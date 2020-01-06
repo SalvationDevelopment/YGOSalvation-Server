@@ -8,30 +8,32 @@
 #YGOPro Salvation Server
 **by Salvation Development**
 
-Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core support software of YGOPro, written in HTML, CSS and JavaScript housed in this repository. The project addresses issues of negligence by automating deployment and updating.
+Salvation Development is a large scale social engineering non-profit project set out to tackle the 'wicked problem' of Yu-Gi-Oh! Online Simulators via enterprise level software design. To do so it employs a merit of interconnected support software based around the core support software of YGOPro, written in HTML, CSS and JavaScript housed in this and sibling repositories. The project addresses issues of negligence by automating deployment and updating.
 
 ![Screenshot of Launcher featuring Magi Magi * Gal](/documentation/screenshot.jpg?raw=true)
 
 [Feature List](https://github.com/SalvationDevelopment/YGOPro-Support-System/blob/master/documentation/features.md)
 
 ## Usage
-If you are looking for a system to use just for dueling with custom cards server side this is not the system, please use [YGOCore](https://github.com/SalvationDevelopment/YGOCore) for that. This system is much more complex and geared to the sole use of SalvationDevelopment.
+If you are looking for a system to use just for dueling with custom cards server side this is not the system, please use [YGOCore](https://github.com/SalvationDevelopment/YGOCore) for that. This system is much more complex and geared to the sole use of YGOSalvation.
 
 ## Installation
-To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
+To run the system use `node ./`. This will create a version of the system on your desktop at http://localhost.
 
 - Install [Nodist](https://github.com/marcelklehr/nodist) for Windows Users, or [nvm](https://github.com/creationix/nvm) instead of Node JS. As nodejs versions increase we tend to stay with the latest releases. This helps simplify things.
 - For Windows users, open your PowerShell (not CMD) as Administrator (this is important), then `cd` to the root of the cloned repository to install the following. Non Windows users can skip this step.
   - `npm install --global windows-build-tools
 - Install and setup MongoDB as a service
-- Create a collection in MongoDB called `salvation`
+- Install and properly configure `ygosalvation-admin` project adjacent to this folder.
 
 - Run the following commands. It installs a package manager, and a testing harness, and then the dependencies. 
   - `nodist 8.11.4`
   - `npm install`
 - create a `.env` file in the top folder (beside this file). 
   - Set `SSL=<path>` SSL isnt needed to work locally
-  - Set `SPARKPOST=<string>`
+  - Set `ADMIN_SERVER_USERNAME=<string>` and `ADMIN_SERVER_PASSWORD=<string>` based on a "Server" Permission level user in the admin.
+  - Set `ADMIN_SERVER_URL` if connecting to a centralized hub, (staging, production), default should suffice for local development 
+  - Set `ADMIN_SERVER_LOCAL` to false if using external admin server.
 To run the system use `node server`. This will create a version of the system on your desktop at http://localhost.
 
 ## Licensing

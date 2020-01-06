@@ -2,6 +2,7 @@
 /*global store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
 /*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen, CreditsScreen, SettingsScreen*/
 /*global RankingScreen, FAQsScreen*/
+/*global ManualControls*/
 
 class ApplicationComponent extends React.Component {
     constructor(store) {
@@ -25,6 +26,7 @@ class ApplicationComponent extends React.Component {
         this.gamelist = new GamelistScreen(store, {});
         this.rankings = new RankingScreen(store);
         this.faqs = new FAQsScreen();
+        this.news = new NewsScreen(store);
         this.credits = new CreditsScreen();
         this.settings = new SettingsScreen(store);
         this.downloads = new DownloadsPage();
@@ -79,10 +81,10 @@ class ApplicationComponent extends React.Component {
 
         store.register('LOAD_SESSION', (action) => {
             const session = localStorage.session;
-
             this.primus.write({
                 action: 'loadSession',
-                session
+                username : localStorage.username,
+                session : localStorage.session
             });
         });
 
@@ -109,10 +111,6 @@ class ApplicationComponent extends React.Component {
                 username: localStorage.nickname
             };
             this.primus.write(message);
-            app.alert('Saved Deck');
-            setTimeout(() => {
-                this.closeModal();
-            }, 1000);
         });
 
 
@@ -176,7 +174,7 @@ class ApplicationComponent extends React.Component {
         }
         const info = data.info || data.result;
 
-        if (info.session && info.bans.length) {
+        if (info.session && info.blocked) {
             return;
         }
 
@@ -188,7 +186,7 @@ class ApplicationComponent extends React.Component {
             action: 'load'
         });
         localStorage.session = info.session;
-        localStorage.username = this.state.username;
+        localStorage.username = info.username;
         console.log(info);
         this.store.dispatch({ action: 'LOAD_DECKS', decks: info.decks });
         this.store.dispatch({ action: 'LOGGEDIN' });
@@ -231,6 +229,11 @@ class ApplicationComponent extends React.Component {
             case 'registrationRequest':
                 this.registrationRequest();
                 break;
+            case 'deckSaved':
+                app.alert('Saved Deck');
+                setTimeout(() => {
+                    this.closeModal();
+                }, 1000);
             default:
                 console.log('Error: Unknown Data', data);
                 return;
@@ -242,7 +245,6 @@ class ApplicationComponent extends React.Component {
     connect() {
         const primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
         this.primus = window.Primus.connect(primusprotocol + location.host);
-
         this.primus.on('open', () => {
             console.log('Connected to YGOSalvation Server');
         });
@@ -279,12 +281,14 @@ class ApplicationComponent extends React.Component {
                 return React.createElement('section', { id: 'rankings', key: 'rankings' }, this.rankings.render());
             case 'faqs':
                 return React.createElement('section', { id: 'faqs', key: 'raqs' }, this.faqs.render());
+            case 'news':
+                return React.createElement('section', { id: 'news', key: 'raqs' }, this.news.render());
             case 'downloads':
                 return React.createElement('section', { id: 'downloads', key: 'downloads' }, this.downloads.render());
             case 'credits':
                 return React.createElement('section', { id: 'credits', key: 'credits' }, this.credits.render());
             default:
-                return React.createElement('section', { id: 'error', key :'error' }, '');
+                return React.createElement('section', { id: 'error', key: 'error' }, '');
         }
     }
 
@@ -325,7 +329,7 @@ class ApplicationComponent extends React.Component {
     }
 
     render() {
-        return React.createElement('div', {key : 'top'}, [
+        return React.createElement('div', { key: 'top' }, [
             this.superheader.render(this.state.loggedIn),
             this.screen(),
             this.language(),

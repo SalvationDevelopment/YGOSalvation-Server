@@ -29,6 +29,7 @@ class ApplicationComponent extends React.Component {
 
         this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
         this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
+        this.manualControls = new ManualControls(this.store, this.primus);
         this.primus.on('data', (data) => {
             this.duel.lifepoints.state.waiting = false;
             if (data.action) {

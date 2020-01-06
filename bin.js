@@ -1,25 +1,45 @@
 
 require('dotenv').config();
-const fs = require('fs');
-const controller = require('./src');
+const axios = require('axios'),
+    ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
+    child_process = require('child_process'),
+    controller = require('./src'),
+    fs = require('fs'),
+    ADMIN_SERVER_USERNAME = process.env.ADMIN_SERVER_USERNAME,
+    ADMIN_SERVER_PASSWORD = process.env.ADMIN_SERVER_PASSWORD;
+
+
 
 /**
  * Program Entry Point
  * @returns {undefined}
  */
-function main() {
-    console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.magenta);
+async function main() {
+    console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
 
+    if (!ADMIN_SERVER_URL || !ADMIN_SERVER_USERNAME || !ADMIN_SERVER_PASSWORD) {
+        console.error('Administrative Server and User are not configured, no database access, see README.MD for details.');
+        process.exit();
+    }
 
     if (!fs.existsSync(banlist)) {
         console.error('Error: Banlist not generated, run "npm run banlist"');
         process.exit();
     }
 
+    if (Boolean(process.env.ADMIN_SERVER_LOCAL)) {
+        console.log('[SERVER] Starting Admin Server'.bold.green);
+        var subserver = child_process.fork('../ygosalvation-admin/src/server.js');
+    }
 
-    process.title = 'YGOSalvation Server ' + new Date();
+    if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
+        console.log('[SERVER] Starting Database Server'.bold.green);
+        var subserver = child_process.fork('../ygosalvation-database/app.js');
+    }
     
+    process.title = 'YGOSalvation Server ' + new Date();
+
 }
 
 main();

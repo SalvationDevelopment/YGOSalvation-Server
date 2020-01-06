@@ -15,119 +15,119 @@ function broadcast(players, message) {
     players[1].write((message));
 }
 
-function responseHandler(duel, players, client, message) {
+function responseHandler(engine, players, client, message) {
 
     if (!message.action) {
         return;
     }
     switch (message.action) {
         case 'moveCard':
-            duel.setState(message);
+            engine.setState(message);
             break;
         case 'revealTop':
-            duel.revealTop(client.slot);
+            engine.revealTop(client.slot);
             break;
         case 'revealBottom':
-            duel.revealBottom(client.slot);
+            engine.revealBottom(client.slot);
             break;
         case 'offsetDeck':
-            duel.offsetZone(client.slot, 'DECK');
+            engine.offsetZone(client.slot, 'DECK');
             break;
         case 'makeToken':
-            duel.makeNewCard(message.location, message.player, message.index, message.position, message.id, message.index);
+            engine.makeNewCard(message.location, message.player, message.index, message.position, message.id, message.index);
             break;
         case 'removeToken':
-            duel.removeCard(message.uid);
+            engine.removeCard(message.uid);
             break;
         case 'revealDeck':
-            duel.revealDeck(client.slot);
+            engine.revealDeck(client.slot);
             break;
         case 'revealExcavated':
-            duel.revealExcavated(client.slot);
+            engine.revealExcavated(client.slot);
             break;
         case 'revealExtra':
-            duel.revealExtra(client.slot);
+            engine.revealExtra(client.slot);
             break;
         case 'revealHand':
-            duel.revealHand(client.slot);
+            engine.revealHand(client.slot);
             break;
         case 'viewDeck':
-            duel.viewDeck(client.slot, players[client.slot].username, client.slot);
+            engine.viewDeck(client.slot, players[client.slot].username, client.slot);
             break;
         case 'viewExtra':
-            duel.viewExtra(message.player, players[client.slot].username, client.slot);
+            engine.viewExtra(message.player, players[client.slot].username, client.slot);
             break;
         case 'viewExcavated':
-            duel.viewExcavated(message.player, players[client.slot].username, client.slot);
+            engine.viewExcavated(message.player, players[client.slot].username, client.slot);
             break;
         case 'viewGrave':
-            duel.viewGrave(message.player, players[client.slot].username, client.slot);
+            engine.viewGrave(message.player, players[client.slot].username, client.slot);
             break;
         case 'viewBanished':
-            duel.viewBanished(message.player, players[client.slot].username, client.slot);
+            engine.viewBanished(message.player, players[client.slot].username, client.slot);
             break;
         case 'viewXYZ':
-            duel.viewXYZ(client.slot, message.index, message.player);
+            engine.viewXYZ(client.slot, message.index, message.player);
             break;
         case 'shuffleDeck':
-            duel.shuffleDeck(client.slot, players[client.slot].username, message.player);
+            engine.shuffleDeck(client.slot, players[client.slot].username, message.player);
             break;
         case 'shuffleHand':
-            duel.shuffleHand(client.slot);
+            engine.shuffleHand(client.slot);
             break;
         case 'draw':
-            duel.drawCard(client.slot, 1, [{}], players[client.slot].username);
+            engine.drawCard(client.slot, 1, [{}], players[client.slot].username);
             break;
         case 'excavate':
-            duel.excavateCard(client.slot, 1);
+            engine.excavateCard(client.slot, 1);
             break;
         case 'mill':
-            duel.millCard(client.slot, 1);
+            engine.millCard(client.slot, 1);
             break;
         case 'millRemovedCard':
-            duel.millRemovedCard(client.slot, 1);
+            engine.millRemovedCard(client.slot, 1);
             break;
         case 'millRemovedCardFaceDown':
-            duel.millRemovedCardFaceDown(client.slot, 1);
+            engine.millRemovedCardFaceDown(client.slot, 1);
             break;
         case 'addCounter':
-            duel.addCounter(message.uid);
+            engine.addCounter(message.uid);
             break;
         case 'flipDeck':
-            duel.flipDeck(client.slot);
+            engine.flipDeck(client.slot);
             break;
         case 'removeCounter':
-            duel.removeCounter(message.uid);
+            engine.removeCounter(message.uid);
             break;
         case 'rollDie':
-            duel.rollDie(message.name);
+            engine.rollDie(message.name);
             break;
         case 'flipCoin':
-            duel.flipCoin(players[client.slot].username);
+            engine.flipCoin(players[client.slot].username);
             break;
         case 'nextPhase':
-            duel.nextPhase(message.phase);
+            engine.nextPhase(message.phase);
             break;
         case 'nextTurn':
-            duel.nextTurn();
+            engine.nextTurn();
             break;
         case 'changeLifepoints':
-            duel.changeLifepoints(client.slot, message.amount, players[client.slot].username);
+            engine.changeLifepoints(client.slot, message.amount, players[client.slot].username);
             break;
         case 'revealHandSingle':
-            duel.revealCallback([message.card], client.slot, 'revealHandSingle');
+            engine.revealCallback([message.card], client.slot, 'revealHandSingle');
             break;
         case 'rps':
-            duel.rps(function (result) {
+            engine.rps(function (result) {
                 var winner = 'Player ' + (1 + result);
-                duel.duelistChat('Server', players[client.slot].username + ' ' + winner + ' won.');
+                engine.duelistChat('Server', players[client.slot].username + ' ' + winner + ' won.');
             });
             break;
         case 'reveal':
-            duel.revealCallback(duel.findUIDCollection(message.card.uid), client.slot, 'revealHandSingle');
+            engine.revealCallback(engine.findUIDCollection(message.card.uid), client.slot, 'revealHandSingle');
             break;
         case 'question':
-            duel.answerListener.emit(message.uuid, message.answer);
+            engine.answerListener.emit(message.uuid, message.answer);
             break;
         case 'attack':
             broadcast(players, {
@@ -159,18 +159,18 @@ function responseHandler(duel, players, client, message) {
             });
             break;
         case 'ygopro':
-            duel.relayYGOPro(client.slot, message.data);
+            engine.relayYGOPro(client.slot, message.data);
             break;
         default:
             break;
     }
 
     if (client.slot !== undefined && message.sound) {
-        duel.players[0].write(({
+        players[0].write(({
             duelAction: 'sound',
             sound: message.sound
         }));
-        duel.players[1].write(({
+        players[1].write(({
             duelAction: 'sound',
             sound: message.sound
         }));
@@ -238,10 +238,10 @@ function clientBinding(clients, spectators) {
             if (!view) {
                 return;
             }
-            clients[0].write((view['p' + clients[0].slot]));
-            clients[1].write((view['p' + clients[1].slot]));
-            spectators.write((view.spectators));
-
+            
+            clients[0].write((view.p0));
+            clients[1].write((view.p1));
+            //spectators.write((view.spectators));
         } catch (error) {
             console.log('failed messaging client', error);
         } finally {

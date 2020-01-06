@@ -367,7 +367,7 @@ function hideViewOfZone(view) {
         output[index] = {};
         Object.assign(output[index], card);
         if (output[index].position === 'FaceDown' || output[index].position === 'FaceDownDefence' || output[index].position === 'FaceDownDefense') {
-            ///output[index].id = 0;
+            output[index].id = 'unknown';
             output[index].counters = {};
             delete output[index].originalcontroller;
         }
@@ -406,7 +406,10 @@ function hideHand(view) {
     view.forEach(function (card, index) {
         output[index] = {};
         Object.assign(output[index], card);
-        output[index].position =  (card.isPublic) ? 'FaceUp' : 'FaceDown';
+        output[index].position = (card.isPublic) ? 'FaceUp' : 'FaceDown';
+        if (!card.isPublic) {
+            output[index].id = 'unknown';
+        }
     });
 
     return output;
@@ -455,6 +458,7 @@ class Game {
                 side: []
             }
         }; // holds decks
+        return this;
     }
 
     getState() {
@@ -462,6 +466,20 @@ class Game {
             names: this.names,
             stack: this.stack
         });
+    }
+
+    setState(message) {
+        this.stack.move({
+            player: message.player,
+            location: message.location,
+            index: message.index
+        }, {
+            player: message.moveplayer,
+            location: message.movelocation,
+            index: message.moveindex,
+            position: message.moveposition
+        });
+        this.callback(this.generateView(), this.stack.cards());
     }
 
     /**
@@ -674,6 +692,7 @@ class Game {
             }
         };
         this.previousStack = JSON.parse(JSON.stringify(this.stack.cards()));
+        console.log(output.p0.duelAction);
         return output;
     }
 
@@ -747,12 +766,12 @@ class Game {
                 location: 'DECK',
                 index: topcard.index
             }, {
-                    player,
-                    location: 'HAND',
-                    index: currenthand + i,
-                    position: 'FaceUp',
-                    id: cards[i].id || topcard.id
-                });
+                player,
+                location: 'HAND',
+                index: currenthand + i,
+                position: 'FaceUp',
+                id: cards[i].id || topcard.id
+            });
         }
 
         this.callback(this.generateView(), this.stack.cards());
@@ -817,19 +836,21 @@ class Game {
         };
 
         player1.main.forEach((card, index) => {
-            this.addCard('DECK', 0, index, this.stack.length, card);
+            this.addCard('DECK', 0, index, card);
         });
         player2.main.forEach((card, index) => {
-            this.addCard('DECK', 1, index, this.stack.length, card);
+            this.addCard('DECK', 1, index, card);
         });
 
         player1.extra.forEach((card, index) => {
-            this.addCard('EXTRA', 0, index, this.stack.length, card);
+            this.addCard('EXTRA', 0, index, card);
         });
         player2.extra.forEach((card, index) => {
-            this.addCard('EXTRA', 1, index, this.stack.length, card);
+            this.addCard('EXTRA', 1, index, card);
         });
         this.stack.updateIndex();
+        this.announcement(0, { command: 'MSG_ORIENTATION', slot: 0 });
+        this.announcement(1, { command: 'MSG_ORIENTATION', slot: 1 });
         this.callback(this.generateView('start'), this.stack.cards());
     }
 

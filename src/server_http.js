@@ -6,7 +6,8 @@ const express = require('express'),
     toobusy = require('toobusy-js'),
     app = express(),
     compression = require('compression'),
-    userController = require('./model_controller_users.js'),
+    users = require('./endpoint_users.js'),
+    news = require('./endpoint_services.js'),
     // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
@@ -92,7 +93,6 @@ module.exports = function () {
 
     app.use(compression());
     app.use(helmet());
-    app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json()); // Body parser use JSON data
 
     app.use(systemLoad);
@@ -107,7 +107,8 @@ module.exports = function () {
     app.get('/git', function (req, res, next) {
         gitRoute(req, res, next);
     });
-    userController.setupController(app);
+    users.setupEndpoints(app);
+    news.setupEndpoints(app);
     let primusServer;
 
     try {

@@ -69,7 +69,7 @@ const ffi = require('ffi'),
     scriptsFolder = '../../ygopro-scripts';
 
 global.gc_protected = [];
-
+process.replay = [[], []];
 /**
  * Read a card from file.
  * @param {String} scriptname filename of the script
@@ -159,31 +159,7 @@ function seed() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * Shuffles an array in place, once.
- * @param {Array} array to shuffle
- * @returns {void}
- */
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)),
-            temp = array[i];
 
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-
-/**
- * Shuffles an array in place, multiple times.
- * @param {Array} array to shuffle
- * @returns {void}
- */
-function deepShuffle(array) {
-    for (var i = 0; i < array.length; i++) {
-        shuffle(array);
-    }
-}
 
 /**
  * When the duel ends, send the replay, notify the users, etc...
@@ -205,6 +181,7 @@ function duelEndProcedure(players) {
 function GameBoard(playerConnection, slot, masterRule) {
     const board = new ManualControlEngine(function (view, stack, callback) {
         try {
+            process.replay[slot].push(view['p' + slot]);
             playerConnection.write((view['p' + slot]));
 
         } catch (error) {
@@ -514,20 +491,15 @@ function makeGame(pduel, settings) {
 
 /**
  * Start a duel
- * @param {DuelSettings} settings parameters for starting the duel
+ * @param {DuelSettings} game parameters for starting the duel
  * @param {Function} errorHandler error reporting function, sends to UI.
  * @param {Socket[]} players  1-4 players for the duel
- * @param {Socket} observers  observer abstraction
+ * @param {Socket} spectators  observer abstraction
  * @returns {void}
  */
-function duel(settings, errorHandler, players, observers) {
+function duel(game, state, errorHandler, players, spectators) {
     var pduel,
-        game = {};
-        
-    if (settings.shuffle) {
-        deepShuffle(players[0].main);
-        deepShuffle(players[1].main);
-    }
+        instance = {};
 
     function messageHandler(external_pduel, type) {
         var messageBuffer = Buffer.alloc(1024);
@@ -555,8 +527,8 @@ function duel(settings, errorHandler, players, observers) {
     ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
     ocgapi.set_responsei(pduel, message_handler_function);
 
-    ocgapi.set_player_info(pduel, 0, settings.start_lp, settings.start_hand_count, settings.draw_count);
-    ocgapi.set_player_info(pduel, 1, settings.start_lp, settings.start_hand_count, settings.draw_count);
+    ocgapi.set_player_info(pduel, 0, game.start_lp, game.start_hand_count, game.draw_count);
+    ocgapi.set_player_info(pduel, 1, game.start_lp, game.start_hand_count, game.draw_count);
     players[0].main.forEach(function (cardID, sequence) {
         ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
@@ -570,22 +542,22 @@ function duel(settings, errorHandler, players, observers) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    game = makeGame(pduel, settings);
+    instance = makeGame(pduel, game);
     const playerConnections = players.map(function (playerConnection, slot) {
-        return playerInstance(playerConnection, slot, game, settings);
-    }), rule = (settings.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
-    game.setPlayers(playerConnections);
-    game.refer = ref.deref(pduel);
-    game.sendStartInfo(0);
-    game.sendStartInfo(1);
-    game.refreshExtra(0);
-    game.refreshExtra(1);
+        return playerInstance(playerConnection, slot, instance, game);
+    }), rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
+    instance.setPlayers(playerConnections);
+    instance.refer = ref.deref(pduel);
+    instance.sendStartInfo(0);
+    instance.sendStartInfo(1);
+    instance.refreshExtra(0);
+    instance.refreshExtra(1);
     ocgapi.start_duel(pduel, rule);
-    mainProcess(game);
+    mainProcess(instance);
 
 
-    process.game = game;
-    return game;
+    process.instance = instance;
+    return instance;
 
 }
 

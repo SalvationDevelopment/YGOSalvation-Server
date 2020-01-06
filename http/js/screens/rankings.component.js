@@ -8,9 +8,12 @@ class RankingScreen extends React.Component {
 
         this.store = store;
 
-        this.store.register('LOAD_RANKING', (action) => {
-            this.state.ranks = action.ranks;
-            this.store.dispatch({ action: 'RENDER' });
+        fetch(`/ranking`).then((response) => {
+            response.json().then(data => {
+                this.state.ranks = data;
+                this.store.dispatch({ action: 'RENDER' });
+            });
+
         });
 
     }

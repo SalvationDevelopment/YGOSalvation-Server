@@ -84,13 +84,14 @@ const WARNING_COUNTDOWN = 3000000,
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
-    manualEngine = require('./model_field.js'),
+    ManualControlEngine = require('./model_field.js'),
     automaticEngine = require('./controller_core.js'),
     manualController = require('./controller_manual.js'),
     path = require('path'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
+    shuffle = require('./lib_shuffle.js'),
     uuid = require('uuid/v4'),
     validateDeck = require('./lib_validate_deck.js'),
     verificationSystem = new EventEmitter();
@@ -138,7 +139,8 @@ function broadcast(server, game) {
 function enableClient(client, person) {
     client.username = person.username;
     client.avatar = person.avatar;
-    client.ranking = person.ranking;
+    client.points = person.points || 0;
+    client.elo = person.elo || 1200;
     client.write({
         action: 'registered'
     });
@@ -246,10 +248,12 @@ function join(error, game, state, client, callback) {
         client.slot = game.player.length;
         game.player.push({
             ready: Boolean(client.ready),
-            ranking: client.ranking || {},
+            points: client.points,
+            elo: client.elo,
             slot: client.slot,
             settings: client.settings,
-            username: client.username
+            username: client.username,
+            avatar: client.avatar.url
         });
         state.clients[client.slot] = client;
         callback();
@@ -455,41 +459,41 @@ function sideLock(game, client, message) {
  */
 function Duel() {
 
-    const duel = {};
+    let duel = {};
 
     function failure() {
         throw ('Duel has not started');
     }
 
-    function load(game, state, players, spectators) {
+    function load(game, state, errorHandler, players, spectators) {
         process.recordOutcome = new EventEmitter();
         process.recordOutcome.once('win', function (command) {
 
-
+            // process.replay requires filtering.
             process.send({
                 action: 'win',
-                banlist: game.banlist,
-                decks: game.decks,
-                loser: {
-                    username: game.player[Math.abs(command.player - 1)].username,
-                    elo: game.player[Math.abs(command.player - 1)].ranking.elo
-                },
-                winner: {
-                    username: game.player[command.player].username,
-                    elo: game.player[command.player].ranking.elo
-                }
+                replay: process.replay,
+                ranked: Boolean(game.ranked === "Ranked"),
+                loserID: game.player[Math.abs(command.player - 1)].id,
+                winnerID: game.player[command.player].id
             });
         });
 
+        if (game.shuffle) {
+            shuffle(players[0].main);
+            shuffle(players[1].main);
+        }
+
         if (game.automatic === 'Automatic') {
-            const instance = automaticEngine.duel(game, players, spectators);
+            const instance = automaticEngine.duel(game, state, errorHandler, players, spectators);
             duel.getField = instance.getField;
             duel.respond = instance.respond;
             return;
         }
+
         const clientBinding = manualController.clientBinding(players, spectators);
-        Object.assign(duel, manualEngine(clientBinding));
-        duel.startDuel(players[0], players[1], true, game);
+        duel.engine = new ManualControlEngine(clientBinding);
+        duel.engine.startDuel(players[0], players[1], true, game);
 
 
     }
@@ -625,6 +629,8 @@ function start(server, duel, game, state, message) {
     }
     if (message.turn_player) {
         state.clients = state.clients.reverse();
+        state.clients[0].slot = 0;
+        state.clients[1].slot = 1;
     }
 
     const players = [
@@ -658,15 +664,16 @@ function question(duel, client, message) {
  * @returns {void} 
  */
 function requiresManualEngine(game, client) {
-    if (!game.automatic) {
+    if (!game.automatic === 'Manual') {
         return;
     }
-    if (!game.start) {
+    if (!game.started) {
         return;
     }
     if (client.slot === undefined) {
         return;
     }
+    return true;
 }
 
 
@@ -690,7 +697,7 @@ function processMessage(server, duel, game, state, client, message) {
     }
     switch (message.action) {
         case 'chat':
-            chat(server, state, client, message.chat, undefined);
+            chat(server, state, client, message.message, undefined);
             break;
         case 'determine':
             determine(server, game, state, client);
@@ -754,7 +761,7 @@ function processMessage(server, duel, game, state, client, message) {
     if (!requiresManualEngine(game, client)) {
         return;
     }
-    manualController.responseHandler(duel, state.clients, client, message);
+    manualController.responseHandler(duel.engine, state.clients, client, message);
 }
 
 /**

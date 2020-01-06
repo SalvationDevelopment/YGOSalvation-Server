@@ -101,6 +101,11 @@ function cardStackSort(a, b) {
     return 0;
 }
 
+
+postJSON = function (url, data, callback) {
+    return $.ajax({ url: url, data: JSON.stringify(data), type: 'POST', contentType: 'application/json', success: callback });
+};
+
 store.register('REGISTER_ACCOUNT', (action) => {
     var username = $('#new_username').val(),
         email = $('#new_email').val(),
@@ -122,13 +127,13 @@ store.register('REGISTER_ACCOUNT', (action) => {
         return false;
     }
 
-    $.post('/register', { email: email, username: username, password: password }, function (result, networkStatus) {
+    postJSON('/register', { email: email, username: username, password: password }, function (result, networkStatus) {
         console.log(result);
         if (result.error) {
             app.alert(result.error);
         } else {
             app.alert('Account Created. Please check your email.');
-            store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+            store.dispatch({ action: 'OPEN_LOGIN' });
         }
     });
 });
@@ -142,7 +147,7 @@ store.register('RECOVER_ACCOUNT', (action) => {
         return false;
     }
 
-    $.post('/recover', { email: email }, function (result, networkStatus) {
+    postJSON('/recover', { email: email }, function (result, networkStatus) {
         console.log(result);
         if (result.error) {
             app.alert(result.error);
@@ -155,7 +160,7 @@ store.register('RECOVER_ACCOUNT', (action) => {
 store.register('RECOVER_CODE', (action) => {
     var recoveryPass = $('#remember').val();
 
-    $.post('/recoverpassword', { recoveryPass }, function (result, networkStatus) {
+    postJSON('/recoverpassword', { recoveryPass }, function (result, networkStatus) {
         console.log(result);
         if (result.error) {
             app.alert(result.error);
@@ -223,26 +228,24 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                 });
             store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
             store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-            if (localStorage.remember === 'true') {
-                if (localStorage.session) {
-                    $.getJSON('api/session/' + localStorage.session, (userInfo) => {
-                        console.log('Session Login', userInfo);
-                        store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-                        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-                        console.log(userInfo.success);
-                        const state = (userInfo.success)
-                            ? store.dispatch({ action: 'LOAD_SESSION', banlist, primary })
-                            : store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+            if (localStorage.remember === 'true' && localStorage.username && localStorage.session) {
 
-                    }).fail((e) => {
-                        console.log(e);
-                        store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-                    });
-                } else {
-                    store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
-                }
+                store.dispatch({ action: 'LOAD_SESSION', banlist, primary });
+                $.getJSON('api/session/' + localStorage.session, (userInfo) => {
+                    console.log('Session Login', userInfo);
+                    store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+                    store.dispatch({ action: 'LOAD_LOGIN' });
+                    console.log(userInfo.success);
+                    const state = (userInfo.success)
+                        ? store.dispatch({ action: 'LOAD_SESSION', banlist, primary })
+                        : store.dispatch({ action: 'LOAD_LOGIN' });
+
+                }).fail((e) => {
+                    console.log(e);
+                    store.dispatch({ action: 'LOAD_LOGIN' });
+                });
             } else {
-                store.dispatch({ action: 'LOAD_LOGIN', banlist, primary });
+                store.dispatch({ action: 'LOAD_LOGIN' });
             }
         });
     });
@@ -290,7 +293,7 @@ class SearchFilter {
             scale: undefined,
             scaleop: 0,
             limit: undefined,
-            links : [null, null, null, null, null, null, null, null]
+            links: [null, null, null, null, null, null, null, null]
         };
     }
 
@@ -627,7 +630,7 @@ class SearchFilter {
                 }
                 return list;
             }, []);
-            console.log(filter.banlist);
+        console.log(filter.banlist);
         cardsf = this.filterToken(cardsf) || cardsf;
         cardsf = this.filterLimit(cardsf, filter.limit) || cardsf;
         cardsf = this.filterExactType(cardsf, filter.exacttype) || cardsf;
@@ -703,5 +706,4 @@ class SearchFilter {
         }
         return this.currentSearch.slice(this.currentSearchIndex, this.currentSearchIndex + this.currentSearchPageSize);
     }
-
 }

@@ -60,7 +60,7 @@ class HostScreen extends React.Component {
             this.settings.masterRule = banlist.masterRule;
             console.log(this.settings.masterRule);
         }
-        this.store.dispatch({ action: 'RENDER'});
+        this.store.dispatch({ action: 'RENDER' });
     }
 
     host() {
@@ -73,9 +73,9 @@ class HostScreen extends React.Component {
             React.createElement('br', {}),
             React.createElement('label', {}, 'Cardpool'),
             React.createElement('select', { id: 'creategamecardpool', onChange: this.onChange.bind(this) }, [
-                React.createElement('option', { value: 'OCG' }, 'OCG'),
-                React.createElement('option', { value: 'TCG' }, 'TCG'),
-                React.createElement('option', { value: 'OCG/TCG', selected: true }, 'OCG/TCG')
+                React.createElement('option', { key: 'OCG', value: 'OCG' }, 'OCG'),
+                React.createElement('option', { key: 'TCG', value: 'TCG' }, 'TCG'),
+                React.createElement('option', { key: 'OCG/TCG', value: 'OCG/TCG', selected: true }, 'OCG/TCG')
             ]),
             React.createElement('br', {}),
             React.createElement('label', {}, 'Ban list'),
@@ -85,28 +85,28 @@ class HostScreen extends React.Component {
             React.createElement('br', {}),
             React.createElement('label', {}, 'Duel Mode'),
             React.createElement('select', { id: 'mode', onChange: this.onChange.bind(this) }, [
-                React.createElement('option', { value: 'Single' }, 'Single'),
-                React.createElement('option', { value: 'Match', selected: true }, 'Match'),
-                React.createElement('option', { value: 'Tag', disabled: true }, 'Tag')
+                React.createElement('option', { key: 'single', value: 'Single' }, 'Single'),
+                React.createElement('option', { key: 'match', value: 'Match', selected: true }, 'Match'),
+                React.createElement('option', { key: 'tag', value: 'Tag', disabled: true }, 'Tag')
             ]),
             React.createElement('br', {}),
             React.createElement('label', {}, 'Time Limit'),
             React.createElement('select', { id: 'time', onChange: this.onChange.bind(this) }, [
-                React.createElement('option', { value: 180000 }, '3 Minutes'),
-                React.createElement('option', { value: 360000, selected: true }, '6 Minutes'),
-                React.createElement('option', { value: 540000 }, '9 Minutes'),
-                React.createElement('option', { value: 720000 }, '12 Minutes'),
-                React.createElement('option', { value: 900000 }, '15 Minutes')
+                React.createElement('option', { key: '', value: 180000 }, '3 Minutes'),
+                React.createElement('option', { key: '', value: 360000, selected: true }, '6 Minutes'),
+                React.createElement('option', { key: '', value: 540000 }, '9 Minutes'),
+                React.createElement('option', { key: '', value: 720000 }, '12 Minutes'),
+                React.createElement('option', { key: '', value: 900000 }, '15 Minutes')
             ]),
-            React.createElement('br', {}),
-            React.createElement('br', {}),
-            React.createElement('h2', {}, 'Additional Options'),
-            React.createElement('br', {}),
+            React.createElement('br', { key: '', }),
+            React.createElement('br', { key: '', }),
+            React.createElement('h2', { key: '', }, 'Additional Options'),
+            React.createElement('br', { key: '', }),
             //React.createElement('label', {}, 'Use AI'),
             //React.createElement('input', { type: 'checkbox', id: 'useai', disabled: true, onChange: this.onChange.bind(this) }),
             //React.createElement('select', { id: 'aidecks', disabled: true, onChange: this.onChange.bind(this) }, []),
-            //React.createElement('label', {}, 'Automatic Mode (In Development'),
-            //React.createElement('input', { type: 'checkbox', id: 'useautomatic', checked: true, disabled: true, onChange: this.onChange.bind(this) }),
+            React.createElement('label', {}, 'Automatic Mode (In Development'),
+            React.createElement('input', { type: 'checkbox', id: 'automatic', checked: this.settings.automatic, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Validate Deck'),
             React.createElement('input', { type: 'checkbox', id: 'deckcheck', checked: this.settings.deckcheck, onChange: this.onChange.bind(this) }),
             React.createElement('label', {}, 'Shuffle Deck'),

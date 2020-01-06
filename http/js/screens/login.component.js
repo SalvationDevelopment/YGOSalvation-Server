@@ -14,6 +14,10 @@ class LoginScreen extends React.Component {
         store.register('LOAD_LOGIN', (action) => {
             this.state.mode = 'start';
         });
+
+        store.register('OPEN_LOGIN', (action) => {
+             this.openLogin();
+        });
     }
 
 

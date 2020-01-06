@@ -523,7 +523,6 @@ ul#socialmediabuttons {
 }
 
 #socialmediabuttons li {
-    height: 25%;
     list-style: none;
     text-align: center;
     margin-top: 5%;
@@ -1531,7 +1530,7 @@ div#gamelist {
 .lobbyrating {
     display: block;
     color: white;
-    width: 4vw;
+    width: 15vw;
     text-align: center;
     border: 1px solid #444;
     font-size: 1.5vh;
@@ -1570,10 +1569,16 @@ div#duelspectate {
 #lobbygamemode,
 #lobbyallowed,
 #lobbyprerelease,
-#lobbyflist {
+#lobbyflist,
+#lobbyauto,
+#lobbyranked {
     display: inline-block;
     float: right;
     color: orange;
+}
+
+span#lobbyflist {
+    font-size: 65%;
 }
 
 #lobbycurrentdeck {
@@ -1744,6 +1749,19 @@ input#player4lobbyslot {
     color: white;
     font-weight: bold;
     width: 15vw;
+}
+.slot {
+    float : left;
+    clear : both;
+    overflow : auto;
+}
+
+.slot img.avatar {
+    float: left;
+    clear: both;
+    margin: 5px;
+    height: 5.5vh;
+    min-width: 3vw;
 }
 
 #lobby input:placeholder-shown {
@@ -2842,3 +2860,4 @@ p#error {
     padding: 1vh 1vw;
     box-shadow: 0 0 200px 200px black;
 }
+

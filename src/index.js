@@ -11,11 +11,13 @@
 const child_process = require('child_process'),
     hotload = require('hotload'),
     cardidmap = require('../http/cardidmap.js'),
-    userController = require('./model_controller_users.js'),
+    userController = require('./endpoint_users.js'),
+    decks = require('./endpoint_decks.js'),
     adminlist = {},
     primusServer = require('./server_http')(),
     Primus = require('primus'),
-    Rooms = require('primus-rooms');
+    Rooms = require('primus-rooms'),
+    services = require('./endpoint_services');
 
 var userlist = [],
     chatbox = [],
@@ -64,8 +66,8 @@ function unsafePort() {
 }
 
 function registrationCall(data, socket) {
-    userController.validate(true, data, function (error, valid, info) {
-
+    userController.validate(true, data, function (error, valid, responseData) {
+       
         if (error) {
             console.log(error);
             socket.write({
@@ -81,19 +83,26 @@ function registrationCall(data, socket) {
             });
             return;
         }
+        const info = responseData.user;
+        info.session = responseData.jwt;
+        info.decks = responseData.decks;
         if (valid) {
             socket.username = info.username;
+            
+            socket.session = info.session;
+            socket.admin = (info.role.name === 'Administrator');
             console.log(`${socket.username} has logged in`.bold);
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
-                admin: adminlist[data.username]
+                admin: (info.role.name === 'Administrator')
             });
             socket.write({
                 clientEvent: 'ackresult',
                 ackresult: acklevel,
                 userlist: userlist
             });
+
             socket.speak = true;
             socket.write({
                 clientEvent: 'login',
@@ -288,7 +297,8 @@ function childHandler(child, socket, message) {
             break;
         case 'register':
             userController.validateSession({
-                session: message.session
+                session: message.session,
+                username: message.username
             }, function (error, valid, person) {
                 child.send({
                     action: 'register',
@@ -312,7 +322,7 @@ function childHandler(child, socket, message) {
             });
             break;
         case 'win':
-            userController.recordDuelResult(message, function () {
+            services.logDuel(message, function () {
                 child.send({
                     action: 'kill'
                 });
@@ -376,18 +386,14 @@ function onData(data, socket) {
         case ('register'):
             registrationCall(data, socket);
             break;
-        case 'sessionUpdate':
-            userController.validateSession({
-                session: data.session
-            }, function (error, valid, person) {
-
-            });
-            break;
         case 'loadSession':
+            console.log('loadSession', data);
             userController.validateSession({
-                session: data.session
+                session: data.session,
+                username: data.username
             }, function (error, valid, info) {
-                if (error) {
+                console.log(info);
+                if (error || !valid) {
                     return;
                 }
                 socket.username = info.username;
@@ -409,9 +415,7 @@ function onData(data, socket) {
                         username: info.username,
                         decks: info.decks,
                         friends: info.friends,
-                        session: info.session,
-                        sessionExpiration: info.sessionExpiration,
-                        ranking: info.ranking,
+                        session: data.session,
                         admin: info.admin,
                         rewards: info.rewards,
                         settings: info.settings,
@@ -499,6 +503,9 @@ function onData(data, socket) {
             }
             break;
         case 'save':
+            if (!socket.username) {
+                return;
+            }
             delete data.action;
             data.decks.forEach(function (deck, i) { //cycles through the decks
                 data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
@@ -506,10 +513,10 @@ function onData(data, socket) {
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
             data.username = socket.username;
-            if (!socket.username) {
-                return;
-            }
-            userController.saveDeck(data, function (error, docs) {
+           
+            data.session = socket.session;
+            
+            decks.processDecks(data, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',
                     error: error

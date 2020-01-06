@@ -30,7 +30,7 @@ function cardIs(cat, obj) {
         return (obj.type & 8388608) === 8388608;
     }
     if (cat === 'link') {
-        return (obj.type & 33554432) === 33554432;
+        return (obj.type & 0x4000000) === 0x4000000;
     }
 }
 
@@ -88,7 +88,7 @@ const attributeMap = {
         16785441: 'Synchro / Pendulum / Effect',
         18874401: 'Pendulum / Flip / Effect',
         25165857: 'Xyz / Pendulum / Effect',
-        33554433: 'Link',
+        67108865: 'Link',
         33554465: 'Link / Effect'
     },
     pendulumMap = {

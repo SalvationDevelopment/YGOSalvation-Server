@@ -64,7 +64,9 @@ function condenseDecks(decks) {
             side: deck.side.map(condenseDeck),
             name: deck.name,
             creator: deck.creator,
-            creationDate: deck.creationDate
+            creationDate: deck.creationDate,
+            id: deck.id,
+            _id: deck._id
         };
     });
 }
@@ -180,6 +182,7 @@ class DeckEditScreen extends React.Component {
             this.state.search = [];
             this.state.decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
+                console.log(deck.id);
                 deck.main = deck.main.map(this.findcard.bind(this));
                 deck.extra = deck.extra.map(this.findcard.bind(this));
                 deck.side = deck.side.map(this.findcard.bind(this));
@@ -644,22 +647,22 @@ class DeckEditScreen extends React.Component {
             case 1:
                 return [element('select', { id: 'type1', onChange: this.onSearchChange.bind(this) }, [
                     element('option', { value: 'undefined' }, 'Frame'),
-                    element('option', { value: 64 }, 'Fusion'),
-                    element('option', { value: 128 }, 'Ritual'),
-                    element('option', { value: 8192 }, 'Synchro'),
-                    element('option', { value: 8388608 }, 'Xyz'),
-                    element('option', { value: 16777216 }, 'Pendulum'),
-                    element('option', { value: 33554432 }, 'Link')
+                    element('option', { value: 0x40 }, 'Fusion'),
+                    element('option', { value: 0x80 }, 'Ritual'),
+                    element('option', { value: 0x2000 }, 'Synchro'),
+                    element('option', { value: 0x800000 }, 'Xyz'),
+                    element('option', { value: 0x1000000 }, 'Pendulum'),
+                    element('option', { value: 0x4000000 }, 'Link')
                 ]),
                 element('select', { id: 'type2', onChange: this.onSearchChange.bind(this) }, [
                     element('option', { value: 'undefined' }, 'Sub Card Type'),
-                    element('option', { value: 16 }, 'Normal'),
-                    element('option', { value: 32 }, 'Effect'),
-                    element('option', { value: 512 }, 'Spirit'),
-                    element('option', { value: 1024 }, 'Union'),
-                    element('option', { value: 4096 }, 'Tuner'),
-                    element('option', { value: 2048 }, 'Gemini'),
-                    element('option', { value: 4194304 }, 'Toon')]),
+                    element('option', { value: 0x10 }, 'Normal'),
+                    element('option', { value: 0x20 }, 'Effect'),
+                    element('option', { value: 0x200 }, 'Spirit'),
+                    element('option', { value: 0x400 }, 'Union'),
+                    element('option', { value: 0x1000 }, 'Tuner'),
+                    element('option', { value: 0x800 }, 'Gemini'),
+                    element('option', { value: 0x400000 }, 'Toon')]),
                 element('select', { id: 'attribute', onChange: this.onSearchChange.bind(this) }, [
                     element('option', { value: 'undefined' }, 'Attribute'),
                     element('option', { value: 1 }, 'EARTH'),
