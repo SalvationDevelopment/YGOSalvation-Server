@@ -91,6 +91,7 @@ const WARNING_COUNTDOWN = 3000000,
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     sanitize = require('./lib_html_sanitizer.js'),
+    shuffle = require('./lib_shuffle.js'),
     uuid = require('uuid/v4'),
     validateDeck = require('./lib_validate_deck.js'),
     verificationSystem = new EventEmitter();
@@ -478,15 +479,21 @@ function Duel() {
             });
         });
 
+        if (game.shuffle) {
+            shuffle(players[0].main);
+            shuffle(players[1].main);
+        }
+
         if (game.automatic === 'Automatic') {
             const instance = automaticEngine.duel(game, state, errorHandler, players, spectators);
             duel.getField = instance.getField;
             duel.respond = instance.respond;
             return;
         }
+
         const clientBinding = manualController.clientBinding(players, spectators);
         duel.engine = new ManualControlEngine(clientBinding);
-        duel.engine.startDuel(state.clients[0].deck, state.clients[1].deck, true, game);
+        duel.engine.startDuel(players[0], players[1], true, game);
 
 
     }

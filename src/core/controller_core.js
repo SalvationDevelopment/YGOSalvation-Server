@@ -159,31 +159,7 @@ function seed() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * Shuffles an array in place, once.
- * @param {Array} array to shuffle
- * @returns {void}
- */
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)),
-            temp = array[i];
 
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-
-/**
- * Shuffles an array in place, multiple times.
- * @param {Array} array to shuffle
- * @returns {void}
- */
-function deepShuffle(array) {
-    for (var i = 0; i < array.length; i++) {
-        shuffle(array);
-    }
-}
 
 /**
  * When the duel ends, send the replay, notify the users, etc...
@@ -524,11 +500,6 @@ function makeGame(pduel, settings) {
 function duel(game, state, errorHandler, players, spectators) {
     var pduel,
         instance = {};
-        
-    if (game.shuffle) {
-        deepShuffle(players[0].main);
-        deepShuffle(players[1].main);
-    }
 
     function messageHandler(external_pduel, type) {
         var messageBuffer = Buffer.alloc(1024);
