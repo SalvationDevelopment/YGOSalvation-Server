@@ -253,7 +253,7 @@ function join(error, game, state, client, callback) {
             slot: client.slot,
             settings: client.settings,
             username: client.username,
-            avatar: (client.avatar) ? client.avatar.url : '';
+            avatar: (client.avatar) ? client.avatar.url : ''
         });
         state.clients[client.slot] = client;
         callback();
