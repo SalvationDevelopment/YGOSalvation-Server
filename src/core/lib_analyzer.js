@@ -463,7 +463,7 @@ function msg_add_counter(message, pbuf, game) {
             location: message.location,
             index: message.index
         }]
-    }
+    };
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();

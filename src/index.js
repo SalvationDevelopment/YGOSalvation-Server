@@ -67,7 +67,7 @@ function unsafePort() {
 
 function registrationCall(data, socket) {
     userController.validate(true, data, function (error, valid, responseData) {
-       
+
         if (error) {
             console.log(error);
             socket.write({
@@ -88,7 +88,7 @@ function registrationCall(data, socket) {
         info.decks = responseData.decks;
         if (valid) {
             socket.username = info.username;
-            
+
             socket.session = info.session;
             socket.admin = (info.role.name === 'Administrator');
             console.log(`${socket.username} has logged in`.bold);
@@ -481,15 +481,15 @@ function onData(data, socket) {
             mindcrushCall(data);
             break;
         case ('host'):
-            const port = unsafePort();
-            const execArgv =  (process.env.CORE_DEBUG) ?  [`--inspect=${unsafePort()}`] : undefined;
-            const child = child_process.fork(
-                './core/index.js', process.argv, {
-                cwd: __dirname,
-                env: Object.assign({}, process.env, data.info, { PORT: port }),
-                execArgv
-            }
-            );
+            const port = unsafePort(),
+                execArgv = (process.env.CORE_DEBUG) ? [`--inspect=${unsafePort()}`] : undefined,
+                child = child_process.fork(
+                    './core/index.js', process.argv, {
+                    cwd: __dirname,
+                    env: Object.assign({}, process.env, data.info, { PORT: port}),
+                    execArgv
+                }
+                );
             child.on('message', function (message) {
                 childHandler(child, socket, message);
             });
@@ -513,9 +513,9 @@ function onData(data, socket) {
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
             data.username = socket.username;
-           
+
             data.session = socket.session;
-            
+
             decks.processDecks(data, function (error, docs) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deckSaved',

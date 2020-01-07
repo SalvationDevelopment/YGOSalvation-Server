@@ -562,8 +562,7 @@ function duel(game, state, errorHandler, players, spectators) {
 }
 
 module.exports = {
-    duel: duel,
-    shuffle: shuffle
+    duel: duel
 };
 
 module.exports.configurations = {

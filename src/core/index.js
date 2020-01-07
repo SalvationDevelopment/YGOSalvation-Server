@@ -84,9 +84,9 @@ const WARNING_COUNTDOWN = 3000000,
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
-    ManualControlEngine = require('./model_manual_field.js/index.js'),
+    field = require('./model_manual_field.js'),
     automaticControlEngine = require('./controller_core.js'),
-    manualController = require('./controller_manual.js'),
+    manualControlEngine = require('./controller_manual.js'),
     path = require('path'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
@@ -459,7 +459,7 @@ function sideLock(game, client, message) {
  */
 function Duel() {
 
-    let duel = {};
+    const duel = {};
 
     function failure() {
         throw ('Duel has not started');
@@ -473,7 +473,7 @@ function Duel() {
             process.send({
                 action: 'win',
                 replay: process.replay,
-                ranked: Boolean(game.ranked === "Ranked"),
+                ranked: Boolean(game.ranked === 'Ranked'),
                 loserID: game.player[Math.abs(command.player - 1)].id,
                 winnerID: game.player[command.player].id
             });
@@ -491,8 +491,10 @@ function Duel() {
             return;
         }
 
-        const clientBinding = manualController.clientBinding(players, spectators);
-        duel.engine = new ManualControlEngine(clientBinding);
+        const clientBinding = manualControlEngine.clientBinding(players, spectators);
+        duel.engine = field(clientBinding);
+        duel.engine.lock[0] = true;
+        duel.engine.lock[1] = true;
         duel.engine.startDuel(players[0], players[1], true, game);
 
 
@@ -592,7 +594,7 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    automaticControlEngine.shuffle(state.clients);
+    shuffle(state.clients);
 
     server.write({
         action: 'start'
@@ -673,6 +675,7 @@ function requiresManualEngine(game, client) {
     if (client.slot === undefined) {
         return;
     }
+    console.log('manual');
     return true;
 }
 
@@ -761,7 +764,7 @@ function processMessage(server, duel, game, state, client, message) {
     if (!requiresManualEngine(game, client)) {
         return;
     }
-    manualController.responseHandler(duel.engine, state.clients, client, message);
+    manualControlEngine.responseHandler(duel.engine, state.clients, client, message);
 }
 
 /**
@@ -995,7 +998,7 @@ function Game(settings) {
         started: false,
         startLP: settings.LIFEPOINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
-        time: settings.TIME_LIMIT || 3000,
+        time: settings.TIME_LIMIT || 3000
     };
 }
 
@@ -1018,6 +1021,7 @@ function State(server, game) {
 /* eslint-disable no-sync */
 /**
  * Construct server instance
+ * @returns {Object} server instance
  */
 function HTTPServer() {
     const keyFile = path.resolve(process.env.SSL + '\\private.key'),

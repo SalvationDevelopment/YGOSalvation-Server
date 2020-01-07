@@ -1,3 +1,4 @@
+/**global app*/
 class ManualControls {
     constructor(store, primus) {
         this.store = store;
@@ -164,7 +165,7 @@ class ManualControls {
     manualNextPhase(phase) {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'nextPhase',
             phase: phase,
             sound: 'soundphase'
@@ -175,7 +176,7 @@ class ManualControls {
     manualNextTurn() {
 
         app.duel.controls.enable({});
-        this.primis.write({
+        this.primus.write({
             action: 'nextTurn'
         });
     }
@@ -183,7 +184,7 @@ class ManualControls {
     manualChangeLifepoints(amount) {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'changeLifepoints',
             amount: amount,
             sound: 'soundchangeLifePoints'
@@ -193,14 +194,14 @@ class ManualControls {
     manualMoveCard(movement) {
 
         app.duel.controls.enable({});
-        this.primis.write((movement));
+        this.primus.write((movement));
     }
 
     manualShuffleHand() {
 
         setTimeout(() => {
             app.duel.controls.enable({});
-            this.primis.write(({
+            this.primus.write(({
                 action: 'shuffleHand',
                 sound: 'soundcardShuffle'
             }));
@@ -213,7 +214,7 @@ class ManualControls {
     manualDraw() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'draw',
             sound: 'sounddrawCard'
         }));
@@ -222,7 +223,7 @@ class ManualControls {
     manualExcavateTop() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'excavate',
             sound: 'sounddrawCard'
         }));
@@ -231,7 +232,7 @@ class ManualControls {
     manualShuffleDeck() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'shuffleDeck',
             sound: 'soundcardShuffle'
         }));
@@ -240,7 +241,7 @@ class ManualControls {
     manualRevealTop() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealTop'
         }));
     }
@@ -248,7 +249,7 @@ class ManualControls {
     manualRevealBottom() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealBottom'
         }));
     }
@@ -256,7 +257,7 @@ class ManualControls {
     manualRevealDeck() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealDeck'
         }));
     }
@@ -264,7 +265,7 @@ class ManualControls {
     manualRevealExtra() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealExtra'
         }));
     }
@@ -272,7 +273,7 @@ class ManualControls {
     manualRevealExcavated() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealExcavated'
         }));
     }
@@ -280,7 +281,7 @@ class ManualControls {
     manualMill() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'mill'
         }));
     }
@@ -289,7 +290,7 @@ class ManualControls {
     manualMillRemovedCard() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'millRemovedCard'
         }));
     }
@@ -297,7 +298,7 @@ class ManualControls {
     manualMillRemovedCardFaceDown() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'millRemovedCardFaceDown'
         }));
     }
@@ -305,7 +306,7 @@ class ManualControls {
     manualViewDeck() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'viewDeck'
         }));
     }
@@ -313,7 +314,7 @@ class ManualControls {
     manualViewBanished() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'viewBanished',
             player: this.manualActionReference.player
         }));
@@ -322,7 +323,7 @@ class ManualControls {
     manualFlipDeck() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'flipDeck'
         }));
     }
@@ -330,7 +331,7 @@ class ManualControls {
     manualAddCounter() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'addCounter',
             uid: this.manualActionReference.uid
         }));
@@ -339,7 +340,7 @@ class ManualControls {
     manualRemoveCounter() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'removeCounter',
             uid: this.manualActionReference.uid
         }));
@@ -351,7 +352,7 @@ class ManualControls {
     manualAttack() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'attack',
             source: this.manualActionReference,
             target: targetreference,
@@ -375,7 +376,7 @@ class ManualControls {
     manualTarget(target) {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'target',
             target: target
         }));
@@ -387,7 +388,7 @@ class ManualControls {
     manualRemoveToken() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'removeToken',
             uid: this.manualActionReference.uid
         }));
@@ -396,7 +397,7 @@ class ManualControls {
     manualViewExtra() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'viewExtra',
             player: this.manualActionReference.player
         }));
@@ -405,7 +406,7 @@ class ManualControls {
     manualViewExcavated() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'viewExcavated',
             player: this.manualActionReference.player
         }));
@@ -414,7 +415,7 @@ class ManualControls {
     manualViewGrave() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'viewGrave',
             player: this.manualActionReference.player
         }));
@@ -423,7 +424,7 @@ class ManualControls {
     manualViewXYZMaterials() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'viewXYZ',
             index: this.manualActionReference.index,
             player: this.manualActionReference.player
@@ -434,7 +435,7 @@ class ManualControls {
 
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'effect',
             id: this.manualActionReference.id,
             player: this.manualActionReference.player,
@@ -453,7 +454,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToAttack(index) {
@@ -466,7 +467,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualsetMonster(index) {
@@ -479,7 +480,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToDefence() {
@@ -491,7 +492,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToFaceDownDefence() {
@@ -503,7 +504,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToFaceUpDefence() {
@@ -515,7 +516,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualsetMonsterFaceUp(index) {
@@ -528,7 +529,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualActivate(index) {
@@ -541,7 +542,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundactivateCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualActivateFieldSpell() {
@@ -552,7 +553,7 @@ class ManualControls {
         message.sound = 'soundactivateCard';
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualActivateFieldSpellFaceDown() {
@@ -564,7 +565,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualsetSpell(index) {
@@ -577,7 +578,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualSTFlipDown() {
@@ -590,7 +591,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundflipSummon';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualSTFlipUp() {
@@ -603,7 +604,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundflipSummon';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToExcavate() {
@@ -615,7 +616,7 @@ class ManualControls {
         message.movelocation = 'EXCAVATED';
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToExtra() {
@@ -628,13 +629,13 @@ class ManualControls {
 
         message.moveposition = 'FaceDown';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToOpponent() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'give',
             target: this.manualActionReference
         }));
@@ -643,7 +644,7 @@ class ManualControls {
     manualToOpponentsHand() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'give',
             target: this.manualActionReference,
             choice: 'HAND'
@@ -666,14 +667,14 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToBottomOfDeck() {
 
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'offsetDeck'
         }));
         var index = 0,
@@ -683,7 +684,7 @@ class ManualControls {
         message.action = 'moveCard';
         setTimeout(() => {
             app.duel.controls.enable({});
-            this.primis.write((message));
+            this.primus.write((message));
         }, 300);
 
     }
@@ -701,7 +702,7 @@ class ManualControls {
         message.moveindex = index;
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
 
@@ -719,7 +720,7 @@ class ManualControls {
         message.moveindex = index;
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualOverlay() {
@@ -734,7 +735,7 @@ class ManualControls {
             message.overlayindex = overlayindex;
             message.action = 'moveCard';
             app.duel.controls.enable({});
-            this.primis.write((message));
+            this.primus.write((message));
         });
     }
 
@@ -751,7 +752,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
         setTimeout(() => {
             var overlayindex = 0;
             overlaylist.forEach((card, cindex) => {
@@ -761,7 +762,7 @@ class ManualControls {
                 message.action = index;
                 message.action = 'moveCard';
                 app.duel.controls.enable({});
-                this.primis.write((message));
+                this.primus.write((message));
             });
         }, 1000);
     }
@@ -775,7 +776,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToOpponentsGrave() {
@@ -788,7 +789,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.moveplayer = moveplayer;
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToRemoved() {
@@ -799,7 +800,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
 
@@ -813,7 +814,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.moveposition = 'FaceUp';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToHand() {
@@ -828,7 +829,7 @@ class ManualControls {
 
         message.action = 'moveCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToExtra() {
@@ -841,7 +842,7 @@ class ManualControls {
 
         message.moveposition = 'FaceDown';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToRemovedFacedown() {
@@ -852,7 +853,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.moveposition = 'FaceDown';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualActivateField() {
@@ -866,7 +867,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToPZoneL() {
@@ -881,7 +882,7 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualToPZoneR() {
@@ -895,13 +896,13 @@ class ManualControls {
         message.action = 'moveCard';
         message.sound = 'soundsetCard';
         app.duel.controls.enable({});
-        this.primis.write((message));
+        this.primus.write((message));
     }
 
     manualRevealHandSingle() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealHandSingle',
             card: this.manualActionReference
         }));
@@ -910,7 +911,7 @@ class ManualControls {
     manualRevealHand() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'revealHand',
             card: this.manualActionReference
         }));
@@ -923,7 +924,7 @@ class ManualControls {
         card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.EXTRA').length));
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'reveal',
             card: card
         }));
@@ -936,7 +937,7 @@ class ManualControls {
         card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.EXCAVATED').length));
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'reveal',
             card: card
         }));
@@ -949,7 +950,7 @@ class ManualControls {
         card.index = Math.floor((Math.random() * $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.DECK').length));
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'reveal',
             card: card
         }));
@@ -966,13 +967,13 @@ class ManualControls {
         card.index = index;
         card.action = 'makeToken';
         app.duel.controls.enable({});
-        this.primis.write((card));
+        this.primus.write((card));
     }
 
     manualRoll() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'rollDie',
             name: localStorage.nickname
         }));
@@ -981,7 +982,7 @@ class ManualControls {
     manualFlip() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'flipCoin',
             name: localStorage.nickname
         }));
@@ -990,7 +991,7 @@ class ManualControls {
     manualRPS() {
 
         app.duel.controls.enable({});
-        this.primis.write(({
+        this.primus.write(({
             action: 'rps',
             name: localStorage.nickname
         }));

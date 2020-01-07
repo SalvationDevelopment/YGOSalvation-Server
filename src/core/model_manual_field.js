@@ -72,7 +72,7 @@
  * @typedef  {Object} ChangeRequest
  * @property {Number} uid   Unique card identifier in this game
  * @property {Number} player current player int 0,1, etc of controlling player
- * @property {String} clocation current location of the target card 'DECK'/'EXTRA' etc, in caps. 
+ * @property {String} location current location of the target card 'DECK'/'EXTRA' etc, in caps. 
  * @property {Number} index  current sequence of the card in the stack group. Example, nth card of DECK. in the current location
  * @property {Number} overlayindex  current overlay slot
  * @property {Number} moveplayer Requested end player int 0,1, etc of controlling player
@@ -342,17 +342,17 @@ function init(callback) {
     /**
      * Returns info on a card, or rather a single card.
      * @param   {Number} player player int 0,1, etc      Player Interger
-     * @param   {Number} clocation    Location enumeral
+     * @param   {Number} location    Location enumeral
      * @param   {Number} index        sequence of the card in the stack group. Example, nth card of DECK.
      * @param   {Number} overlayindex Index of where a card is in an XYZ stack starting at 1
      * @param   {Number} uid          Unique identifier, optional.
      * @returns {Object} The card you where looking for.
      */
-    function queryCard(player, clocation, index, overlayindex, uid) {
+    function queryCard(player, location, index, overlayindex, uid) {
         if (uid) {
             return filterUID(stack, uid)[0];
         }
-        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), clocation), index), overlayindex)[0];
+        return filterOverlyIndex(filterIndex(filterlocation(filterPlayer(stack, player), location), index), overlayindex)[0];
     }
 
     function findUIDCollection(uid) {
@@ -576,7 +576,7 @@ function init(callback) {
      */
     function setState(changeRequest) {
         var player = changeRequest.player,
-            clocation = changeRequest.clocation,
+            location = changeRequest.location,
             index = changeRequest.index,
             moveplayer = changeRequest.moveplayer,
             movelocation = changeRequest.movelocation,
@@ -584,7 +584,7 @@ function init(callback) {
             moveposition = changeRequest.moveposition,
             overlayindex = changeRequest.overlayindex,
             uid = changeRequest.uid,
-            target = queryCard(player, clocation, index, overlayindex, uid),
+            target = queryCard(player, location, index, overlayindex, uid),
             pointer = uidLookup(target.uid),
             zone;
 
@@ -697,7 +697,7 @@ function init(callback) {
             topcard = deck[deck.length - 1];
             setState({
                 player: topcard.player,
-                clocation: 'DECK',
+                location: 'DECK',
                 index: topcard.index,
                 moveplayer: player,
                 movelocation: 'HAND',
@@ -731,7 +731,7 @@ function init(callback) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
-                clocation: 'DECK',
+                location: 'DECK',
                 index: topcard,
                 moveplayer: player,
                 movelocation: 'EXCAVATED',
@@ -764,7 +764,7 @@ function init(callback) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
-                clocation: 'DECK',
+                location: 'DECK',
                 index: topcard,
                 moveplayer: player,
                 movelocation: 'GRAVE',
@@ -794,7 +794,7 @@ function init(callback) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
-                clocation: 'DECK',
+                location: 'DECK',
                 index: topcard,
                 moveplayer: player,
                 movelocation: 'REMOVED',
@@ -824,7 +824,7 @@ function init(callback) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
             setState({
                 player: player,
-                clocation: 'DECK',
+                location: 'DECK',
                 index: topcard,
                 moveplayer: player,
                 movelocation: 'REMOVED',
