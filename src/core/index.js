@@ -84,8 +84,8 @@ const WARNING_COUNTDOWN = 3000000,
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
-    ManualControlEngine = require('./model_field.js'),
-    automaticEngine = require('./controller_core.js'),
+    ManualControlEngine = require('./model_manual_field.js/index.js'),
+    automaticControlEngine = require('./controller_core.js'),
     manualController = require('./controller_manual.js'),
     path = require('path'),
     Primus = require('primus'),
@@ -485,7 +485,7 @@ function Duel() {
         }
 
         if (game.automatic === 'Automatic') {
-            const instance = automaticEngine.duel(game, state, errorHandler, players, spectators);
+            const instance = automaticControlEngine.duel(game, state, errorHandler, players, spectators);
             duel.getField = instance.getField;
             duel.respond = instance.respond;
             return;
@@ -592,7 +592,7 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    automaticEngine.shuffle(state.clients);
+    automaticControlEngine.shuffle(state.clients);
 
     server.write({
         action: 'start'
