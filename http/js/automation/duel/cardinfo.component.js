@@ -30,7 +30,10 @@ function cardIs(cat, obj) {
         return (obj.type & 8388608) === 8388608;
     }
     if (cat === 'link') {
-        return obj.links.length || ((obj.type & 0x4000000) === 0x4000000);
+        if (obj.links && obj.links.length) {
+            return true;
+        }
+        return  ((obj.type & 0x4000000) === 0x4000000);
     }
 }
 
