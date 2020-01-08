@@ -137,7 +137,8 @@ function setupEndpoints(app) {
 }
 
 module.exports = {
-    setupEndpoints
+    setupEndpoints,
+    logDuel
 }
 
 setSession();
