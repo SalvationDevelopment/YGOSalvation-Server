@@ -1,3 +1,7 @@
+#cardDescription {
+    background-color: rgba(0, 0, 0, 0.50);    
+}
+
 #deckedit ::-webkit-input-placeholder {
     text-align: center;
 }
@@ -112,6 +116,7 @@
     overflow: auto;
     padding: .5vh .5vw;
     flex: 1;
+    background-color: rgba(0, 0, 0, 0.50);
 }
 
 #deckedit h3 {
@@ -462,4 +467,8 @@ input[type="checkbox"]:checked:after {
     position: relative;
     left: 5px;
     top: 5px;
+}
+
+.searchfilter {
+    background-color: rgba(0, 0, 0, 0.35);    
 }
