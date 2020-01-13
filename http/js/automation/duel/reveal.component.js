@@ -19,7 +19,7 @@ class Revealer extends React.Component {
     }
 
     img(card, i) {
-        const src = `http://127.0.0.1:8887/${card.id}.jpg`,
+        const src = `${localStorage.imageURL}/${card.id}.jpg`,
             onClick = this.click.bind(this, card.selected, i);
 
         return React.createElement('img', { className: (card.selected) ? 'selected' : '', src, onClick });

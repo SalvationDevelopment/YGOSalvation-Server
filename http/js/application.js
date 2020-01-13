@@ -115,6 +115,8 @@ class ApplicationComponent extends React.Component {
 
 
         this.connect();
+
+        localStorage.imageURL = localStorage.imageURL || 'http://127.0.0.1:8887';
         ReactDOM.render(this.render(), this.root);
     }
 

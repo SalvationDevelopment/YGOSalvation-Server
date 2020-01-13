@@ -20,7 +20,7 @@ class SelectPosition extends React.Component {
     }
 
     img(card) {
-        const src = `http://127.0.0.1:8887/${card.id}.jpg`,
+        const src = `${localStorage.imageURL}/${card.id}.jpg`,
             onClick = this.click.bind(this, card);
 
         return React.createElement('img', { className: card.position, src, onClick });
