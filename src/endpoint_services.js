@@ -39,6 +39,11 @@ async function getNews() {
     return news.data;
 }
 
+async function getBackgrounds() {
+    const backgrounds = await axios.get(`${ADMIN_SERVER_URL}/backgrounds?_sort=createdAt:ASC`);
+    return backgrounds.data;
+}
+
 async function getRanking() {
     const ranking = await axios.get(`${ADMIN_SERVER_URL}/users?_sort=elo:desc`,
         {
@@ -111,6 +116,15 @@ function setupEndpoints(app) {
     app.get('/news', async (request, response) => {
         try {
             const news = await getNews();
+            response.send(news);
+        } catch (error) {
+            response.send(error.toJSON());
+        }
+    });
+
+    app.get('/backgrounds', async (request, response) => {
+        try {
+            const news = await getBackgrounds();
             response.send(news);
         } catch (error) {
             response.send(error.toJSON());

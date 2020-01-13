@@ -224,7 +224,7 @@ class CardInfo extends React.Component {
     }
 
     render() {
-        const src = `http://127.0.0.1:8887/${this.state.id}.jpg`,
+        const src = `${localStorage.imageURL}/${this.state.id}.jpg`,
             picture = [
                 React.createElement('div', { className: 'cardImage' },
                     React.createElement('img', { className: 'imgContainer', src })),

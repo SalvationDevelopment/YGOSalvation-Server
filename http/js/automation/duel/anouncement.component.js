@@ -12,7 +12,7 @@ class Flasher extends React.Component {
 
     render() {
         if (this.state.active) {
-            const src = `http://127.0.0.1:8887/${this.state.id}.jpg`;
+            const src = `${localStorage.imageURL}/${this.state.id}.jpg`;
             return React.createElement('div', {
                 style: {
                     display: 'block'

@@ -3,13 +3,12 @@ class NewsScreen extends React.Component {
     constructor(store) {
         super();
         this.store = store;
-        
-        fetch(`/news`).then((response) => {
+        this.articles = [];
+        fetch('/news').then((response) => {
             response.json().then(data => {
                 this.articles = data;
                 this.store.dispatch({ action: 'RENDER' });
             });
-
         });
     }
 

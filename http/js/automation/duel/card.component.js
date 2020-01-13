@@ -10,7 +10,7 @@ class CardImage extends React.Component {
         const player = (window.orientation) ? (state.player ? 0 : 1) : state.player,
             className = ['card', 'p' + player, state.location, 'i' + state.index],
             facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack'),
-            src = (state.id && !facedown) ? 'http://127.0.0.1:8887/' + state.id + '.jpg' : 'img/textures/cover.jpg',
+            src = (state.id && !facedown) ? localStorage.imageURL + '/' + state.id + '.jpg' : 'img/textures/cover.jpg',
             style = {};
         if (!player && state.location === 'HAND') {
             state.position = 'FaceUp';
