@@ -1,4 +1,8 @@
 
+/**
+ * Boot Loader for the YGOSalvation software suite. Starts central and helper servers.
+ */
+/* eslint-disable no-sync */
 require('dotenv').config();
 const axios = require('axios'),
     ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
@@ -15,7 +19,7 @@ const axios = require('axios'),
  * Program Entry Point
  * @returns {undefined}
  */
-async function main() {
+function main() {
     console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
 
@@ -35,12 +39,12 @@ async function main() {
 
     if (Boolean(process.env.ADMIN_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Admin Server'.bold.green);
-        var subserver = child_process.fork('../ygosalvation-admin/src/server.js');
+        process.adminServer = child_process.fork('../ygosalvation-admin/src/server.js');
     }
 
     if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Database Server'.bold.green);
-        var subserver = child_process.fork('../ygosalvation-database/app.js');
+        process.databaseServer = child_process.fork('../ygosalvation-database/app.js');
     }
     
     process.title = 'YGOSalvation Server ' + new Date();
