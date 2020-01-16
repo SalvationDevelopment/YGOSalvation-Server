@@ -309,8 +309,11 @@ class DeckEditScreen extends React.Component {
             main: [],
             extra: [],
             side: []
-        },
-            name = prompt('New Deck Name?', this.state.decks[this.settings.decklist].name);
+        }, name = window.prompt('New Deck Name?', this.state.decks[this.settings.decklist].name);
+
+        if (!name) {
+            return;
+        }
         if (this.state.decks.some((unit) => name === unit.name)) {
             return;
         }
@@ -332,6 +335,9 @@ class DeckEditScreen extends React.Component {
     saveAs() {
         const deck = {},
             name = prompt('Save As?', this.state.decks[this.settings.decklist].name);
+        if (!name) {
+            return;
+        }
         if (name === this.state.decks[this.settings.decklist].name) {
             return;
         }
@@ -365,6 +371,9 @@ class DeckEditScreen extends React.Component {
     }
     rename() {
         const name = prompt('Deck Name?', this.state.decks[this.settings.decklist].name);
+        if (!name) {
+            return;
+        }
         this.state.decks[this.settings.decklist].name = name;
         this.save();
     }
