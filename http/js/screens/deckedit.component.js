@@ -870,6 +870,12 @@ class DeckEditScreen extends React.Component {
         event.preventDefault();
     }
 
+    handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            this.onSearchChange(event);
+        }
+    }
+
     renderReleases() {
         const element = React.createElement,
             list = this.state.releases.map((set, i) => {
@@ -877,6 +883,7 @@ class DeckEditScreen extends React.Component {
             });
         return [element('option', { value: 'undefined' }, 'Release Set')].concat(list);
     }
+
     render() {
         const element = React.createElement;
         return [
@@ -915,8 +922,16 @@ class DeckEditScreen extends React.Component {
                                 element('option', { value: 1 }, 'Limited'),
                                 element('option', { value: 0 }, 'Forbidden')
                             ]),
-                            element('input', { id: 'cardname', type: 'text', placeholder: 'Name', onBlur: this.onSearchChange.bind(this) }),
-                            element('input', { id: 'description', type: 'text', placeholder: 'Card Text', onBlur: this.onSearchChange.bind(this) }),
+                            element('input', {
+                                id: 'cardname', type: 'text', placeholder: 'Name',
+                                onKeyPress: this.handleKeyPress.bind(this),
+                                onBlur: this.onSearchChange.bind(this)
+                            }),
+                            element('input', {
+                                id: 'description', type: 'text', placeholder: 'Card Text',
+                                onKeyPress: this.handleKeyPress.bind(this),
+                                onBlur: this.onSearchChange.bind(this)
+                            }),
                             this.renderStats(),
                             element('button', { onClick: this.clearSearch.bind(this) }, 'Reset')
                         ]),
