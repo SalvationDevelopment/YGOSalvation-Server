@@ -510,6 +510,15 @@ class DeckEditScreen extends React.Component {
 
     }
 
+    searchScroll(event) {
+        var searchBox = document.querySelector("#decksearchresults");
+        if (searchBox.scrollTop >= (searchBox.scrollHeight - searchBox.offsetHeight)) {
+            this.searchFilter.currentSearchPageSize+= 30;
+            this.state.search = this.searchFilter.renderSearch();
+            this.store.dispatch({ action: 'RENDER' });
+        }
+    }
+
     marginClass(deck) {
         if (deck.length <= 40) {
             return '';
@@ -981,7 +990,7 @@ class DeckEditScreen extends React.Component {
                 ]),
                 element('div', { id: 'decktextlist' }, this.renderCardList())
             ]),
-            element('button', { id: 'prev', onClick: this.prev.bind(this) }, '<'),
+            
             element('div', {
                 id: 'decksearch',
                 onDragOver: function (event, x) {
@@ -995,9 +1004,8 @@ class DeckEditScreen extends React.Component {
                     element('h2', {}, 'Card Information')
                 ]),
 
-                element('div', { id: 'decksearchresults' }, this.renderCardCollection('search', this.state.search)),
-                element('div', { id: 'decksearchresultsofx' }, `${Math.ceil(this.searchFilter.currentSearchNumberOfPages)} of ${this.searchFilter.maxPages}`),
-                element('button', { id: 'next', onClick: this.next.bind(this) }, '>'),
+                element('div', { id: 'decksearchresults', onScroll: this.searchScroll.bind(this) }, this.renderCardCollection('search', this.state.search)),
+                element('div', { id: 'decksearchresultsofx' }, `${this.searchFilter.currentSearch.length} cards found`),
                 element('div', { id: 'cardinformation' }, this.info.render())
             ]),
             element('div', { id: 'deckarea' }, [

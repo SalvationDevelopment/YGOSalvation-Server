@@ -65,6 +65,7 @@
     display: block;
     flex-wrap: wrap;
     padding: .5vh .5vw;
+    overflow-y: auto;
 }
 
 #decksearchresults div {
