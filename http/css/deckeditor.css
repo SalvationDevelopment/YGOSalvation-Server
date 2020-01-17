@@ -100,15 +100,15 @@
 #deckedit h2 {
     font-size: 2vh;
     float: left;
-    color: #f0f;
-    border-top: 1px solid #f0f;
-    border-right: 1px solid #f0f;
+    color: gray;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
     font-weight: bold;
     padding-right: .5em;
 }
 
 #decktextlist {
-    border: 1px solid #f0f;
+    border: 1px solid gray;
     float: left;
     width: 97%;
     margin-top: 1vh;
@@ -239,8 +239,8 @@ control#linkmarkers {
 }
 
 .deckmetainfo {
-    border: 1px solid #f0f;
-    background: rgba(255, 0, 255, .1);
+    border: 1px solid gray;
+    /* background: rgba(255, 0, 255, .1); */
     height: 90%;
     width: 100%;
     float: left;
