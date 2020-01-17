@@ -1,4 +1,4 @@
-/*global store, $, app, Store, cardId */
+/*global store, $, app, Store, cardId, cardIs */
 
 const store = new Store();
 
@@ -195,7 +195,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
             hash[item.tcg.pack] = 0;
         }
         return hash;
-    }), sets = Object.keys(cardsets).sort();
+    }, {}), sets = Object.keys(cardsets).sort();
 
     store.dispatch({ action: 'LOAD_RELEASES', sets });
     $.getJSON('/manifest/banlist.json', (bdata) => {
@@ -258,7 +258,7 @@ class SearchFilter {
     constructor(database) {
         this.currentSearch = [];
         this.currentSearchIndex = 0;
-        this.currentSearchPageSize = 30;
+        this.currentSearchPageSize = 60;
         this.currentSearchNumberOfPages = 1;
         this.maxPages = Math.ceil(this.currentSearchPageSize / this.currentSearch.length);
         this.currentFilter = this.getFilter();
@@ -653,6 +653,7 @@ class SearchFilter {
 
     preformSearch() {
         this.currentSearch = this.filterAll(this.database, this.currentFilter);
+        this.currentSearchPageSize= 60;
         this.currentSearchIndex = 0;
     }
 
