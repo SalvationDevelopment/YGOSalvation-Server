@@ -264,6 +264,12 @@ class DeckEditScreen extends React.Component {
         this.store.dispatch({ action: 'RENDER' });
     }
     clearSearch() {
+        const searchBox = document.querySelector('#cardname'),
+            description = document.querySelector('#description');
+
+        searchBox.value = '';
+        description.value = '';
+
         this.searchFilter.clearFilter();
         this.state.search = this.searchFilter.renderSearch();
         this.settings = {
@@ -289,6 +295,7 @@ class DeckEditScreen extends React.Component {
             limit: undefined,
             links: [null, null, null, null, null, null, null, null]
         };
+
         this.store.dispatch({ action: 'RENDER' });
     }
 
@@ -460,7 +467,7 @@ class DeckEditScreen extends React.Component {
         deck.side = deck.side.map((cardid) => {
             return this.findcard({
                 id: parseInt(cardid, 10)
-            })
+            });
         }).filter((card) => card);
         deck.extra = deck.extra.map((cardid) => {
             return this.findcard({
@@ -511,9 +518,9 @@ class DeckEditScreen extends React.Component {
     }
 
     searchScroll(event) {
-        var searchBox = document.querySelector("#decksearchresults");
+        var searchBox = document.querySelector('#decksearchresults');
         if (searchBox.scrollTop >= (searchBox.scrollHeight - searchBox.offsetHeight)) {
-            this.searchFilter.currentSearchPageSize+= 30;
+            this.searchFilter.currentSearchPageSize += 30;
             this.state.search = this.searchFilter.renderSearch();
             this.store.dispatch({ action: 'RENDER' });
         }
@@ -640,7 +647,7 @@ class DeckEditScreen extends React.Component {
                 return list;
             }, {});
         return Object.keys(hashMap).map((name, i) => {
-            return element('div', { key: `x${i}${name}` }, `${hashMap[name]}x ${name}`)
+            return element('div', { key: `x${i}${name}` }, `${hashMap[name]}x ${name}`);
         });
 
     }
@@ -990,7 +997,7 @@ class DeckEditScreen extends React.Component {
                 ]),
                 element('div', { id: 'decktextlist' }, this.renderCardList())
             ]),
-            
+
             element('div', {
                 id: 'decksearch',
                 onDragOver: function (event, x) {

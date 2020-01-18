@@ -61,6 +61,7 @@
     width: 45vw;
     height: 40vh;
     background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
     float: left;
     display: block;
     flex-wrap: wrap;
@@ -105,8 +106,9 @@
     border-top: 1px solid gray;
     border-right: 1px solid gray;
     font-weight: bold;
-    padding-right: .5em;
+    padding: 0 .5em;
     background-color: rgba(0, 0, 0, 0.70);
+
 }
 
 #decktextlist {
@@ -119,6 +121,7 @@
     padding: .5vh .5vw;
     flex: 1;
     background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
 }
 
 #deckedit h3 {
@@ -223,7 +226,7 @@ control#linkmarkers {
 }
 
 #decksearchtitles h2:first-child {
-    margin-right: 52.5%;
+    margin-right: 51.75%;
 }
 
 #deckareamain,
@@ -259,6 +262,8 @@ control#linkmarkers {
     float: left;
     height: 40vh;
     background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+    
     margin-left: 1.7vw;
 }
 
@@ -289,6 +294,7 @@ control#linkmarkers {
     display: flex;
     flex-wrap: wrap;
     background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
 }
 
 .deckmetainfo div {
@@ -333,7 +339,8 @@ control#linkmarkers {
     left: 6vw;
     width: 43%;
     text-align: center;
-    background: rgba(0, 0, 0, .8);
+    background: rgba(0, 0, 0, .7);
+    box-shadow: 0 0 10px #000;
 }
 
 [data-limit] {
@@ -482,5 +489,6 @@ input[type="checkbox"]:checked:after {
 }
 
 .searchfilter {
-    background-color: rgba(0, 0, 0, 0.35);    
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px #000;
 }

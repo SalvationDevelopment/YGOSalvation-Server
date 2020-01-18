@@ -980,7 +980,7 @@ function Game(settings) {
     return {
         automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
         banlist: settings.BANLIST || 'No Banlist',
-        cardpool: settings.CARD_POOL || 'OCG/TCG',
+        cardpool: settings.CARDPOOL || 'OCG/TCG',
         deckcheck: (settings.DECK_CHECK === 'true'),
         draw_count: settings.DRAW_COUNT || 1,
         legacyfield: (settings.LEGACY === 'true'),

@@ -119,7 +119,7 @@ class GamelistScreen extends React.Component {
                     hash['data-' + data] = room[data];
                     return hash;
                 }, {}),
-                illegal = this.isIllegal(room) ? 'illegal' : ''
+                illegal = this.isLegal(room) ? '' : 'illegal';
             return React.createElement('div', Object.assign({
                 onClick: this.enter.bind(this, room),
                 className: `game ${room.mode} ${status} ${illegal}`
@@ -127,11 +127,8 @@ class GamelistScreen extends React.Component {
         });
     }
 
-    isIllegal(room) {
+    isLegal(room) {
         if (!room.shuffle) {
-            return false;
-        }
-        if (room.banlist === 'No Banlist') {
             return false;
         }
         if (room.banlist === 'No Banlist') {

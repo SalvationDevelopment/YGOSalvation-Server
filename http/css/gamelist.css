@@ -70,10 +70,12 @@ sction#gamelist {
 }
 
 #gamelistfilter {
-    height: 70vh;
+    height: 90vh;
     width: 20vw;
     text-align: center;
-
+    background: rgba(0,0,0,.7);
+    border: 1px solid #444;
+    box-shadow: 0 0 10px #000;
 }
 
 #gamelist select,
@@ -141,20 +143,20 @@ sction#gamelist {
 }
 
 
-div[data-ot="0"] {
+div[data-cardpool="OCG"] {
     /* OCG */
     border-color: yellow;
     color: yellow;
 }
 
-div[data-ot="0"]:not(.started) {
+div[data-cardpool="OCG"]:not(.started) {
     background-image: url(../img/ocg.png);
     background-size: 100% 100%;
     color: white;
     background-size: cover;
 }
 
-.started[data-ot="0"] {
+.started[data-cardpool="OCG"] {
     background-image: url(../img/faded-ocg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
@@ -162,20 +164,20 @@ div[data-ot="0"]:not(.started) {
     background-size: cover;
 }
 
-div[data-ot="1"] {
+div[data-cardpool="OCG/TCG"] {
     /* TCG */
     border-color: blue;
     color: blue;
 }
 
-div[data-ot="1"]:not(.started) {
+div[data-cardpool="TCG"]:not(.started) {
     background-image: url(../img/tcg.png);
     background-size: cover;
     color: white;
     background-size: cover;
 }
 
-.started[data-ot^="1"] {
+.started[data-cardpool="TCG"] {
     background-image: url(../img/faded-tcg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
@@ -183,19 +185,19 @@ div[data-ot="1"]:not(.started) {
     background-size: cover;
 }
 
-div[data-ot="2"] {
+div[data-cardpool="OCG/TCG"] {
     /* TCG/OCG */
     border-color: green;
     color: green;
 }
 
-div[data-ot="2"]:not(.started) {
+div[data-cardpool="OCG/TCG"] {
     background-image: url(../img/tcgocg.png);
     background-size: cover;
     color: white;
 }
 
-.started[data-ot="2"] {
+.started[data-cardpool="OCG/TCG"] {
     background-image: url(../img/faded-tcgocg.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
@@ -203,7 +205,7 @@ div[data-ot="2"]:not(.started) {
     background-size: cover;
 }
 
-div[data-ot="3"]:not(.started) {
+div[data-cardpool="Anime"]:not(.started) {
     /* Anime */
     background-image: url(../img/anime.png);
     background-size: cover;
@@ -211,7 +213,7 @@ div[data-ot="3"]:not(.started) {
     background-size: cover;
 }
 
-.started[data-ot="3"] {
+.started[data-cardpool="Anime"] {
     background-image: url(../img/faded-anime.png);
     background-color: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
@@ -235,12 +237,12 @@ div[data-mode="Tag"] {
 }
 
 
-[data-bad] {
+.illegal {
     background: red !important;
     border: 1px solid orange;
 }
 
-.started[data-bad] {
+.started.illegal {
     background: rgba(0, 0, 0, .5) !important;
     border: 1px solid grey;
     background-size: cover;
