@@ -33,7 +33,7 @@ function cardIs(cat, obj) {
         if (obj.links && obj.links.length) {
             return true;
         }
-        return  ((obj.type & 0x4000000) === 0x4000000);
+        return ((obj.type & 0x4000000) === 0x4000000);
     }
 }
 
@@ -224,7 +224,7 @@ class CardInfo extends React.Component {
     }
 
     render() {
-        const src = `${localStorage.imageURL}/${this.state.id}.jpg`,
+        const src = (this.state.id) ? `${localStorage.imageURL}/${this.state.id}.jpg` : '',
             picture = [
                 React.createElement('div', { className: 'cardImage' },
                     React.createElement('img', { className: 'imgContainer', src })),

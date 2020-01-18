@@ -1,25 +1,12 @@
 .marquee {
-    animation: marquee 30s linear infinite;
-    -webkit-animation: marquee 30s linear infinite;
     width: 50%;
     margin: 0 auto;
     padding-bottom: 30%;
 }
 
-.marquee:hover {
-    animation-play-state: paused
-}
 
 
-keyframes marquee {
-    0% {
-        transform: translate(0, 100%);
-    }
 
-    100% {
-        transform: translate(0, -100%);
-    }
-}
 
 .creditsperson {
     margin: 9px auto;
