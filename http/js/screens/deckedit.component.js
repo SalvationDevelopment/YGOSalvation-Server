@@ -265,10 +265,12 @@ class DeckEditScreen extends React.Component {
     }
     clearSearch() {
         const searchBox = document.querySelector('#cardname'),
-            description = document.querySelector('#description');
+            description = document.querySelector('#description'),
+            cardtype = document.querySelector('#cardtype');
 
         searchBox.value = '';
         description.value = '';
+        cardtype.value = 5;
 
         this.searchFilter.clearFilter();
         this.state.search = this.searchFilter.renderSearch();

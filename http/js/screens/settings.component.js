@@ -37,6 +37,7 @@ class SettingsScreen extends React.Component {
         localStorage.language = this.settings.language;
         localStorage.imageURL = this.settings.imageURL;
         document.body.style.backgroundImage = `url(${this.settings.theme})`;
+        this.store.dispatch({ action: 'RENDER' });
 
     }
 
