@@ -52,7 +52,12 @@ class ZoneSelector extends React.Component {
             SPELLZONE: 8
         };
         this.store.dispatch({
-            action: 'ZONE_CLICK', zone: {
+            action: 'ZONE_CLICK',
+            manual: {
+                choice: this.state.index,
+                location: this.state.location
+            },
+            automatic: {
                 type: 'zone',
                 i: [
                     (window.orientation) ? (this.state.player ? 0 : 1) : this.state.player,

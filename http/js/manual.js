@@ -1,9 +1,10 @@
-/**global app*/
+/**global app, $*/
 class ManualControls {
     constructor(store, primus) {
         this.store = store;
         this.primus = primus;
         this.manualActionReference = {};
+        this.zonetargetingmode = '';
         return this;
     }
 
@@ -34,6 +35,80 @@ class ManualControls {
             isBecomingCard: end.isBecomingCard,
             uid: start.uid
         };
+    }
+
+    selectionzoneonclick(choice, zone) {
+        if (!this.zonetargetingmode) {
+            return;
+        }
+
+        $('.cardselectionzone.p0').removeClass('card');
+        $('.cardselectionzone.p0').removeClass('attackglow');
+        if (this.zonetargetingmode === 'atk') {
+            this.manualToAttack(choice);
+        }
+        if (this.zonetargetingmode === 'generic') {
+            if (zone === 'GRAVE') {
+                this.manualToGrave();
+            } else {
+                this.manualMoveGeneric(choice, zone);
+            }
+
+        }
+        if (this.zonetargetingmode === 'def') {
+            this.manualSetMonsterFaceUp(choice);
+        }
+        if (this.zonetargetingmode === 'normalatk') {
+            this.manualNormalSummon(choice);
+        }
+        if (this.zonetargetingmode === 'normaldef') {
+            this.manualSetMonster(choice);
+        }
+        if (this.zonetargetingmode === 'activate') {
+            this.manualActivate(choice);
+        }
+        if (this.zonetargetingmode === 'set') {
+            this.manualSetSpell(choice);
+        }
+        if (this.zonetargetingmode === 'token') {
+            this.manualToken(choice);
+        }
+        this.zonetargetingmode = false;
+        return;
+
+    }
+
+    startSpecialSummon(mode) {
+        'use strict';
+        this.zonetargetingmode = mode;
+        $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
+        if (this.legacyMode) {
+            $('.cardselectionzone.p0.MONSTERZONE.i5').removeClass('attackglow card');
+            $('.cardselectionzone.p0.MONSTERZONE.i6').removeClass('attackglow card');
+        }
+        if (mode === 'generic') {
+            $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+            if (!legacyMode) {
+                $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+                $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+            }
+            $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+            exclusionList(0, 'SPELLZONE', 'attackglow');
+        }
+        exclusionList(0, 'MONSTERZONE', 'attackglow');
+    }
+
+    startSpellTargeting(mode) {
+        'use strict';
+        zonetargetingmode = mode;
+        $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
+        if (!legacyMode) {
+            $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
+            $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+        }
+        $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
+        exclusionList(0, 'SPELLZONE', 'attackglow');
+
     }
 
     makeMonster(card, index) {

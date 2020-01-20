@@ -91,9 +91,14 @@ class ApplicationComponent extends React.Component {
         });
 
         this.store.register('ZONE_CLICK', (message, state) => {
+            if (app.manual) {
+                debugger;
+                app.manualControls.selectionzoneonclick(message.manual.choice, message.manual.location);
+                return;
+            }
             this.primus.write({
                 action: 'question',
-                answer: message.zone,
+                answer: message.automatic,
                 uuid: this.state.question
             });
             return state;
