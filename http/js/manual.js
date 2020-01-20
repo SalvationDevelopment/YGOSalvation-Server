@@ -545,7 +545,7 @@ class ManualControls {
         this.primus.write((message));
     }
 
-    manualsetMonster(index) {
+    manualSetMonster(index) {
 
 
         index = (index !== undefined) ? index : automaticZonePicker(this.manualActionReference.player, 'MONSTERZONE');
@@ -594,7 +594,7 @@ class ManualControls {
         this.primus.write((message));
     }
 
-    manualsetMonsterFaceUp(index) {
+    manualSetMonsterFaceUp(index) {
 
 
         index = (index !== undefined) ? index : this.manualActionReference.index;
@@ -643,7 +643,7 @@ class ManualControls {
         this.primus.write((message));
     }
 
-    manualsetSpell(index) {
+    manualSetSpell(index) {
 
 
         index = (index !== undefined) ? index : automaticZonePicker(this.manualActionReference.player, 'SPELLZONE');
