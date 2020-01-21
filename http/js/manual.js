@@ -8,6 +8,24 @@ class ManualControls {
         return this;
     }
 
+    exclusionList(player, location, classValue) {
+        var cardsOnField = app.duel.field.state.cards.filter(function(card) {
+                return (orient(card.player) === player && card.location === location);
+            }),
+            selections = cardsOnField.map(function(card) {
+                return '.cardselectionzone.p' + player + '.' + location + '.i' + card.index;
+            });
+    
+        selections.forEach(function(cardzone) {
+            $(cardzone).removeClass(classValue);
+        });
+        return {
+            selections: selections,
+            cardsOnField: cardsOnField
+        };
+    
+    }
+
     makeCardMovement(start, end) {
 
         if (end.position === undefined) {
@@ -93,9 +111,9 @@ class ManualControls {
                 $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
             }
             $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-            exclusionList(0, 'SPELLZONE', 'attackglow');
+            this.exclusionList(0, 'SPELLZONE', 'attackglow');
         }
-        exclusionList(0, 'MONSTERZONE', 'attackglow');
+        this.exclusionList(0, 'MONSTERZONE', 'attackglow');
     }
 
     startSpellTargeting(mode) {
@@ -107,7 +125,7 @@ class ManualControls {
             $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
         }
         $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-        exclusionList(0, 'SPELLZONE', 'attackglow');
+        this.exclusionList(0, 'SPELLZONE', 'attackglow');
 
     }
 

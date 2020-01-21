@@ -3,7 +3,7 @@
 
 window.orientation = 0;
 function orient(player) {
-    return;
+    return (window.orientation) ? (player ? 0 : 1) : player;
 }
 
 class ApplicationComponent extends React.Component {
