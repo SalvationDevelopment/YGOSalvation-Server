@@ -185,7 +185,7 @@ class ControlButtons {
                 disabledClasses.push('spdef');
             }
             if (pendulumMap[query.type]) {
-                enabledClasses.push('.m-monster-p');
+                enabledClasses.push('m-monster-p');
             }
         }
         if (query.location === 'MONSTERZONE') {
@@ -193,31 +193,31 @@ class ControlButtons {
             // non-extra filter
 
             if (cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query)) {
-                enabledClasses.push('.m-monster-extra');
+                enabledClasses.push('m-monster-extra');
             }
             if (!(cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query))) {
-                enabledClasses.push('.non-extra');
+                enabledClasses.push('non-extra');
             }
             if (pendulumMap[query.type]) {
-                enabledClasses.push('.m-monster-p');
+                enabledClasses.push('m-monster-p');
             }
             if (cardIs('xyz', query)) {
-                enabledClasses.push('.m-monster-xyz');
+                enabledClasses.push('m-monster-xyz');
             }
             if (!excludeTokens(query)) {
-                enabledClasses.push('.m-monster-token').css({
+                enabledClasses.push('m-monster-token').css({
                     'display': 'block'
                 });
                 disabledClasses.push('bottomdeck', 'topdeck', 'opphand', 'banishcard', 'tograve', 'tohand', 'overlayStack', 'flipDownMonster', 'banishcardfd');
             }
             if (checksetcode(query, 151) || query.id === 9791914 || query.id === 58132856) {
-                enabledClasses.push('.m-st-monster');
+                enabledClasses.push('m-st-monster');
             }
             if (query.id === 27911549) {
-                enabledClasses.push('.m-parasite');
+                enabledClasses.push('m-parasite');
             }
             if (query.position === 'FaceUpAttack') {
-                // to attack
+                enabledClasses.push('m-monster');
 
             }
             if (cardIs('link', query)) {
@@ -235,16 +235,16 @@ class ControlButtons {
         }
         if (query.location === 'EXTRA') {
             enabledClasses.push('m-extra-view');
-            enabledClasses.push('.m-extra');
+            enabledClasses.push('m-extra');
             if (cardIs('link', query)) {
                 // remove defense option.
             }
         }
         if (query.location === 'REMOVED') {
             enabledClasses.push('m-removed');
-            enabledClasses.push('.m-removed');
+            enabledClasses.push('m-removed');
             if (pendulumMap[query.type]) {
-                enabledClasses.push('.m-monster-p');
+                enabledClasses.push('m-monster-p');
             }
             if (cardIs('link', query)) {
                 $('#SpDef').css({
@@ -361,7 +361,8 @@ class ControlButtons {
             location: query.location,
             type: query.type,
             player: query.player,
-            setcode: query.setcode
+            setcode: query.setcode,
+            position : query.position
         };
         this.info.coords = coords;
         app.manualControls.manualActionReference = this.info.target;
