@@ -584,7 +584,7 @@ div#actions button {
     display: block;
 }
 
-.sidingzone img {
+.sidingzone .card {
     width: 6%;
     margin: 1px;
     float: left;
@@ -1022,12 +1022,13 @@ div#yesnobox {
 }
 
 
-#subreveal img,
-#revealed img {
+#subreveal .card,
+#revealed .card {
     margin: 10px;
     height: 37vh;
     min-width: 13vw;
     display: inline-block;
+    position : relative;
 }
 
 div#attributes>div {
@@ -1053,8 +1054,8 @@ div#attributes>div {
     padding: 1vw;
 }
 
-#subreveal img.selected,
-#revealed img.selected {
+#subreveal .card.selected,
+#revealed .card.selected {
     border: 5px solid yellow;
 }
 

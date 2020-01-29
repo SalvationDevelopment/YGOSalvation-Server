@@ -138,7 +138,10 @@ function Pile(movelocation, player, index, uid, id) {
     }
 
     function update(data) {
-        Object.assign(state.list[0], data);
+        if (!data) {
+            return;
+        }
+        Object.assign(state, data);
     }
 
     return {
@@ -307,12 +310,16 @@ function Field() {
 
     function update(data) {
         //console.log(data.player, data.location, data.index, stack.length);
-        const pile = search(data);
-        if (pile) {
-            pile.update(data);
-            return;
+        try {
+            const pile = search(data);
+            if (pile) {
+                pile.update(data);
+                return;
+            }
+            console.log('error', data);
+        } catch (error) {
+            console.log(error, 'no card at', data);
         }
-        console.log('error', data);
     }
 
     return {

@@ -6,11 +6,11 @@ const React = window.React,
  * @class
  */
 class CardImage extends React.Component {
-    getImageProperties(state) {
-        const player = (window.orientation) ? (state.player ? 0 : 1) : state.player,
+    getContainerProperties(state) {
+        const line2 = (state.level) ? `\n★ ${state.level}` : '',
+            line3 = (state.def) ? `\n${state.attack} / ${state.def}` : '',
+            player = (window.orientation) ? (state.player ? 0 : 1) : state.player,
             className = ['card', 'p' + player, state.location, 'i' + state.index],
-            facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack'),
-            src = (state.id && !facedown) ? localStorage.imageURL + '/' + state.id + '.jpg' : 'img/textures/cover.jpg',
             style = {};
         if (!player && state.location === 'HAND') {
             state.position = 'FaceUp';
@@ -18,7 +18,7 @@ class CardImage extends React.Component {
 
 
         if (state.location !== 'HAND') {
-            style.zIndex = state.index;
+            //style.zIndex = state.index;
         } else {
             const f = 75 / 0.8,
                 xCoord = (state.handLocation < 6)
@@ -45,6 +45,7 @@ class CardImage extends React.Component {
         if (state.attackmode) {
             className.push('attackglow');
         }
+        console.log(state);
 
         return {
             className: className.join(' '),
@@ -52,16 +53,30 @@ class CardImage extends React.Component {
             'data-id': state.id,
             'data-uid': state.uid,
             'data-index': state.index,
+            'data-tooltip': `${state.name} ${line2} ${line3}`,
             'reloaded': state.reloaded,
             'key': state.uid,
-            onError: function (event) {
-                event.target.src = 'img/textures/unknown.jpg';
-            },
             onMouseEnter: this.hover.bind(this),
             onClick: this.click.bind(this),
-            src,
             style
         };
+    }
+
+    getImageProperties(state) {
+        const facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack'),
+            src = (state.id && !facedown) ? localStorage.imageURL + '/' + state.id + '.jpg' : 'img/textures/cover.jpg',
+            style = {};
+        if (state.location !== 'HAND') {
+            style.zIndex = state.index;
+        }
+        return {
+            src,
+            style,
+            onError: function (event) {
+                event.target.src = 'img/textures/unknown.jpg';
+            }
+
+        }
     }
 
     getCounterProperties(state) {
@@ -99,7 +114,7 @@ class CardImage extends React.Component {
         this.store.dispatch({ action: 'UPDATE_FIELD' });
     }
     render() {
-        const element = createElement('img', this.getImageProperties(this.state, this.hover));
+        const element = createElement('div', this.getContainerProperties(this.state, this.hover), createElement('img', this.getImageProperties(this.state)));
         return element;
     }
 }

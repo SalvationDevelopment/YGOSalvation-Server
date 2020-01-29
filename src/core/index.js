@@ -666,7 +666,8 @@ function question(duel, client, message) {
  * @returns {void} 
  */
 function requiresManualEngine(game, client) {
-    if (!game.automatic === 'Manual') {
+    
+    if (game.automatic !== 'Manual') {
         return;
     }
     if (!game.started) {

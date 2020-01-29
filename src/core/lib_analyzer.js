@@ -196,6 +196,8 @@ function msg_draw(message, pbuf, game) {
     game.sendBufferToPlayer(message.player, message);
     game.reSendToPlayer(1 - message.player);
     game.sendToObservers();
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_shuffle_deck(message, pbuf, game) {
@@ -203,6 +205,8 @@ function msg_shuffle_deck(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_shuffle_hand(message, pbuf, game) {
@@ -251,6 +255,8 @@ function msg_chaining(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
     game.sendToObservers();
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_chained(message, pbuf, game) {
@@ -276,8 +282,6 @@ function msg_chain_solved(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
     game.sendToObservers();
-    game.refresh(0);
-    game.refresh(1);
 }
 
 
@@ -673,9 +677,6 @@ function msg_move(message, pbuf, game) {
     message.reason = enums.reasons[message.r];
 
     game.sendBufferToPlayer(message.previousController, message);
-    // need to implement this!!!
-    // if (!(cl & (LOCATION_GRAVE + LOCATION_OVERLAY)) && ((cl & (LOCATION_DECK + LOCATION_HAND)) || (cp & POS_FACEDOWN)))
-    // 			BufferIO::WriteInt32(pbufw, 0);
     game.sendBufferToPlayer(1 - message.previousController, message);
     game.sendToObservers();
 

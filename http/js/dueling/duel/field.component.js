@@ -94,10 +94,14 @@ class Field {
 
     updateField(update) {
         this.cast(update, (card) => {
+            let dbEntry = {};
             if (!this.state.cards[card.uid]) {
                 this.state.cards[card.uid] = new CardImage(card, this.store);
             }
-            Object.assign(this.state.cards[card.uid].state, card);
+            if (this.state.cards[card.uid].state.id !== card.id) {
+                dbEntry = app.duel.info.databaseSystem.find((entry) => entry.id === card.id) || {};
+            }
+            Object.assign(this.state.cards[card.uid].state, dbEntry, card);
         });
         const count = {
             0: 0,

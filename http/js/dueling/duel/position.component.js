@@ -23,7 +23,7 @@ class SelectPosition extends React.Component {
         const src = `${localStorage.imageURL}/${card.id}.jpg`,
             onClick = this.click.bind(this, card);
 
-        return React.createElement('img', { className: card.position, src, onClick });
+        return React.createElement('img', { className: 'card ' + card.position, src, onClick });
     }
     render() {
         if (this.state.active) {
