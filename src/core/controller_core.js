@@ -420,7 +420,7 @@ function makeGame(pduel, settings) {
         for (let index = 0; count > index; ++index) {
             const qbuf = Buffer.alloc(0x40000);
             qbuf.type = ref.types.byte;
-            ocgapi.query_card(pduel, player, location, index, 0xf81fff, qbuf, 0);
+            ocgapi.query_card(pduel, player, location, index, 0x834333, qbuf, 0);
             const pack = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
             cards.push(pack.card);
         }
@@ -432,29 +432,15 @@ function makeGame(pduel, settings) {
         sendToObservers();
     }
 
-    function refreshExtra(player, flag, use_cache) {
+    function refresh(player) {
         msg_update_data(player, LOCATION_EXTRA);
-
-    }
-
-    function refreshMzone(player, flag, use_cache) {
+        msg_update_data(player, LOCATION_GRAVE);
         msg_update_data(player, LOCATION_MZONE);
-    }
-
-    function refreshSzone(player, flag, use_cache) {
         msg_update_data(player, LOCATION_SZONE);
-    }
-
-    function refreshHand(player, flag, use_cache) {
         msg_update_data(player, LOCATION_HAND);
     }
 
-
-    function refreshGrave(player, flag, use_cache) {
-        msg_update_data(player, LOCATION_GRAVE);
-    }
-
-    function refreshSingle(player, location, index, flag = 0xfffffff) {
+    function refreshSingle(player, location, index, flag = 0x834333) {
         const qbuf = Buffer.alloc(0x40000);
         qbuf.type = ref.types.byte;
         ocgapi.query_card(pduel, player, location, index, flag, qbuf, 0);
@@ -469,12 +455,8 @@ function makeGame(pduel, settings) {
 
     return {
         sendStartInfo,
-        refreshMzone,
-        refreshSzone,
-        refreshExtra,
-        refreshHand,
+        refresh,
         refreshSingle,
-        refreshGrave,
         respond,
         last,
         retry,
@@ -550,8 +532,8 @@ function duel(game, state, errorHandler, players, spectators) {
     instance.refer = ref.deref(pduel);
     instance.sendStartInfo(0);
     instance.sendStartInfo(1);
-    instance.refreshExtra(0);
-    instance.refreshExtra(1);
+    instance.refresh(0);
+    instance.refresh(1);
     ocgapi.start_duel(pduel, rule);
     mainProcess(instance);
 

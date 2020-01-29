@@ -14,12 +14,8 @@ function user_interface_only(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
     game.sendToObservers();
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function unused() { }
@@ -158,14 +154,8 @@ function msg_hint(message, pbuf, game) {
 }
 
 function msg_new_turn(message, pbuf, game) {
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
-    game.refreshExtra(0);
-    game.refreshExtra(1);
+    game.refresh(0);
+    game.refresh(1);
     message.player = pbuf.readInt8();
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
@@ -186,12 +176,8 @@ function msg_win(message, pbuf, game) {
 function msg_new_phase(message, pbuf, game) {
     message.phase = pbuf.readInt16();
     message.gui_phase = enums.phase[message.phase];
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
+    game.refresh(0);
+    game.refresh(1);
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
@@ -229,7 +215,8 @@ function msg_shuffle_hand(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
-    game.refreshHand(message.player, 0x781fff, 0);
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_shuffle_extra(message, pbuf, game) {
@@ -242,7 +229,8 @@ function msg_shuffle_extra(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1 - message.player, message);
     game.sendToObservers();
-    game.refreshExtra(message.player);
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_chaining(message, pbuf, game) {
@@ -270,12 +258,8 @@ function msg_chained(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
     game.sendToObservers();
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
+    game.refresh(0);
+    game.refresh(1);
 }
 
 
@@ -292,12 +276,8 @@ function msg_chain_solved(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
     game.sendToObservers();
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
+    game.refresh(0);
+    game.refresh(1);
 }
 
 
@@ -667,12 +647,8 @@ function msg_select_idlecmd(message, pbuf, game) {
     message.enableBattlePhase = pbuf.readInt8();
     message.enableEndPhase = pbuf.readInt8();
     message.shufflecount = pbuf.readInt8();
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
+    game.refresh(0);
+    game.refresh(1);
     game.waitforResponse(message.player);
     game.sendBufferToPlayer(message.player, message);
     return 1;
@@ -703,9 +679,8 @@ function msg_move(message, pbuf, game) {
     game.sendBufferToPlayer(1 - message.previousController, message);
     game.sendToObservers();
 
-    if (message.cl !== 0 && (message.cl & 0x80) === 0 && (message.cl !== message.pl || message.previousController !== message.currentController)) {
-        game.refreshSingle(message.previousController, message.locationEnum, message.cs);
-    }
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_pos_change(message, pbuf, game) {
@@ -746,8 +721,8 @@ function msg_swap(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.sendBufferToPlayer(1, message);
     game.sendToObservers();
-    game.refreshSingle(message.c1, message.l1, message.s1);
-    game.refreshSingle(message.c2, message.l2, message.s2);
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_field_disabled(message, pbuf, game) {
@@ -794,12 +769,8 @@ function msg_select_battlecmd(message, pbuf, game) {
     }
     message.enableMainPhase2 = pbuf.readInt8();
     message.enableEndPhase = pbuf.readInt8();
-    game.refreshMzone(0);
-    game.refreshMzone(1);
-    game.refreshSzone(0);
-    game.refreshSzone(1);
-    game.refreshHand(0);
-    game.refreshHand(1);
+    game.refresh(0);
+    game.refresh(1);
     game.waitforResponse(message.player);
     game.sendBufferToPlayer(message.player, message);
     return 1;
@@ -1041,7 +1012,8 @@ function msg_swap_grave_deck(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
-    game.refreshGrave();
+    game.refresh(0);
+    game.refresh(1);
 }
 
 function msg_waiting(message, pbuf, game) {
@@ -1059,7 +1031,6 @@ function msg_deck_top(message, pbuf, game) {
 }
 
 function msg_shuffle_set_card(message, pbuf, game) {
-    const LOCATION_MZONE = 0x04;
     message.location = pbuf.readInt8();
     message.count = pbuf.readInt8();
     message.targets = [];
@@ -1083,14 +1054,8 @@ function msg_shuffle_set_card(message, pbuf, game) {
     game.sendBufferToPlayer(0, message);
     game.reSendToPlayer(1);
     game.sendToObservers();
-    if (message.location === LOCATION_MZONE) {
-        game.refreshMzone(0, 0x181fff, 0);
-        game.refreshMzone(1, 0x181fff, 0);
-        return;
-    }
-
-    game.refreshSzone(0, 0x181fff, 0);
-    game.refreshSzone(1, 0x181fff, 0);
+    game.refresh(0);
+    game.refresh(1);
 
 }
 
