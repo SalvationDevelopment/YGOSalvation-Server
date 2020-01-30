@@ -424,3 +424,19 @@ class ApplicationComponent extends React.Component {
 
 const store = new Store(),
     app = new ApplicationComponent(store);
+
+
+var toolTipData = '';
+    
+
+function updateTooltip(event) {
+    const tooltip = document.querySelector('#tooltip');
+    tooltip.style.left = event.pageX + 'px';
+    tooltip.style.top = event.pageY + 'px';
+
+    tooltip.style.display = (toolTipData) ? 'block' : 'none';
+    tooltip.innerHTML = toolTipData;
+}
+
+
+document.addEventListener('mousemove', updateTooltip, false);

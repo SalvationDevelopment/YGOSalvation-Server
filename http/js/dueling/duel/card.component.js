@@ -53,10 +53,10 @@ class CardImage extends React.Component {
             'data-id': state.id,
             'data-uid': state.uid,
             'data-index': state.index,
-            'data-tooltip': `${state.name} ${line2} ${line3}`,
             'reloaded': state.reloaded,
             'key': state.uid,
-            onMouseEnter: this.hover.bind(this),
+            onMouseEnter: this.hover.bind(this, `${state.name} ${line2} ${line3}`),
+            onMouseLeave: this.toolKill.bind(this),
             onClick: this.click.bind(this),
             style
         };
@@ -101,12 +101,27 @@ class CardImage extends React.Component {
         return this;
     }
 
-    hover() {
-        //this.state.hover = !Boolean(this.state.hover);
+    hover(tooltip) {
+        if (!['MONSTERZONE', 'SPELLZONE', 'HAND'].includes(this.state.location)) {
+            return;
+        }
+
+        if ((this.state.position === 'FaceDown'
+            || this.state.position === 'FaceDownDefence')
+            && this.state.player !== window.orientation
+        ) {
+            return;
+        }
+        window.toolTipData = tooltip;
         this.store.dispatch({
             action: 'CARD_HOVER',
             id: this.state.id
         });
+    }
+
+
+    toolKill() {
+        window.toolTipData = '';
     }
 
     click(event) {
