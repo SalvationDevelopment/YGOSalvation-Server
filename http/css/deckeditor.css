@@ -1,5 +1,5 @@
 #cardDescription {
-    background-color: rgba(0, 0, 0, 0.70);    
+    background-color: rgba(0, 0, 0, 0.70);
 }
 
 #deckedit ::-webkit-input-placeholder {
@@ -33,14 +33,12 @@
     flex-direction: column;
 }
 
-#decksearch,
-#deckarea {
+#decksearch, #deckarea {
     width: 77%;
     float: left;
 }
 
-#deckedit #prev,
-#deckedit #next {
+#deckedit #prev, #deckedit #next {
     float: left;
     height: 100%;
     margin-top: 16vh;
@@ -74,8 +72,8 @@
     height: 33%;
     padding: 1%;
     transition: opacity 500ms;
-    width : 10%;
-    float : left;
+    width: 10%;
+    float: left;
 }
 
 .transitioning {
@@ -108,7 +106,6 @@
     font-weight: bold;
     padding: 0 .5em;
     background-color: rgba(0, 0, 0, 0.70);
-
 }
 
 #decktextlist {
@@ -167,7 +164,6 @@ img.imgContainer {
     width: 45%;
     margin: 1%;
 }
-
 
 #deckedit br {
     clear: both;
@@ -229,14 +225,11 @@ control#linkmarkers {
     margin-right: 51.75%;
 }
 
-#deckareamain,
-#deckareaextra,
-#deckareaside {
+#deckareamain, #deckareaextra, #deckareaside {
     height: 21vw;
     width: 13vw;
     float: left;
     margin-right: 2vw;
-    
 }
 
 #deckareaside {
@@ -263,7 +256,6 @@ control#linkmarkers {
     height: 40vh;
     background-color: rgba(0, 0, 0, 0.70);
     box-shadow: 0 0 10px #000;
-    
     margin-left: 1.7vw;
 }
 
@@ -284,7 +276,6 @@ control#linkmarkers {
     padding: 1vh .25vw;
 }
 
-
 #cardinformation .description+br+.description {
     overflow: auto;
     height: 23vh;
@@ -297,17 +288,22 @@ control#linkmarkers {
     box-shadow: 0 0 10px #000;
 }
 
-.deckmetainfo div {
+.deckmetainfo>div {
     height: 25%;
     width: 10%;
 }
 
-.deckmetainfo.c48 div {
+.deckmetainfo>div>div {
+    height: 100%;
+    width: 100%;
+}
+
+.deckmetainfo.c48>div {
     height: 25%;
     width: 8%;
 }
 
-.deckmetainfo.c60 div {
+.deckmetainfo.c60>div {
     height: 25%;
     width: 6.6%;
 }
@@ -323,12 +319,12 @@ control#linkmarkers {
     border: 1px solid white;
 }
 
-#deckareaextra .deckmetainfo div {
+#deckareaextra .deckmetainfo>div {
     height: 25%;
     width: 25%;
 }
 
-#deckareaside .deckmetainfo div {
+#deckareaside .deckmetainfo>div {
     height: 25%;
     width: 25%;
 }
@@ -373,16 +369,15 @@ control#linkmarkers {
     content: "1";
 }
 
-
 [data-limit="2"]:before {
     content: "2";
 }
 
 #linkmarkers {
-    background : white;
+    background: white;
 }
 
-#linkmarkers > input[type="checkbox"] {
+#linkmarkers>input[type="checkbox"] {
     visibility: hidden;
 }
 
@@ -398,7 +393,7 @@ input[type="checkbox"]:after {
 }
 
 input[type="checkbox"]:checked:after {
-    background: red;   
+    background: red;
 }
 
 #link1:after {
@@ -415,6 +410,7 @@ input[type="checkbox"]:checked:after {
     border-right: 13px solid white;
     border-bottom: 13px solid transparent;
 }
+
 #link8:after {
     border-left: 13px solid white;
     border-bottom: 13px solid transparent;
@@ -437,6 +433,7 @@ input[type="checkbox"]:checked:after {
     border-bottom: 7px solid white;
     border-left: 13px solid transparent;
 }
+
 #link7:after {
     border-left: 7px solid white;
     border-right: 7px solid white;
@@ -445,19 +442,19 @@ input[type="checkbox"]:checked:after {
 
 #link1 {
     position: relative;
-    left : -5px;
-    top : -5px;
+    left: -5px;
+    top: -5px;
 }
 
 #link2 {
     position: relative;
-    top : -5px;
+    top: -5px;
 }
 
 #link3 {
     position: relative;
-    left : 5px;
-    top : -5px;
+    left: 5px;
+    top: -5px;
 }
 
 #link4 {
@@ -476,10 +473,9 @@ input[type="checkbox"]:checked:after {
     top: 5px;
 }
 
-
 #link7 {
     position: relative;
-    top : 5px;
+    top: 5px;
 }
 
 #link8 {

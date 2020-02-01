@@ -60,7 +60,11 @@ class FieldSelector {
 
         const initialField = {
             SPELLZONE: this.setup('SPELLZONE', 7),
-            MONSTERZONE: this.setup('MONSTERZONE', 7)
+            MONSTERZONE: this.setup('MONSTERZONE', 7),
+            DECK: this.setup('DECK', 1),
+            EXTRA: this.setup('EXTRA', 1),
+            GRAVE: this.setup('GRAVE', 1),
+            BANISHED: this.setup('BANISHED', 1)
         };
 
         this.cast(initialField, (zone) => {

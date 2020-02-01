@@ -4,8 +4,15 @@ class ZoneSelector extends React.Component {
             className = ['cardselectionzone', 'p' + player, state.location, 'i' + state.index],
             style = {
                 pointerEvents: (state.active) ? 'auto' : 'none',
-                border: (state.active) ? '4px solid red' : 'none'
-            };
+                background: (state.active) ? 'rgba(255,0,0,.5)' : 'none'
+            },
+            count = Object.keys(app.duel.field.state.cards).reduce((total, uid) => {
+                const card = app.duel.field.state.cards[uid];
+                if (card.state.location === state.location && state.player === card.state.player) {
+                    total = total + 1;
+                }
+                return total;
+            }, 0);
 
 
         return {
@@ -14,6 +21,7 @@ class ZoneSelector extends React.Component {
             'data-id': state.id,
             'data-uid': state.uid,
             'data-index': state.index,
+            'data-count': (count) ? count : '',
             'reloaded': state.reloaded,
             'key': state.uid,
             onError: function (event) {

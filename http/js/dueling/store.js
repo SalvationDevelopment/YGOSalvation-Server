@@ -16,7 +16,7 @@ class Store {
         if (!this.reducers[event.action]) {
             return;
         }
-        console.log(event);
+        
         Object.assign(this.states[event.action], (this.reducers[event.action](event, this.states[event.action])));
     }
 }

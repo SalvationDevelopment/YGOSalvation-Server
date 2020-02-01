@@ -1,14 +1,25 @@
 const React = window.React,
     ReactDOM = window.ReactDOM,
     createElement = React.createElement;
+
+
+function makeCardheader(state) {
+    if (cardIs('link', state)) { 
+        return `L ${state.level}`;
+    }
+    if (cardIs('xyz', state)) { 
+        return `R ${state.rank}`;
+    }
+    return `★ ${state.level}`;
+}
 /**
  * React Binding for dynamically updating a card image with animations.
  * @class
  */
 class CardImage extends React.Component {
     getContainerProperties(state) {
-        const line2 = (state.level) ? `\n★ ${state.level}` : '',
-            line3 = (state.def) ? `\n${state.attack} / ${state.def}` : '',
+        const line2 = (cardIs('monster', state)) ? `\n${makeCardheader(state)}` : '',
+            line3 = (state.def !== undefined) ? `\n${state.attack} / ${state.def}` : '',
             player = (window.orientation) ? (state.player ? 0 : 1) : state.player,
             className = ['card', 'p' + player, state.location, 'i' + state.index],
             style = {};
@@ -45,7 +56,6 @@ class CardImage extends React.Component {
         if (state.attackmode) {
             className.push('attackglow');
         }
-        console.log(state);
 
         return {
             className: className.join(' '),
@@ -53,6 +63,8 @@ class CardImage extends React.Component {
             'data-id': state.id,
             'data-uid': state.uid,
             'data-index': state.index,
+            'data-header': line2,
+            'data-footer': line3,
             'reloaded': state.reloaded,
             'key': state.uid,
             onMouseEnter: this.hover.bind(this, `${state.name} ${line2} ${line3}`),
