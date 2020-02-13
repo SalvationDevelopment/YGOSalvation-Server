@@ -14,7 +14,6 @@ const axios = require('axios'),
         js: 'application/javascript'
     };
 
-
 let session = '';
 
 function setSession() {
@@ -23,13 +22,11 @@ function setSession() {
         password: process.env.ADMIN_SERVER_PASSWORD
     }, function (error, valid, responseData) {
         if (error) {
-            setTimeout(setSession,10000);
-
             
-            console.log('[SERVER] Server Permissions Incorrect '.bold.error);
+            console.log('[SERVER] Admin Server Permissions Failure: '.bold + error.toString());
             return;
         }
-        console.log('[SERVER] Server Permissions Aquired '.bold.green);
+        console.log('[SERVER] Server Permissions Aquired '.bold);
         session = responseData.jwt;
     });
 }
@@ -42,6 +39,11 @@ async function getNews() {
 async function getBackgrounds() {
     const backgrounds = await axios.get(`${ADMIN_SERVER_URL}/backgrounds?_sort=createdAt:ASC`);
     return backgrounds.data;
+}
+
+async function getCovers() {
+    const covers = await axios.get(`${ADMIN_SERVER_URL}/covers?_sort=createdAt:ASC`);
+    return covers.data;
 }
 
 async function getRanking() {
@@ -124,8 +126,17 @@ function setupEndpoints(app) {
 
     app.get('/backgrounds', async (request, response) => {
         try {
-            const news = await getBackgrounds();
-            response.send(news);
+            const backgrounds = await getBackgrounds();
+            response.send(backgrounds);
+        } catch (error) {
+            response.send(error.toJSON());
+        }
+    });
+
+    app.get('/covers', async (request, response) => {
+        try {
+            const covers = await getCovers();
+            response.send(covers);
         } catch (error) {
             response.send(error.toJSON());
         }

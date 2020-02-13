@@ -20,7 +20,10 @@ class ApplicationComponent extends React.Component {
                 tick: 0
             };
             this.connect();
+            document.body.style.backgroundImage = `url(${localStorage.theme})`;
         });
+
+        
     }
 
     connect() {

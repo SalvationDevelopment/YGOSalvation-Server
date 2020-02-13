@@ -603,8 +603,8 @@ meter::-webkit-meter-optimum-value {
     content: initial !important;
 }
 
-#revealed .card.FaceUpDefence img,
-#subreveal .card.FaceUpDefence img {
+.FaceUpDefence img,
+img.FaceUpDefence {
     transform: rotate(90deg) translate(0, -25%);
 }
 
@@ -628,7 +628,7 @@ meter::-webkit-meter-optimum-value {
     color: white;
     font-size: 14px;
     text-align: center;
-    width: 120%%;
+    width: 120%;
     position: absolute;
     text-shadow: -2px -2px black, 2px 2px black;
     bottom: -3px;

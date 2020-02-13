@@ -9,12 +9,13 @@ const axios = require('axios'),
     ADMIN_SERVER_PASSWORD = process.env.ADMIN_SERVER_PASSWORD,
     os = require('os');
 
-
-
+let adminServer,
+    databaseServer;
+    
 /**
- * Program Entry Point
- * @returns {undefined}
- */
+* Program Entry Point
+* @returns {undefined}
+*/
 async function main() {
     console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
@@ -35,14 +36,14 @@ async function main() {
 
     if (Boolean(process.env.ADMIN_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Admin Server'.bold.green);
-        var subserver = child_process.fork('../ygosalvation-admin/src/server.js');
+        adminServer = child_process.fork('../ygosalvation-admin/src/server.js');
     }
 
     if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Database Server'.bold.green);
-        var subserver = child_process.fork('../ygosalvation-database/app.js');
+        databaseServer = child_process.fork('../ygosalvation-database/app.js');
     }
-    
+
     process.title = 'YGOSalvation Server ' + new Date();
 
 }

@@ -4,10 +4,13 @@ const React = window.React,
 
 
 function makeCardheader(state) {
-    if (cardIs('link', state)) { 
+    if (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack') {
+        return '';
+    }
+    if (cardIs('link', state)) {
         return `L ${state.level}`;
     }
-    if (cardIs('xyz', state)) { 
+    if (cardIs('xyz', state)) {
         return `R ${state.rank}`;
     }
     return `★ ${state.level}`;
