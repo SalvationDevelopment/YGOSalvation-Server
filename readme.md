@@ -30,7 +30,8 @@ To run the system use `node ./`. This will create a version of the system on you
   - `nodist 8.11.4`
   - `npm install`
 - create a `.env` file in the top folder (beside this file). 
-  - Set `SSL=<path>` SSL isnt needed to work locally
+  - Set `SSL_KEY=<path>` SSL isnt needed to work locally, key path
+  - Set `SSL_CERT=<path>` SSL isnt needed to work locally, certificate path.
   - Set `HTTP=<number>` When SSL is off the port that gets used for viewing the site.
   - Set `HTTPS=<number>` When SSL is on the port that gets used for viewing the site.
   - Set `ADMIN_SERVER_USERNAME=<string>` and `ADMIN_SERVER_PASSWORD=<string>` based on a "Server" Permission level user in the admin.
