@@ -12,7 +12,8 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
     child_process = require('child_process'),
-    HTTP_PORT = 80;
+    HTTP_PORT = process.env.HTTP_PORT || 80,
+    HTTPS_PORT = process.env.HTTPS_PORT || 443;
 // ddos = new Ddos({
 //     maxcount: 2000,
 //     burst: 500,
@@ -74,7 +75,7 @@ function useSSL(primusServer) {
     primusServer = https.createServer({
         key: privateKey,
         cert: certificate
-    }, app).listen(443);
+    }, app).listen(HTTPS_PORT);
     // set up a route to redirect http to spdy
     openserver.use(helmet());
     //openserver.use(ddos.express);
