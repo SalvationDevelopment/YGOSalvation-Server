@@ -69,8 +69,8 @@ function gitRoute(req, res, next) {
 
 
 function useSSL(primusServer) {
-    var privateKey = fs.readFileSync(path.resolve(process.env.SSL_KEY + '\\private.key')).toString(),
-        certificate = fs.readFileSync(path.resolve(process.env.SSL_CERT + '\\certificate.crt')).toString(),
+    var privateKey = fs.readFileSync(path.resolve(process.env.SSL_KEY)).toString(),
+        certificate = fs.readFileSync(path.resolve(process.env.SSL_CERT)).toString(),
         openserver = express();
     primusServer = https.createServer({
         key: privateKey,
