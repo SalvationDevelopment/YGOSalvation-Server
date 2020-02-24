@@ -31,6 +31,8 @@ To run the system use `node ./`. This will create a version of the system on you
   - `npm install`
 - create a `.env` file in the top folder (beside this file). 
   - Set `SSL=<path>` SSL isnt needed to work locally
+  - Set `HTTP=<number>` When SSL is off the port that gets used for viewing the site.
+  - Set `HTTPS=<number>` When SSL is on the port that gets used for viewing the site.
   - Set `ADMIN_SERVER_USERNAME=<string>` and `ADMIN_SERVER_PASSWORD=<string>` based on a "Server" Permission level user in the admin.
   - Set `ADMIN_SERVER_URL` if connecting to a centralized hub, (staging, production), default should suffice for local development 
   - Set `ADMIN_SERVER_LOCAL` to false if using external admin server.

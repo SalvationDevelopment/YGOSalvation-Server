@@ -685,16 +685,15 @@ function init(callback) {
      * Draws a card, updates state.
      * @param {Number} player player int 0,1, etc       Player drawing the cards
      * @param {Number} numberOfCards number of cards drawn
-     * @param {String} username      name of player drawing cards
+     * @param {Object[]} cards Cards from the game
+     * @param {String} username name of player drawing cards
      * @param {Function} drawCallback callback used by automatic
      * @returns {undefined}
      */
     function drawCard(player, numberOfCards, cards, username, drawCallback) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'HAND').length,
             topcard,
-            target,
             i,
-            pointer,
             deck;
 
         for (i = 0; i < numberOfCards; i += 1) {
@@ -712,9 +711,6 @@ function init(callback) {
                 uid: topcard.uid,
                 id: cards[i].id || topcard.id
             });
-            target = queryCard(player, 'HAND', (currenthand + i), 0);
-            pointer = uidLookup(target.uid);
-            //stack[pointer].id = cards[i].Code;
         }
         if (username) {
             state.duelistChat.push('<pre>' + username + ' drew a card.</pre>');
@@ -728,9 +724,7 @@ function init(callback) {
     function excavateCard(player, numberOfCards, cards) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'EXCAVATED').length,
             topcard,
-            target,
-            i,
-            pointer;
+            i;           
 
         for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
@@ -745,9 +739,6 @@ function init(callback) {
                 overlayindex: 0,
                 uid: undefined
             });
-            target = queryCard(player, 'EXCAVATED', (currenthand + i), 0);
-            pointer = uidLookup(target.uid);
-            //stack[pointer].id = cards[i].Code;
         }
         callback(generateView(), stack);
     }
@@ -1174,12 +1165,28 @@ function init(callback) {
         }
     }
 
+    function announcement(player, message) {
+        const slot = 'p' + player,
+            output = {
+                names: this.names,
+                p0: {},
+                p1: {},
+                spectators: {}
+            };
+        output[slot] = {
+            duelAction: 'announcement',
+            message
+        };
+        this.callback(output, stack);
+    }
+
 
     /**
      * Exposed method to initialize the field; You only run this once.
      * @param {Object} player1 player instance
      * @param {Object} player2 player instance
      * @param {Boolean} manual if using manual, or automatic
+     * @param {Object} settings additional settings information and game configuration
      * @returns {undefined}
      */
     function startDuel(player1, player2, manual, settings) {
@@ -1229,6 +1236,8 @@ function init(callback) {
             state.duelistChat.push('<pre>Make Token:  /token</pre>');
             state.duelistChat.push('<pre>Surrender:   /surrender</pre>');
         }
+        announcement(0, { command: 'MSG_ORIENTATION', slot: 0 });
+        announcement(1, { command: 'MSG_ORIENTATION', slot: 1 });
         callback(generateView('start'), stack);
     }
 
@@ -1442,6 +1451,8 @@ function init(callback) {
         duelistChat('Server', username + ' surrendered.');
     }
 
+   
+
     /**
      * Send a question to the player
      * @param {Number} slot 
@@ -1491,6 +1502,7 @@ function init(callback) {
     /**
      * Answer a queued up question
      * @param {Object} message response message
+     * @returns {undefined}
      */
     function respond(message) {
         console.log('seeing answer from', message.uuid);
