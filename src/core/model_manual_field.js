@@ -1168,7 +1168,7 @@ function init(callback) {
     function announcement(player, message) {
         const slot = 'p' + player,
             output = {
-                names: this.names,
+                names: names,
                 p0: {},
                 p1: {},
                 spectators: {}
@@ -1177,7 +1177,7 @@ function init(callback) {
             duelAction: 'announcement',
             message
         };
-        this.callback(output, stack);
+        callback(output, stack);
     }
 
 

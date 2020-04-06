@@ -67,7 +67,7 @@
     overflow-y: auto;
 }
 
-#decksearchresults div {
+#decksearchresults>div {
     flex: 1;
     height: 33%;
     padding: 1%;
@@ -85,8 +85,12 @@
     border: 1px solid black;
 }
 
-#decksearchresults div img:hover {
+#decksearchresults div>img:hover {
     border: 1px solid white;
+}
+
+#decksearchresults>div>div {
+    height: 100%;
 }
 
 #decksearch {
