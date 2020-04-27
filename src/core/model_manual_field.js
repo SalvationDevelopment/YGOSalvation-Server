@@ -26,7 +26,7 @@
  * @property {Card[]} HAND Cards in the hand of one player.
  * @property {Card[]} GRAVE Cards in the graveyard "GY" of one player.
  * @property {Card[]} EXTRA Cards in the extra deck of one player.
- * @property {Card[]} REMOVED Cards removed from play,"Banished" of one player.
+ * @property {Card[]} BANISHED Cards removed from play,"Banished" of one player.
  * @property {Card[]} SPELLZONE Cards in the spell and pendulum zones of one player.
  * @property {Card[]} MONSTERZONE Cards in the Main Monster zones and Extra Monster zone of one player.
  * @property {Card[]} EXCAVATED Cards Excavated by one player atm, or held.
@@ -389,7 +389,7 @@ function init(callback) {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            removed = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE');
         return {
@@ -397,7 +397,7 @@ function init(callback) {
             HAND: hand.length,
             GRAVE: grave.length,
             EXTRA: extra.length,
-            REMOVED: removed.length,
+            BANISHED: removed.length,
             SPELLZONE: spellzone.length,
             MONSTERZONE: monsterzone.length
         };
@@ -413,7 +413,7 @@ function init(callback) {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            removed = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE');
         return {
@@ -421,7 +421,7 @@ function init(callback) {
             HAND: hand.sort(sortByIndex),
             GRAVE: grave.sort(sortByIndex),
             EXTRA: extra.sort(sortByIndex),
-            REMOVED: removed.sort(sortByIndex),
+            BANISHED: removed.sort(sortByIndex),
             SPELLZONE: spellzone.sort(sortByIndex),
             MONSTERZONE: monsterzone.sort(sortByIndex)
         };
@@ -438,7 +438,7 @@ function init(callback) {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            removed = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             excavated = filterlocation(playersCards, 'EXCAVATED'),
@@ -449,7 +449,7 @@ function init(callback) {
             HAND: hand,
             GRAVE: grave,
             EXTRA: hideViewOfZone(extra),
-            REMOVED: removed,
+            BANISHED: removed,
             SPELLZONE: spellzone,
             MONSTERZONE: monsterzone,
             EXCAVATED: excavated,
@@ -468,7 +468,7 @@ function init(callback) {
             hand = filterlocation(playersCards, 'HAND'),
             grave = filterlocation(playersCards, 'GRAVE'),
             extra = filterOverlyIndex(filterlocation(playersCards, 'EXTRA'), 0),
-            removed = filterlocation(playersCards, 'REMOVED'),
+            removed = filterlocation(playersCards, 'BANISHED'),
             spellzone = filterlocation(playersCards, 'SPELLZONE'),
             monsterzone = filterlocation(playersCards, 'MONSTERZONE'),
             excavated = filterlocation(playersCards, 'EXCAVATED'),
@@ -479,7 +479,7 @@ function init(callback) {
             HAND: hideHand(hand),
             GRAVE: grave,
             EXTRA: hideViewOfZone(extra),
-            REMOVED: hideViewOfZone(removed),
+            BANISHED: hideViewOfZone(removed),
             SPELLZONE: hideViewOfZone(spellzone),
             MONSTERZONE: hideViewOfZone(monsterzone),
             EXCAVATED: hideViewOfZone(excavated),
@@ -593,7 +593,7 @@ function init(callback) {
             pointer = uidLookup(target.uid),
             zone;
 
-        if (movelocation === 'GRAVE' || movelocation === 'REMOVED') {
+        if (movelocation === 'GRAVE' || movelocation === 'BANISHED') {
             moveplayer = stack[pointer].originalcontroller;
         }
 
@@ -780,7 +780,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function millRemovedCard(player, numberOfCards) {
-        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'BANISHED').length,
             topcard,
             target,
             i,
@@ -793,7 +793,7 @@ function init(callback) {
                 location: 'DECK',
                 index: topcard,
                 moveplayer: player,
-                movelocation: 'REMOVED',
+                movelocation: 'BANISHED',
                 moveindex: currentgrave,
                 moveposition: 'FaceUp',
                 overlayindex: 0,
@@ -810,7 +810,7 @@ function init(callback) {
      * @returns {undefined}
      */
     function millRemovedCardFaceDown(player, numberOfCards) {
-        var currentgrave = filterlocation(filterPlayer(stack, player), 'REMOVED').length,
+        var currentgrave = filterlocation(filterPlayer(stack, player), 'BANISHED').length,
             topcard,
             target,
             i,
@@ -823,7 +823,7 @@ function init(callback) {
                 location: 'DECK',
                 index: topcard,
                 moveplayer: player,
-                movelocation: 'REMOVED',
+                movelocation: 'BANISHED',
                 moveindex: currentgrave,
                 moveposition: 'FaceDown',
                 overlayindex: 0,
@@ -978,7 +978,7 @@ function init(callback) {
         } else {
             state.duelistChat.push('<pre>' + username + ' is viewing your banished pile.</pre>');
         }
-        var deck = filterlocation(filterPlayer(stack, player), 'REMOVED').reverse(), // its face up so its reversed.
+        var deck = filterlocation(filterPlayer(stack, player), 'BANISHED').reverse(), // its face up so its reversed.
             result = {
                 0: {},
                 1: {},

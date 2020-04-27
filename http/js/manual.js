@@ -208,7 +208,7 @@ class ManualControls {
 
         return {
             player: card.player,
-            location: 'REMOVED',
+            location: 'BANISHED',
             index: index,
             position: 'FaceUp',
             overlayindex: 0,
@@ -867,7 +867,7 @@ class ManualControls {
 
     manualToRemoved() {
 
-        var index = $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.REMOVED').length,
+        var index = $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.BANISHED').length,
             end = this.makeRemoved(this.manualActionReference, index),
             message = this.makeCardMovement(this.manualActionReference, end);
 
@@ -920,7 +920,7 @@ class ManualControls {
 
     manualToRemovedFacedown() {
 
-        var index = $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.REMOVED').length,
+        var index = $('#automationduelfield .p' + orient(this.manualActionReference.player) + '.BANISHED').length,
             end = this.makeRemoved(this.manualActionReference, index),
             message = this.makeCardMovement(this.manualActionReference, end);
         message.action = 'moveCard';

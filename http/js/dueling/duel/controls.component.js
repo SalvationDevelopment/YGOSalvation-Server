@@ -240,7 +240,7 @@ class ControlButtons {
                 // remove defense option.
             }
         }
-        if (query.location === 'REMOVED') {
+        if (query.location === 'BANISHED') {
             enabledClasses.push('m-removed');
             enabledClasses.push('m-removed');
             if (pendulumMap[query.type]) {
