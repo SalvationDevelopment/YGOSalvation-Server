@@ -423,6 +423,11 @@ class ApplicationComponent extends React.Component {
                 return React.createElement('section', { id: 'error' }, this.error.render());
         }
     }
+
+    
+    refreshUI() {
+        this.store.dispatch({ action: 'RENDER' });
+    }
 }
 
 const store = new Store(),

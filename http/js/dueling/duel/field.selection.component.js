@@ -49,6 +49,7 @@ class FieldSelector {
             const uuid = `selector-player_${zone.player}-${zone.location}-${zone.index}`;
             this.state.zones[uuid].state.active = true;
         });
+        app.refreshUI();
     }
 
 

@@ -10,6 +10,7 @@ class ManualControls {
 
     clearCardReference() {
         app.duel.controls.enable({});
+        app.refreshUI();
     }
 
     exclusionList(player, location, classValue) {
@@ -103,21 +104,55 @@ class ManualControls {
     startSpecialSummon(mode) {
         'use strict';
         this.zonetargetingmode = mode;
-        $('.cardselectionzone.p0.MONSTERZONE').addClass('attackglow card');
-        if (this.legacyMode) {
-            $('.cardselectionzone.p0.MONSTERZONE.i5').removeClass('attackglow card');
-            $('.cardselectionzone.p0.MONSTERZONE.i6').removeClass('attackglow card');
+        const player = 0;
+        app.duel.select({
+            zones: [
+                { player, location: 'MONSTERZONE', index: 0 },
+                { player, location: 'MONSTERZONE', index: 1 },
+                { player, location: 'MONSTERZONE', index: 2 },
+                { player, location: 'MONSTERZONE', index: 3 },
+                { player, location: 'MONSTERZONE', index: 4 },
+            ]
+        });
+        if (!this.legacyMode) {
+            app.duel.select({
+                zones: [
+                    { player, location: 'MONSTERZONE', index: 0 },
+                    { player, location: 'MONSTERZONE', index: 1 },
+                    { player, location: 'MONSTERZONE', index: 2 },
+                    { player, location: 'MONSTERZONE', index: 3 },
+                    { player, location: 'MONSTERZONE', index: 4 },
+                    { player, location: 'MONSTERZONE', index: 5 },
+                    { player, location: 'MONSTERZONE', index: 6 }
+                ]
+            });
         }
         if (mode === 'generic') {
-            $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
-            if (!legacyMode) {
-                $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
-                $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
+            if (this.legacyMode) {
+                app.duel.select({
+                    zones: [
+                        { player, location: 'SPELLZONE', index: 0 },
+                        { player, location: 'SPELLZONE', index: 1 },
+                        { player, location: 'SPELLZONE', index: 2 },
+                        { player, location: 'SPELLZONE', index: 3 },
+                        { player, location: 'SPELLZONE', index: 4 }
+                    ]
+                });
+            } else {
+                app.duel.select({
+                    zones: [
+                        { player, location: 'SPELLZONE', index: 0 },
+                        { player, location: 'SPELLZONE', index: 1 },
+                        { player, location: 'SPELLZONE', index: 2 },
+                        { player, location: 'SPELLZONE', index: 3 },
+                        { player, location: 'SPELLZONE', index: 4 },
+                        { player, location: 'SPELLZONE', index: 5 },
+                        { player, location: 'SPELLZONE', index: 6 }
+                    ]
+                });
             }
-            $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
-            this.exclusionList(0, 'SPELLZONE', 'attackglow');
         }
-        this.exclusionList(0, 'MONSTERZONE', 'attackglow');
+        
     }
 
     startSpellTargeting(mode) {
@@ -603,6 +638,23 @@ class ManualControls {
         index = (index !== undefined) ? index : this.manualActionReference.index;
         var end = this.defenceMonster(this.manualActionReference, index),
             message = this.makeCardMovement(this.manualActionReference, end);
+
+        message.action = 'moveCard';
+        message.sound = 'soundspecialSummonFromExtra';
+        this.primus.write((message));
+        this.clearCardReference();
+    }
+
+    manualMoveGeneric(index, zone) {
+
+
+        index = (index !== undefined) ? index : this.manualActionReference.index;
+        var message = this.makeCardMovement(this.manualActionReference, {
+            player: this.manualActionReference.player,
+            location : zone,
+            position: this.manualActionReference.position,
+            index
+        });
 
         message.action = 'moveCard';
         message.sound = 'soundspecialSummonFromExtra';

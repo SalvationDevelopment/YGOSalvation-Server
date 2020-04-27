@@ -339,6 +339,7 @@ class ApplicationComponent extends React.Component {
             this.modalRender()
         ]);
     }
+
 }
 
 const app = new ApplicationComponent(store);

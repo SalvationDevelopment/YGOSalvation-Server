@@ -126,7 +126,7 @@ class ControlButtons {
 
             { text: 'Flip Face-down', options: ['m-st'], onClick: function () { app.manualControls.manualSTFlipDown(); } },
             { text: 'Flip Face-up', options: ['m-st'], onClick: function () { app.manualControls.manualActivate(); } },
-            { text: 'Move', options: ['m-monster', 'm-st'], onClick: function () { app.manualControls.startSpecialSummon(); } },
+            { text: 'Move', options: ['m-monster', 'm-st'], onClick: function () { app.manualControls.startSpecialSummon('generic'); } },
 
             { text: 'Add Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualAddCounter(); } },
             { text: 'Remove Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualRemoveCounter(); } },
