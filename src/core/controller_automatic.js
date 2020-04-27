@@ -158,18 +158,18 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             gameBoard.retryLastQuestion();
             break;
         case ('MSG_START'): // Good
-            gameBoard.announcement(slot, { command: 'MSG_ORIENTATION', slot });
+
             gameBoard.startDuel({
                 main: Array(message.player1decksize).fill(0),
                 side: Array(0),
                 extra: Array(message.player1extrasize).fill(0)
             }, {
-                    main: Array(message.player2decksize).fill(0),
-                    side: Array(0),
-                    extra: Array(message.player2extrasize).fill(0)
-                }, false, {
-                    startLP: message.lifepoints1
-                });
+                main: Array(message.player2decksize).fill(0),
+                side: Array(0),
+                extra: Array(message.player2extrasize).fill(0)
+            }, false, {
+                startLP: message.lifepoints1
+            });
             break;
         case ('MSG_HINT'):
             gameBoard.announcement(slot, message);
@@ -429,7 +429,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 if (card.position === 'MONSTERZONE') {
                     throw Error('WRONG CARD POSITION');
                 }
-               
+
                 card.location = message.location;
                 gameBoard.update(card);
 

@@ -394,7 +394,7 @@ function isReady(player, slot) {
 
 
 /**
- * Determine ifa specific player has locked in their deck.
+ * Determine if a specific player has locked in their deck.
  * @param {Object[]} player list of players.
  * @param {Number} target queried slot number.
  * @param {Boolean} status new deck lock status.
@@ -594,7 +594,10 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
+    console.log(state.clients[0].slot, state.clients[1].slot);
     shuffle(state.clients);
+    state.clients[0].slot = 0;
+    state.clients[1].slot = 1;
 
     server.write({
         action: 'start'
@@ -666,7 +669,7 @@ function question(duel, client, message) {
  * @returns {void} 
  */
 function requiresManualEngine(game, client) {
-    
+
     if (game.automatic !== 'Manual') {
         return;
     }
@@ -765,6 +768,7 @@ function processMessage(server, duel, game, state, client, message) {
     if (!requiresManualEngine(game, client)) {
         return;
     }
+
     manualControlEngine.responseHandler(duel.engine, state.clients, client, message);
 }
 

@@ -400,6 +400,13 @@ function makeGame(pduel, settings) {
             player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
             player2extrasize: ocgapi.query_field_count(pduel, 1, 0x40)
         };
+        sendBufferToPlayer(player, {
+            duelAction: 'announcement',
+            message: {
+                command: 'MSG_ORIENTATION',
+                slot: player
+            }
+        });
         sendBufferToPlayer(player, message);
     }
 

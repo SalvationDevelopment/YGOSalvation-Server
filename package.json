@@ -58,7 +58,7 @@
     "homepage": "http://ygopro.us",
     "license": "LicenseRef-LICENSE",
     "scripts": {
-        "start": "node bin",
+        "start": "node ./",
         "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec test/test.js",
         "server": "node server",
         "ygopro": "cd src && node application_ygopro",
