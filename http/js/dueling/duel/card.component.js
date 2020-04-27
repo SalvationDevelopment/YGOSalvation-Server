@@ -96,7 +96,7 @@ class CardImage extends React.Component {
 
     getCounterProperties(state) {
         const counters = (state.counters > 0 && state.location !== 'HAND') ? `${state.counters} Counters` : '',
-            className = ['cardselectionzone', `p${state.player}`, state.location, `i${state.index}`],
+            className = ['cardselectionzone', `p${orient(state.player)}`, state.location, `i${state.index}`],
             style = {
                 'zIndex': state.index + 1
             };

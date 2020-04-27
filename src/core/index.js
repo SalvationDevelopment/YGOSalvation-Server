@@ -594,7 +594,7 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    console.log(state.clients[0].slot, state.clients[1].slot);
+    
     shuffle(state.clients);
     state.clients[0].slot = 0;
     state.clients[1].slot = 1;
@@ -679,7 +679,6 @@ function requiresManualEngine(game, client) {
     if (client.slot === undefined) {
         return;
     }
-    console.log('manual');
     return true;
 }
 
