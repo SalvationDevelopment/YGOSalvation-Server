@@ -486,7 +486,7 @@ function onData(data, socket) {
                 child = child_process.fork(
                     './core/index.js', process.argv, {
                     cwd: __dirname,
-                    env: Object.assign({}, process.env, data.info, { PORT: port}),
+                    env: Object.assign({}, process.env, data.info, { PORT: port }),
                     execArgv
                 }
                 );
@@ -552,26 +552,30 @@ function onPrimusConnection(socket) {
         onPrimusData(socket, data);
     });
 }
-
-require('json');
-primus = new Primus(primusServer, {
-    parser: 'JSON'
-});
-
-primus.plugin('rooms', Rooms);
-primus.on('connection', onPrimusConnection);
-
-setInterval(function () {
-    announce({
-        clientEvent: 'ackresult',
-        ackresult: acklevel,
-        userlist: userlist
+function start() {
+    require('json');
+    primus = new Primus(primusServer, {
+        parser: 'JSON'
     });
-    announce({
-        clientEvent: 'gamelist',
-        gamelist,
-        ackresult: acklevel,
-        userlist: userlist
-    });
-    massAck();
-}, 15000);
+
+    primus.plugin('rooms', Rooms);
+    primus.on('connection', onPrimusConnection);
+
+    setInterval(function () {
+        announce({
+            clientEvent: 'ackresult',
+            ackresult: acklevel,
+            userlist: userlist
+        });
+        announce({
+            clientEvent: 'gamelist',
+            gamelist,
+            ackresult: acklevel,
+            userlist: userlist
+        });
+        massAck();
+    }, 15000);
+
+}
+
+module.exports = start;

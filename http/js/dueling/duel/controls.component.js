@@ -144,10 +144,8 @@ class ControlButtons {
             { text: 'Attack', options: ['a-field'], onClick: function () { app.manualControls.startAttack(); } },
             { text: 'Attack Directly', options: ['a-field'], onClick: function () { app.manualControls.manualAttackDirectly(); } },
 
-            { text: 'Signal Effect', options: ['m-field', 'st-field', 'm-hand-m', 'v-grave', 'v-removed'], onClick: function () { app.manualControls.manualSignalEffect(); } },
-        ];
-
-        const elements = buttons.filter((button) => {
+            { text: 'Signal Effect', options: ['m-field', 'st-field', 'm-hand-m', 'v-grave', 'v-removed'], onClick: function () { app.manualControls.manualSignalEffect(); } }
+        ], elements = buttons.filter((button) => {
             return enabledClasses.some((prospect) => {
                 return button.options.includes(prospect);
             });
@@ -230,6 +228,22 @@ class ControlButtons {
                 disabledClasses.push('#removeCounter');
             }
         }
+        if (query.location === 'SPELLZONE') {
+            enabledClasses.push('st-field');
+            if ((stMap[query.type] || query.type === 2 || query.type === 4) && !fieldspell[query.type]) {
+                enabledClasses.push('m-st');
+            }
+            if (query.id === 62966332) {
+                enabledClasses.push('m-convulse');
+            }
+            if (query.id === 63571750) {
+                enabledClasses.push('m-pharaohstreasure');
+            }
+            if (pendulumMap[query.type]) {
+                enabledClasses.push('m-monster-to-extra-faceup');
+            }
+        }
+
         if (query.location === 'EXCAVATED') {
             enabledClasses.push('m-excavated');
         }
@@ -241,16 +255,30 @@ class ControlButtons {
             }
         }
         if (query.location === 'BANISHED') {
-            enabledClasses.push('m-removed');
-            enabledClasses.push('m-removed');
-            if (pendulumMap[query.type]) {
+            enabledClasses.push('v-removed');
+            if (pendulumMap[dbEntry.type]) {
+                enabledClasses.push('m-hand-p');
                 enabledClasses.push('m-monster-p');
+
             }
-            if (cardIs('link', query)) {
-                $('#SpDef').css({
-                    'display': 'none'
-                });
+            if (monsterMap[dbEntry.type]) {
+                enabledClasses.push('m-hand-m');
             }
+            if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) && !fieldspell[dbEntry.type]) {
+                enabledClasses.push('m-hand-st');
+            }
+            if (fieldspell[dbEntry.type]) {
+                enabledClasses.push('m-hand-f');
+            }
+            if (pendulumMap[dbEntry.type]) {
+                enabledClasses.push('m-hand-p');
+            }
+            if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+                enabledClasses.push('v-monster-extra');
+            } else {
+                enabledClasses.push('non-extra');
+            }
+
         }
         if (query.location === 'DECK') {
             enabledClasses.push('m-deck');
@@ -362,7 +390,7 @@ class ControlButtons {
             type: query.type,
             player: query.player,
             setcode: query.setcode,
-            position : query.position
+            position: query.position
         };
         this.info.coords = coords;
         app.manualControls.manualActionReference = this.info.target;

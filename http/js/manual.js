@@ -111,7 +111,7 @@ class ManualControls {
                 { player, location: 'MONSTERZONE', index: 1 },
                 { player, location: 'MONSTERZONE', index: 2 },
                 { player, location: 'MONSTERZONE', index: 3 },
-                { player, location: 'MONSTERZONE', index: 4 },
+                { player, location: 'MONSTERZONE', index: 4 }
             ]
         });
         if (!this.legacyMode) {
@@ -157,9 +157,9 @@ class ManualControls {
 
     startSpellTargeting(mode) {
         'use strict';
-        zonetargetingmode = mode;
+        this.zonetargetingmode = mode;
         $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
-        if (!legacyMode) {
+        if (!this.legacyMode) {
             $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
             $('.cardselectionzone.p0.SPELLZONE.i7').removeClass('attackglow card');
         }
@@ -285,12 +285,12 @@ class ManualControls {
 
     makePendulumZoneL(card) {
 
-        return this.makeSpell(card, penL());
+        return this.makeSpell(card, this.penL());
     }
 
     makePendulumZoneR(card) {
 
-        return this.makeSpell(card, penR());
+        return this.makeSpell(card, this.penR());
     }
 
 
@@ -470,10 +470,10 @@ class ManualControls {
         this.primus.write(({
             action: 'attack',
             source: this.manualActionReference,
-            target: targetreference,
+            target: this.targetreference,
             sound: 'soundattack'
         }));
-        attackmode = false;
+        this.attackmode = false;
         //$('.card.p1').removeClass('attackglow');
         this.clearCardReference();
     }
@@ -486,7 +486,7 @@ class ManualControls {
             index: 0,
             position: 'FaceUp'
         };
-        manualAttack();
+        this.manualAttack();
     }
 
     manualTarget(target) {
@@ -822,7 +822,7 @@ class ManualControls {
             end = JSON.parse(JSON.stringify(this.manualActionReference)),
             message = this.makeCardMovement(this.manualActionReference, end);
 
-        if (index === (legacyMode) ? 7 : 5) {
+        if (index === (this.legacyMode) ? 7 : 5) {
             index = 0;
         }
         message.moveindex = index;
