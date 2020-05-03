@@ -126,7 +126,7 @@ class DuelScreen extends React.Component {
     }
 
     closeRevealer() {
-        this.revealer.trigger({ active: false });
+        this.revealer.close();
     }
 
     disableSelection() {

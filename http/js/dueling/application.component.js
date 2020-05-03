@@ -23,7 +23,7 @@ class ApplicationComponent extends React.Component {
             document.body.style.backgroundImage = `url(${localStorage.theme})`;
         });
 
-        
+
     }
 
     connect() {
@@ -124,6 +124,12 @@ class ApplicationComponent extends React.Component {
                 uuid: this.state.question
             });
             return state;
+        });
+
+        this.store.register('EMPTY_SPACE', (message, state) => {
+            this.duel.closeRevealer();
+            this.store.dispatch({ action: 'RENDER' });
+            return;
         });
 
         this.store.register('REVEAL_CARD_CLICK', (message, state) => {
@@ -239,6 +245,9 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'announcement':
                 this.announcement(message.message);
+                break;
+            case 'reveal':
+                this.duel.reveal(message.reveal);
                 break;
             default:
                 break;
@@ -424,7 +433,7 @@ class ApplicationComponent extends React.Component {
         }
     }
 
-    
+
     refreshUI() {
         this.store.dispatch({ action: 'RENDER' });
     }
@@ -435,7 +444,7 @@ const store = new Store(),
 
 
 var toolTipData = '';
-    
+
 
 function updateTooltip(event) {
     const tooltip = document.querySelector('#tooltip');

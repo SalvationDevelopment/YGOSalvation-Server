@@ -38,6 +38,7 @@ class GameplayControlButton extends React.Component {
             style: {
                 display: 'flex',
                 width: 'auto',
+                zIndex: '350', 
                 'text-align': 'center'
             }
         }, this.state.info.text);
@@ -256,24 +257,24 @@ class ControlButtons {
         }
         if (query.location === 'BANISHED') {
             enabledClasses.push('v-removed');
-            if (pendulumMap[dbEntry.type]) {
+            if (pendulumMap[query.type]) {
                 enabledClasses.push('m-hand-p');
                 enabledClasses.push('m-monster-p');
 
             }
-            if (monsterMap[dbEntry.type]) {
+            if (monsterMap[query.type]) {
                 enabledClasses.push('m-hand-m');
             }
-            if ((stMap[dbEntry.type] || dbEntry.type === 2 || dbEntry.type === 4) && !fieldspell[dbEntry.type]) {
+            if ((stMap[query.type] || query.type === 2 || query.type === 4) && !fieldspell[query.type]) {
                 enabledClasses.push('m-hand-st');
             }
-            if (fieldspell[dbEntry.type]) {
+            if (fieldspell[query.type]) {
                 enabledClasses.push('m-hand-f');
             }
-            if (pendulumMap[dbEntry.type]) {
+            if (pendulumMap[query.type]) {
                 enabledClasses.push('m-hand-p');
             }
-            if (cardIs('fusion', dbEntry) || cardIs('synchro', dbEntry) || cardIs('xyz', dbEntry) || cardIs('link', dbEntry)) {
+            if (cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query)) {
                 enabledClasses.push('v-monster-extra');
             } else {
                 enabledClasses.push('non-extra');
@@ -390,7 +391,8 @@ class ControlButtons {
             type: query.type,
             player: query.player,
             setcode: query.setcode,
-            position: query.position
+            position: query.position,
+            status : query.status
         };
         this.info.coords = coords;
         app.manualControls.manualActionReference = this.info.target;

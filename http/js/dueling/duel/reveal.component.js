@@ -15,18 +15,28 @@ class Revealer extends React.Component {
         this.state.active = false;
         this.store.dispatch({ action: 'REVEAL_CARD_CLICK', option, selected });
         this.store.dispatch({ action: 'RENDER' });
+    }
+
+    manualClick(card, event) {
+        event.stopPropagation();
+        card.status = 'revealed';
+        app.duel.controls.enable(card, { x: event.pageX, y: event.pageY });
+        this.store.dispatch({ action: 'RENDER' });
+        return;
 
     }
 
     img(card, i) {
         const src = `${localStorage.imageURL}/${card.id}.jpg`,
-            onClick = this.click.bind(this, card.selected, i);
+            onClick = (app.manual) ? this.manualClick.bind(this, card) : this.click.bind(this, card.selected, i);
 
         return React.createElement('img', { className: (card.selected) ? 'selected' : '', src, onClick });
     }
     render() {
+
         if (this.state.active) {
             return React.createElement('div', {
+                onClick: this.close.bind(this),
                 style: {
                     display: 'flex'
                 }, id: 'revealed'
@@ -42,6 +52,8 @@ class Revealer extends React.Component {
 
     close() {
         this.state.cards = [];
-        this.active = false;
+        this.state.active = false;
+        console.log('trying to close');
+        this.store.dispatch({ action: 'RENDER' });
     }
 }
