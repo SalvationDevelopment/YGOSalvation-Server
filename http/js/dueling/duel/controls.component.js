@@ -29,6 +29,7 @@ class GameplayControlButton extends React.Component {
 
     click() {
         this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state.card, uuid: this.uuid });
+        app.duel.closeRevealer();
     }
 
     render() {
@@ -38,7 +39,7 @@ class GameplayControlButton extends React.Component {
             style: {
                 display: 'flex',
                 width: 'auto',
-                zIndex: '350', 
+                zIndex: '350',
                 'text-align': 'center'
             }
         }, this.state.info.text);
@@ -179,7 +180,30 @@ class ControlButtons {
             disabledClasses = [];
 
         if (query.location === 'GRAVE') {
-            enabledClasses.push('m-grave');
+            if (query.status === 'revealed') {
+                enabledClasses.push('m-hand');
+                if (monsterMap[query.type]) {
+                    enabledClasses.push('m-hand-m');
+                }
+                console.log(query);
+                if ((stMap[query.type]
+                    || query.type === 2
+                    || query.type === 4
+                    || checksetcode(query, 151)
+                    || query.id === 9791914
+                    || query.id === 58132856) && !fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-st');
+                }
+                if (fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-f');
+                }
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                    enabledClasses.push('m-monster-p');
+                }
+            } else {
+                enabledClasses.push('m-grave');
+            }
             if (cardIs('link', query)) {
                 disabledClasses.push('spdef');
             }
@@ -246,7 +270,30 @@ class ControlButtons {
         }
 
         if (query.location === 'EXCAVATED') {
-            enabledClasses.push('m-excavated');
+            if (query.status === 'reveal') {
+                enabledClasses.push('m-hand');
+                if (monsterMap[query.type]) {
+                    enabledClasses.push('m-hand-m');
+                }
+                console.log(query);
+                if ((stMap[query.type]
+                    || query.type === 2
+                    || query.type === 4
+                    || checksetcode(query, 151)
+                    || query.id === 9791914
+                    || query.id === 58132856) && !fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-st');
+                }
+                if (fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-f');
+                }
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                    enabledClasses.push('m-monster-p');
+                }
+            } else {
+                enabledClasses.push('m-excavated');
+            }
         }
         if (query.location === 'EXTRA') {
             enabledClasses.push('m-extra-view');
@@ -392,7 +439,7 @@ class ControlButtons {
             player: query.player,
             setcode: query.setcode,
             position: query.position,
-            status : query.status
+            status: query.status
         };
         this.info.coords = coords;
         app.manualControls.manualActionReference = this.info.target;
