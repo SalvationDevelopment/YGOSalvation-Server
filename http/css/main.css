@@ -544,6 +544,7 @@ div#actions {
 div#actions button {
     width: 100%;
     width: 50%;
+    display : flex;
 }
 
 .field {
@@ -2814,6 +2815,17 @@ div#selectplayer button {
     position: relative;
     height: auto;
     margin-bottom: 2em;
+}
+
+div#extracontrols {
+    position: fixed;
+    height: 100%;
+    left: 33vh;
+    width: 10vh;
+}
+
+.button-filter .filtered {
+    display: none !important;
 }
 
 div#lightbox {

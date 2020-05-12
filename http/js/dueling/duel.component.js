@@ -1,6 +1,6 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
-/*global SelectPosition, DeckDialog, YesNoDialog, SelectAttributes, Chainer*/
+/*global SelectPosition, DeckDialog, YesNoDialog, SelectAttributes, Chainer, ExtraControls*/
 class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
@@ -20,6 +20,7 @@ class DuelScreen extends React.Component {
         this.positionDialog = new SelectPosition(this.store);
         this.pickAttribute = new SelectAttributes(this.store);
         this.yesnoDialog = new YesNoDialog(this.store);
+        this.extracontrols = new ExtraControls(this.store, this.controls);
         this.store.register('CARD_HOVER', this.onHover.bind(this));
         this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
         this.store.register('CARD_CLICK', this.onCardClick.bind(this));
@@ -90,6 +91,7 @@ class DuelScreen extends React.Component {
     render() {
         return [
             React.createElement('div', { id: 'sidechat', key: 'sidechat' }, this.sidechat.render()),
+            React.createElement('div', { id: 'extracontrols', key: 'extracontrols' }, this.extracontrols.render()),
             React.createElement('div', { id: 'actions', key: 'actions' }, this.controls.render()),
             React.createElement('div', { id: 'ingamecardimage', key: 'ingamecardimage' }, this.info.render()),
             React.createElement('div', { id: 'lifepoints', key: 'lifepoints' }, this.lifepoints.render()),
