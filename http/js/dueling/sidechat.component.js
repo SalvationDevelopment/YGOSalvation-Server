@@ -12,6 +12,10 @@ class SideChat extends React.Component {
         return React.createElement('li', { key: `char-message-${i}` }, sanitize(message));
     }
 
+    manualCommand() {
+        
+    }
+
     onKeyDown(event) {
         const key = {
             RETURN: 13,

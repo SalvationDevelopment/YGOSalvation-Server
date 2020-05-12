@@ -10,6 +10,7 @@ class ManualControls {
 
     clearCardReference() {
         app.duel.controls.enable({});
+        app.duel.closeRevealer();
         app.refreshUI();
     }
 
@@ -64,7 +65,7 @@ class ManualControls {
         if (!this.zonetargetingmode) {
             return;
         }
-
+        app.duel.closeRevealer();
         $('.cardselectionzone.p0').removeClass('card');
         $('.cardselectionzone.p0').removeClass('attackglow');
         if (this.zonetargetingmode === 'atk') {
@@ -102,7 +103,7 @@ class ManualControls {
     }
 
     startSpecialSummon(mode) {
-        'use strict';
+        app.duel.closeRevealer();
         this.zonetargetingmode = mode;
         const player = 0;
         app.duel.select({

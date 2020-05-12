@@ -1421,7 +1421,7 @@ function init(callback) {
             // flip the card over.
             card.position = (card.position === 'FaceDown') ? 'FaceUp' : 'FaceDown';
         });
-        callback(generateView('flipDeckOver'), stack); // alert UI of the shuffle.
+        callback(generateView(), stack); // alert UI of the shuffle.
     }
 
 

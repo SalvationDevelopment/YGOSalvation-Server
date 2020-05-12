@@ -1,6 +1,6 @@
 /* eslint-disable brace-style */
 /*global React, ReactDOM */
-/*global app */
+/*global app, monsterMap */
 
 function checksetcode(obj, sc) {
     'use strict';
@@ -40,7 +40,7 @@ class GameplayControlButton extends React.Component {
                 display: 'flex',
                 width: 'auto',
                 zIndex: '350',
-                'text-align': 'center'
+                textAlign: 'center'
             }
         }, this.state.info.text);
     }
@@ -69,7 +69,7 @@ class ControlButtons {
     }
 
 
-    renderEnabledClasses(enabledClasses) {
+    renderEnabledClasses(enabledClasses, disabledClasses) {
         const buttons = [
             { text: 'Flip Deck Over', options: ['m-deck', 'm-convulse'], onClick: function () { app.manualControls.manualFlipDeck(); } },
             { text: 'Reveal Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualRevealDeck(); } },
@@ -134,10 +134,10 @@ class ControlButtons {
             { text: 'Remove Counter', options: ['m-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualRemoveCounter(); } },
             { text: 'View Xyz Materials', options: [], onClick: function () { app.manualControls.manualViewXYZMaterials(); } },
             { text: 'Overlay', options: ['m-monster', 'm-monster-xyz', 'v-monster-xyz'], onClick: function () { app.manualControls.startXYZSummon(); } },
-            { text: 'Flip Face-up', options: ['m-monster'], onClick: function () { app.manualControls.manualToFaceUpDefence(); } },
+            { text: 'Flip Face-up', options: ['m-monster', 'toDefence'], onClick: function () { app.manualControls.manualToFaceUpDefence(); } },
             { text: 'Flip Face-down', options: ['m-monster'], onClick: function () { app.manualControls.manualToFaceDownDefence(); } },
             { text: 'To Attack', options: ['m-monster'], onClick: function () { app.manualControls.manualToAttack(); } },
-            { text: 'To Defense', options: ['m-field'], onClick: function () { app.manualControls.manualToDefence(); } },
+            { text: 'To Defense', options: ['m-field', 'toDefence'], onClick: function () { app.manualControls.manualToDefence(); } },
             { text: 'Remove Token', options: ['m-monster-token'], onClick: function () { app.manualControls.manualRemoveToken(); } },
             { text: 'To Left Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'], onClick: function () { app.manualControls.manualToPZoneL(); } },
             { text: 'To Right Pendulumn Zone', options: ['m-hand-p', 'm-monster-p'], onClick: function () { app.manualControls.manualToPZoneR(); } },
@@ -150,6 +150,10 @@ class ControlButtons {
         ], elements = buttons.filter((button) => {
             return enabledClasses.some((prospect) => {
                 return button.options.includes(prospect);
+            })
+        }).filter((button) => {
+            return disabledClasses.every((prospect) => {
+                return !button.options.includes(prospect);
             });
         }).map((button, i) => {
             button.className = button.options;
@@ -157,10 +161,10 @@ class ControlButtons {
             button.style = {
                 display: 'flex',
                 width: 'auto',
-                'text-align': 'center'
+                textAlign: 'center'
             };
             return React.createElement('button', button, button.text);
-        });
+        }).reverse();
 
         return React.createElement('div', {
             style: {
@@ -168,8 +172,8 @@ class ControlButtons {
                 top: `${(this.info.coords.y - 15)}px`,
                 position: 'fixed',
                 display: 'flex',
-                'flex-direction': 'column',
-                'text-align': 'center'
+                'flexDirection': 'column',
+                textAlign: 'center'
             }
         }, elements);
     }
@@ -201,6 +205,7 @@ class ControlButtons {
                     enabledClasses.push('m-hand-p');
                     enabledClasses.push('m-monster-p');
                 }
+                disabledClasses.push('non-grave');
             } else {
                 enabledClasses.push('m-grave');
             }
@@ -213,6 +218,8 @@ class ControlButtons {
         }
         if (query.location === 'MONSTERZONE') {
             enabledClasses.push('m-opponent');
+            enabledClasses.push('m-field');
+            enabledClasses.push('m-monster');
             // non-extra filter
 
             if (cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query)) {
@@ -247,6 +254,8 @@ class ControlButtons {
                 disabledClasses.push('toDefence', 'flipUpMonster', 'flipDownMonster', 'flipDown');
             }
             if (query.position === 'FaceUpDefence') {
+
+
                 disabledClasses.push('toDefence', 'flipUpMonster');
             }
             if (!query.counters) {
@@ -270,7 +279,7 @@ class ControlButtons {
         }
 
         if (query.location === 'EXCAVATED') {
-            if (query.status === 'reveal') {
+            if (query.status === 'revealed') {
                 enabledClasses.push('m-hand');
                 if (monsterMap[query.type]) {
                     enabledClasses.push('m-hand-m');
@@ -296,35 +305,63 @@ class ControlButtons {
             }
         }
         if (query.location === 'EXTRA') {
-            enabledClasses.push('m-extra-view');
-            enabledClasses.push('m-extra');
-            if (cardIs('link', query)) {
-                // remove defense option.
+            if (query.status === 'revealed') {
+                enabledClasses.push('v-removed');
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                    enabledClasses.push('m-monster-p');
+
+                }
+                if (monsterMap[query.type]) {
+                    enabledClasses.push('m-hand-m');
+                }
+                if ((stMap[query.type] || query.type === 2 || query.type === 4) && !fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-st');
+                }
+                if (fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-f');
+                }
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                }
+                if (cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query)) {
+                    enabledClasses.push('v-monster-extra');
+                }
+            } else {
+                enabledClasses.push('m-extra-view');
+                enabledClasses.push('m-extra');
+                if (cardIs('link', query)) {
+                    // remove defense option.
+                }
             }
         }
         if (query.location === 'BANISHED') {
-            enabledClasses.push('v-removed');
-            if (pendulumMap[query.type]) {
-                enabledClasses.push('m-hand-p');
-                enabledClasses.push('m-monster-p');
+            if (query.status === 'revealed') {
+                enabledClasses.push('v-removed');
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                    enabledClasses.push('m-monster-p');
 
-            }
-            if (monsterMap[query.type]) {
-                enabledClasses.push('m-hand-m');
-            }
-            if ((stMap[query.type] || query.type === 2 || query.type === 4) && !fieldspell[query.type]) {
-                enabledClasses.push('m-hand-st');
-            }
-            if (fieldspell[query.type]) {
-                enabledClasses.push('m-hand-f');
-            }
-            if (pendulumMap[query.type]) {
-                enabledClasses.push('m-hand-p');
-            }
-            if (cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query)) {
-                enabledClasses.push('v-monster-extra');
+                }
+                if (monsterMap[query.type]) {
+                    enabledClasses.push('m-hand-m');
+                }
+                if ((stMap[query.type] || query.type === 2 || query.type === 4) && !fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-st');
+                }
+                if (fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-f');
+                }
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                }
+                if (cardIs('fusion', query) || cardIs('synchro', query) || cardIs('xyz', query) || cardIs('link', query)) {
+                    enabledClasses.push('v-monster-extra');
+                } else {
+                    enabledClasses.push('non-extra');
+                }
             } else {
-                enabledClasses.push('non-extra');
+                enabledClasses.push('m-excavated');
             }
 
         }
@@ -357,7 +394,7 @@ class ControlButtons {
             }
         }
 
-        return this.renderEnabledClasses(enabledClasses);
+        return this.renderEnabledClasses(enabledClasses, disabledClasses);
 
     }
 
@@ -386,8 +423,8 @@ class ControlButtons {
                 top: `${(this.info.coords.y - 15)}px`,
                 position: 'fixed',
                 display: 'flex',
-                'flex-direction': 'column',
-                'text-align': 'center'
+                'flexDirection': 'column',
+                textAlign: 'center'
             }
         }, elements);
     }
