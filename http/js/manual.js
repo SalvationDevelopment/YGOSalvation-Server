@@ -1091,7 +1091,7 @@ class ManualControls {
     manualToken(index, id) {
 
         var card = {};
-        card.player = orientSlot;
+        card.player = window.orientation;
         card.location = 'MONSTERZONE';
         card.position = 'FaceUpDefence';
         card.id = id || parseInt($('#tokendropdown').val(), 10);

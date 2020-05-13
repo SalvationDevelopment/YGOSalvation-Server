@@ -35,6 +35,7 @@ function responseHandler(engine, players, client, message) {
             break;
         case 'makeToken':
             engine.makeNewCard(message.location, message.player, message.index, message.position, message.id, message.index);
+            engine.ygoproUpdate();
             break;
         case 'removeToken':
             engine.removeCard(message.uid);

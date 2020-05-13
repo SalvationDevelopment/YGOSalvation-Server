@@ -3,6 +3,7 @@
 class ExtraControls extends React.Component {
 
     render() {
+        console.log(this.tokens);
         return [
             React.createElement('button', { id: 'control-filter-adv', key: 'filter-advanced-controls', onClick: this.toggle.bind(this) }, 'Toggle Controls'),
             React.createElement('button', {
@@ -11,15 +12,19 @@ class ExtraControls extends React.Component {
                 }
             }, 'Flip Coin'),
             React.createElement('button', {
-                id: 'control-roll-die', key: 'control-flip-coin', onClick: function () {
+                id: 'control-roll-die', key: 'control-roll-die', onClick: function () {
                     app.manualControls.manualRoll();
                 }
             }, 'Roll Die'),
             React.createElement('button', {
                 id: 'control-token', key: 'control-token', onClick: function () {
-                    app.manualControls.manualToken();
+                    app.manualControls.startSpecialSummon('token')
                 }
-            }, 'Make Token')
+            }, 'Make Token'),
+            React.createElement('select', { id: 'tokendropdown' }, this.tokens.map((card, i) => {
+                console.log(card.name);
+                return React.createElement('option', { key: 'selectn' + i, value: card.id }, sanitize(card.name));
+            }))
         ];
     }
 
@@ -27,9 +32,14 @@ class ExtraControls extends React.Component {
         this.controls.state.filter = !this.controls.state.filter;
     }
 
-    constructor(store, controls) {
+    constructor(store, controls, databaseSystem) {
         super();
         this.store = store;
         this.controls = controls;
+        this.tokens = databaseSystem
+            .filter((card) => {
+                return cardIs('token', card);
+            })
+
     }
 }
