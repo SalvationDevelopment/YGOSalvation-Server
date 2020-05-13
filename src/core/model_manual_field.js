@@ -306,13 +306,13 @@ function init(callback) {
         return Object.assign(info, state);
     }
 
-        /**
-     * Record what a duelist said to another duelist.
-     * @param {Number} username  player saying the message.
-     * @param {String} message message to other spectators
-     * @returns {undefined}
-     */
-    function duelistChat(message, username) {
+    /**
+ * Record what a duelist said to another duelist.
+ * @param {Number} username  player saying the message.
+ * @param {String} message message to other spectators
+ * @returns {undefined}
+ */
+    function duelistChat(username, message) {
         username = username || 'Server';
         const view = {
             names: names,
@@ -1044,7 +1044,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        duelistChat('Server' ,  username + ' is viewing their extra deck.');
+        duelistChat('Server', username + ' is viewing their extra deck.');
 
         result['p' + player] = {
             duelAction: 'reveal',
@@ -1071,7 +1071,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        duelistChat('Server' ,  username + ' is viewing their excavated pile.');
+        duelistChat('Server', username + ' is viewing their excavated pile.');
 
         result['p' + player] = {
             duelAction: 'reveal',
@@ -1236,7 +1236,7 @@ function init(callback) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
 
-        duelistChat(`!!! READ BELOW FOR GAME COMMANDS\n
+        duelistChat('Server', `!!! READ BELOW FOR GAME COMMANDS\n
         --Commands--\n
         Draw Cards:  /draw [amount]\n
         Mill Cards:  /mill [amount]\n

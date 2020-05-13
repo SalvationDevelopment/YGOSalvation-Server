@@ -253,6 +253,9 @@ class ApplicationComponent extends React.Component {
             case 'chat':
                 this.chat.add(message);
                 break;
+            case 'give':
+                this.manualControls.manualTake(message);
+                break;
             default:
                 break;
         }

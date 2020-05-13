@@ -652,7 +652,7 @@ class ManualControls {
 
         index = (index !== undefined) ? index : this.manualActionReference.index;
         var message = this.makeCardMovement(this.manualActionReference, {
-            player: this.manualActionReference.player,
+            player: window.orientation,
             location : zone,
             position: this.manualActionReference.position,
             index
@@ -762,6 +762,17 @@ class ManualControls {
         message.moveposition = 'FaceDown';
         this.primus.write((message));
         this.clearCardReference();
+    }
+
+    manualTake(message) {
+        if (message.target.player !== window.orientation) {
+            this.manualActionReference = message.target;
+            if (message.choice === 'HAND') {
+                this.manualMoveGeneric(message.target.index, 'HAND');
+            } else {
+                this.startSpecialSummon('generic');
+            }
+        }
     }
 
     manualToOpponent() {

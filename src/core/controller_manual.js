@@ -154,9 +154,12 @@ function responseHandler(engine, players, client, message) {
             break;
         case 'give':
             broadcast(players, {
-                duelAction: 'give',
-                target: message.target,
-                choice: message.choice
+                action: 'ygopro',
+                message: {
+                    duelAction: 'give',
+                    target: message.target,
+                    choice: message.choice
+                }
             });
             break;
         case 'ygopro':
@@ -239,7 +242,7 @@ function clientBinding(clients, spectators) {
             if (!view) {
                 return;
             }
-            
+
             clients[0].write((view.p0));
             clients[1].write((view.p1));
             //spectators.write((view.spectators));
