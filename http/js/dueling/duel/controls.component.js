@@ -76,8 +76,8 @@ class ControlButtons {
             { text: 'Reveal Deck', options: ['filtered', 'm-deck'], onClick: function () { app.manualControls.manualRevealDeck(); } },
             { text: 'Reveal Top Card', options: ['filtered', 'm-deck'], onClick: function () { app.manualControls.manualRevealTop(); } },
             { text: 'Reveal Bottom Card', options: ['filtered', 'm-deck'], onClick: function () { app.manualControls.manualRevealBottom(); } },
-            { text: 'Banish Top Card', options: ['filtered', 'm-deck'], onClick: function () { app.manualControls.manualMillRemovedCard(); } },
-            { text: 'Banish FaceDown', options: ['m-deck'], onClick: function () { app.manualControls.manualMillRemovedCardFaceDown(); } },
+            { text: 'Banish Top Card', options: ['filtered', 'm-deck', 'non-banish'], onClick: function () { app.manualControls.manualMillRemovedCard(); } },
+            { text: 'Banish FaceDown', options: ['m-deck', 'non-banish'], onClick: function () { app.manualControls.manualMillRemovedCardFaceDown(); } },
             { text: 'Excavate', options: ['filtered','m-hand', 'm-deck', 'v-grave', 'v-removed', 'v-deck', 'non-excavate'], onClick: function () { app.manualControls.manualToExcavate(); } },
             { text: 'Excavate Face-down', options: ['filtered','m-deck'], onClick: function () { app.manualControls.manualExcavateTop(); } },
             { text: 'Shuffle Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualShuffleDeck(); } },
@@ -236,10 +236,8 @@ class ControlButtons {
                 enabledClasses.push('m-monster-xyz');
             }
             if (!excludeTokens(query)) {
-                enabledClasses.push('m-monster-token').css({
-                    'display': 'block'
-                });
-                disabledClasses.push('bottomdeck', 'topdeck', 'opphand', 'banishcard', 'tograve', 'tohand', 'overlayStack', 'flipDownMonster', 'banishcardfd');
+                enabledClasses.push('m-monster-token');
+                disabledClasses.push('non-extra', 'm-monster-xyz', 'non-deck', 'non-banish',  'non-hand', 'overlayStack', 'flipDownMonster', 'banishcardfd', 'non-grave');
             }
             if (checksetcode(query, 151) || query.id === 9791914 || query.id === 58132856) {
                 enabledClasses.push('m-st-monster');
@@ -471,13 +469,14 @@ class ControlButtons {
     enable(query, coords) {
         this.info.target = {
             id: query.id,
+            uid: query.uid,
             index: query.index,
             location: query.location,
             type: query.type,
             player: query.player,
             setcode: query.setcode,
             position: query.position,
-            status: query.status
+            status: query.status,
         };
         this.info.coords = coords;
         app.manualControls.manualActionReference = this.info.target;

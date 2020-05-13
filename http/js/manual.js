@@ -503,6 +503,7 @@ class ManualControls {
 
 
     manualRemoveToken() {
+        console.log(this.manualActionReference);
         this.primus.write(({
             action: 'removeToken',
             uid: this.manualActionReference.uid

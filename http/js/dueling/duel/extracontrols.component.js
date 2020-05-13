@@ -3,7 +3,6 @@
 class ExtraControls extends React.Component {
 
     render() {
-        console.log(this.tokens);
         return [
             React.createElement('button', { id: 'control-filter-adv', key: 'filter-advanced-controls', onClick: this.toggle.bind(this) }, 'Toggle Controls'),
             React.createElement('button', {
@@ -22,7 +21,6 @@ class ExtraControls extends React.Component {
                 }
             }, 'Make Token'),
             React.createElement('select', { id: 'tokendropdown' }, this.tokens.map((card, i) => {
-                console.log(card.name);
                 return React.createElement('option', { key: 'selectn' + i, value: card.id }, sanitize(card.name));
             }))
         ];
