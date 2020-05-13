@@ -721,15 +721,45 @@ div#sidechat {
 .ingamechatbox li {
     color: white;
     list-style: none;
+    font-size: 1.5vh;
+    font-family: monospace;
+    clear : both;
 }
 
-.ingamechatbox li pre {
-    /* opacity: .5; */
-    padding: 0;
-    margin: 0;
-    font-family: 'Roboto', serif;
-    font-size: 100%;
-    color: yellow;
+span.sidechat-date {
+    display: inline-block;
+    color: #444;
+    
+    padding: 0 4px;
+    margin-right: .5em;
+}
+
+span.sidechat-username {
+    display: inline-block;
+    /* background: #444; */
+    padding: 0 4px;
+    margin-right: .5em;
+}
+
+span.sidechat-message {
+    display: block;
+    border-bottom: 1px solid #333;
+    margin-bottom: .5em;
+    padding: 0 4px;
+    white-space: pre-line;
+    color: #ccc;
+}
+
+#sidechattext img.avatar {
+    width: 3vw;
+    margin-right:.5em;
+    float: left;
+    margin-bottom: 1vh;
+}
+
+#sidechattext li div {
+    float: left;
+    margin-bottom: 1vh;
 }
 
 #sidechatinput {

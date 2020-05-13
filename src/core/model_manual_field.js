@@ -114,16 +114,6 @@ function makeCard(location, player, index, unique, code) {
 }
 
 
-/**
- * Filters non cards from a collection of possible cards.
- * @param   {Card[]} stack a stack of cards which may have overlay units attached to them.
- * @returns {Card[]} a stack of cards, devoid of overlay units.
- */
-function filterIsCard(stack) {
-    return stack.filter(function (item) {
-        return item.type === 'card';
-    });
-}
 
 /**
  * Filters out cards based on player.
@@ -237,7 +227,7 @@ function hideViewOfZone(view) {
  */
 function cleanCounters(stack) {
 
-    stack.forEach(function (card, index) {
+    stack.forEach(function (card) {
         if (card.position === 'FaceDown' || card.position === 'FaceDownDefense') {
             card.counters = 0;
         }
@@ -273,18 +263,16 @@ function init(callback) {
     //numberOfCards is used like a memory address. It must be increased by 1 when creating a makeCard.
 
     if (typeof callback !== 'function') {
-        callback = function (view, internalState) { };
+        callback = function () { };
     }
 
     var answerListener = new EventEmitter(),
         lastQuestion = {},
         stack = [],
         previousStack = [],
-        outstack = [],
         names = ['', ''],
         lock = [false, false],
         round = [],
-        instance,
         state = {
             turn: 0,
             turnOfPlayer: 0,
@@ -317,6 +305,39 @@ function init(callback) {
         };
         return Object.assign(info, state);
     }
+
+        /**
+     * Record what a duelist said to another duelist.
+     * @param {Number} username  player saying the message.
+     * @param {String} message message to other spectators
+     * @returns {undefined}
+     */
+    function duelistChat(message, username) {
+        username = username || 'Server';
+        const view = {
+            names: names,
+            p0: {
+                duelAction: 'chat',
+                username,
+                message,
+                date: new Date()
+            },
+            p1: {
+                duelAction: 'chat',
+                username,
+                message,
+                date: new Date()
+            },
+            spectators: {
+                duelAction: 'chat',
+                username,
+                message,
+                date: new Date()
+            }
+        };
+        callback(view, stack);
+    }
+
     /**
      * Set a username to a specific slot on lock in.
      * @public
@@ -590,8 +611,7 @@ function init(callback) {
             overlayindex = changeRequest.overlayindex,
             uid = changeRequest.uid,
             target = queryCard(player, location, index, overlayindex, uid),
-            pointer = uidLookup(target.uid),
-            zone;
+            pointer = uidLookup(target.uid);
 
         if (movelocation === 'GRAVE' || movelocation === 'BANISHED') {
             moveplayer = stack[pointer].originalcontroller;
@@ -713,7 +733,7 @@ function init(callback) {
             });
         }
         if (username) {
-            state.duelistChat.push('<pre>' + username + ' drew a card.</pre>');
+            duelistChat('Server', username + ' drew a card.');
         }
         callback(generateView(), stack);
         if (typeof drawCallback === 'function') {
@@ -721,10 +741,10 @@ function init(callback) {
         }
     }
 
-    function excavateCard(player, numberOfCards, cards) {
+    function excavateCard(player, numberOfCards) {
         var currenthand = filterlocation(filterPlayer(stack, player), 'EXCAVATED').length,
             topcard,
-            i;           
+            i;
 
         for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
@@ -752,9 +772,7 @@ function init(callback) {
     function millCard(player, numberOfCards) {
         var currentgrave = filterlocation(filterPlayer(stack, player), 'GRAVE').length,
             topcard,
-            target,
-            i,
-            pointer;
+            i;
 
         for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
@@ -782,9 +800,7 @@ function init(callback) {
     function millRemovedCard(player, numberOfCards) {
         var currentgrave = filterlocation(filterPlayer(stack, player), 'BANISHED').length,
             topcard,
-            target,
-            i,
-            pointer;
+            i;
 
         for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
@@ -812,9 +828,7 @@ function init(callback) {
     function millRemovedCardFaceDown(player, numberOfCards) {
         var currentgrave = filterlocation(filterPlayer(stack, player), 'BANISHED').length,
             topcard,
-            target,
-            i,
-            pointer;
+            i;
 
         for (i = 0; i < numberOfCards; i += 1) {
             topcard = filterlocation(filterPlayer(stack, player), 'DECK').length - 1;
@@ -943,9 +957,9 @@ function init(callback) {
      */
     function viewGrave(player, username, requester) {
         if (player === requester) {
-            state.duelistChat.push('<pre>' + username + ' is viewing their graveyard.</pre>');
+            duelistChat('Server', username + ' is viewing their graveyard.');
         } else {
-            state.duelistChat.push('<pre>' + username + ' is viewing your graveyard.</pre>');
+            duelistChat('Server', username + ' is viewing your graveyard.');
         }
         var deck = filterlocation(filterPlayer(stack, player), 'GRAVE').sort(sortByIndex).reverse(),
             result = {
@@ -974,9 +988,9 @@ function init(callback) {
      */
     function viewBanished(player, username, requester) {
         if (player === requester) {
-            state.duelistChat.push('<pre>' + username + ' is viewing their banished pile.</pre>');
+            duelistChat('Server', username + ' is viewing their banished pile.');
         } else {
-            state.duelistChat.push('<pre>' + username + ' is viewing your banished pile.</pre>');
+            duelistChat('Server', username + ' is viewing your banished pile.');
         }
         var deck = filterlocation(filterPlayer(stack, player), 'BANISHED').reverse(), // its face up so its reversed.
             result = {
@@ -1006,7 +1020,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push('<pre>' + username + ' is viewing their deck.</pre>');
+        duelistChat('Server', username + ' is viewing their deck.');
         result['p' + player] = {
             duelAction: 'reveal',
             info: state,
@@ -1030,7 +1044,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push('<pre>' + username + ' is viewing their extra deck.</pre>');
+        duelistChat('Server' ,  username + ' is viewing their extra deck.');
 
         result['p' + player] = {
             duelAction: 'reveal',
@@ -1057,7 +1071,7 @@ function init(callback) {
                 1: {},
                 sepectators: {}
             };
-        state.duelistChat.push('<pre>' + username + ' is viewing their excavated pile.</pre>');
+        duelistChat('Server' ,  username + ' is viewing their excavated pile.');
 
         result['p' + player] = {
             duelAction: 'reveal',
@@ -1221,21 +1235,21 @@ function init(callback) {
         player2.extra.forEach(function (card, index) {
             stack.push(makeCard('EXTRA', 1, index, stack.length, card));
         });
-        if (manual) {
-            state.duelistChat.push('<pre>!!! READ BELOW FOR GAME COMMANDS</pre>');
-            state.duelistChat.push('<pre>--Commands--</pre>');
-            state.duelistChat.push('<pre>Draw Cards:  /draw [amount]</pre>');
-            state.duelistChat.push('<pre>Mill Cards:  /mill [amount]</pre>');
-            state.duelistChat.push('<pre>Banish Mill Cards:  /banish [amount]</pre>');
-            state.duelistChat.push('<pre>Banish Mill Cards Face-down:  /banishfd [amount]</pre>');
-            state.duelistChat.push('<pre>Reduce LP:   /sub [amount]</pre>');
-            state.duelistChat.push('<pre>Increase LP: /add [amount]</pre>');
-            state.duelistChat.push('<pre>RPS:         /rps</pre>');
-            state.duelistChat.push('<pre>Flip Coin:   /flip</pre>');
-            state.duelistChat.push('<pre>Roll Dice:   /roll</pre>');
-            state.duelistChat.push('<pre>Make Token:  /token</pre>');
-            state.duelistChat.push('<pre>Surrender:   /surrender</pre>');
-        }
+
+        duelistChat(`!!! READ BELOW FOR GAME COMMANDS\n
+        --Commands--\n
+        Draw Cards:  /draw [amount]\n
+        Mill Cards:  /mill [amount]\n
+        Banish Mill Cards:  /banish [amount]\n
+        Banish Mill Cards Face-down:  /banishfd [amount]\n
+        Reduce LP:   /sub [amount]\n
+        Increase LP: /add [amount]\n
+        RPS:         /rps\n
+        Flip Coin:   /flip\n
+        Roll Dice:   /roll\n
+        Make Token:  /token\n
+        Surrender:   /surrender`);
+
         announcement(0, { command: 'MSG_ORIENTATION', slot: 0 });
         announcement(1, { command: 'MSG_ORIENTATION', slot: 1 });
         callback(generateView('start'), stack);
@@ -1268,7 +1282,7 @@ function init(callback) {
      */
     function rematch() {
         stack = [];
-        state.duelistChat.push('<pre>Server: Rematch started</pre>');
+        duelistChat('Server: Rematch started');
         startDuel(round[0][0], round[0][1], true);
     }
 
@@ -1311,30 +1325,16 @@ function init(callback) {
     function changeLifepoints(player, amount, username) {
         if (username) {
             if (amount > 0) {
-                state.duelistChat.push('<pre>' + username + ' gained ' + amount + ' Lifepoints.</pre>');
+                duelistChat('Server', username + ' gained ' + amount + ' Lifepoints.');
             } else {
-                state.duelistChat.push('<pre>' + username + ' lost ' + Math.abs(amount) + ' Lifepoints.</pre>');
+                duelistChat('Server', username + ' lost ' + Math.abs(amount) + ' Lifepoints.');
             }
         }
         state.lifepoints[player] = state.lifepoints[player] + amount;
         callback(generateView(), stack);
     }
 
-    /**
-     * Record what a duelist said to another duelist.
-     * @param {Number} username  player saying the message.
-     * @param {String} message message to other spectators
-     * @returns {undefined}
-     */
-    function duelistChat(username, message) {
-        if (username) {
-            state.duelistChat.push(username + ': ' + message);
-        } else {
-            state.duelistChat.push(message);
-        }
 
-        callback(generateView('chat'), stack);
-    }
 
     /**
      * Record what a spectator said to another spectator.
@@ -1368,7 +1368,7 @@ function init(callback) {
         deck.forEach(function (card, index) {
             card.id = idCollection[index]; // finalize the shuffle
         });
-        state.duelistChat.push('<pre>' + username + ' shuffled their deck.</pre>');
+        duelistChat('Server', username + ' shuffled their deck.');
         callback(generateView('shuffleDeck' + player), stack); // alert UI of the shuffle.
     }
     /**
@@ -1426,7 +1426,7 @@ function init(callback) {
 
 
     function offsetZone(player, zone) {
-        stack.forEach(function (card, index) {
+        stack.forEach(function (card) {
             if (card.player === player && card.location === zone) {
                 card.index += 1;
             }
@@ -1451,7 +1451,7 @@ function init(callback) {
         duelistChat('Server', username + ' surrendered.');
     }
 
-   
+
 
     /**
      * Send a question to the player
@@ -1577,7 +1577,6 @@ function init(callback) {
 
 
         function ask() {
-            var time = (previous1 !== undefined) ? 3000 : 0;
 
             question('p0', 'specialCards', [{
                 id: 'rock',

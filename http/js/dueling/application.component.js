@@ -250,6 +250,9 @@ class ApplicationComponent extends React.Component {
             case 'reveal':
                 this.duel.reveal(message.reveal);
                 break;
+            case 'chat':
+                this.chat.add(message);
+                break;
             default:
                 break;
         }
@@ -399,7 +402,7 @@ class ApplicationComponent extends React.Component {
                 window.decks = message.decks;
                 break;
             case 'chat':
-                this.chat.add(`[${new Date(message.date).toLocaleTimeString()}] ${message.username}: ${message.message}`);
+                this.chat.add(message);
                 break;
             case 'start':
                 this.state.mode = 'duel';

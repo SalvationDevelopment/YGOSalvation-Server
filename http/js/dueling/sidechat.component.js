@@ -9,7 +9,15 @@ function sanitize(str) {
 class SideChat extends React.Component {
 
     messageElement(message, i) {
-        return React.createElement('li', { key: `char-message-${i}` }, sanitize(message));
+        return React.createElement('li', { key: `char-message-${i}` }, [
+            React.createElement('img', { key: 'avatar', className: 'avatar', src: message.avatar }),
+            React.createElement('div', {}, [
+                React.createElement('span', { className: 'sidechat-username', key: `char-message-username-${i}` }, message.username),
+                React.createElement('span', { className: 'sidechat-date', key: `char-message-date-${i}` }, new Date(message.date).toLocaleTimeString()),
+
+                React.createElement('span', { className: 'sidechat-message', key: `char-message-message-${i}` }, message.message)
+            ])
+        ]);
     }
 
     manualCommand() {
@@ -165,7 +173,15 @@ class SideChat extends React.Component {
     }
 
     add(message) {
-        this.state.chat = this.state.chat.concat([sanitize(message)]);
+        message.avatar = '';
+        if (app.lobby.state.player.length) {
+            const player = app.lobby.state.player.find((player) => message.username === player.username);
+            if (player) {
+                message.avatar = player.avatar;
+            }
+        }
+        message.message = sanitize(message.message);
+        this.state.chat = this.state.chat.concat([message]);
     }
 
     constructor(store, manualControls) {

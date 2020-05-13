@@ -29,12 +29,22 @@ class PhaseIndicator extends React.Component {
         });
     }
 
+    manualPhase(number) {
+        if (app.manual) {
+            if (number === 6) {
+                app.manualControls.manualNextTurn(number);
+                return;
+            }
+            app.manualControls.manualNextPhase(number);
+        }
+    }
+
     button(number, id, text, enabled) {
         return React.createElement('button', {
             className: (enabled) ? 'phaseindicator enabled' : 'phaseindicator',
             id: id,
             key: id,
-            onClick: (enabled) ? this.click.bind(this, enabled) : () => { }
+            onClick: (enabled) ? this.click.bind(this, enabled) : this.manualPhase.bind(this, number)
         }, text);
     }
 

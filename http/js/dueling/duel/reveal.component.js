@@ -53,7 +53,6 @@ class Revealer extends React.Component {
     close() {
         this.state.cards = [];
         this.state.active = false;
-        console.log('trying to close');
         this.store.dispatch({ action: 'RENDER' });
     }
 }

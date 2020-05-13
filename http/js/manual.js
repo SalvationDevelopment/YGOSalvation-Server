@@ -1094,7 +1094,7 @@ class ManualControls {
         card.player = orientSlot;
         card.location = 'MONSTERZONE';
         card.position = 'FaceUpDefence';
-        card.id = id;
+        card.id = id || parseInt($('#tokendropdown').val(), 10);
         card.index = index;
         card.action = 'makeToken';
         this.primus.write((card));

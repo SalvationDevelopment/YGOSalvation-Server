@@ -594,7 +594,7 @@ function determine(server, game, state, client) {
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
-    
+
     shuffle(state.clients);
     state.clients[0].slot = 0;
     state.clients[1].slot = 1;
@@ -767,7 +767,9 @@ function processMessage(server, duel, game, state, client, message) {
     if (!requiresManualEngine(game, client)) {
         return;
     }
-
+    if (!duel.engine) {
+        return;
+    }
     manualControlEngine.responseHandler(duel.engine, state.clients, client, message);
 }
 
