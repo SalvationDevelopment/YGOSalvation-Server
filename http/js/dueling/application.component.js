@@ -250,6 +250,9 @@ class ApplicationComponent extends React.Component {
             case 'reveal':
                 this.duel.reveal(message.reveal);
                 break;
+            case 'effect':
+                this.duel.flash(message);
+                break;
             case 'chat':
                 this.chat.add(message);
                 break;

@@ -132,24 +132,33 @@ function responseHandler(engine, players, client, message) {
             break;
         case 'attack':
             broadcast(players, {
-                duelAction: 'attack',
-                source: message.source,
-                target: message.target
+                action: 'ygopro',
+                message: {
+                    duelAction: 'attack',
+                    source: message.source,
+                    target: message.target
+                }
             });
             break;
         case 'effect':
             broadcast(players, {
-                duelAction: 'effect',
-                id: message.id,
-                player: message.player,
-                index: message.index,
-                location: message.location
+                action: 'ygopro',
+                message: {
+                    duelAction: 'effect',
+                    id: message.id,
+                    player: message.player,
+                    index: message.index,
+                    location: message.location
+                }
             });
             break;
         case 'target':
             broadcast(players, {
-                duelAction: 'target',
-                target: message.target
+                action: 'ygopro',
+                message: {
+                    duelAction: 'target',
+                    target: message.target
+                }
             });
             break;
         case 'give':

@@ -3,6 +3,9 @@
 class ExtraControls extends React.Component {
 
     render() {
+        if (!app.manual) {
+            return '';
+        }
         return [
             React.createElement('button', { id: 'control-filter-adv', key: 'filter-advanced-controls', onClick: this.toggle.bind(this) }, 'Toggle Controls'),
             React.createElement('button', {

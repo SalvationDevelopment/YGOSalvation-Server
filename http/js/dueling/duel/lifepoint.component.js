@@ -51,8 +51,8 @@ class LifepointDisplay extends React.Component {
         return [
             this.meter('p0lp', this.state.lifepoints[0], this.maxLifepoints),
             this.meter('p1lp', this.state.lifepoints[1], this.maxLifepoints),
-            this.input('p0lp', this.state.lifepoints[0]),
-            this.input('p1lp', this.state.lifepoints[1]),
+            //this.input('p0lp', this.state.lifepoints[0]),
+            //this.input('p1lp', this.state.lifepoints[1]),
             this.span('p0name', 'Player 1'),
             this.span('p1name', 'Player 2'),
             this.meter('p0time'),

@@ -2,12 +2,9 @@
    Author's custom styles
    ========================================================================== */
 
-
 /* apply a natural box layout model to all elements */
 
-*,
-*:before,
-*:after {
+*, *:before, *:after {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -47,15 +44,12 @@ body.unlogged {
     0% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
-
     25% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
-
     75% {
         background-image: url(../img/magimagipinkshadow.jpg);
     }
-
     100% {
         background-image: url(../img/magimagipinkshadow2.jpg);
     }
@@ -86,8 +80,6 @@ body.unlogged {
 #faq img {
     max-width: 100%;
 }
-
-
 
 h1 {
     color: white;
@@ -135,7 +127,6 @@ header {
     width: 100vw;
     height: 100vh;
 }
-
 
 section {
     width: 100%;
@@ -238,7 +229,6 @@ ul#mirrors {
     0% {
         background-color: rgba(255, 100, 200, 0);
     }
-
     100% {
         background-color: rgba(255, 100, 200, .75);
     }
@@ -323,8 +313,7 @@ button#lobbycancel {
     -webkit-animation: colorRotate 6s linear 0s infinite;
 }
 
-#settings select,
-#settings button {
+#settings select, #settings button {
     width: 45%;
 }
 
@@ -345,8 +334,6 @@ button#lobbycancel {
 #lobbycancel {
     float: right;
 }
-
-
 
 .game span.major {
     text-shadow: 0 0 3px #fff;
@@ -373,8 +360,7 @@ button#lobbycancel {
     display: block;
 }
 
-#lobbyplayer0,
-#lobbyplayer1 {
+#lobbyplayer0, #lobbyplayer1 {
     width: 33%;
     display: inline-block;
 }
@@ -429,8 +415,7 @@ input#ips_remember {
     text-transform: uppercase
 }
 
-button#doregister,
-#backuplogin {
+button#doregister, #backuplogin {
     border-radius: 20px;
     border: 1px solid white;
     background: rgba(0, 0, 0, .5);
@@ -466,8 +451,7 @@ button#doregister,
     margin: 0 auto;
 }
 
-button#dolog,
-#openlogin {
+button#dolog, #openlogin {
     font-size: 70%;
     border-radius: 20px;
     border: 1px solid white;
@@ -482,15 +466,13 @@ button#dolog,
     border-bottom-left-radius: 20px;
 }
 
-button#dolog,
-#openlogin {
+button#dolog, #openlogin {
     border: 1px solid white;
     background: rgba(255, 0, 100, .5);
     color: white;
 }
 
-button#doregister,
-#backuplogin {
+button#doregister, #backuplogin {
     border: 1px solid white;
     background: rgba(75, 0, 100, .5);
     color: white;
@@ -544,7 +526,7 @@ div#actions {
 div#actions button {
     width: 100%;
     width: 50%;
-    display : flex;
+    display: flex;
 }
 
 .field {
@@ -592,9 +574,7 @@ div#actions button {
     position: relative;
 }
 
-.sidingzone .main,
-.sidingzone .extra,
-.sidingzone .side {
+.sidingzone .main, .sidingzone .extra, .sidingzone .side {
     margin-bottom: 10px;
     height: auto;
     overflow: auto;
@@ -658,8 +638,7 @@ div#actions button {
     background: brown;
 }
 
-meter.p1lp,
-meter.p0lp {
+meter.p1lp, meter.p0lp {
     width: 40% !important;
     float: left;
 }
@@ -670,8 +649,7 @@ meter {
     width: 90%;
 }
 
-.p0name,
-.p1name {
+.p0name, .p1name {
     display: block;
     float: left;
     margin: 29px 3.5%;
@@ -723,13 +701,12 @@ div#sidechat {
     list-style: none;
     font-size: 1.5vh;
     font-family: monospace;
-    clear : both;
+    clear: both;
 }
 
 span.sidechat-date {
     display: inline-block;
     color: #444;
-    
     padding: 0 4px;
     margin-right: .5em;
 }
@@ -752,7 +729,7 @@ span.sidechat-message {
 
 #sidechattext img.avatar {
     width: 3vw;
-    margin-right:.5em;
+    margin-right: .5em;
     float: left;
     margin-bottom: 1vh;
 }
@@ -843,8 +820,7 @@ meter::meter-bar {
     background: rgba(255, 255, 25, .85);
 }
 
-meter.p0time,
-meter.p1time {
+meter.p0time, meter.p1time {
     height: 15px;
     border: none;
     float: left;
@@ -852,20 +828,17 @@ meter.p1time {
     width: 40%;
 }
 
-.p0time::-webkit-meter-bar,
-.p1time::-webkit-meter-bar {
+.p0time::-webkit-meter-bar, .p1time::-webkit-meter-bar {
     border: none;
     background: none;
 }
 
-.p0time::-webkit-meter-optimum-value,
-.p1time::-webkit-meter-optimum-value {
+.p0time::-webkit-meter-optimum-value, .p1time::-webkit-meter-optimum-value {
     background: rgba(200, 200, 200, .5);
     border: none;
 }
 
-#lifepoints input.p0time,
-#lifepoints input.p1time {
+#lifepoints input.p0time, #lifepoints input.p1time {
     height: 10px;
     font-size: 8px;
     width: 5%;
@@ -938,8 +911,7 @@ div#selectionsystem .fieldimage {
     background: none !important;
 }
 
-#fieldbg0,
-#fieldbg1 {
+#fieldbg0, #fieldbg1 {
     z-index: -200;
 }
 
@@ -958,8 +930,6 @@ div#selectionsystem .fieldimage {
     z-index: -200;
     background-repeat: no-repeat;
 }
-
-
 
 .button.ready0 {
     display: none;
@@ -1028,7 +998,6 @@ div#yesnobox {
     color: white;
 }
 
-
 #yesnobox>div {
     width: 100%;
     margin: 0 auto;
@@ -1040,14 +1009,12 @@ div#yesnobox {
     margin: 1%;
 }
 
-
-#subreveal .card,
-#revealed .card {
+#subreveal .card, #revealed .card {
     margin: 10px;
     height: 37vh;
     min-width: 13vw;
     display: inline-block;
-    position : relative;
+    position: relative;
 }
 
 div#attributes>div {
@@ -1073,8 +1040,7 @@ div#attributes>div {
     padding: 1vw;
 }
 
-#subreveal .card.selected,
-#revealed .card.selected {
+#subreveal .card.selected, #revealed .card.selected {
     border: 5px solid yellow;
 }
 
@@ -1108,8 +1074,7 @@ div#attributes>div {
     float: right;
 }
 
-div#gofirst,
-#gosecond {
+div#gofirst, #gosecond {
     margin: .25em auto;
     width: 8em;
     color: white;
@@ -1118,8 +1083,7 @@ div#gofirst,
     cursor: pointer;
 }
 
-#rps,
-#selectduelist {
+#rps, #selectduelist {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, .8);
@@ -1129,8 +1093,7 @@ div#gofirst,
     color: white;
 }
 
-#rps .container,
-#selectduelist .container {
+#rps .container, #selectduelist .container {
     width: 1000px;
     margin: 0 auto;
     height: 1000px;
@@ -1148,8 +1111,7 @@ div#gofirst,
     margin: 0 5%;
 }
 
-.login,
-#creategame {
+.login, #creategame {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, .85);
@@ -1207,17 +1169,14 @@ div#gofirst,
     display: inline-block;
 }
 
-#creategame input,
-#creategame select,
-#creategame option {
+#creategame input, #creategame select, #creategame option {
     width: 135px;
     padding: 0px 30px 0px 0;
     display: inline-block;
     color: #444;
 }
 
-#creategame select,
-#creategame option {
+#creategame select, #creategame option {
     padding: 0;
 }
 
@@ -1260,7 +1219,6 @@ div#gofirst,
     display: none;
 }
 
-
 /*
 #phases div {
     display: inline-block;
@@ -1269,9 +1227,7 @@ div#gofirst,
 }
 */
 
-main a,
-main a:visited,
-main {
+main a, main a:visited, main {
     color: #bbb;
     text-decoration: none;
 }
@@ -1320,11 +1276,7 @@ main a:hover {
     margin-top: 2.5%;
 }
 
-#hostSettings select,
-#hostSettings input,
-#settings select,
-#settings input,
-    {
+#hostSettings select, #hostSettings input, #settings select, #settings input, {
     width: 45%;
     border: 1px solid whitesmoke;
     height: 1.5em;
@@ -1335,15 +1287,13 @@ main a:hover {
     padding: .1em;
 }
 
-#hostSettings label,
-#settings label {
+#hostSettings label, #settings label {
     display: inline-block;
     padding-bottom: 2px;
     width: 50%;
 }
 
-#creategameok,
-#creategamecancel {
+#creategameok, #creategamecancel {
     width: 100%;
     display: inline-block;
     padding: 5px;
@@ -1440,8 +1390,7 @@ input#chatinput {
     margin-top: 1vh;
 }
 
-#gamefilter label select,
-#gamefilter label input {
+#gamefilter label select, #gamefilter label input {
     float: right;
     display: block;
     width: 50%;
@@ -1540,8 +1489,7 @@ div#gamelist {
     overflow: auto;
 }
 
-.formrow input,
-.formrow label {
+.formrow input, .formrow label {
     float: left;
     display: block;
     width: 50%
@@ -1562,10 +1510,7 @@ div#gamelist {
     line-height: 1.5em;
 }
 
-#lobbygotoduel,
-#lobbygotospectate,
-#lobbystart,
-#lobbycancel {
+#lobbygotoduel, #lobbygotospectate, #lobbystart, #lobbycancel {
     display: inline-block;
     border: 1px solid #444;
     padding: 0.5vh 2vw;
@@ -1583,15 +1528,7 @@ div#duelspectate {
     float: left;
 }
 
-#lobbycdpt,
-#lobbylp,
-#lobbytimelimit,
-#lobbygamemode,
-#lobbyallowed,
-#lobbyprerelease,
-#lobbyflist,
-#lobbyauto,
-#lobbyranked {
+#lobbycdpt, #lobbylp, #lobbytimelimit, #lobbygamemode, #lobbyallowed, #lobbyprerelease, #lobbyflist, #lobbyauto, #lobbyranked {
     display: inline-block;
     float: right;
     color: orange;
@@ -1699,13 +1636,6 @@ div#ygowaiting {
     text-align: center;
 }
 
-select#tokendropdown {
-    display: block;
-    float: left;
-    width: 8em;
-    margin: 1.2em .1em;
-}
-
 .ingameminorcontrols button {
     /* width: 90px; */
     /* float: left; */
@@ -1757,10 +1687,7 @@ div#camerazone {
     float: left;
 }
 
-input#player1lobbyslot,
-input#player2lobbyslot,
-input#player3lobbyslot,
-input#player4lobbyslot {
+input#player1lobbyslot, input#player2lobbyslot, input#player3lobbyslot, input#player4lobbyslot {
     background: rgba(0, 0, 0, .5);
     border: 1px solid #444;
     margin-bottom: 0.5em;
@@ -1770,10 +1697,11 @@ input#player4lobbyslot {
     font-weight: bold;
     width: 15vw;
 }
+
 .slot {
-    float : left;
-    clear : both;
-    overflow : auto;
+    float: left;
+    clear: both;
+    overflow: auto;
 }
 
 .slot img.avatar {
@@ -1837,8 +1765,7 @@ input#player4lobbyslot {
     bottom: 0;
 }
 
-#p0avatar,
-#p1avatar {
+#p0avatar, #p1avatar {
     z-index: 400;
     position: absolute;
     width: 75px;
@@ -1994,8 +1921,7 @@ img#sqlimage {
     padding-right: 5px;
 }
 
-.datarow input,
-.datarow select {
+.datarow input, .datarow select {
     float: left;
     display: block;
     width: 55%;
@@ -2024,8 +1950,7 @@ input#sqlsearch {
     text-align: center;
 }
 
-#sqlcardcategory,
-#sqlcardtypes {
+#sqlcardcategory, #sqlcardtypes {
     background-color: rgba(0, 0, 0, .5);
     float: left;
     width: 48%;
@@ -2109,7 +2034,6 @@ div#rankingtable table td {
     border: 1px solid white;
 }
 
-
 /* =========================================
 =================================
    Media Queries
@@ -2117,11 +2041,7 @@ div#rankingtable table td {
 
 @media only screen and (min-width: 35em) {}
 
-@media print,
-(-o-min-device-pixel-ratio: 5/4),
-(-webkit-min-device-pixel-ratio: 1.25),
-(min-resolution: 120dppx) {}
-
+@media print, (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dppx) {}
 
 /* ==========================================================================
    Helper classes
@@ -2157,8 +2077,7 @@ div#rankingtable table td {
     width: 1px;
 }
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
     clip: auto;
     height: auto;
     margin: 0;
@@ -2171,8 +2090,7 @@ div#rankingtable table td {
     visibility: hidden;
 }
 
-.clearfix:before,
-.clearfix:after {
+.clearfix:before, .clearfix:after {
     content: " ";
     display: table;
 }
@@ -2185,19 +2103,16 @@ div#rankingtable table td {
     *zoom: 1;
 }
 
-
 /* Make it move */
 
 @-webkit-keyframes marquee {
     0% {
         transform: translate(0, 30%);
     }
-
     100% {
         transform: translate(0, -100%);
     }
 }
-
 
 .gamelabel {
     padding-top: 10px;
@@ -2233,11 +2148,9 @@ header#deckedit div {
     from {
         -webkit-box-shadow: 0 0 3px rgba(255, 255, 255, 0);
     }
-
     50% {
         -webkit-box-shadow: 0 0 18px white;
     }
-
     to {
         #ccc;
         -webkit-box-shadow: 0 0 3px rgba(255, 255, 255, 0);
@@ -2268,8 +2181,7 @@ a.launcheronly.loginsystem {
     color: white;
 }
 
-#ips_username,
-#ips_password {
+#ips_username, #ips_password {
     margin: 20px auto;
     background: rgba(0, 0, 0, 1);
     border: none;
@@ -2314,12 +2226,7 @@ div#loginmodal {
     -webkit-animation-iteration-count: 1;
 }
 
-#ips_username,
-#ips_password,
-#dolog,
-#openlogin,
-#doregister,
-#backuplogin {
+#ips_username, #ips_password, #dolog, #openlogin, #doregister, #backuplogin {
     -webkit-animation-name: pulse;
     -webkit-animation-duration: 5s;
     -webkit-animation-iteration-count: 10;
@@ -2343,12 +2250,10 @@ div#loginmodal {
     from {
         -webkit-box-shadow: 0 0 5px #000;
     }
-
     50% {
         -webkit-box-shadow: 0 0 150px rgba(184, 72, 144, 0.911);
         border-color: rgba(255, 100, 200, .5);
     }
-
     to {
         -webkit-box-shadow: 0 0 5px #000;
     }
@@ -2380,8 +2285,6 @@ div#loginmodal {
 .chatalert {
     background: hotpink;
 }
-
-
 
 .chatlabel {
     display: none;
@@ -2525,11 +2428,9 @@ ul#friendslist {
     0% {
         background-position: top left;
     }
-
     50% {
         background-position: top right;
     }
-
     0% {
         background-position: top left;
     }
@@ -2539,7 +2440,6 @@ ul#friendslist {
     0% {
         box-shadow: inset 0px 0px 0em hotpink;
     }
-
     100% {
         box-shadow: inset 0px 0px 7em hotpink;
     }
@@ -2631,7 +2531,6 @@ div#intro strong {
     max-width: 39%;
     max-height: 98%;
 }
-
 
 #languagesetter {
     text-align: center;
@@ -2851,7 +2750,20 @@ div#extracontrols {
     position: fixed;
     height: 100%;
     left: 33vh;
-    width: 10vh;
+    width: 15vh;
+    padding-top: 8vh;
+}
+
+div#extracontrols button, div#extracontrols select {
+    width: 100%;
+}
+
+div#extracontrols button, div#extracontrols select, div#actions button {
+    background: rgba(0, 0, 0, .8);
+    color: #aaa;
+    border: 1px solid #222;
+    border-top-color: #555;
+    border-left-color: #555;
 }
 
 .button-filter .filtered {
@@ -2891,4 +2803,3 @@ p#error {
     padding: 1vh 1vw;
     box-shadow: 0 0 200px 200px black;
 }
-

@@ -21,8 +21,9 @@ function makeCardheader(state) {
  */
 class CardImage extends React.Component {
     getContainerProperties(state) {
-        const line2 = (cardIs('monster', state)) ? `\n${makeCardheader(state)}` : '',
-            line3 = (state.def !== undefined) ? `\n${state.attack} / ${state.def}` : '',
+        const counters = (state.counters > 0 && state.location !== 'HAND') ? `\n${state.counters} Counters` : '',
+            line2 = (cardIs('monster', state)) ? `\n${makeCardheader(state)}` : '',
+            line3 = (state.def !== undefined) ? `\n${state.attack || state.atk} / ${state.def} ${counters}` : counters,
             player = (window.orientation) ? (state.player ? 0 : 1) : state.player,
             className = ['card', 'p' + player, state.location, 'i' + state.index],
             style = {};
@@ -49,6 +50,7 @@ class CardImage extends React.Component {
         }
 
         if (state.location === 'MONSTERZONE' && state.overlayindex) {
+            console.log(state);
             const offsetX = (state.overlayindex % 2) ? (-1) * (state.overlayindex + 1) * 3 : state.overlayindex + (-1) * 3,
                 offsetY = state.overlayindex * 4;
 
@@ -94,20 +96,6 @@ class CardImage extends React.Component {
         }
     }
 
-    getCounterProperties(state) {
-        const counters = (state.counters > 0 && state.location !== 'HAND') ? `${state.counters} Counters` : '',
-            className = ['cardselectionzone', `p${orient(state.player)}`, state.location, `i${state.index}`],
-            style = {
-                'zIndex': state.index + 1
-            };
-
-        return {
-            className: className.join(' '),
-            'data-counters': counters,
-            style
-        };
-    }
-
 
     constructor(state, store) {
         super();
@@ -144,7 +132,9 @@ class CardImage extends React.Component {
         this.store.dispatch({ action: 'UPDATE_FIELD' });
     }
     render() {
-        const element = createElement('div', this.getContainerProperties(this.state, this.hover), createElement('img', this.getImageProperties(this.state)));
+        const element = createElement('div', this.getContainerProperties(this.state, this.hover),
+            createElement('img', this.getImageProperties(this.state))
+        );
         return element;
     }
 }
