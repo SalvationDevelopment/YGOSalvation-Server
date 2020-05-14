@@ -89,7 +89,7 @@ class ControlButtons {
             { text: 'View Banished', options: ['m-removed'], onClick: function () { app.manualControls.manualViewBanished(); } },
 
             { text: 'View Extra Deck', options: ['m-extra', 'm-extra-view'], onClick: function () { app.manualControls.manualViewExtra(); } },
-            { text: 'Reveal Extra Deck', options: ['m-extra'], onClick: function () { app.manualControls.manualRevealExtra(); } },
+            { text: 'Reveal Extra Deck', options: ['filtered', 'm-extra'], onClick: function () { app.manualControls.manualRevealExtra(); } },
             { text: 'Reveal Random Card', options: ['filtered', 'm-extra'], onClick: function () { app.manualControls.manualRevealExtraDeckRandom(); } },
 
             { text: 'View Excavated', options: ['m-excavated'], onClick: function () { app.manualControls.manualViewExcavated(); } },
@@ -133,7 +133,7 @@ class ControlButtons {
 
             { text: 'Add Counter', options: ['filtered', 'm-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualAddCounter(); } },
             { text: 'Remove Counter', options: ['filtered', 'm-monster', 'm-st', 'countercontroller'], onClick: function () { app.manualControls.manualRemoveCounter(); } },
-            { text: 'View Xyz Materials', options: [], onClick: function () { app.manualControls.manualViewXYZMaterials(); } },
+            { text: 'View Xyz Materials', options: ['m-monster-xyz'], onClick: function () { app.manualControls.manualViewXYZMaterials(); } },
             { text: 'Overlay', options: ['m-monster', 'm-monster-xyz', 'v-monster-xyz'], onClick: function () { app.manualControls.startXYZSummon(); } },
             { text: 'Flip Face-up', options: ['m-monster', 'toDefence'], onClick: function () { app.manualControls.manualToFaceUpDefence(); } },
             { text: 'Flip Face-down', options: ['m-monster'], onClick: function () { app.manualControls.manualToFaceDownDefence(); } },

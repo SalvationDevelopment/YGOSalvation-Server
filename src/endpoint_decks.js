@@ -65,7 +65,7 @@ async function processDecks(user, callback) {
         decks = user.decks,
         id = user.session,
         saved = [],
-        owner = data.username;
+        owner = user.username;
     try {
         for (const deck of decks) {
             try {

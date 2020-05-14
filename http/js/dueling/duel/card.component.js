@@ -11,7 +11,7 @@ function makeCardheader(state) {
         return `L ${state.level}`;
     }
     if (cardIs('xyz', state)) {
-        return `R ${state.rank}`;
+        return `R ${state.rank || state.level}`;
     }
     return `★ ${state.level}`;
 }

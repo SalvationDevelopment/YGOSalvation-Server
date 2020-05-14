@@ -62,6 +62,14 @@ class ManualControls {
     }
 
     selectionzoneonclick(choice, zone) {
+        if (this.overlaymode) {
+            this.manualXYZSummon({
+                location: 'MONSTERZONE',
+                index: choice,
+                player: window.orientation
+            });
+            return;
+        }
         if (!this.zonetargetingmode) {
             return;
         }
@@ -97,6 +105,8 @@ class ManualControls {
         if (this.zonetargetingmode === 'token') {
             this.manualToken(choice);
         }
+
+
         this.zonetargetingmode = false;
         return;
 
@@ -171,13 +181,21 @@ class ManualControls {
     }
 
     startXYZSummon() {
-        'use strict';
-        if ($('.card.p0.MONSTERZONE').length === 0) {
+        const viables = app.duel.field.state.cards.filter((card) => {
+            return ((card.state.location === 'MONSTERZONE') && (card.state.player === window.orientation));
+        });
+
+        if (viables.length === 0) {
             return;
         }
+
+
         this.overlaymode = true;
         this.overlaylist = [this.manualActionReference];
-        $('.card.p0.MONSTERZONE').addClass('attackglow');
+
+        app.duel.select({
+            zones: viables.map((card) => card.state)
+        });
     }
 
     makeMonster(card, index) {
@@ -891,9 +909,9 @@ class ManualControls {
 
     manualXYZSummon(target) {
 
-        overlaymode = false;
-        overlaylist.push(target);
-        $('.card').removeClass('targetglow');
+        this.overlaymode = false;
+        this.overlaylist.push(target);
+
 
 
         var index = target.index,
