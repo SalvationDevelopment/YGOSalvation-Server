@@ -16,7 +16,7 @@ async function login(data) {
     const response = await axios.post(`${ADMIN_SERVER_URL}/auth/local`, {
         identifier: data.username,
         password: data.password,
-    }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?_sort=name:ASC`, {
+    }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?owner=${data.username}&_sort=name:ASC`, {
         headers: {
             Authorization: `Bearer ${response.data.jwt}`
         }
@@ -32,7 +32,7 @@ async function validateSession(message, callback) {
             headers: {
                 Authorization: `Bearer ${message.session}`
             }
-        }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?_sort=name:ASC`, {
+        }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?owner=${message.username}&_sort=name:ASC`, {
             headers: {
                 Authorization: `Bearer ${message.session}`
             }

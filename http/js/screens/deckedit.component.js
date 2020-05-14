@@ -63,7 +63,7 @@ function condenseDecks(decks) {
             extra: deck.extra.map(condenseDeck),
             side: deck.side.map(condenseDeck),
             name: deck.name,
-            creator: deck.creator,
+            owner: deck.owner,
             creationDate: deck.creationDate,
             id: deck.id,
             _id: deck._id
@@ -186,6 +186,7 @@ class DeckEditScreen extends React.Component {
                 deck.main = deck.main.map(this.findcard.bind(this));
                 deck.extra = deck.extra.map(this.findcard.bind(this));
                 deck.side = deck.side.map(this.findcard.bind(this));
+                
                 return deck;
             });
             this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
@@ -403,7 +404,7 @@ class DeckEditScreen extends React.Component {
     }
 
     export() {
-        let file = '#Created by ' + this.state.activeDeck.creator + ' on ' + this.state.activeDeck.creationDate + '\r\n#main';
+        let file = '#Created by ' + this.state.activeDeck.owner + ' on ' + this.state.activeDeck.creationDate + '\r\n#main';
 
         function printCard(card) {
             file += card.id + '\r\n';
@@ -459,7 +460,7 @@ class DeckEditScreen extends React.Component {
 
         var deck = makeDeckfromydk(file);
         deck.name = name;
-        deck.creator = localStorage.nickname;
+        deck.owner = localStorage.nickname;
         deck.creationDate = new Date();
         deck.main = deck.main.map((cardid) => {
             return this.findcard({

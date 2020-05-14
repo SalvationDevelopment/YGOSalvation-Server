@@ -503,6 +503,7 @@ function onData(data, socket) {
             }
             break;
         case 'save':
+            
             if (!socket.username) {
                 return;
             }
@@ -511,6 +512,7 @@ function onData(data, socket) {
                 data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
                 data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
                 data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
+                deck.owner = socket.username;
             }); //unsure if loop should run through all decks for a single save; might be resource intensive
             data.username = socket.username;
 

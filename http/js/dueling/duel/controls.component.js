@@ -52,7 +52,7 @@ class GameplayControlButton extends React.Component {
         this.state = {
             card,
             info,
-            filter : true
+            filter: true
         };
         this.index = list.indexOf((item) => {
             return item.id === card.id;
@@ -78,8 +78,8 @@ class ControlButtons {
             { text: 'Reveal Bottom Card', options: ['filtered', 'm-deck'], onClick: function () { app.manualControls.manualRevealBottom(); } },
             { text: 'Banish Top Card', options: ['filtered', 'm-deck', 'non-banish'], onClick: function () { app.manualControls.manualMillRemovedCard(); } },
             { text: 'Banish FaceDown', options: ['m-deck', 'non-banish'], onClick: function () { app.manualControls.manualMillRemovedCardFaceDown(); } },
-            { text: 'Excavate', options: ['filtered','m-hand', 'm-deck', 'v-grave', 'v-removed', 'v-deck', 'non-excavate'], onClick: function () { app.manualControls.manualToExcavate(); } },
-            { text: 'Excavate Face-down', options: ['filtered','m-deck'], onClick: function () { app.manualControls.manualExcavateTop(); } },
+            { text: 'Excavate', options: ['filtered', 'm-hand', 'm-deck', 'v-grave', 'v-removed', 'v-deck', 'non-excavate'], onClick: function () { app.manualControls.manualToExcavate(); } },
+            { text: 'Excavate Face-down', options: ['filtered', 'm-deck'], onClick: function () { app.manualControls.manualExcavateTop(); } },
             { text: 'Shuffle Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualShuffleDeck(); } },
             { text: 'View Deck', options: ['m-deck'], onClick: function () { app.manualControls.manualViewDeck(); } },
             { text: 'Mill', options: ['m-deck'], onClick: function () { app.manualControls.manualMill(); } },
@@ -173,9 +173,9 @@ class ControlButtons {
                 position: 'fixed',
                 flexDirection: 'column',
                 textAlign: 'center',
-                display : 'flex'
+                display: 'flex'
             },
-            className : this.state.filter ? 'button-filter' : 'no-button-filter'
+            className: this.state.filter ? 'button-filter' : 'no-button-filter'
         }, elements);
     }
 
@@ -190,7 +190,6 @@ class ControlButtons {
                 if (monsterMap[query.type]) {
                     enabledClasses.push('m-hand-m');
                 }
-                console.log(query);
                 if ((stMap[query.type]
                     || query.type === 2
                     || query.type === 4
@@ -237,7 +236,7 @@ class ControlButtons {
             }
             if (!excludeTokens(query)) {
                 enabledClasses.push('m-monster-token');
-                disabledClasses.push('non-extra', 'm-monster-xyz', 'non-deck', 'non-banish',  'non-hand', 'overlayStack', 'flipDownMonster', 'banishcardfd', 'non-grave');
+                disabledClasses.push('non-extra', 'm-monster-xyz', 'non-deck', 'non-banish', 'non-hand', 'overlayStack', 'flipDownMonster', 'banishcardfd', 'non-grave');
             }
             if (checksetcode(query, 151) || query.id === 9791914 || query.id === 58132856) {
                 enabledClasses.push('m-st-monster');
@@ -283,7 +282,6 @@ class ControlButtons {
                 if (monsterMap[query.type]) {
                     enabledClasses.push('m-hand-m');
                 }
-                console.log(query);
                 if ((stMap[query.type]
                     || query.type === 2
                     || query.type === 4
@@ -365,7 +363,30 @@ class ControlButtons {
 
         }
         if (query.location === 'DECK') {
-            enabledClasses.push('m-deck');
+            if (query.status === 'revealed') {
+                enabledClasses.push('m-hand');
+                if (monsterMap[query.type]) {
+                    enabledClasses.push('m-hand-m');
+                }
+                
+                if ((stMap[query.type]
+                    || query.type === 2
+                    || query.type === 4
+                    || checksetcode(query, 151)
+                    || query.id === 9791914
+                    || query.id === 58132856) && !fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-st');
+                }
+                if (fieldspell[query.type]) {
+                    enabledClasses.push('m-hand-f');
+                }
+                if (pendulumMap[query.type]) {
+                    enabledClasses.push('m-hand-p');
+                    enabledClasses.push('m-monster-p');
+                }
+            } else {
+                enabledClasses.push('m-deck');
+            }
         }
         if (query.player !== window.orientation) {
             return;
@@ -375,7 +396,7 @@ class ControlButtons {
             if (monsterMap[query.type]) {
                 enabledClasses.push('m-hand-m');
             }
-            console.log(query);
+            
             if ((stMap[query.type]
                 || query.type === 2
                 || query.type === 4
@@ -476,7 +497,7 @@ class ControlButtons {
             player: query.player,
             setcode: query.setcode,
             position: query.position,
-            status: query.status,
+            status: query.status
         };
         this.info.coords = coords;
         app.manualControls.manualActionReference = this.info.target;

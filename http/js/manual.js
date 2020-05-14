@@ -153,12 +153,13 @@ class ManualControls {
                 });
             }
         }
-        
+
     }
 
     startSpellTargeting(mode) {
         'use strict';
         this.zonetargetingmode = mode;
+        app.duel.closeRevealer();
         $('.cardselectionzone.p0.SPELLZONE').addClass('attackglow card');
         if (!this.legacyMode) {
             $('.cardselectionzone.p0.SPELLZONE.i6').removeClass('attackglow card');
@@ -167,6 +168,16 @@ class ManualControls {
         $('.cardselectionzone.p0.SPELLZONE.i5').removeClass('attackglow card');
         this.exclusionList(0, 'SPELLZONE', 'attackglow');
 
+    }
+
+    startXYZSummon() {
+        'use strict';
+        if ($('.card.p0.MONSTERZONE').length === 0) {
+            return;
+        }
+        this.overlaymode = true;
+        this.overlaylist = [this.manualActionReference];
+        $('.card.p0.MONSTERZONE').addClass('attackglow');
     }
 
     makeMonster(card, index) {
@@ -653,7 +664,7 @@ class ManualControls {
         index = (index !== undefined) ? index : this.manualActionReference.index;
         var message = this.makeCardMovement(this.manualActionReference, {
             player: window.orientation,
-            location : zone,
+            location: zone,
             position: this.manualActionReference.position,
             index
         });

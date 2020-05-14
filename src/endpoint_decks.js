@@ -28,8 +28,8 @@ async function createDeck(id, deck) {
     return decks.data;
 }
 
-async function getDecks(id) {
-    const decks = await axios.get(`${ADMIN_SERVER_URL}/decks?_sort=name:ASC`, {
+async function getDecks(id, owner) {
+    const decks = await axios.get(`${ADMIN_SERVER_URL}/decks?owner=${owner}_sort=name:ASC`, {
         headers: {
             Authorization: `Bearer ${id}`
         }
@@ -64,7 +64,8 @@ async function processDecks(user, callback) {
     const result = { error: null },
         decks = user.decks,
         id = user.session,
-        saved = [];
+        saved = [],
+        owner = data.username;
     try {
         for (const deck of decks) {
             try {
@@ -75,7 +76,7 @@ async function processDecks(user, callback) {
             }
 
         }
-        result.decks = await getDecks(id);
+        result.decks = await getDecks(id, owner);
 
         const serverSaved = result.decks.map((deck) => {
             return deck.id;
@@ -83,14 +84,14 @@ async function processDecks(user, callback) {
         const deletions = serverSaved.filter((deck) => {
             return !saved.includes(deck);
         });
-        
+
         for (const guid of deletions) {
             await deleteDeck(id, guid);
         }
-        result.decks = await getDecks(id);
+        result.decks = await getDecks(id, owner);
     } catch (error) {
         result.error = error;
-        result.decks = await getDecks(id);
+        result.decks = await getDecks(id, owner);
     }
     callback(result.error, result.decks);
 }
