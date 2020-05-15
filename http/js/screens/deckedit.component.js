@@ -182,7 +182,6 @@ class DeckEditScreen extends React.Component {
             this.state.search = [];
             this.state.decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
-                console.log(deck.id);
                 deck.main = deck.main.map(this.findcard.bind(this));
                 deck.extra = deck.extra.map(this.findcard.bind(this));
                 deck.side = deck.side.map(this.findcard.bind(this));
@@ -302,16 +301,9 @@ class DeckEditScreen extends React.Component {
         this.store.dispatch({ action: 'RENDER' });
     }
 
-    saveToServer() {
-        const decks = JSON.parse(JSON.stringify(condenseDecks(this.state.decks)));
-        decks.sort((a, b) => {
-            return a.name > b.name;
-        });
-        store.dispatch({ action: 'SAVE_DECKS', decks });
-    }
     save() {
         this.state.decks[this.settings.decklist] = this.state.activeDeck;
-        this.saveToServer();
+        store.dispatch({ action: 'SAVE_DECK', deck : this.state.activeDeck });
     }
 
     newDeck() {
@@ -332,7 +324,7 @@ class DeckEditScreen extends React.Component {
         this.state.decks.push(deck);
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.saveToServer();
+        this.save();
         this.store.dispatch({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
@@ -357,7 +349,7 @@ class DeckEditScreen extends React.Component {
         this.state.decks.push(deck);
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.saveToServer();
+        this.save();
         this.store.dispatch({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
@@ -372,7 +364,8 @@ class DeckEditScreen extends React.Component {
         this.state.decks.splice(this.settings.decklist, 1);
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.saveToServer();
+
+        store.dispatch({ action: 'DELETE_DECK', deck : this.state.activeDeck });
         this.store.dispatch({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
@@ -480,7 +473,7 @@ class DeckEditScreen extends React.Component {
         this.state.decks.push(deck);
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.saveToServer();
+        this.save();
         this.store.dispatch({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');

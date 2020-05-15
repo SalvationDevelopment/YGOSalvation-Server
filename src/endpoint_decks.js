@@ -18,7 +18,7 @@ function validateDeckType(id, deck) {
     }
 }
 
-async function createDeck(id, deck) {
+async function callCreateDeck(id, deck) {
     validateDeckType(id, deck);
     const decks = await axios.post(`${ADMIN_SERVER_URL}/decks`, deck, {
         headers: {
@@ -28,75 +28,68 @@ async function createDeck(id, deck) {
     return decks.data;
 }
 
-async function getDecks(id, owner) {
-    const decks = await axios.get(`${ADMIN_SERVER_URL}/decks?owner=${owner}_sort=name:ASC`, {
+async function getDecks(jwt, owner) {
+    const decks = await axios.get(`${ADMIN_SERVER_URL}/decks?owner=${owner}&_sort=name:ASC`, {
         headers: {
-            Authorization: `Bearer ${id}`
+            Authorization: `Bearer ${jwt}`
         }
     });
     return decks.data;
 }
 
-async function updateDeck(id, deck) {
-    validateDeckType(id, deck);
+async function callUpdateDeck(jwt, deck) {
+    validateDeckType(jwt, deck);
     const decks = await axios.put(`${ADMIN_SERVER_URL}/decks/${deck._id}`, deck, {
         headers: {
-            Authorization: `Bearer ${id}`
+            Authorization: `Bearer ${jwt}`
         }
     });
     return decks.data;
 }
 
-async function deleteDeck(id, guid) {
-    if (typeof id !== 'string') {
+async function callDelete (jwt, guid) {
+    if (typeof jwt !== 'string') {
         throw new Error('Authentication Information Missing');
     }
-    decks = await axios.delete(`${ADMIN_SERVER_URL}/decks/${guid}`, {
+    const decks = await axios.delete(`${ADMIN_SERVER_URL}/decks/${guid}`, {
         headers: {
-            Authorization: `Bearer ${id}`
+            Authorization: `Bearer ${jwt}`
         }
     });
     return decks.data;
 }
 
 
-async function processDecks(user, callback) {
-    const result = { error: null },
-        decks = user.decks,
-        id = user.session,
-        saved = [],
-        owner = user.username;
+async function saveDeck(jwt, deck, owner, callback) {
+    const result = { error: null }
     try {
-        for (const deck of decks) {
-            try {
-                const call = (deck.id) ? await updateDeck(id, deck) : await createDeck(id, deck);
-                saved.push(call.id);
-            } catch (e) {
-                console.log('throwing out deck at slot', n);
-            }
-
-        }
-        result.decks = await getDecks(id, owner);
-
-        const serverSaved = result.decks.map((deck) => {
-            return deck.id;
-        });
-        const deletions = serverSaved.filter((deck) => {
-            return !saved.includes(deck);
-        });
-
-        for (const guid of deletions) {
-            await deleteDeck(id, guid);
-        }
-        result.decks = await getDecks(id, owner);
-    } catch (error) {
-        result.error = error;
-        result.decks = await getDecks(id, owner);
+        const call = (deck.id) ? await callUpdateDeck(jwt, deck) : await callCreateDeck(jwt, deck);
+    } catch (e) {
+        console.log('Failed to save deck', deck.owner, deck.name);
     }
+
+
+    result.decks = await getDecks(jwt, owner);
+
     callback(result.error, result.decks);
+}
+
+async function deleteDeck(jwt, deckID, owner, callback) {
+    let results = { error: null };
+    try {
+        await callDelete (jwt, deckID);
+        results.decks = await getDecks(jwt, owner);
+    } catch (error) {
+        results.error = error;
+        return;
+    }
+    
+    callback(results.error, results.decks);
+    
 }
 
 
 module.exports = {
-    processDecks
+    saveDeck,
+    deleteDeck,
 }

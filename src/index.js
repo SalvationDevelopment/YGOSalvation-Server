@@ -9,8 +9,8 @@
 
 // Mostly just stuff so that Express runs
 const child_process = require('child_process'),
-    hotload = require('hotload'),
-    cardidmap = require('../http/cardidmap.js'),
+    
+    cardIDMap = require('../http/cardidmap.js'),
     userController = require('./endpoint_users.js'),
     decks = require('./endpoint_decks.js'),
     adminlist = {},
@@ -23,7 +23,7 @@ var userlist = [],
     chatbox = [],
     games = [],
     gamelist = {},
-    gameports = {},
+    gamePorts = {},
     primus,
     acklevel = 0,
     currentGlobalMessage = '',
@@ -38,9 +38,9 @@ var userlist = [],
  */
 function mapCards(deck) {
     return deck.map(function (cardInDeck) {
-        return (cardidmap[cardInDeck.id])
+        return (cardIDMap[cardInDeck.id])
             ? {
-                id: cardidmap[cardInDeck.id]
+                id: cardIDMap[cardInDeck.id]
             }
             : cardInDeck;
 
@@ -246,7 +246,7 @@ function censorCall(data) {
     });
 }
 
-function mindcrushCall(data) {
+function mindCrushCall(data) {
     userController.validate(false, data, function (error, info, body) {
         if (error) {
             return;
@@ -313,7 +313,7 @@ function childHandler(child, socket, message) {
 
         case 'quit':
             delete gamelist[message.game.roompass];
-            delete gameports[message.game.port];
+            delete gamePorts[message.game.port];
             announce({
                 clientEvent: 'gamelist',
                 gamelist,
@@ -387,17 +387,16 @@ function onData(data, socket) {
             registrationCall(data, socket);
             break;
         case 'loadSession':
-            console.log('loadSession', data);
             userController.validateSession({
                 session: data.session,
                 username: data.username
             }, function (error, valid, info) {
-                console.log(info);
                 if (error || !valid) {
                     return;
                 }
                 socket.username = info.username;
                 console.log(`${socket.username} has rejoined session`.bold);
+                socket.session = data.session;
                 socket.write({
                     clientEvent: 'global',
                     message: currentGlobalMessage,
@@ -428,7 +427,7 @@ function onData(data, socket) {
             break;
         case ('chatline'):
             if (socket.username && socket.speak) {
-                const chatuuid = uuid();
+                const chatUUID = uuid();
                 socket.speak = false;
                 if (chatbox.length > 100) {
                     chatbox.shift();
@@ -437,14 +436,14 @@ function onData(data, socket) {
                     clientEvent: 'chatline',
                     from: socket.username,
                     msg: sanitize(data.msg),
-                    uid: chatuuid,
+                    uid: chatUUID,
                     date: new Date(),
                     timezone: data.timezone
                 });
                 chatbox.push({
                     from: socket.username,
                     msg: sanitize(data.msg),
-                    uid: chatuuid,
+                    uid: chatUUID,
                     date: new Date(),
                     timezone: data.timezone
                 });
@@ -478,7 +477,7 @@ function onData(data, socket) {
             reviveCall(data);
             break;
         case ('mindcrush'):
-            mindcrushCall(data);
+            mindCrushCall(data);
             break;
         case ('host'):
             const port = unsafePort(),
@@ -493,43 +492,55 @@ function onData(data, socket) {
             child.on('message', function (message) {
                 childHandler(child, socket, message);
             });
-            gameports[port] = child;
+            gamePorts[port] = child;
             break;
         case ('privateMessage'):
             if (socket.username) {
                 data.date = new Date();
-                console.log(data);
                 primus.room(data.to).write(data);
             }
             break;
         case 'save':
-            
+
             if (!socket.username) {
                 return;
             }
             delete data.action;
-            data.decks.forEach(function (deck, i) { //cycles through the decks
-                data.decks[i].main = mapCards(data.decks[i].main); //This cannot be simplified 
-                data.decks[i].side = mapCards(data.decks[i].side); //further due to the abstract
-                data.decks[i].extra = mapCards(data.decks[i].extra); //of data.decks, afaik
-                deck.owner = socket.username;
-            }); //unsure if loop should run through all decks for a single save; might be resource intensive
+
+            data.deck.main = mapCards(data.deck.main);
+            data.deck.side = mapCards(data.deck.side);
+            data.deck.extra = mapCards(data.deck.extra);
+            data.deck.owner = socket.username;
+
             data.username = socket.username;
 
-            data.session = socket.session;
-
-            decks.processDecks(data, function (error, docs) {
+            decks.saveDeck(socket.session, data.deck, socket.username, function (error, savedDecks)  {
                 primus.room(socket.address.ip + data.uniqueID).write({
-                    clientEvent: 'deckSaved',
-                    error: error
+                    clientEvent: 'savedDeck',
+                    error,
+                    savedDecks
                 });
             });
 
+            break;
+        case 'delete':
+            if (!socket.username) {
+                return;
+            }
+            decks.deleteDeck(socket.session, data.deck.id, socket.username, function (error, savedDecks) {
+                primus.room(socket.address.ip + data.uniqueID).write({
+                    clientEvent: 'deletedDeck',
+                    error,
+                    savedDecks,
+                    id : data.deck.id
+                });
+            });
             break;
         default:
             return;
     }
 }
+
 
 
 

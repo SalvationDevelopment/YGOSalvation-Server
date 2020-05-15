@@ -25,7 +25,6 @@
         "ffi": "^2.3.0",
         "function-queue": "0.0.12",
         "helmet": "^3.21.2",
-        "hotload": "git+https://github.com/SalvationDevelopment/node-hotload.git",
         "hsts": "^2.2.0",
         "json": "^9.0.6",
         "jsonfile": "^2.4.0",

@@ -1,5 +1,7 @@
 process.title = 'YGOSalvation Server';
 require('dotenv').config();
+require('colors');
+
 const
     ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
     child_process = require('child_process'),
@@ -38,7 +40,9 @@ function main() {
 
     if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Database Server'.bold.green);
-        databaseServer = child_process.fork('../ygosalvation-database/app.js');
+        databaseServer = child_process.fork('../ygosalvation-database/app.js', [], {
+            
+        });
     }
 
     fs.access(banlist, function (err) {

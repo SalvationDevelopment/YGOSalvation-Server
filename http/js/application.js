@@ -20,10 +20,10 @@ class ApplicationComponent extends React.Component {
         };
         this.host = new HostScreen(store, {});
         this.loginScreen = new LoginScreen(store, {});
-        this.deckeditor = new DeckEditScreen(store, {});
-        this.superheader = new SuperHeaderComponent(store, {});
-        this.superfooter = new SuperFooterComponent(store, {});
-        this.gamelist = new GamelistScreen(store, {});
+        this.deckEditor = new DeckEditScreen(store, {});
+        this.superHeader = new SuperHeaderComponent(store, {});
+        this.superFooter = new SuperFooterComponent(store, {});
+        this.gameList = new GamelistScreen(store, {});
         this.rankings = new RankingScreen(store);
         this.faqs = new FAQsScreen();
         this.news = new NewsScreen(store);
@@ -83,8 +83,8 @@ class ApplicationComponent extends React.Component {
             const session = localStorage.session;
             this.primus.write({
                 action: 'loadSession',
-                username : localStorage.username,
-                session : localStorage.session
+                username: localStorage.username,
+                session: localStorage.session
             });
         });
 
@@ -103,11 +103,21 @@ class ApplicationComponent extends React.Component {
             this.lobby(action.key, action.locked, action.port);
         });
 
-        store.register('SAVE_DECKS', (action) => {
+        store.register('SAVE_DECK', (action) => {
 
             var message = {
                 action: 'save',
-                decks: action.decks,
+                deck: action.deck,
+                username: localStorage.nickname
+            };
+            this.primus.write(message);
+        });
+
+        store.register('DELETE_DECK', (action) => {
+
+            var message = {
+                action: 'delete',
+                deck: action.deck,
                 username: localStorage.nickname
             };
             this.primus.write(message);
@@ -217,10 +227,10 @@ class ApplicationComponent extends React.Component {
             case 'gamelist':
                 this.state.activeUsers = data.ackresult;
                 this.state.userlist = data.userlist;
-                this.gamelist.update(data);
+                this.gameList.update(data);
                 break;
             case 'global':
-                this.superfooter.update({ global: data.message });
+                this.superFooter.update({ global: data.message });
                 break;
             case 'lobby':
                 this.lobby(data.roompass, data.password, data.port);
@@ -231,11 +241,20 @@ class ApplicationComponent extends React.Component {
             case 'registrationRequest':
                 this.registrationRequest();
                 break;
-            case 'deckSaved':
+            case 'savedDeck':
                 app.alert('Saved Deck');
                 setTimeout(() => {
                     this.closeModal();
                 }, 1000);
+                console.log(data);
+                break;
+            case 'deletedDeck':
+                app.alert('Deleted Deck');
+                setTimeout(() => {
+                    this.closeModal();
+                }, 1000);
+                console.log(data);
+                break;
             default:
                 console.log('Error: Unknown Data', data);
                 return;
@@ -272,11 +291,11 @@ class ApplicationComponent extends React.Component {
             case 'login':
                 return React.createElement('section', { id: 'login', key: 'login' }, this.loginScreen.render());
             case 'deckedit':
-                return React.createElement('section', { id: 'deckedit', key: 'deckedit' }, this.deckeditor.render());
+                return React.createElement('section', { id: 'deckedit', key: 'deckedit' }, this.deckEditor.render());
             case 'host':
                 return React.createElement('section', { id: 'host', key: 'host' }, this.host.render());
             case 'gamelist':
-                return React.createElement('section', { id: 'gamelist', key: 'gamelist' }, this.gamelist.render());
+                return React.createElement('section', { id: 'gamelist', key: 'gamelist' }, this.gameList.render());
             case 'settings':
                 return React.createElement('section', { id: 'settings', key: 'settings' }, this.settings.render());
             case 'rankings':
@@ -332,10 +351,10 @@ class ApplicationComponent extends React.Component {
 
     render() {
         return React.createElement('div', { key: 'top' }, [
-            this.superheader.render(this.state.loggedIn),
+            this.superHeader.render(this.state.loggedIn),
             this.screen(),
             this.language(),
-            this.superfooter.render(),
+            this.superFooter.render(),
             this.modalRender()
         ]);
     }

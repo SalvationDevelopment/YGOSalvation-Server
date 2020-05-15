@@ -26,7 +26,7 @@ function setSession() {
             console.log('[SERVER] Admin Server Permissions Failure: '.bold + error.toString());
             return;
         }
-        console.log('[SERVER] Server Permissions Aquired '.bold);
+        console.log('[SERVER] Server Permissions Acquired '.bold);
         session = responseData.jwt;
     });
 }
@@ -101,10 +101,10 @@ async function logDuel(info, callback) {
         loser.elo = elo.updateRating(expectedScoreB, 0, loser.elo);
 
         await axios.put(`${ADMIN_SERVER_URL}/users/${winnerID}`, settings, { elo: winner.elo, points: winner.points });
-        await axios.put(`${ADMIN_SERVER_URL}/users/${losserID}`, settings, { elo: loser.elo, points: loser.points });
+        await axios.put(`${ADMIN_SERVER_URL}/users/${loserID}`, settings, { elo: loser.elo, points: loser.points });
 
         await axios.post(`${ADMIN_SERVER_URL}/replays/${winnerID}`, settings, { history: replay, creator: winnerID });
-        await axios.post(`${ADMIN_SERVER_URL}/replays/${losserID}`, settings, { history: replay, creator: winnerID });
+        await axios.post(`${ADMIN_SERVER_URL}/replays/${loserID}`, settings, { history: replay, creator: winnerID });
     } catch (error) {
         callback();
         return;
