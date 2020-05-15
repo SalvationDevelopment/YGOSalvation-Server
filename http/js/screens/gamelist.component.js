@@ -36,7 +36,6 @@ class GamelistScreen extends React.Component {
     }
 
     filter(list) {
-        console.log(this.settings);
         const games = Object.keys(this.state.gamelist).map((key) => {
             return this.state.gamelist[key];
         });
@@ -134,7 +133,7 @@ class GamelistScreen extends React.Component {
         if (room.banlist === 'No Banlist') {
             return false;
         }
-        if (room.draw_count !== 1) {
+        if (Number(room.draw_count) !== 1) {
             return false;
         }
         if (room.start_hand_count !== 5) {

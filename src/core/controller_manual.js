@@ -151,6 +151,7 @@ function responseHandler(engine, players, client, message) {
                     location: message.location
                 }
             });
+            engine.duelistChat('Server', `${players[client.slot].username} signaled the effect of ${message.name}`)
             break;
         case 'target':
             broadcast(players, {

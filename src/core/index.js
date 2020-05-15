@@ -983,26 +983,27 @@ function boot(httpserver, server, game, state) {
  * @returns {GameState} public gamelist state information.
  */
 function Game(settings) {
+    
     return {
         automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
         banlist: settings.BANLIST || 'No Banlist',
-        cardpool: settings.CARDPOOL || 'OCG/TCG',
+        cardpool: settings.CARD_POOL || 'OCG/TCG',
         deckcheck: (settings.DECK_CHECK === 'true'),
         draw_count: settings.DRAW_COUNT || 1,
         legacyfield: (settings.LEGACY === 'true'),
-        locked: Boolean(settings.ROOMPASS),
+        locked: Boolean(settings.ROOM_PASS),
         masterRule: settings.MASTER_RULE || 4,
         mode: settings.MODE || 0,
         port: settings.PORT || 8082,
         player: [],
         priority: false,
         prerelease: settings.PRERELEASE || true,
-        roompass: settings.ROOMPASS || uuid(),
-        ranked: (settings.ranked === 'true') ? 'Ranked' : 'Exhibition',
+        roompass: settings.ROOM_PASS || uuid(),
+        ranked: (settings.RANKED === 'true') ? 'Ranked' : 'Exhibition',
         rule: settings.RULE || 0,
         shuffle: (settings.SHUFFLE === 'true'),
         started: false,
-        startLP: settings.LIFEPOINTS || 8000,
+        startLP: settings.LIFE_POINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
         time: settings.TIME_LIMIT || 3000
     };
@@ -1060,6 +1061,7 @@ function PrimusInstance(httpserver) {
  */
 function main(callback) {
 
+
     // If the callback is given, use the callback,
     // otherwise report to parent process if it exist,
     // if it does not, print to the console.
@@ -1076,8 +1078,11 @@ function main(callback) {
         game = new Game(process.env),
         httpserver = new HTTPServer(),
         server = new PrimusInstance(httpserver),
-        state = new State(server, game);
+        state = new State(server, game),
+        title = `YGOSalvation Core on port: ${game.port} pid: ${process.pid}`;
 
+
+    process.title = title;
     server.plugin('rooms', Rooms);
     server.save(__dirname + '/../../http/js/vendor/server.js');
     server.on('connection', function (client) {
@@ -1092,7 +1097,7 @@ function main(callback) {
     });
 
     boot(httpserver, server, game, state);
-
+    console.log(title);
 }
 
 main(undefined);

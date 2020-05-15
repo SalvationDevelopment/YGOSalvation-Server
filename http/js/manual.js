@@ -585,7 +585,8 @@ class ManualControls {
             id: this.manualActionReference.id,
             player: this.manualActionReference.player,
             index: this.manualActionReference.index,
-            location: this.manualActionReference.location
+            location: this.manualActionReference.location,
+            name : this.manualActionReference.name
         }));
         this.clearCardReference();
     }
