@@ -4,7 +4,13 @@ class ExtraControls extends React.Component {
 
     render() {
         if (!app.manual) {
-            return '';
+            return [
+                React.createElement('button', {
+                    id: 'control-surrender', key: 'control-surrender', onClick: function () {
+                        app.surrender();
+                    }
+                }, 'Surrender')
+            ];
         }
         return [
             React.createElement('button', { id: 'control-filter-adv', key: 'filter-advanced-controls', onClick: this.toggle.bind(this) }, 'Toggle Controls'),
@@ -25,7 +31,12 @@ class ExtraControls extends React.Component {
             }, 'Make Token'),
             React.createElement('select', { id: 'tokendropdown' }, this.tokens.map((card, i) => {
                 return React.createElement('option', { key: 'selectn' + i, value: card.id }, sanitize(card.name));
-            }))
+            })),
+            React.createElement('button', {
+                id: 'control-surrender', key: 'control-surrender', onClick: function () {
+                    app.surrender();
+                }
+            }, 'Surrender')
         ];
     }
 

@@ -42,12 +42,12 @@ class SideChat extends React.Component {
                 if (!event.target.value) {
                     return;
                 }
+                if (parts[0] === '/surrender') {
+                    event.target.value = '';
+                    app.surrender();
+                    return;
+                }
                 if (app.manual) {
-                    if (parts[0] === '/surrender') {
-                        event.target.value = '';
-                        this.manualControls.surrender();
-                        return;
-                    }
                     if (parts[0] === '/side') {
                         event.target.value = '';
                         this.manualControls.startSiding();

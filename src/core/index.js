@@ -338,9 +338,9 @@ function kick(server, game, state, client, message) {
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {void}
  */
-function surrender(game, duel, message) {
+function surrender(game, duel, slot) {
     game.started = false;
-    duel.surrender(message.slot);
+    duel.surrender(slot);
 }
 
 /**
@@ -748,7 +748,7 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'surrender':
-            surrender(game, duel, message);
+            surrender(game, duel, client.slot);
             broadcast(server, game);
             break;
         case 'startSide':
