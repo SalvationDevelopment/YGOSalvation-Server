@@ -89,13 +89,13 @@ class SideDeckEditScreen extends React.Component {
             last: '',
             activeDeck: {
                 name: 'New Deck',
-                main: [],
+                main: [{"id":88472456}],
                 extra: [],
                 side: []
             }
         };
 
-        this.filterKeys = Object.keys(this.settings);
+        
         this.store = store;
         this.debounce = false;
         this.store.register('CARD_HOVER', (event, state) => {

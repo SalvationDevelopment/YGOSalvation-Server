@@ -15,6 +15,7 @@ class ApplicationComponent extends React.Component {
             this.chat = new SideChat(this.store);
             this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
             this.choice = new ChoiceScreen(this.store, this.chat);
+            this.siding = new SideDeckEditScreen(this.store);
             this.state = {
                 mode: 'lobby',
                 tick: 0
@@ -22,8 +23,11 @@ class ApplicationComponent extends React.Component {
             this.connect();
             document.body.style.backgroundImage = `url(${localStorage.theme})`;
         });
+    }
 
-
+    sidedeck() {
+        this.state.mode = 'siding';
+        ReactDOM.render(this.render(), document.getElementById('main'));
     }
 
     connect() {
@@ -447,6 +451,8 @@ class ApplicationComponent extends React.Component {
     refreshUI() {
         this.store.dispatch({ action: 'RENDER' });
     }
+
+    
 }
 
 const store = new Store(),
