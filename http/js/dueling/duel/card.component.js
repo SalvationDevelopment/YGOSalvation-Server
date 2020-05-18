@@ -105,6 +105,10 @@ class CardImage extends React.Component {
     }
 
     hover(tooltip) {
+        this.store.dispatch({
+            action: 'CARD_HOVER',
+            id: this.state.id
+        });
         if (!['MONSTERZONE', 'SPELLZONE', 'HAND'].includes(this.state.location)) {
             return;
         }
@@ -116,10 +120,7 @@ class CardImage extends React.Component {
             return;
         }
         window.toolTipData = tooltip;
-        this.store.dispatch({
-            action: 'CARD_HOVER',
-            id: this.state.id
-        });
+       
     }
 
 
