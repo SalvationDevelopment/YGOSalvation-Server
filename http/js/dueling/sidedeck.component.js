@@ -378,15 +378,21 @@ class SideDeckEditScreen extends React.Component {
         return [element('option', { value: 'undefined' }, 'Release Set')].concat(list);
     }
 
+    completeSideDeck() {
+        let deck = this.state.activeDeck;
+        this.store.dispatch({ action: 'SIDE_DECKING', deck });
+    }
+
     render() {
         const element = React.createElement;
         return [
-
-
-
-
             element('div', { id: 'deckarea' }, [
                 element('div', { id: 'cardinformation' }, this.info.render()),
+                element('Button', { 
+                    id: 'sidedeckcomplete', 
+                    variant: 'primary',
+                    onClick: this.completeSideDeck.bind(this)
+                }, 'Done'),
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
                     element('div', {

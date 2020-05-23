@@ -193,6 +193,20 @@ class ApplicationComponent extends React.Component {
         });
 
 
+        this.store.register('SIDING', (message, state) => {
+            this.sidedeck();
+            this.primus.write({
+                action: 'question',
+                answer: {
+                    type: 'list',
+                    i: this.state.question_selection
+                },
+                uuid: this.state.question
+            });
+            return state;
+        });
+
+
         this.store.register('RENDER', (message, state) => {
             ReactDOM.render(this.render(), document.getElementById('main'));
             return state;
