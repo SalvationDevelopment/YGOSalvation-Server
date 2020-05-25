@@ -86,16 +86,17 @@ class SideDeckEditScreen extends React.Component {
             releases: [],
             banlist: [],
             decks: [],
+            deck: {},
             last: '',
             activeDeck: {
                 name: 'New Deck',
-                main: [{"id":88472456}],
+                main: [{ "id": 88472456 }],
                 extra: [],
                 side: []
             }
         };
 
-        
+
         this.store = store;
         this.debounce = false;
         this.store.register('CARD_HOVER', (event, state) => {
@@ -113,30 +114,25 @@ class SideDeckEditScreen extends React.Component {
         });
 
 
-
-
-        store.register('LOAD_DECK', (action) => {
-            this.settings.decklist = '0';
-            if (!action.decks) {
-                return;
-            }
-            this.state.search = [];
-            this.state.decks = action.decks.map((deckIds) => {
-                const deck = Object.assign({}, deckIds);
-                deck.main = deck.main.map(this.findcard.bind(this));
-                deck.extra = deck.extra.map(this.findcard.bind(this));
-                deck.side = deck.side.map(this.findcard.bind(this));
-
-                return deck;
-            });
-            this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
-            this.store.dispatch({ action: 'RENDER' });
-        });
-
         store.register('LOAD_DATABASE', (action) => {
             this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
         });
+    }
+
+    loadDeck(deck) {
+        const deck = Object.assign({}, deckIds);
+        deck.main = deck.main.map(this.findcard.bind(this));
+        deck.extra = deck.extra.map(this.findcard.bind(this));
+        deck.side = deck.side.map(this.findcard.bind(this));
+        this.state.activeDeck = JSON.stringify(deck);
+        this.state.deck = deck;
+        this.store.dispatch({ action: 'RENDER' });
+    }
+
+    resetDeck() {
+        this.state.activeDeck = JSON.stringify(this.state.deck);
+        this.store.dispatch({ action: 'RENDER' });
     }
 
     applyBanlist() {
@@ -388,10 +384,14 @@ class SideDeckEditScreen extends React.Component {
         return [
             element('div', { id: 'deckarea' }, [
                 element('div', { id: 'cardinformation' }, this.info.render()),
-                element('Button', { 
-                    id: 'sidedeckcomplete', 
+                element('Button', {
+                    id: 'sidedeckcomplete',
                     variant: 'primary',
                     onClick: this.completeSideDeck.bind(this)
+                }, 'Done'),
+                element('Reset', {
+                    id: 'sidereset',
+                    onClick: this.resetDeck.bind(this)
                 }, 'Done'),
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),

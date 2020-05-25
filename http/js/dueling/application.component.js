@@ -25,8 +25,11 @@ class ApplicationComponent extends React.Component {
         });
     }
 
-    sidedeck() {
+    side(deck) {
         this.state.mode = 'siding';
+        if (deck) {
+            this.siding.state.deck = deck;
+        }
         ReactDOM.render(this.render(), document.getElementById('main'));
     }
 
@@ -438,6 +441,9 @@ class ApplicationComponent extends React.Component {
                 this.state.mode = 'choice';
                 window.verification = message.verification;
                 break;
+            case 'side':
+                this.side(message.deck);
+                break;
             case 'ygopro':
                 this.duelAction(message.message);
                 break;
@@ -466,7 +472,7 @@ class ApplicationComponent extends React.Component {
         this.store.dispatch({ action: 'RENDER' });
     }
 
-    
+
 }
 
 const store = new Store(),

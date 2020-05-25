@@ -271,7 +271,6 @@ function init(callback) {
         stack = [],
         previousStack = [],
         names = ['', ''],
-        lock = [false, false],
         round = [],
         state = {
             turn: 0,
@@ -1162,23 +1161,6 @@ function init(callback) {
         return (JSON.stringify(current) === JSON.stringify(previous));
     }
 
-
-    /**
-     * Take a given deck, if it can, lock it in, return if it locked in.
-     * @param   {Number} player player int 0,1, etc
-     * @param   {Object} deck  stack of cards
-     * @returns {boolean}  if it managed to lock in the deck.
-     */
-    function lockInDeck(player, deck) {
-        if (validateDeckAgainstPrevious(player, deck)) {
-            decks[player] = deck;
-            lock[player] = true;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     function announcement(player, message) {
         const slot = 'p' + player,
             output = {
@@ -1205,13 +1187,10 @@ function init(callback) {
      */
     function startDuel(player1, player2, manual, settings) {
         stack = [];
-        if (manual && !lock[0] && !lock[1]) {
-            return;
-        }
+        
 
         round.push(player1, player2);
-        lock[0] = false;
-        lock[1] = false;
+        
         if (!settings.noshuffle || !manual) {
             shuffle(player1.main);
             shuffle(player2.main);
@@ -1679,9 +1658,6 @@ function init(callback) {
         getState,
         players: {}, // holds socket references
         spectators: {}, // holds socket references
-        decks: decks,
-        lock: lock,
-        lockInDeck,
         rematch,
         rematchAccept: 0,
         sideAccept: 0,

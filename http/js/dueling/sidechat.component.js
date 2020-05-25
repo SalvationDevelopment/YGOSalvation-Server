@@ -48,11 +48,6 @@ class SideChat extends React.Component {
                     return;
                 }
                 if (app.manual) {
-                    if (parts[0] === '/side') {
-                        event.target.value = '';
-                        this.manualControls.startSiding();
-                        return;
-                    }
                     if (parts[0] === '/roll') {
                         event.target.value = '';
                         this.manualControls.manualRoll();

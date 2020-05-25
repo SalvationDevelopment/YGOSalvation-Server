@@ -509,8 +509,6 @@ function Duel() {
 
         const clientBinding = manualControlEngine.clientBinding(players, spectators);
         duel.engine = field(clientBinding);
-        duel.engine.lock[0] = true;
-        duel.engine.lock[1] = true;
         duel.engine.startDuel(players[0], players[1], true, game);
         duel.surrender = manualControlEngine.surrender;
 
