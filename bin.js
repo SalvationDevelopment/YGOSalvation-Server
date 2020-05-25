@@ -12,7 +12,8 @@ const
     os = require('os');
 
 let adminServer,
-    databaseServer;
+    databaseServer,
+    srvpro;
 
 /**
 * Program Entry Point
@@ -45,6 +46,13 @@ function main() {
     if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Database Server'.bold.green);
         databaseServer = child_process.fork('../ygosalvation-database/app.js', [], {
+
+        });
+    }
+
+    if (Boolean(process.env.SRVPRO)) {
+        console.log('[SERVER] Starting Database Server'.bold.green);
+        srvpro = child_process.fork('../srvpro/', [], {
 
         });
     }

@@ -70,6 +70,7 @@
  * @method getField get full field information
  * @method load start duel
  * @method respond respond to a ocgcore question
+ * @method surrender allow a player to surrender to the opponent
  */
 
 const WARNING_COUNTDOWN = 3000000,
@@ -256,6 +257,7 @@ function join(error, game, state, client, callback) {
             avatar: (client.avatar) ? client.avatar.url : ''
         });
         state.clients[client.slot] = client;
+        game.usernames[slot] = client.username;
         callback();
         return;
     }
@@ -334,13 +336,27 @@ function kick(server, game, state, client, message) {
 /**
  * Surrender in active duel.
  * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Duel} duel OCGCore Instance
- * @param {ClientMessage} message JSON communication sent from client.
+ * @param {Number} slot surrendering player identifier.
  * @returns {void}
  */
-function surrender(game, duel, slot) {
+function surrender( game, state, duel, slot) {
+    
+    const winner = Math.abs(slot - 1),
+        bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 1 : 2,
+        aheadBy = Math.abs(game.bestOf[0] - game.bestOf[1]);
+
+    game.bestOf[winner]++;
     game.started = false;
-    duel.surrender(slot);
+
+    if (aheadBy >= bestOfXGames) {
+        process.recordOutcome.emit('win', winner);
+        return;
+    }
+
+    startSiding( game.players, state, duel);
+
 }
 
 /**
@@ -437,7 +453,7 @@ function checkSideDeck(oldDeck, newDeck) {
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {void} 
  */
-function sideLock(game, client, message) {
+function side(game, client, message) {
     if (isReady(game.player, client.slot)) {
         updatePlayer(game.player, client.slot, false);
         return;
@@ -496,6 +512,7 @@ function Duel() {
         duel.engine.lock[0] = true;
         duel.engine.lock[1] = true;
         duel.engine.startDuel(players[0], players[1], true, game);
+        duel.surrender = manualControlEngine.surrender;
 
 
     }
@@ -507,11 +524,11 @@ function Duel() {
     return duel;
 }
 
-function startSiding(players, clients, duel) {
+function startSiding(players, state, duel) {
     players.forEach(function (player, slot) {
         updatePlayer(players, slot, false);
     });
-    clients.forEach(function (client) {
+    state.clients.forEach(function (client) {
         client.send({
             action: 'side',
             deck: client.deck
@@ -748,15 +765,12 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'surrender':
-            surrender(game, duel, client.slot);
+            chat(server, state, client, `${game.usernames[slot]} surrendered`);
+            surrender(game, state, duel, client.slot);
             broadcast(server, game);
             break;
-        case 'startSide':
-            startSiding(game.players, state.clients, duel);
-            broadcast(server, game);
-            break;
-        case 'sideLock':
-            sideLock(game, client, message);
+        case 'side':
+            side(game, client, message);
             broadcast(server, game);
             break;
         case 'restart':
@@ -983,7 +997,7 @@ function boot(httpserver, server, game, state) {
  * @returns {GameState} public gamelist state information.
  */
 function Game(settings) {
-    
+
     return {
         automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
         banlist: settings.BANLIST || 'No Banlist',
@@ -996,6 +1010,7 @@ function Game(settings) {
         mode: settings.MODE || 0,
         port: settings.PORT || 8082,
         player: [],
+        bestOf: [0, 0],
         priority: false,
         prerelease: settings.PRERELEASE || true,
         roompass: settings.ROOM_PASS || uuid(),
