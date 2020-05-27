@@ -826,6 +826,10 @@ class Game {
         }, this.stack.cards());
     }
 
+    spectate() {
+        return this.generateView('start').spectators;
+    }
+
 
 
 
@@ -972,5 +976,3 @@ class Game {
 }
 
 module.exports = Game;
-
-console.log('--------------------------');

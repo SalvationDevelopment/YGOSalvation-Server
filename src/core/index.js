@@ -212,7 +212,7 @@ function chat(server, state, client, message, date) {
 
 /**
  * If authorized reconnect a client to an active duel.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {ClientMessage} message JSON communication sent from client.
@@ -233,7 +233,7 @@ function reconnect(duel, state, client, message) {
 
 /**
  * Join the user to a room
- * @param {Error|Null} error unlikely websocket Adapter error.  "haha, unlikely."
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
@@ -241,10 +241,7 @@ function reconnect(duel, state, client, message) {
  * @returns {void}
  */
 function join(error, game, state, client, callback) {
-    if (error) {
-        throw error;
-    }
-
+   
     if (game.player.length < 2) {
         client.slot = game.player.length;
         game.player.push({
@@ -264,22 +261,29 @@ function join(error, game, state, client, callback) {
 
 
     client.join('spectator', callback);
+    if (game.started) {
+        client.write(duel.spectate());
+    }
 
 }
 
 /**
  * Join the user to a room
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {Function} callback trigger after spectator add is complete
  * @returns {void}
  */
-function attemptJoin(game, state, client, callback) {
+function attemptJoin(duel, game, state, client, callback) {
     delete state.clients[client.slot];
     client.slot = undefined;
     client.leave('spectators', function (error) {
-        join(error, game, state, client, callback);
+        if (error) {
+            throw error;
+        }    
+        join(duel, game, state, client, callback);
     });
     client.join('chat');
 }
@@ -337,12 +341,12 @@ function kick(server, game, state, client, message) {
  * Surrender in active duel.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {Number} slot surrendering player identifier.
  * @returns {void}
  */
-function surrender( game, state, duel, slot) {
-    
+function surrender(game, state, duel, slot) {
+
     const winner = Math.abs(slot - 1),
         bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 1 : 2,
         aheadBy = Math.abs(game.bestOf[0] - game.bestOf[1]);
@@ -355,7 +359,7 @@ function surrender( game, state, duel, slot) {
         return;
     }
 
-    startSiding( game.players, state, duel);
+    startSiding(game.players, state, duel);
 
 }
 
@@ -508,12 +512,14 @@ function Duel() {
         }
 
         const clientBinding = manualControlEngine.clientBinding(players, spectators);
-        duel.engine = field(clientBinding);
-        duel.engine.startDuel(players[0], players[1], true, game);
+        const engine = field(clientBinding);
+        engine.startDuel(players[0], players[1], true, game);
+        duel.engine = engine;
         duel.surrender = manualControlEngine.surrender;
-
+        duel.getField = engine.spectate;
 
     }
+
 
     duel.getField = failure;
     duel.respond = failure;
@@ -637,7 +643,7 @@ function determine(server, game, state, client) {
 /**
  * Start the duel
  * @param {Object} server Primus instance.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {ClientMessage} message JSON communication sent from client.
@@ -655,7 +661,7 @@ function start(server, duel, game, state, message) {
 
     const players = [
         new PlayerAbstraction(server, state, 'player1', state.clients[0]),
-        new PlayerAbstraction(server, state, 'player2', state.clients[1])
+        new PlayerAbstraction(server, state, 'player2', state.clients[1]),
     ],
         spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
 
@@ -668,7 +674,7 @@ function start(server, duel, game, state, message) {
 
 /**
  * Respond to a question from the OCGCore game engine.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {void}
@@ -701,7 +707,7 @@ function requiresManualEngine(game, client) {
 /**
  * Process incoming messages from clients.
  * @param {Object} server Primus instance.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
@@ -725,7 +731,7 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'join':
-            attemptJoin(game, state, client, function () {
+            attemptJoin(duel, game, state, client, function () {
                 broadcast(server, game);
                 client.write({
                     action: 'slot',
@@ -788,7 +794,7 @@ function processMessage(server, duel, game, state, client, message) {
 /**
  * Add additional error handling and then, process incoming messages from clients.
  * @param {Object} server Primus instance.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
@@ -850,7 +856,7 @@ function countClients(server, game, state) {
 /**
  * Add additional error handling and then, process incoming messages from clients.
  * @param {Object} server Primus instance.
- * @param {Duel} duel OCGCore Instance
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} deadSpark DEAD DISCONNECTED websocket and Primus user (spark in documentation).

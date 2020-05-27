@@ -13,6 +13,11 @@ class ExtraControls extends React.Component {
             ];
         }
         return [
+            React.createElement('button', {
+                id: 'control-surrender', key: 'control-surrender', onClick: function () {
+                    app.surrender();
+                }
+            }, 'Surrender'),
             React.createElement('button', { id: 'control-filter-adv', key: 'filter-advanced-controls', onClick: this.toggle.bind(this) }, 'Toggle Controls'),
             React.createElement('button', {
                 id: 'control-flip-coin', key: 'control-flip-coin', onClick: function () {

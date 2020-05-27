@@ -1187,10 +1187,10 @@ function init(callback) {
      */
     function startDuel(player1, player2, manual, settings) {
         stack = [];
-        
+
 
         round.push(player1, player2);
-        
+
         if (!settings.noshuffle || !manual) {
             shuffle(player1.main);
             shuffle(player2.main);
@@ -1240,6 +1240,10 @@ function init(callback) {
      */
     function getStack() {
         return JSON.parse(JSON.stringify(stack));
+    }
+
+    function spectate() {
+        return generateView('start').spectators;
     }
 
     /**
@@ -1670,7 +1674,8 @@ function init(callback) {
         respond,
         rps: rps,
         generateUpdateView,
-        ygoproUpdate
+        ygoproUpdate,
+        spectate
     };
 }
 

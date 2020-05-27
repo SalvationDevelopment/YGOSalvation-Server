@@ -193,7 +193,7 @@ function GameBoard(playerConnection, slot, masterRule) {
         }
     });
     board.masterRule = masterRule;
-
+    board.slot = slot;
     return board;
 }
 
@@ -282,7 +282,8 @@ function playerInstance(playerConnection, slot, game, settings) {
         },
         read: function (message) {
             gameBoard.respond(message);
-        }
+        },
+        gameBoard
     };
 }
 
@@ -301,7 +302,7 @@ function makeGame(pduel, settings) {
 
     function setPlayers(clients, additionalClients) {
         players = clients;
-        //observers = additionalClients;
+        observers = additionalClients;
     }
 
 
@@ -348,7 +349,9 @@ function makeGame(pduel, settings) {
     }
 
     function last(player) {
-        last_response = player;
+        if (typeof player === 'number') {
+            last_response = player;
+        }
     }
 
     function respond(message) {
@@ -378,10 +381,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
-        return;
-        observers.forEach(function (observer) {
-            observer.write(lastMessage);
-        });
+        observer.write(lastMessage);
     }
 
     /**
@@ -534,8 +534,10 @@ function duel(game, state, errorHandler, players, spectators) {
     instance = makeGame(pduel, game);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, instance, game);
-    }), rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
-    instance.setPlayers(playerConnections);
+    }),
+        extraPlayers = playerInstance(spectators, 'spectators', instance, game)
+    rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
+    instance.setPlayers(playerConnections, extraPlayers);
     instance.refer = ref.deref(pduel);
     instance.sendStartInfo(0);
     instance.sendStartInfo(1);
@@ -544,6 +546,7 @@ function duel(game, state, errorHandler, players, spectators) {
     ocgapi.start_duel(pduel, rule);
     mainProcess(instance);
 
+    console.log(playerConnections);
 
     process.instance = instance;
     return instance;

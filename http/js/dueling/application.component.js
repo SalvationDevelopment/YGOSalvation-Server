@@ -28,7 +28,7 @@ class ApplicationComponent extends React.Component {
     side(deck) {
         this.state.mode = 'siding';
         if (deck) {
-            this.siding.state.deck = deck;
+            this.siding.loadDeck(deck);
         }
         ReactDOM.render(this.render(), document.getElementById('main'));
     }
