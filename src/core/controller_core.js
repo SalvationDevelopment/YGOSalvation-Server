@@ -283,7 +283,10 @@ function playerInstance(playerConnection, slot, game, settings) {
         read: function (message) {
             gameBoard.respond(message);
         },
-        gameBoard
+        view: function () {
+            const view = (typeof slot === 'number') ? 'p' + slot : 'spectator';
+            return gameBoard.generateView('start')[view];
+        }
     };
 }
 
@@ -545,6 +548,7 @@ function duel(game, state, errorHandler, players, spectators) {
     instance.refresh(1);
     ocgapi.start_duel(pduel, rule);
     mainProcess(instance);
+    
 
     console.log(playerConnections);
 

@@ -241,7 +241,7 @@ function reconnect(duel, state, client, message) {
  * @returns {void}
  */
 function join(error, game, state, client, callback) {
-   
+
     if (game.player.length < 2) {
         client.slot = game.player.length;
         game.player.push({
@@ -262,7 +262,7 @@ function join(error, game, state, client, callback) {
 
     client.join('spectator', callback);
     if (game.started) {
-        client.write(duel.spectate());
+        client.write(duel.spectate('spectator'));
     }
 
 }
@@ -282,8 +282,11 @@ function attemptJoin(duel, game, state, client, callback) {
     client.leave('spectators', function (error) {
         if (error) {
             throw error;
-        }    
+        }
         join(duel, game, state, client, callback);
+        if (duel.getField) {
+            duel.getField(client);
+        }
     });
     client.join('chat');
 }
@@ -506,7 +509,9 @@ function Duel() {
 
         if (game.automatic === 'Automatic') {
             const instance = automaticControlEngine.duel(game, state, errorHandler, players, spectators);
-            duel.getField = instance.getField;
+            duel.getField = function (client) {
+
+            };
             duel.respond = instance.respond;
             return;
         }
@@ -516,8 +521,9 @@ function Duel() {
         engine.startDuel(players[0], players[1], true, game);
         duel.engine = engine;
         duel.surrender = manualControlEngine.surrender;
-        duel.getField = engine.spectate;
-
+        duel.getField = function (client) {
+            client.write(engine.getField(client.slot));
+        };
     }
 
 
