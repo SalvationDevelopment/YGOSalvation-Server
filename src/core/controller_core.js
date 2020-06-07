@@ -461,6 +461,10 @@ function makeGame(pduel, settings) {
 
     }
 
+    function getTurnPlayer() {
+        return last_response;
+    }
+
     gameTick();
 
     return {
@@ -549,9 +553,12 @@ function duel(game, state, errorHandler, players, spectators) {
     ocgapi.start_duel(pduel, rule);
 
     instance.getField = function (client) {
-        const slot = client.slot;
+        const slot = Number(client.slot);
         if (client.slot) {
             client.write(playerConnections[slot].getField());
+        }
+        if (instance.getTurnPlayer() === slot) {
+            instance.reSendToPlayer(slot);
         }
         client.write(observers.getField());
     }
