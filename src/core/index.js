@@ -509,10 +509,10 @@ function Duel() {
 
         if (game.automatic === 'Automatic') {
             const instance = automaticControlEngine.duel(game, state, errorHandler, players, spectators);
-            duel.getField = function (client) {
-
-            };
             duel.respond = instance.respond;
+            duel.getField = function (client) {
+                client.write(instance.getField(client));
+            };
             return;
         }
 

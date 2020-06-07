@@ -1242,8 +1242,8 @@ function init(callback) {
         return JSON.parse(JSON.stringify(stack));
     }
 
-    function spectate() {
-        return generateView('start').spectators;
+    getField(view) {
+        return generateView()[view];
     }
 
     /**

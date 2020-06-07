@@ -285,7 +285,7 @@ function playerInstance(playerConnection, slot, game, settings) {
         },
         view: function () {
             const view = (typeof slot === 'number') ? 'p' + slot : 'spectator';
-            return gameBoard.generateView('start')[view];
+            return gameBoard.getField(view);
         }
     };
 }
@@ -384,7 +384,7 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
-        observer.write(lastMessage);
+        observers.write(lastMessage);
     }
 
     /**
@@ -538,8 +538,8 @@ function duel(game, state, errorHandler, players, spectators) {
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, instance, game);
     }),
-        extraPlayers = playerInstance(spectators, 'spectators', instance, game)
-    rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
+        observers = playerInstance(spectators, 'spectators', instance, game),
+        rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
     instance.setPlayers(playerConnections, extraPlayers);
     instance.refer = ref.deref(pduel);
     instance.sendStartInfo(0);
@@ -547,8 +547,17 @@ function duel(game, state, errorHandler, players, spectators) {
     instance.refresh(0);
     instance.refresh(1);
     ocgapi.start_duel(pduel, rule);
+
+    instance.getField = function (client) {
+        const slot = client.slot;
+        if (client.slot) {
+            client.write(playerConnections[slot].getField());
+        }
+        client.write(observers.getField());
+    }
+
     mainProcess(instance);
-    
+
 
     console.log(playerConnections);
 

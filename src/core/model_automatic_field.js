@@ -826,8 +826,8 @@ class Game {
         }, this.stack.cards());
     }
 
-    spectate() {
-        return this.generateView('start').spectators;
+    getField(view) {
+        return this.generateView()[view];
     }
 
 
