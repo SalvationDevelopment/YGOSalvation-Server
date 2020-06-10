@@ -10,7 +10,7 @@ class RankingScreen extends React.Component {
 
         fetch(`/ranking`).then((response) => {
             response.json().then(data => {
-                this.state.ranks = data;
+                this.state.ranks = Array.isArray(data) ? data : [];
                 this.store.dispatch({ action: 'RENDER' });
             });
 
@@ -20,6 +20,7 @@ class RankingScreen extends React.Component {
 
 
     render() {
+        console.log(this.state.ranks);
         return React.createElement('div', { id: 'rankholder' },
             React.createElement('table', {}, [
                 React.createElement('thead', { key: 'thead' }, [

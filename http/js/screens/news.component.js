@@ -6,7 +6,7 @@ class NewsScreen extends React.Component {
         this.articles = [];
         fetch('/news').then((response) => {
             response.json().then(data => {
-                this.articles = data;
+                this.articles =  Array.isArray(data) ? data : [];
                 this.store.dispatch({ action: 'RENDER' });
             });
         });

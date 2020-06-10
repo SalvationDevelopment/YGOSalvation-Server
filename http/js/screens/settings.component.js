@@ -18,7 +18,7 @@ class SettingsScreen extends React.Component {
         this.cover = [];
         fetch('/backgrounds').then((response) => {
             response.json().then(data => {
-                this.backgrounds = data;
+                this.backgrounds = data || [];
                 this.store.dispatch({ action: 'RENDER' });
             });
         });
