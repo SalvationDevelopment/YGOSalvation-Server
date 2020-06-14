@@ -97,16 +97,16 @@ class LoginScreen extends React.Component {
                     element('input', {  key: 'password', id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', placeholder: 'Password', onKeyPress: this.passwordKeyPress.bind(this)
                     }),
                     element('br', { key: 'br-1' }), ,
-                    element('a', {},
-                        element('button', { id: 'dolog', className: 'loginsystem', onClick: this.login.bind(this) }, 'Login')),
+                    element('a', { key: 'a-1' },
+                        element('button', { id: 'dolog', key: 'dolog', className: 'loginsystem', onClick: this.login.bind(this) }, 'Login')),
                     '\r\n',
-                    element('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
+                    element('button', { id: 'backuplogin', key: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
                     element('br', { key: 'br-2' }),
                     element('br', { key: 'br-3' }),
-                    element('input', Object.assign({ id: 'ips_remember', type: 'checkbox' }, memory)),
-                    element('span', {}, 'Remember Username & Password?'),
+                    element('input', Object.assign({ id: 'ips_remember', type: 'checkbox', key: 'remember'  }, memory)),
+                    element('span', { key: 'span-1'}, 'Remember Username & Password?'),
                     element('br', { key: 'br-4' }), ,
-                    element('a', { className: 'loginsystem', style: { cursor: 'pointer' }, onClick: this.forgot.bind(this) }, 'Forgot Password?'),
+                    element('a', {  key: 'a-2', loginsystem: 'loginsystem', style: { cursor: 'pointer' }, onClick: this.forgot.bind(this) }, 'Forgot Password?'),
                     element('br', { key: 'br-5' }),
                 ]);
             case 'start':

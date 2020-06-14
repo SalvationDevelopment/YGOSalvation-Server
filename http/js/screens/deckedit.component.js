@@ -917,20 +917,20 @@ class DeckEditScreen extends React.Component {
             }, [
 
                 element('div', { id: 'searchfilter' }, [
-                    element('h2', {}, 'Setup'),
-                    element('br'),
+                    element('h2', {key : 'h2-1'}, 'Setup'),
+                    element('br', {key : 'br-1'}),
                     element('h3', {}, 'Filter'),
-                    element('controls', {}, [
-                        element('div', { key: 'col-1', className: 'filtercol' }, [
-                            element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
+                    element('controls', {key : 'controls'}, [
+                        element('div', { key: 'col-1', className: 'filtercol',  key: 'filtercol-1' }, [
+                            element('select', {  key: 'cardtype', id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', { key: 'cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
                                 element('option', { key: 'cardtype-2', value: 1 }, 'Monster'),
                                 element('option', { key: 'cardtype-3', value: 2 }, 'Spell'),
                                 element('option', { key: 'cardtype-4', value: 4 }, 'Trap')
                             ]),
-                            element('div', { className: 'filtercol' }, this.cardTypes()),
+                            element('div', { className: 'filtercol', key: 'filtercol-2',}, this.cardTypes()),
 
-                            element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
+                            element('select', { key: 'setcode', id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
                                 element('option', { value: 'undefined' }, 'Archetype')
                             ].concat(this.state.setcodes.map((list, i) => {
                                 return React.createElement('option', { key: `setcode-${i}`, value: parseInt(list.num) }, list.name);
