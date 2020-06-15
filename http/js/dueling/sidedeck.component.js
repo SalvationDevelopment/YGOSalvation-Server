@@ -120,13 +120,13 @@ class SideDeckEditScreen extends React.Component {
         });
     }
 
-    loadDeck(deck) {
-        const deck = Object.assign({}, deckIds);
-        deck.main = deck.main.map(this.findcard.bind(this));
-        deck.extra = deck.extra.map(this.findcard.bind(this));
-        deck.side = deck.side.map(this.findcard.bind(this));
-        this.state.activeDeck = JSON.stringify(deck);
-        this.state.deck = deck;
+    loadDeck(deckRecord) {
+        const newDeck = Object.assign({}, deckRecord);
+        newDeck.main = newDeck.main.map(this.findcard.bind(this));
+        newDeck.extra = newDeck.extra.map(this.findcard.bind(this));
+        newDeck.side = newDeck.side.map(this.findcard.bind(this));
+        this.state.activeDeck = JSON.stringify(newDeck);
+        this.state.deck = newDeck;
         this.store.dispatch({ action: 'RENDER' });
     }
 

@@ -455,15 +455,15 @@ class ApplicationComponent extends React.Component {
     render() {
         switch (this.state.mode) {
             case 'lobby':
-                return React.createElement('section', { id: 'lobby' }, this.lobby.render());
+                return React.createElement('section', { id: 'lobby', key: 'lobby' }, this.lobby.render());
             case 'choice':
-                return React.createElement('section', { id: 'choice' }, this.choice.render());
+                return React.createElement('section', { id: 'choice', key: 'choice' }, this.choice.render());
             case 'duel':
-                return React.createElement('section', { id: 'duel' }, this.duel.render());
+                return React.createElement('section', { id: 'duel', key: 'duel' }, this.duel.render());
             case 'siding':
-                return React.createElement('section', { id: 'siding' }, this.siding.render());
+                return React.createElement('section', { id: 'siding', key: 'siding' }, this.siding.render());
             default:
-                return React.createElement('section', { id: 'error' }, this.error.render());
+                return React.createElement('section', { id: 'error', key: 'error' }, this.error.render());
         }
     }
 

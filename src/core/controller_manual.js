@@ -268,9 +268,7 @@ function clientBinding(clients, spectators) {
 }
 
 function surrender(game, duel, slot) {
-    responseHandler(engine, players, client, message) {
 
-    }
 }
 
 module.exports = {

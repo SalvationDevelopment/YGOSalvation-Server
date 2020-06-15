@@ -23,7 +23,7 @@ function main() {
     console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
     const banlist = './http/manifest/banlist.json';
 
-    if (os.platform === 'win32' && process.env.NODIST_X64 !== '0') {
+    if (os.platform === 'win32' && Boolean(process.env.NODIST_X64) !== false) {
         console.error('Node is Running in 64bit mode, games can not start.');
         console.info('HINT --> SET NODIST_X64=0'.bold.yellow);
         if (!process.env.DEFIANT) {

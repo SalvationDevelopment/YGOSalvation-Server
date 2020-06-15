@@ -254,7 +254,7 @@ function join(error, game, state, client, callback) {
             avatar: (client.avatar) ? client.avatar.url : ''
         });
         state.clients[client.slot] = client;
-        game.usernames[slot] = client.username;
+        game.usernames[client.slot] = client.username;
         callback();
         return;
     }

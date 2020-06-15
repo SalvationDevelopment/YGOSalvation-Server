@@ -1242,7 +1242,7 @@ function init(callback) {
         return JSON.parse(JSON.stringify(stack));
     }
 
-    getField(view) {
+    function getField(view) {
         return generateView()[view];
     }
 
