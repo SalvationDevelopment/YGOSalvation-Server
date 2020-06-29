@@ -866,6 +866,9 @@ class DeckEditScreen extends React.Component {
         if (zone === 'extra' && !isExtra(card)) {
             return;
         }
+        if (zone === 'main' && isExtra(card)) {
+            return;
+        }
         if (source === 'search') {
 
             const legal = (checkLegality(card, this.state.activeDeck[zone], this.state.activeDeck, banlist));

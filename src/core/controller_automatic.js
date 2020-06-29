@@ -171,6 +171,9 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                 startLP: message.lifepoints1
             });
             break;
+        case ('MSG_ORIENTATION'):
+            gameBoard.announcement(slot, message);
+            break;
         case ('MSG_HINT'):
             gameBoard.announcement(slot, message);
             break;

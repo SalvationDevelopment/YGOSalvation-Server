@@ -210,6 +210,7 @@ control#linkmarkers {
     margin-bottom: 1vh;
     text-align-last: center;
     text-align: center;
+    min-width: 3em;
 }
 
 .filterrow {

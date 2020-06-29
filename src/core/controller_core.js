@@ -179,13 +179,16 @@ function duelEndProcedure(players) {
  * @returns {Object} A game instance with manual controls.
  */
 function GameBoard(playerConnection, slot, masterRule) {
-    const board = new ManualControlEngine(function (view, stack, callback) {
+    const board = new ManualControlEngine(function (perspectives, stack, callback) {
         try {
-            process.replay[slot].push(view['p' + slot]);
-            playerConnection.write((view['p' + slot]));
+            const view = (typeof slot === 'number') ? 'p' + slot : 'spectator';
+
+            //process.replay[slot].push(view['p' + slot]);
+            playerConnection.write(perspectives[view]);
 
         } catch (error) {
-            console.log('failed messaging socket', error);
+
+            console.log('failed messaging socket', slot, playerConnection, error);
         } finally {
             if (callback) {
                 return callback(stack);
@@ -255,8 +258,7 @@ function Responser(game, player, slot) {
 }
 
 function playerInstance(playerConnection, slot, game, settings) {
-    const dataStream = new DataStream(),
-        gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
+    const gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
         gameQueue = queue(),
         responder = new Responser(game, playerConnection, slot);
 
@@ -283,8 +285,9 @@ function playerInstance(playerConnection, slot, game, settings) {
         read: function (message) {
             gameBoard.respond(message);
         },
-        view: function () {
+        getField: function () {
             const view = (typeof slot === 'number') ? 'p' + slot : 'spectator';
+            console.log(view);
             return gameBoard.getField(view);
         }
     };
@@ -384,18 +387,13 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
+        
         observers.write(lastMessage);
     }
 
-    /**
-     * Send start information to a specific player.
-     * @param {Player} player Player to send to.
-     * @returns {void}
-     */
-    function sendStartInfo(player) {
-        const message = {
+    function startingInfo() {
+        return {
             command: 'MSG_START',
-            playertype: player,
             lifepoints1: settings.start_lp,
             lifepoints2: settings.start_lp,
             player1decksize: ocgapi.query_field_count(pduel, 0, 0x1),
@@ -403,14 +401,37 @@ function makeGame(pduel, settings) {
             player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
             player2extrasize: ocgapi.query_field_count(pduel, 1, 0x40)
         };
-        sendBufferToPlayer(player, {
+    }
+
+    /**
+     * Send start information to a specific player.
+     * @param {Player} player Player to send to.
+     * @returns {void}
+     */
+    function sendStartInfo() {
+        console.log('sending start info');
+        const info = startingInfo();
+        sendBufferToPlayer(0, info);
+        sendBufferToPlayer(1, info);
+        observers.write(info);
+
+        sendBufferToPlayer(0, {
             duelAction: 'announcement',
             message: {
                 command: 'MSG_ORIENTATION',
-                slot: player
+                slot: 0
             }
         });
-        sendBufferToPlayer(player, message);
+
+        sendBufferToPlayer(1, {
+            duelAction: 'announcement',
+            message: {
+                command: 'MSG_ORIENTATION',
+                slot: 1
+            }
+        });
+
+
     }
 
 
@@ -479,6 +500,7 @@ function makeGame(pduel, settings) {
         sendBufferToPlayer,
         reSendToPlayer,
         sendToObservers,
+        getTurnPlayer,
         duel_count: 0,
         match_result: [],
         pduel
@@ -542,25 +564,27 @@ function duel(game, state, errorHandler, players, spectators) {
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, instance, game);
     }),
-        observers = playerInstance(spectators, 'spectators', instance, game),
+        observers = playerInstance(spectators, 'spectator', instance, game),
         rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
     instance.setPlayers(playerConnections, observers);
     instance.refer = ref.deref(pduel);
-    instance.sendStartInfo(0);
-    instance.sendStartInfo(1);
+    instance.sendStartInfo();
     instance.refresh(0);
     instance.refresh(1);
     ocgapi.start_duel(pduel, rule);
 
     instance.getField = function (client) {
-        const slot = Number(client.slot);
-        if (client.slot) {
+        if (client.slot === 0 || client.slot === 1) {
+            console.log('writing for a player');
             client.write(playerConnections[slot].getField());
         }
-        if (instance.getTurnPlayer() === slot) {
+        if (instance.getTurnPlayer() === client.slot) {
+            console.log('writing for a player that needs to make a move');
             instance.reSendToPlayer(slot);
         }
-        client.write(observers.getField());
+        console.log('writing for a spectator');
+        spectators.write(observers.getField());
+
     }
 
     mainProcess(instance);

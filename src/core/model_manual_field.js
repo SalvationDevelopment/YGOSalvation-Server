@@ -55,7 +55,7 @@
  * @property {UIPayloadUnit} p0 State of the game for the UI to update itself with
  * @property {UIPayloadUnit} p1 view of the field
  * @property {Number} player slot of the player, shifts view angle.
- * @property {UIPayloadUnit} spectators
+ * @property {UIPayloadUnit} spectator
  */
 
 /**
@@ -308,7 +308,7 @@ function init(callback) {
     /**
  * Record what a duelist said to another duelist.
  * @param {Number} username  player saying the message.
- * @param {String} message message to other spectators
+ * @param {String} message message to other spectator
  * @returns {undefined}
  */
     function duelistChat(username, message) {
@@ -327,7 +327,7 @@ function init(callback) {
                 message,
                 date: new Date()
             },
-            spectators: {
+            spectator: {
                 duelAction: 'chat',
                 username,
                 message,
@@ -554,7 +554,7 @@ function init(callback) {
                 field: generatePlayer2View(),
                 player: 1
             },
-            spectators: {
+            spectator: {
                 duelAction: action || 'duel',
                 info: state,
                 field: generateSpectatorView()
@@ -1167,7 +1167,7 @@ function init(callback) {
                 names: names,
                 p0: {},
                 p1: {},
-                spectators: {}
+                spectator: {}
             };
         output[slot] = {
             duelAction: 'announcement',
@@ -1322,7 +1322,7 @@ function init(callback) {
     /**
      * Record what a spectator said to another spectator.
      * @param {Number} username  player saying the message.
-     * @param {String} message message to other spectators
+     * @param {String} message message to other spectator
      * @returns {undefined}
      */
     function spectatorChat(username, message) {
@@ -1454,7 +1454,7 @@ function init(callback) {
                 names: names,
                 p0: {},
                 p1: {},
-                spectators: {}
+                spectator: {}
             };
         lastQuestion = {
             slot,
@@ -1661,7 +1661,7 @@ function init(callback) {
         getGroup,
         getState,
         players: {}, // holds socket references
-        spectators: {}, // holds socket references
+        spectator: {}, // holds socket references
         rematch,
         rematchAccept: 0,
         sideAccept: 0,
@@ -1687,7 +1687,7 @@ makegameState = require('./state.js');
 state = makegameState(function(view, stack){
     updateplayer1(view.player1);
     updateplayer2(view.player1);
-    updatespectators(view.specators);
+    updatespectator(view.specators);
     savegameforlater(stack;)
 });
 

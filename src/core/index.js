@@ -259,11 +259,14 @@ function join(duel, game, state, client, callback) {
         return;
     }
 
-
-    client.join('spectator', callback);
-    if (game.started) {
-        client.write(duel.spectate('spectator'));
-    }
+    client.slot = 'spectator';
+    client.join('spectator', function(){
+        if (game.started) {
+            duel.getField(client);
+        }
+        callback();
+    });
+    
 
 }
 
@@ -279,7 +282,7 @@ function join(duel, game, state, client, callback) {
 function attemptJoin(duel, game, state, client, callback) {
     delete state.clients[client.slot];
     client.slot = undefined;
-    client.leave('spectators', function (error) {
+    client.leave('spectator', function (error) {
         if (error) {
             throw error;
         }
@@ -310,7 +313,7 @@ function spectate(server, game, state, message, user) {
         action: 'leave',
         user: user
     }));
-    state.clients[slot].join('spectators', function (error) {
+    state.clients[slot].join('spectator', function (error) {
         if (error) {
             throw error;
         }
@@ -669,7 +672,7 @@ function start(server, duel, game, state, message) {
         new PlayerAbstraction(server, state, 'player1', state.clients[0]),
         new PlayerAbstraction(server, state, 'player2', state.clients[1]),
     ],
-        spectators = [new PlayerAbstraction(server, state, 'spectators', {})];
+        spectators = new PlayerAbstraction(server, state, 'spectator', {});
 
     duel.load(game, state, function (error, type) {
         chat(server, state, {

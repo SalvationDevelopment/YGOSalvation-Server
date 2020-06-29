@@ -80,7 +80,7 @@ class CardImage extends React.Component {
     }
 
     getImageProperties(state) {
-        const facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack'),
+        const facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack' || state.id === 'unknown'),
             src = (state.id && !facedown) ? localStorage.imageURL + '/' + state.id + '.jpg' : 'img/textures/cover.jpg',
             style = {};
         if (state.location !== 'HAND') {
