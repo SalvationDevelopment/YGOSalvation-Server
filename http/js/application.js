@@ -286,12 +286,6 @@ class ApplicationComponent extends React.Component {
         }.bind(this), 10000);
     }
 
-    surrender() {
-        this.primus.write({
-            action : 'surrender',
-            slot : window.orientation
-        });
-    }
 
     screen() {
         switch (this.state.screen) {

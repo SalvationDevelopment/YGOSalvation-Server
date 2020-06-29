@@ -472,6 +472,13 @@ class ApplicationComponent extends React.Component {
         this.store.dispatch({ action: 'RENDER' });
     }
 
+    
+    surrender() {
+        this.primus.write({
+            action : 'surrender',
+            slot : window.orientation
+        });
+    }
 
 }
 

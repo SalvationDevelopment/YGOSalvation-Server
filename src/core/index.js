@@ -362,7 +362,7 @@ function surrender(game, state, duel, slot) {
         return;
     }
 
-    startSiding(game.players, state, duel);
+    startSiding(game.player, state, duel);
 
 }
 
@@ -542,7 +542,7 @@ function startSiding(players, state, duel) {
         updatePlayer(players, slot, false);
     });
     state.clients.forEach(function (client) {
-        client.send({
+        client.write({
             action: 'side',
             deck: client.deck
         });
@@ -778,7 +778,7 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'surrender':
-            chat(server, state, client, `${game.usernames[slot]} surrendered`);
+            chat(server, state, client, `${game.usernames[client.slot]} surrendered`);
             surrender(game, state, duel, client.slot);
             broadcast(server, game);
             break;

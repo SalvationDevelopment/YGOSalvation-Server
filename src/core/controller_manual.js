@@ -246,7 +246,7 @@ function clientBinding(clients, spectators) {
      * @param {Array} stack of cards
      * @param {Function} callback gamestate watcher
      * @returns {Function} manual duel mode update state callback function
-     */
+     */this.state.deck
     function gameResponse(view, stack, callback) {
         try {
             if (!view) {

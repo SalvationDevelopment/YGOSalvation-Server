@@ -67,6 +67,10 @@ div#selectionsystem {
     transform: rotate(180deg);
 }
 
+#siding .card.p1 {
+    transform: rotate(0deg);
+}
+
 .p0.DECK {
     bottom: 10px;
     left: 632px;
@@ -621,4 +625,8 @@ meter::-webkit-meter-optimum-value {
     position: absolute;
     bottom: -31px;
     left: 25px;
+}
+
+#siding #description {
+    color : white;
 }

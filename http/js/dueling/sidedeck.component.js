@@ -1,5 +1,95 @@
 /*global React, ReactDOM, SearchFilter, store, cardIs*/
 
+
+
+function cardEvaluate(card) {
+    'use strict';
+    var value = 0;
+
+    if (cardIs('monster', card)) {
+        value -= 100;
+    }
+    if (card.type === 17) { // normal monster
+        value -= 100;
+    }
+    if (cardIs('ritual', card)) {
+        value += 300;
+    }
+    if (cardIs('fusion', card)) {
+        value += 400;
+    }
+    if (cardIs('synchro', card)) {
+        value += 500;
+    }
+    if (cardIs('xyz', card)) {
+        value += 600;
+    }
+    if (cardIs('link', card)) {
+        value += 700;
+    }
+    if (cardIs('spell', card)) {
+        value += 10000;
+    }
+    if (cardIs('trap', card)) {
+        value += 100000;
+    }
+    return value;
+
+}
+
+function getLevel(card) {
+    'use strict';
+    return card.level & 0xff;
+}
+
+function cardStackSort(a, b) {
+    'use strict';
+    if (cardEvaluate(a) > cardEvaluate(b)) {
+        return 1;
+    }
+    if (cardEvaluate(a) < cardEvaluate(b)) {
+        return -1;
+    }
+    if (getLevel(a) > getLevel(b)) {
+        return -1;
+    }
+    if ((getLevel(a) < getLevel(b))) {
+        return 1;
+    }
+    if (a.atk > b.atk) {
+        return -1;
+    }
+    if (a.atk < b.atk) {
+        return 1;
+    }
+    if (a.def < b.def) {
+        return 1;
+    }
+    if (a.def > b.def) {
+        return -1;
+    }
+
+    if (a.type > b.type) {
+        return 1;
+    }
+    if (a.type < b.type) {
+        return -1;
+    }
+    if (a.name > b.name) {
+        return 1;
+    }
+    if (a.name < b.name) {
+        return -1;
+    }
+    if (a.id > b.id) {
+        return 1;
+    }
+    if (a.id < b.id) {
+        return -1;
+    }
+    return 0;
+}
+
 /**
  * Shuffles an array in place, multiple times.
  * @param {Array} array to shuffle
@@ -96,6 +186,10 @@ class SideDeckEditScreen extends React.Component {
             }
         };
 
+        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
+            data.sort(cardStackSort);
+            store.dispatch({ action: 'LOAD_DATABASE', data });
+        });
 
         this.store = store;
         this.debounce = false;
@@ -125,9 +219,8 @@ class SideDeckEditScreen extends React.Component {
         newDeck.main = newDeck.main.map(this.findcard.bind(this));
         newDeck.extra = newDeck.extra.map(this.findcard.bind(this));
         newDeck.side = newDeck.side.map(this.findcard.bind(this));
-        this.state.activeDeck = JSON.stringify(newDeck);
-        this.state.deck = newDeck;
-        this.store.dispatch({ action: 'RENDER' });
+        this.state.activeDeck = newDeck;
+        console.log('new deck in side deck', this.state.deck);
     }
 
     resetDeck() {
@@ -178,7 +271,7 @@ class SideDeckEditScreen extends React.Component {
     }
 
     findcard(card) {
-        return this.fullDatabase.find((item) => card.id === item.id);
+        return this.fullDatabase.find((item) => {return card === item.id});
     }
 
 
@@ -381,6 +474,7 @@ class SideDeckEditScreen extends React.Component {
 
     render() {
         const element = React.createElement;
+        console.log(this.state.activeDeck);
         return [
             element('div', { id: 'deckarea' }, [
                 element('div', { id: 'cardinformation' }, this.info.render()),
