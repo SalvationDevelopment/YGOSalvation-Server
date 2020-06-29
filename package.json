@@ -31,7 +31,6 @@
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.7.5",
         "nedb": "^1.7.2",
-        "node-static": "^0.7.11",
         "nodemailer": "^6.2.1",
         "nodemailer-direct-transport": "^3.3.2",
         "primus": "^7.3.3",
@@ -39,6 +38,7 @@
         "random-port": "^0.1.0",
         "request": "^2.88.0",
         "sanitizer": "^0.1.3",
+        "serve": "^11.3.2",
         "serve-index": "^1.9.1",
         "smtp-server": "^3.5.0",
         "sparkpost": "^2.1.3",
@@ -49,7 +49,7 @@
     },
     "devDependencies": {
         "chai": "^3.5.0",
-        "mocha": "^5.2.0",
+        "mocha": "^8.0.1",
         "pkg": "^4.4.1"
     },
     "bugs": "https://github.com/salvationdevelopment/YGOPro-Salvation-Server/issues",

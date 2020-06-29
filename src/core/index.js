@@ -81,7 +81,7 @@ const WARNING_COUNTDOWN = 3000000,
     dotenv = require('dotenv'),
     defaultPlayer = require('./defaults'),
     EventEmitter = require('events'),
-    fileStream = require('node-static'),
+    express = require('express'),
     fs = require('fs'),
     http = require('http'),
     https = require('https'),
@@ -107,10 +107,7 @@ let lastInteraction = new Date();
  * @returns {void}
  */
 function staticWebServer(request, response) {
-    const server = new fileStream.Server('../http', { cache: 0 });
-    request.addListener('end', function () {
-        server.serve(request, response);
-    }).resume();
+
 }
 
 
@@ -260,13 +257,13 @@ function join(duel, game, state, client, callback) {
     }
 
     client.slot = 'spectator';
-    client.join('spectator', function(){
+    client.join('spectator', function () {
         if (game.started) {
             duel.getField(client);
         }
         callback();
     });
-    
+
 
 }
 
@@ -1037,7 +1034,7 @@ function Game(settings) {
         startLP: settings.LIFE_POINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
         time: settings.TIME_LIMIT || 3000,
-        usernames : []
+        usernames: []
     };
 }
 
@@ -1064,7 +1061,11 @@ function State(server, game) {
  */
 function HTTPServer() {
     const keyFile = path.resolve(process.env.SSL + '\\private.key'),
-        certFile = path.resolve(process.env.SSL + '\\certificate.crt');
+        certFile = path.resolve(process.env.SSL + '\\certificate.crt'),
+        app = express();
+
+    app.use(express.static(path.join(__dirname, '../http')));
+
     try {
         const privateKey = fs.readFileSync(keyFile).toString(),
             certificate = fs.readFileSync(certFile).toString();
@@ -1072,9 +1073,9 @@ function HTTPServer() {
         return https.createServer({
             key: privateKey,
             cert: certificate
-        }, staticWebServer);
+        }, app);
     } catch (nossl) {
-        return http.createServer(staticWebServer);
+        return http.createServer(app);
     }
 }
 
