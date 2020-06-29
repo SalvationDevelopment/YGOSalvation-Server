@@ -525,7 +525,10 @@ function Duel() {
         duel.engine = engine;
         duel.surrender = manualControlEngine.surrender;
         duel.getField = function (client) {
-            client.write(engine.getField(client.slot));
+            client.write({
+                action: 'ygopro',
+                message: engine.getField(client.slot)
+            });
         };
     }
 

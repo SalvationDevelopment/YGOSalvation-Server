@@ -1243,7 +1243,7 @@ function init(callback) {
     }
 
     function getField(view) {
-        return generateView()[view];
+        return generateView('start')[view];
     }
 
     /**
@@ -1674,7 +1674,8 @@ function init(callback) {
         respond,
         rps: rps,
         generateUpdateView,
-        ygoproUpdate
+        ygoproUpdate,
+        getField
     };
 }
 
