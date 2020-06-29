@@ -316,7 +316,7 @@ function Field() {
                 pile.update(data);
                 return;
             }
-            console.log('error', data);
+           // console.log('error', data);
         } catch (error) {
             console.log(error, 'no card at', data);
         }

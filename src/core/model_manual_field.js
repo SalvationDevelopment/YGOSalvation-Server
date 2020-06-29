@@ -1674,8 +1674,7 @@ function init(callback) {
         respond,
         rps: rps,
         generateUpdateView,
-        ygoproUpdate,
-        spectate
+        ygoproUpdate
     };
 }
 

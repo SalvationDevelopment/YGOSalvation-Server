@@ -240,7 +240,7 @@ function reconnect(duel, state, client, message) {
  * @param {Function} callback trigger after spectator add is complete
  * @returns {void}
  */
-function join(error, game, state, client, callback) {
+function join(duel, game, state, client, callback) {
 
     if (game.player.length < 2) {
         client.slot = game.player.length;
@@ -284,7 +284,7 @@ function attemptJoin(duel, game, state, client, callback) {
             throw error;
         }
         join(duel, game, state, client, callback);
-        if (duel.getField) {
+        if (game.started) {
             duel.getField(client);
         }
     });
@@ -485,7 +485,7 @@ function Duel() {
     const duel = {};
 
     function failure() {
-        throw ('Duel has not started');
+        throw new Error('Duel has not started');
     }
 
     function load(game, state, errorHandler, players, spectators) {
@@ -1030,7 +1030,8 @@ function Game(settings) {
         started: false,
         startLP: settings.LIFE_POINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
-        time: settings.TIME_LIMIT || 3000
+        time: settings.TIME_LIMIT || 3000,
+        usernames : []
     };
 }
 

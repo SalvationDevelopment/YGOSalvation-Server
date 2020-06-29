@@ -544,7 +544,7 @@ function duel(game, state, errorHandler, players, spectators) {
     }),
         observers = playerInstance(spectators, 'spectators', instance, game),
         rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
-    instance.setPlayers(playerConnections, extraPlayers);
+    instance.setPlayers(playerConnections, observers);
     instance.refer = ref.deref(pduel);
     instance.sendStartInfo(0);
     instance.sendStartInfo(1);
