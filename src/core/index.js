@@ -8,7 +8,6 @@
  * Configuration is passed via enviromental variables.
  */
 
-
 /**
  * @typedef {Object} ClientMessage
  * @property {String} action game model manipulation or general action to take place. 
@@ -125,6 +124,20 @@ function broadcast(server, game) {
     process.send({
         action: 'lobby',
         game
+    });
+}
+
+/**
+ * Broadcast current game lobby status to connected clients and management system.
+ * @param {Object} server Primus instance.
+ * @param {GameState} game public gamelist state information.
+ * @returns {void}
+ */
+function clearField(server, game) {
+    game.player.ready = [false, false];
+
+    server.write({
+        action: 'clear'
     });
 }
 
@@ -361,8 +374,11 @@ function surrender(game, state, duel, slot) {
         process.recordOutcome.emit('win', winner);
         return;
     }
+    
+    setTimeout(() => {
+        startSiding(game.player, state, duel);
+    }, 2000);
 
-    startSiding(game.player, state, duel);
 
 }
 
@@ -454,13 +470,16 @@ function checkSideDeck(oldDeck, newDeck) {
 }
 
 /**
- * During siding, validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
+ * Add additional error handling and then, process incoming messages from clients.
+ * @param {Object} server Primus instance.
+ * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {ClientMessage} message JSON communication sent from client.
- * @returns {void} 
+ * @returns {void}
  */
-function side(game, client, message) {
+function side(server, game, client, message) {
     if (isReady(game.player, client.slot)) {
         updatePlayer(game.player, client.slot, false);
         return;
@@ -473,6 +492,9 @@ function side(game, client, message) {
         updatePlayer(game.player, client.slot, true);
     }
 
+    if (isReady(game.player, 0) && isReady(game.player, 1)) {
+        clearField(server, game);
+    }
 }
 
 
@@ -731,6 +753,7 @@ function processMessage(server, duel, game, state, client, message) {
         register(client, message);
         return;
     }
+
     switch (message.action) {
         case 'chat':
             chat(server, state, client, message.message, undefined);
@@ -783,7 +806,8 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'side':
-            side(game, client, message);
+            console.log('seeing side');
+            side(server, game, client, message);
             broadcast(server, game);
             break;
         case 'restart':

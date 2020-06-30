@@ -166,8 +166,9 @@ function condenseDecks(decks) {
 class SideDeckEditScreen extends React.Component {
 
 
-    constructor(store) {
+    constructor(store, sidechat) {
         super();
+        this.sidechat = sidechat;
         this.searchFilter = new SearchFilter([]);
         this.info = new CardInfo([]);
         this.state = {
@@ -271,7 +272,7 @@ class SideDeckEditScreen extends React.Component {
     }
 
     findcard(card) {
-        return this.fullDatabase.find((item) => {return card === item.id});
+        return this.fullDatabase.find((item) => { return card === item.id });
     }
 
 
@@ -468,15 +469,20 @@ class SideDeckEditScreen extends React.Component {
     }
 
     completeSideDeck() {
-        let deck = this.state.activeDeck;
+        const deck = Object.assign({}, this.state.activeDeck);
+        deck.main = deck.main.map((card) => card.id);
+        deck.extra = deck.extra.map((card) => card.id);
+        deck.side = deck.side.map((card) => card.id);
+
         this.store.dispatch({ action: 'SIDE_DECKING', deck });
     }
 
     render() {
         const element = React.createElement;
-        console.log(this.state.activeDeck);
+        
         return [
             element('div', { id: 'deckarea' }, [
+                
                 element('div', { id: 'cardinformation' }, this.info.render()),
                 element('Button', {
                     id: 'sidedeckcomplete',
@@ -520,6 +526,7 @@ class SideDeckEditScreen extends React.Component {
                     }, this.renderCardCollection('side', this.state.activeDeck.side)),
                     element('div', { id: 'main' })
                 ])
-            ])];
+            ]), ,
+            this.sidechat.render()];
     }
 }

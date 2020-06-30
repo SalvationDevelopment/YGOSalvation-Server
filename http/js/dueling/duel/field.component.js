@@ -156,7 +156,7 @@ class Field {
     constructor(state, store) {
         this.store = store;
         this.state = {
-            cards: [],
+            cards: {},
             phase: new PhaseIndicator(store, { phase: state.info.phase }),
             selectors: new FieldSelector(store)
         };

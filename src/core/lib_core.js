@@ -11,8 +11,10 @@ const ffi = require('ffi'),
     platform = os.platform(),
     arch = os.arch(),
     fileExtension = (platform === 'win32') ? 'dll' : 'so',
-    core_location = path.resolve(__dirname, `./bin/${platform}/${arch}/ocgcore.${fileExtension}`),
-    ocgcore = new ffi.Library(core_location, {
+    core_location = path.resolve(__dirname, `./bin/${platform}/${arch}/ocgcore.${fileExtension}`);
+
+module.exports = function() {
+    return  new ffi.Library(core_location, {
         'set_script_reader': [bytePointer, ['pointer']],
         'set_card_reader': ['void', ['pointer']],
         'set_message_handler': ['void', ['pointer']],
@@ -33,5 +35,4 @@ const ffi = require('ffi'),
         'set_responseb': ['void', ['pointer', bytePointer]],
         'preload_script': ['int32', ['pointer', 'string', 'int32']]
     });
-
-module.exports = ocgcore;
+};
