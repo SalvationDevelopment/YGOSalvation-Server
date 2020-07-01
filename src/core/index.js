@@ -374,11 +374,9 @@ function surrender(game, state, duel, slot) {
         process.recordOutcome.emit('win', winner);
         return;
     }
-    
-    setTimeout(() => {
-        startSiding(game.player, state, duel);
-    }, 2000);
 
+
+    startSiding(game.player, state, duel);
 
 }
 
@@ -564,6 +562,7 @@ function startSiding(players, state, duel) {
         updatePlayer(players, slot, false);
     });
     state.clients.forEach(function (client) {
+        client.leave('')
         client.write({
             action: 'side',
             deck: client.deck
@@ -607,6 +606,7 @@ function lock(game, client, message) {
  * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
  */
 function PlayerAbstraction(server, state, room, client) {
+    server
     if (client.username) {
         client.join(room);
         state.reconnection[room] = client.username;
@@ -689,6 +689,9 @@ function start(server, duel, game, state, message) {
         state.clients[0].slot = 0;
         state.clients[1].slot = 1;
     }
+
+    server.empty('player1');
+    server.empty('player2');
 
     const players = [
         new PlayerAbstraction(server, state, 'player1', state.clients[0]),

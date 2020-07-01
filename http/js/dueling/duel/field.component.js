@@ -149,7 +149,6 @@ class Field {
                 index: cardImage.state.index
             };
         });
-        console.log(deck);
         return deck;
     }
 

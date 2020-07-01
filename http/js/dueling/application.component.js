@@ -248,6 +248,8 @@ class ApplicationComponent extends React.Component {
         this.duel.disableSelection();
         switch (message.duelAction) {
             case 'start':
+                this.duel.clear();
+                
                 this.state.mode = 'duel';
                 this.duel.update(message.info);
                 this.duel.updateField(message.field[0]);
@@ -428,7 +430,6 @@ class ApplicationComponent extends React.Component {
                 this.chat.add(message);
                 break;
             case 'start':
-                this.duel.clear();
                 this.state.mode = 'duel';
                 break;
             case 'slot':
@@ -452,6 +453,7 @@ class ApplicationComponent extends React.Component {
             default:
                 return;
         }
+        console.log(Object.keys(app.duel.field.state.cards).length);
     }
 
     render() {
