@@ -172,6 +172,7 @@ class SideDeckEditScreen extends React.Component {
         this.searchFilter = new SearchFilter([]);
         this.info = new CardInfo([]);
         this.state = {
+            lobby : {},
             search: [],
             setcodes: [],
             releases: [],
@@ -180,8 +181,8 @@ class SideDeckEditScreen extends React.Component {
             deck: {},
             last: '',
             activeDeck: {
-                name: 'New Deck',
-                main: [{ "id": 88472456 }],
+                name: 'No Deck Loaded',
+                main: [],
                 extra: [],
                 side: []
             }
@@ -492,7 +493,7 @@ class SideDeckEditScreen extends React.Component {
                 element('Reset', {
                     id: 'sidereset',
                     onClick: this.resetDeck.bind(this)
-                }, 'Done'),
+                }, 'Reset'),
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
                     element('div', {
