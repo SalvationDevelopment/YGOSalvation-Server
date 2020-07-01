@@ -89,7 +89,11 @@ async function rps(clients, callback) {
     while (isNull(result)) {
         p1 = await ask(clients[0]);
         p2 = await ask(clients[0]);
+<<<<<<< HEAD
         result = await shoot(clients, p1, p2);
+=======
+        result = shoot(clients, p1, p2);
+>>>>>>> ab1a47d1b854181cf58fd5be6ec813f728847225
     }
 
     return {
