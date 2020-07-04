@@ -1,7 +1,10 @@
+const { assign } = require('nodemailer/lib/shared');
+
 const ROCK = 0,
     PAPER = 1,
     SCISSORS = 2,
-    ANIMATION_TIME = 1000;
+    ANIMATION_TIME = 1000,
+    shuffle = require('./lib_shuffle');
 
 function roll(sides = 6) {
     return Math.floor(Math.random() * sides) + 1;
@@ -51,7 +54,7 @@ function ask(client) {
 
 }
 
-function dice(clients, callback) {
+function dice(clients) {
     const p1 = 0,
         p2 = 0;
 
@@ -66,7 +69,7 @@ function dice(clients, callback) {
     };
 }
 
-function coin(clients, callback) {
+function coin(clients) {
     const p1 = 0,
         p2 = 0;
 
@@ -81,7 +84,7 @@ function coin(clients, callback) {
     };
 }
 
-async function rps(clients, callback) {
+async function rps(clients) {
     let result = null;
     let p1;
     let p2;
@@ -89,17 +92,41 @@ async function rps(clients, callback) {
     while (isNull(result)) {
         p1 = await ask(clients[0]);
         p2 = await ask(clients[0]);
-<<<<<<< HEAD
         result = await shoot(clients, p1, p2);
-=======
-        result = shoot(clients, p1, p2);
->>>>>>> ab1a47d1b854181cf58fd5be6ec813f728847225
     }
 
     return {
         winner: result,
         results: [p1, p2]
     };
+}
+
+async function assign(clients, type, callback) {
+    const games = {
+        dice,
+        coin,
+        rps
+    }, gameResults = await games[type.toLowerCase()](client, callback);
+
+    if (gameResults.winner !== 0) {
+        clients[0].slot = 1;
+        clients[1].slot = 0;
+        clients.reverse();
+    }
+
+    clients[0].write({
+        action: 'game',
+        type,
+        result:gameResults.results,
+        slot: 0
+    });
+
+    clients[1].write({
+        action: 'game',
+        type,
+        result:gameResults.results,
+        slot: 1
+    });
 }
 
 
