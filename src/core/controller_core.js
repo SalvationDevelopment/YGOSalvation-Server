@@ -64,7 +64,7 @@ const ffi = require('ffi'),
     boardController = require('./controller_automatic'),
     ManualControlEngine = require('./model_automatic_field'),
     DataStream = require('./model_stream'),
-    ocgapi = require('./lib_core'),
+    libocgapi = require('./lib_core'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     scriptsFolder = '../../ygopro-scripts';
 
@@ -179,13 +179,16 @@ function duelEndProcedure(players) {
  * @returns {Object} A game instance with manual controls.
  */
 function GameBoard(playerConnection, slot, masterRule) {
-    const board = new ManualControlEngine(function (view, stack, callback) {
+    const board = new ManualControlEngine(function (perspectives, stack, callback) {
         try {
-            process.replay[slot].push(view['p' + slot]);
-            playerConnection.write((view['p' + slot]));
+            const view = (typeof slot === 'number') ? 'p' + slot : 'spectator';
+
+            //process.replay[slot].push(view['p' + slot]);
+            playerConnection.write(perspectives[view]);
 
         } catch (error) {
-            console.log('failed messaging socket', error);
+
+            console.log('failed messaging socket', slot, playerConnection, error);
         } finally {
             if (callback) {
                 return callback(stack);
@@ -193,7 +196,7 @@ function GameBoard(playerConnection, slot, masterRule) {
         }
     });
     board.masterRule = masterRule;
-
+    board.slot = slot;
     return board;
 }
 
@@ -213,12 +216,12 @@ function mainProcess(game) {
         if (flag === 2) {
             break;
         }
-        const result = ocgapi.process(game.pduel),
+        const result = game.ocgapi.process(game.pduel),
             length = result & 0xffff;
 
         flag = result >> 16;
         if (length) {
-            ocgapi.get_message(game.pduel, coreMessage);
+            game.ocgapi.get_message(game.pduel, coreMessage);
         }
         message = analyze(coreMessage, length, game);
 
@@ -242,8 +245,8 @@ function Responser(game, player, slot) {
         game.last(slot);
 
         const result = (typeof data === 'number')
-            ? ocgapi.set_responsei(game.pduel, data)
-            : ocgapi.set_responseb(game.pduel, Buffer(data));
+            ? game.ocgapi.set_responsei(game.pduel, data)
+            : game.ocgapi.set_responseb(game.pduel, Buffer(data));
 
         mainProcess(game);
         return result;
@@ -255,8 +258,7 @@ function Responser(game, player, slot) {
 }
 
 function playerInstance(playerConnection, slot, game, settings) {
-    const dataStream = new DataStream(),
-        gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
+    const gameBoard = new GameBoard(playerConnection, slot, settings.masterRule),
         gameQueue = queue(),
         responder = new Responser(game, playerConnection, slot);
 
@@ -282,6 +284,11 @@ function playerInstance(playerConnection, slot, game, settings) {
         },
         read: function (message) {
             gameBoard.respond(message);
+        },
+        getField: function () {
+            const view = (typeof slot === 'number') ? 'p' + slot : 'spectator';
+            console.log(view);
+            return gameBoard.getField(view);
         }
     };
 }
@@ -289,19 +296,20 @@ function playerInstance(playerConnection, slot, game, settings) {
 /**
  * Setup duel control functions
  * @param {Buffer} pduel pointer representing the duel inside ygopro-core
- * @param {*} settings game settings
+ * @param {*} game game settings
+ * @param {*} ocgapi game logic
  * @returns {Duel} Game instance with controls.
  */
-function makeGame(pduel, settings) {
+function makeGame(pduel, game, ocgapi) {
     let lastMessage = new Buffer(''),
         last_response = -1,
-        time_limit = settings.time_limit,
+        time_limit = game.time_limit,
         players = [],
         observers = {};
 
     function setPlayers(clients, additionalClients) {
         players = clients;
-        //observers = additionalClients;
+        observers = additionalClients;
     }
 
 
@@ -348,7 +356,9 @@ function makeGame(pduel, settings) {
     }
 
     function last(player) {
-        last_response = player;
+        if (typeof player === 'number') {
+            last_response = player;
+        }
     }
 
     function respond(message) {
@@ -378,10 +388,20 @@ function makeGame(pduel, settings) {
      * @returns {void}
      */
     function sendToObservers() {
-        return;
-        observers.forEach(function (observer) {
-            observer.write(lastMessage);
-        });
+        
+        observers.write(lastMessage);
+    }
+
+    function startingInfo() {
+        return {
+            command: 'MSG_START',
+            lifepoints1: game.start_lp,
+            lifepoints2: game.start_lp,
+            player1decksize: ocgapi.query_field_count(pduel, 0, 0x1),
+            player1extrasize: ocgapi.query_field_count(pduel, 0, 0x40),
+            player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
+            player2extrasize: ocgapi.query_field_count(pduel, 1, 0x40)
+        };
     }
 
     /**
@@ -389,25 +409,30 @@ function makeGame(pduel, settings) {
      * @param {Player} player Player to send to.
      * @returns {void}
      */
-    function sendStartInfo(player) {
-        const message = {
-            command: 'MSG_START',
-            playertype: player,
-            lifepoints1: settings.start_lp,
-            lifepoints2: settings.start_lp,
-            player1decksize: ocgapi.query_field_count(pduel, 0, 0x1),
-            player1extrasize: ocgapi.query_field_count(pduel, 0, 0x40),
-            player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
-            player2extrasize: ocgapi.query_field_count(pduel, 1, 0x40)
-        };
-        sendBufferToPlayer(player, {
+    function sendStartInfo() {
+        console.log('sending start info');
+        const info = startingInfo();
+        sendBufferToPlayer(0, info);
+        sendBufferToPlayer(1, info);
+        observers.write(info);
+
+        sendBufferToPlayer(0, {
             duelAction: 'announcement',
             message: {
                 command: 'MSG_ORIENTATION',
-                slot: player
+                slot: 0
             }
         });
-        sendBufferToPlayer(player, message);
+
+        sendBufferToPlayer(1, {
+            duelAction: 'announcement',
+            message: {
+                command: 'MSG_ORIENTATION',
+                slot: 1
+            }
+        });
+
+
     }
 
 
@@ -458,6 +483,10 @@ function makeGame(pduel, settings) {
 
     }
 
+    function getTurnPlayer() {
+        return last_response;
+    }
+
     gameTick();
 
     return {
@@ -472,6 +501,7 @@ function makeGame(pduel, settings) {
         sendBufferToPlayer,
         reSendToPlayer,
         sendToObservers,
+        getTurnPlayer,
         duel_count: 0,
         match_result: [],
         pduel
@@ -488,7 +518,8 @@ function makeGame(pduel, settings) {
  */
 function duel(game, state, errorHandler, players, spectators) {
     var pduel,
-        instance = {};
+        instance = {},
+        ocgapi = libocgapi();
 
     function messageHandler(external_pduel, type) {
         var messageBuffer = Buffer.alloc(1024);
@@ -531,19 +562,37 @@ function duel(game, state, errorHandler, players, spectators) {
         ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    instance = makeGame(pduel, game);
+    instance = makeGame(pduel, game, ocgapi);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, instance, game);
-    }), rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
-    instance.setPlayers(playerConnections);
+    }),
+        observers = playerInstance(spectators, 'spectator', instance, game),
+        rule = (game.masterRule === 4) ? 0x040000 : 0;  //0xfffff (mr4 + tag)
+    instance.setPlayers(playerConnections, observers);
     instance.refer = ref.deref(pduel);
-    instance.sendStartInfo(0);
-    instance.sendStartInfo(1);
+    instance.sendStartInfo();
     instance.refresh(0);
     instance.refresh(1);
     ocgapi.start_duel(pduel, rule);
+
+    instance.getField = function (client) {
+        if (client.slot === 0 || client.slot === 1) {
+            console.log('writing for a player');
+            client.write(playerConnections[slot].getField());
+        }
+        if (instance.getTurnPlayer() === client.slot) {
+            console.log('writing for a player that needs to make a move');
+            instance.reSendToPlayer(slot);
+        }
+        console.log('writing for a spectator');
+        spectators.write(observers.getField());
+
+    }
+    instance.ocgapi = ocgapi;
     mainProcess(instance);
 
+
+    console.log(playerConnections);
 
     process.instance = instance;
     return instance;

@@ -286,37 +286,31 @@ class ApplicationComponent extends React.Component {
         }.bind(this), 10000);
     }
 
-    surrender() {
-        this.primus.write({
-            action : 'surrender',
-            slot : window.orientation
-        });
-    }
 
     screen() {
         switch (this.state.screen) {
             case 'login':
-                return React.createElement('section', { id: 'login', key: 'login' }, this.loginScreen.render());
+                return React.createElement('section', { id: 'login', key: 'screen-login' }, this.loginScreen.render());
             case 'deckedit':
-                return React.createElement('section', { id: 'deckedit', key: 'deckedit' }, this.deckEditor.render());
+                return React.createElement('section', { id: 'deckedit', key: 'screen-deckedit' }, this.deckEditor.render());
             case 'host':
-                return React.createElement('section', { id: 'host', key: 'host' }, this.host.render());
+                return React.createElement('section', { id: 'host', key: 'screen-host' }, this.host.render());
             case 'gamelist':
-                return React.createElement('section', { id: 'gamelist', key: 'gamelist' }, this.gameList.render());
+                return React.createElement('section', { id: 'gamelist', key: 'screen-gamelist' }, this.gameList.render());
             case 'settings':
-                return React.createElement('section', { id: 'settings', key: 'settings' }, this.settings.render());
+                return React.createElement('section', { id: 'settings', key: 'screen-settings' }, this.settings.render());
             case 'rankings':
-                return React.createElement('section', { id: 'rankings', key: 'rankings' }, this.rankings.render());
+                return React.createElement('section', { id: 'rankings', key: 'screen-rankings' }, this.rankings.render());
             case 'faqs':
-                return React.createElement('section', { id: 'faqs', key: 'raqs' }, this.faqs.render());
+                return React.createElement('section', { id: 'faqs', key: 'screen-raqs' }, this.faqs.render());
             case 'news':
-                return React.createElement('section', { id: 'news', key: 'raqs' }, this.news.render());
+                return React.createElement('section', { id: 'news', key: 'screen-raqs' }, this.news.render());
             case 'downloads':
-                return React.createElement('section', { id: 'downloads', key: 'downloads' }, this.downloads.render());
+                return React.createElement('section', { id: 'downloads', key: 'screen-downloads' }, this.downloads.render());
             case 'credits':
-                return React.createElement('section', { id: 'credits', key: 'credits' }, this.credits.render());
+                return React.createElement('section', { id: 'credits', key: 'screen-credits' }, this.credits.render());
             default:
-                return React.createElement('section', { id: 'error', key: 'error' }, '');
+                return React.createElement('section', { id: 'error', key: 'screen-error' }, '');
         }
     }
 
@@ -324,7 +318,7 @@ class ApplicationComponent extends React.Component {
         if (!this.state.modalActive) {
             return '';
         }
-        return React.createElement('div', { id: 'lightbox', key: 'lightbox' }, [
+        return React.createElement('div', { id: 'lightbox', key: 'screen-lightbox' }, [
             React.createElement('p', { id: 'error' }, [
                 this.state.modalMessage,
                 React.createElement('button', { id: 'modal-ok', onClick: this.closeModal.bind(this) }, 'OK')
@@ -337,27 +331,27 @@ class ApplicationComponent extends React.Component {
         ReactDOM.render(this.render(), this.root);
     }
     language() {
-        return React.createElement('div', { id: 'languagesetter', key: 'languagesetter' }, [
-            React.createElement('span', { key: 'en', onClick: this.translate.bind(this, 'en') }, 'English'),
-            React.createElement('span', { key: 'es', onClick: this.translate.bind(this, 'es') }, 'Español'),
-            React.createElement('span', { key: 'de', onClick: this.translate.bind(this, 'de') }, 'Deutsch'),
-            React.createElement('span', { key: 'fr', onClick: this.translate.bind(this, 'fr') }, 'Français(France)'),
-            React.createElement('span', { key: 'frca', onClick: this.translate.bind(this, 'fr-ca') }, 'Français(Québec)'),
-            React.createElement('span', { key: 'it', onClick: this.translate.bind(this, 'it') }, 'Italiano'),
-            React.createElement('span', { key: 'pt', onClick: this.translate.bind(this, 'pt') }, 'Português'),
-            React.createElement('span', { key: 'nl', onClick: this.translate.bind(this, 'nl') }, 'Nederlands'),
-            React.createElement('span', { key: 'jp', onClick: this.translate.bind(this, 'jp') }, '日本語'),
-            React.createElement('span', { key: 'tr', onClick: this.translate.bind(this, 'tr') }, 'Türkçe'),
-            React.createElement('span', { key: 'el', onClick: this.translate.bind(this, 'el') }, 'Ελληνικά'),
-            React.createElement('span', { key: 'fa', onClick: this.translate.bind(this, 'fa') }, 'فارسی'),
-            React.createElement('span', { key: 'ar', onClick: this.translate.bind(this, 'ar') }, 'لغةعربي'),
-            React.createElement('span', { key: 'zh', onClick: this.translate.bind(this, 'zh') }, '中文(简体)'),
-            React.createElement('span', { key: 'he', onClick: this.translate.bind(this, 'he') }, 'עברית')
+        return React.createElement('div', { id: 'languagesetter', key: 'screen-languagesetter' }, [
+            React.createElement('span', { key: 'screen-en', onClick: this.translate.bind(this, 'en') }, 'English'),
+            React.createElement('span', { key: 'screen-es', onClick: this.translate.bind(this, 'es') }, 'Español'),
+            React.createElement('span', { key: 'screen-de', onClick: this.translate.bind(this, 'de') }, 'Deutsch'),
+            React.createElement('span', { key: 'screen-fr', onClick: this.translate.bind(this, 'fr') }, 'Français(France)'),
+            React.createElement('span', { key: 'screen-frca', onClick: this.translate.bind(this, 'fr-ca') }, 'Français(Québec)'),
+            React.createElement('span', { key: 'screen-it', onClick: this.translate.bind(this, 'it') }, 'Italiano'),
+            React.createElement('span', { key: 'screen-pt', onClick: this.translate.bind(this, 'pt') }, 'Português'),
+            React.createElement('span', { key: 'screen-nl', onClick: this.translate.bind(this, 'nl') }, 'Nederlands'),
+            React.createElement('span', { key: 'screen-jp', onClick: this.translate.bind(this, 'jp') }, '日本語'),
+            React.createElement('span', { key: 'screen-tr', onClick: this.translate.bind(this, 'tr') }, 'Türkçe'),
+            React.createElement('span', { key: 'screen-el', onClick: this.translate.bind(this, 'el') }, 'Ελληνικά'),
+            React.createElement('span', { key: 'screen-fa', onClick: this.translate.bind(this, 'fa') }, 'فارسی'),
+            React.createElement('span', { key: 'screen-ar', onClick: this.translate.bind(this, 'ar') }, 'لغةعربي'),
+            React.createElement('span', { key: 'screen-zh', onClick: this.translate.bind(this, 'zh') }, '中文(简体)'),
+            React.createElement('span', { key: 'screen-he', onClick: this.translate.bind(this, 'he') }, 'עברית')
         ]);
     }
 
     render() {
-        return React.createElement('div', { key: 'top' }, [
+        return React.createElement('div', { key: 'screen-top' }, [
             this.superHeader.render(this.state.loggedIn),
             this.screen(),
             this.language(),

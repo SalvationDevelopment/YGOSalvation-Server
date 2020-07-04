@@ -185,7 +185,7 @@ class DeckEditScreen extends React.Component {
                 deck.main = deck.main.map(this.findcard.bind(this));
                 deck.extra = deck.extra.map(this.findcard.bind(this));
                 deck.side = deck.side.map(this.findcard.bind(this));
-                
+
                 return deck;
             });
             this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
@@ -303,7 +303,7 @@ class DeckEditScreen extends React.Component {
 
     save() {
         this.state.decks[this.settings.decklist] = this.state.activeDeck;
-        store.dispatch({ action: 'SAVE_DECK', deck : this.state.activeDeck });
+        store.dispatch({ action: 'SAVE_DECK', deck: this.state.activeDeck });
     }
 
     newDeck() {
@@ -365,7 +365,7 @@ class DeckEditScreen extends React.Component {
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
 
-        store.dispatch({ action: 'DELETE_DECK', deck : this.state.activeDeck });
+        store.dispatch({ action: 'DELETE_DECK', deck: this.state.activeDeck });
         this.store.dispatch({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
@@ -746,36 +746,36 @@ class DeckEditScreen extends React.Component {
     renderLinks() {
         const element = React.createElement;
         if (this.settings.cardtype !== 1) {
-            return element('br', {});
+            return element('br', { key: 'linkbr1' });
         }
-        return element('div', { key: 'link-col', className: 'filtercol' }, [
-            element('control', { id: 'linkmarkers' }, [
-                element('input', { id: 'link1', type: 'checkbox', onChange: this.onLinkChange.bind(this, 0) }),
-                element('input', { id: 'link2', type: 'checkbox', onChange: this.onLinkChange.bind(this, 1) }),
-                element('input', { id: 'link3', type: 'checkbox', onChange: this.onLinkChange.bind(this, 2) }),
-                element('br'),
-                element('input', { id: 'link4', type: 'checkbox', onChange: this.onLinkChange.bind(this, 3) }),
+        return element('div', { key: 'deckedit-link-col', className: 'filtercol' }, [
+            element('control', { id: 'linkmarkers', key: 'deckedit-link-col-coltrol' }, [
+                element('input', { id: 'link1', key: 'link0', type: 'checkbox', onChange: this.onLinkChange.bind(this, 0) }),
+                element('input', { id: 'link2', key: 'link1', type: 'checkbox', onChange: this.onLinkChange.bind(this, 1) }),
+                element('input', { id: 'link3', key: 'link2', type: 'checkbox', onChange: this.onLinkChange.bind(this, 2) }),
+                element('br', { key: 'link', }),
+                element('input', { id: 'link4', key: 'link3', type: 'checkbox', onChange: this.onLinkChange.bind(this, 3) }),
                 element('input', {
-                    type: 'checkbox', style: {
+                    type: 'checkbox', key: 'linkx', style: {
                         visibility: 'hidden'
                     }
                 }),
-                element('input', { id: 'link5', type: 'checkbox', onChange: this.onLinkChange.bind(this, 4) }),
-                element('br'),
-                element('input', { id: 'link6', type: 'checkbox', onChange: this.onLinkChange.bind(this, 5) }),
-                element('input', { id: 'link7', type: 'checkbox', onChange: this.onLinkChange.bind(this, 6) }),
-                element('input', { id: 'link8', type: 'checkbox', onChange: this.onLinkChange.bind(this, 7) })
+                element('input', { id: 'link5', key: 'link4', type: 'checkbox', onChange: this.onLinkChange.bind(this, 4) }),
+                element('br', { key: 'linkbr2', }),
+                element('input', { id: 'link6', key: 'link5', type: 'checkbox', onChange: this.onLinkChange.bind(this, 5) }),
+                element('input', { id: 'link7', key: 'link6', type: 'checkbox', onChange: this.onLinkChange.bind(this, 6) }),
+                element('input', { id: 'link8', key: 'link7', type: 'checkbox', onChange: this.onLinkChange.bind(this, 7) })
             ])
         ]);
     }
     renderStats() {
         const element = React.createElement;
         if (this.settings.cardtype !== 1) {
-            return element('br', {});
+            return element('br', {key : 'blank-stats'});
         }
-        return [element('div', { className: 'filterrow' }, [
-            element('input', { id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
-            element('select', { id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
+        return [element('div', { className: 'filterrow', key :'div-render-stats' }, [
+            element('input', { key : 'atk', id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
+            element('select', { key: 'atkop', id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
                 element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
@@ -866,6 +866,9 @@ class DeckEditScreen extends React.Component {
         if (zone === 'extra' && !isExtra(card)) {
             return;
         }
+        if (zone === 'main' && isExtra(card)) {
+            return;
+        }
         if (source === 'search') {
 
             const legal = (checkLegality(card, this.state.activeDeck[zone], this.state.activeDeck, banlist));
@@ -902,7 +905,7 @@ class DeckEditScreen extends React.Component {
             list = this.state.releases.map((set, i) => {
                 return element('option', { key: `release-${i}`, value: set }, set);
             });
-        return [element('option', { value: 'undefined' }, 'Release Set')].concat(list);
+        return [element('option', { value: 'undefined', key: 'releaseset' }, 'Release Set')].concat(list);
     }
 
     render() {
@@ -917,81 +920,86 @@ class DeckEditScreen extends React.Component {
             }, [
 
                 element('div', { id: 'searchfilter' }, [
-                    element('h2', {}, 'Setup'),
-                    element('br'),
+                    element('h2', { key: 'deckedit-h2-1' }, 'Setup'),
+                    element('br', { key: 'deckedit-br-1' }),
                     element('h3', {}, 'Filter'),
-                    element('controls', {}, [
-                        element('div', { key: 'col-1', className: 'filtercol' }, [
-                            element('select', { id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', { key: 'cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
-                                element('option', { key: 'cardtype-2', value: 1 }, 'Monster'),
-                                element('option', { key: 'cardtype-3', value: 2 }, 'Spell'),
-                                element('option', { key: 'cardtype-4', value: 4 }, 'Trap')
+                    element('controls', { key: 'deckedit-card-controls' }, [
+                        element('div', { key: 'deckedit-col-1', className: 'filtercol', key: 'deckedit-filtercol-1' }, [
+                            element('select', { key: 'deckedit-cardtype', id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
+                                element('option', { key: 'deckedit-cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
+                                element('option', { key: 'deckedit-cardtype-2', value: 1 }, 'Monster'),
+                                element('option', { key: 'deckedit-cardtype-3', value: 2 }, 'Spell'),
+                                element('option', { key: 'deckedit-cardtype-4', value: 4 }, 'Trap')
                             ]),
-                            element('div', { className: 'filtercol' }, this.cardTypes()),
+                            element('div', { className: 'filtercol', key: 'deckedit-filtercol-2', }, this.cardTypes()),
 
-                            element('select', { id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', { value: 'undefined' }, 'Archetype')
+                            element('select', { key: 'deckedit-setcode', id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
+                                element('option', { value: 'undefined', key: 'deckedit-setcode-undefined' }, 'Archetype')
                             ].concat(this.state.setcodes.map((list, i) => {
                                 return React.createElement('option', { key: `setcode-${i}`, value: parseInt(list.num) }, list.name);
                             }))),
-                            element('select', { key: 'release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
-                            element('select', { key: 'limit', id: 'limit', onChange: this.onSearchChange.bind(this) }, [
-                                element('option', { value: 'null' }, 'Limit'),
-                                element('option', { value: 3 }, 'Unlimited'),
-                                element('option', { value: 2 }, 'Semi-Limited'),
-                                element('option', { value: 1 }, 'Limited'),
-                                element('option', { value: 0 }, 'Forbidden')
+                            element('select', { key: 'deckedit-release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
+                            element('select', { key: 'deckedit-limit', id: 'limit', onChange: this.onSearchChange.bind(this) }, [
+                                element('option', { value: 'null', key: 'deckedit-limit-null' }, 'Limit'),
+                                element('option', { value: 3, key: 'deckedit-limit-0' }, 'Unlimited'),
+                                element('option', { value: 2, key: 'deckedit-limit-1' }, 'Semi-Limited'),
+                                element('option', { value: 1, key: 'deckedit-limit-2' }, 'Limited'),
+                                element('option', { value: 0, key: 'deckedit-limit-3' }, 'Forbidden')
                             ]),
                             element('input', {
+                                key: 'deckedit-cardname-input',
                                 id: 'cardname', type: 'text', placeholder: 'Name',
                                 onKeyPress: this.handleKeyPress.bind(this),
                                 onBlur: this.onSearchChange.bind(this)
                             }),
                             element('input', {
+                                key: 'deckedit-description-input',
                                 id: 'description', type: 'text', placeholder: 'Card Text',
                                 onKeyPress: this.handleKeyPress.bind(this),
                                 onBlur: this.onSearchChange.bind(this)
                             }),
                             this.renderStats(),
-                            element('button', { onClick: this.clearSearch.bind(this) }, 'Reset')
+                            element('button', {
+                                key: 'deckedit-clearsearch',
+                                onClick: this.clearSearch.bind(this)
+                            }, 'Reset')
                         ]),
                         this.renderLinks()
                     ]),
-                    element('controls', {}, [
+                    element('controls', { key: 'deck-banlist-controls' }, [
                         element('div', { className: 'filtercol' }, [
-                            element('h3', {}, 'Deck'),
-                            element('h3', {}, 'Banlist')
+                            element('h3', { key: 'deck-controls-label' }, 'Deck'),
+                            element('h3', { key: 'banlist-controls-label' }, 'Banlist')
                         ]),
 
                         element('div', { className: 'filtercol' }, [
-                            element('select', { id: 'decklist', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
+                            element('select', { id: 'decklist', key: 'deckedit-decklist-select', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
                                 return React.createElement('option', { value: i }, list.name);
                             })),
-                            React.createElement('select', { id: 'banlist', onChange: this.onSearchChange.bind(this) }, this.state.banlist.map((list, i) => {
+                            React.createElement('select', { id: 'banlist', key: 'deckedit-ban;list-select', onChange: this.onSearchChange.bind(this) }, this.state.banlist.map((list, i) => {
                                 return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
                             }))
 
                         ]),
-                        element('div', { className: 'deckcontrols' }, [
+                        element('div', { className: 'deckcontrols',  key: 'deckedit-deckcontrols-div1', }, [
                             element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
                             element('input', { type: 'file', accept: '.ydk', placeholder: 'Choose File', onChange: this.upload.bind() })]),
-                        element('div', { className: 'deckcontrols' }, [
-                            element('button', { onClick: this.newDeck.bind(this) }, 'New'),
-                            element('button', { onClick: this.save.bind(this) }, 'Save'),
-                            element('button', { onClick: this.delete.bind(this) }, 'Delete'),
-                            element('button', { onClick: this.rename.bind(this) }, 'Rename'),
-                            element('button', { onClick: this.clear.bind(this) }, 'Clear'),
+                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div2', }, [
+                            element('button', { key: 'deckedit-decklist-0', onClick: this.newDeck.bind(this) }, 'New'),
+                            element('button', { key: 'deckedit-decklist-1', onClick: this.save.bind(this) }, 'Save'),
+                            element('button', { key: 'deckedit-decklist-2', onClick: this.delete.bind(this) }, 'Delete'),
+                            element('button', { key: 'deckedit-decklist-3', onClick: this.rename.bind(this) }, 'Rename'),
+                            element('button', { key: 'deckedit-decklist-4', onClick: this.clear.bind(this) }, 'Clear'),
 
-                            element('button', { onClick: this.sort.bind(this) }, 'Sort'),
-                            element('button', { onClick: this.shuffle.bind(this) }, 'Shuffle'),
-                            element('button', { onClick: this.export.bind(this) }, 'Export'),
-                            element('button', { onClick: this.saveAs.bind(this) }, 'Save As')
+                            element('button', { key: 'deckedit-decklist-5', onClick: this.sort.bind(this) }, 'Sort'),
+                            element('button', { key: 'deckedit-decklist-6', onClick: this.shuffle.bind(this) }, 'Shuffle'),
+                            element('button', { key: 'deckedit-decklist-7', onClick: this.export.bind(this) }, 'Export'),
+                            element('button', { key: 'deckedit-decklist-8', onClick: this.saveAs.bind(this) }, 'Save As')
                         ])
 
                     ])
                 ]),
-                element('div', { id: 'decktextlist' }, this.renderCardList())
+                element('div', { id: 'decktextlist', key: 'deckedit-decktextlist-div', }, this.renderCardList())
             ]),
 
             element('div', {

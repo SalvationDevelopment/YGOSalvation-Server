@@ -51,7 +51,7 @@
  * @property {UIPayloadUnit} p0 State of the game for the UI to update itself with
  * @property {UIPayloadUnit} p1 view of the field
  * @property {Number} player slot of the player, shifts view angle.
- * @property {UIPayloadUnit} spectators
+ * @property {UIPayloadUnit} spectator
  */
 
 /**
@@ -316,7 +316,7 @@ function Field() {
                 pile.update(data);
                 return;
             }
-            console.log('error', data);
+           // console.log('error', data);
         } catch (error) {
             console.log(error, 'no card at', data);
         }
@@ -412,8 +412,8 @@ function hideHand(view) {
     var output = [];
     view.forEach(function (card, index) {
         output[index] = {};
-        Object.assign(output[index], card);
-        output[index].position = (card.isPublic) ? 'FaceUp' : 'FaceDown';
+        Object.assign(output[index], card);    
+            output[index].position = (card.isPublic) ? 'FaceUp' : 'FaceDown';
         if (!card.isPublic) {
             output[index].id = 'unknown';
         }
@@ -692,14 +692,13 @@ class Game {
                 field: this.generatePlayer2View(),
                 player: 1
             },
-            spectators: {
+            spectator: {
                 duelAction: action || 'duel',
                 info: this.state,
-                field: this.generatePlayer1View()
+                field: this.generateSpectatorView()
             }
         };
         this.previousStack = JSON.parse(JSON.stringify(this.stack.cards()));
-        console.log(output.p0.duelAction);
         return output;
     }
 
@@ -826,6 +825,10 @@ class Game {
         }, this.stack.cards());
     }
 
+    getField(view) {
+        return this.generateView('start')[view];
+    }
+
 
 
 
@@ -888,7 +891,7 @@ class Game {
                 names: this.names,
                 p0: {},
                 p1: {},
-                spectators: {}
+                spectator: {}
             };
         output[slot] = {
             duelAction: 'announcement',
@@ -927,7 +930,7 @@ class Game {
                 names: this.names,
                 p0: {},
                 p1: {},
-                spectators: {}
+                spectator: {}
             };
         this.lastQuestion = {
             slot,
@@ -972,5 +975,3 @@ class Game {
 }
 
 module.exports = Game;
-
-console.log('--------------------------');

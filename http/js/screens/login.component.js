@@ -92,22 +92,22 @@ class LoginScreen extends React.Component {
         switch (this.state.mode) {
             case 'login':
                 return element('div', { id: 'loginmodal', key: 'modal-1' }, [
-                    element('input', { id: 'ips_username', type: 'text', className: 'loginsystem', name: 'ips_username', tabIndex: '1', placeholder: 'Username' }),
+                    element('input', {  key:  'username', id: 'ips_username', type: 'text', className: 'loginsystem', name: 'ips_username', tabIndex: '1', placeholder: 'Username' }),
                     '\r\n',
-                    element('input', { id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', placeholder: 'Password', onKeyPress: this.passwordKeyPress.bind(this)
+                    element('input', {  key: 'password', id: 'ips_password', type: 'password', className: 'loginsystem', name: 'ips_password', tabIndex: '2', placeholder: 'Password', onKeyPress: this.passwordKeyPress.bind(this)
                     }),
                     element('br', { key: 'br-1' }), ,
-                    element('a', {},
-                        element('button', { id: 'dolog', className: 'loginsystem', onClick: this.login.bind(this) }, 'Login')),
+                    element('a', { key: 'a-1' },
+                        element('button', { id: 'dolog', key: 'dolog', className: 'loginsystem', onClick: this.login.bind(this) }, 'Login')),
                     '\r\n',
-                    element('button', { id: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
-                    element('br', { key: 'br-1' }),
+                    element('button', { id: 'backuplogin', key: 'backuplogin', className: 'loginsystem', onClick: this.back.bind(this) }, 'Back'),
                     element('br', { key: 'br-2' }),
-                    element('input', Object.assign({ id: 'ips_remember', type: 'checkbox' }, memory)),
-                    element('span', {}, 'Remember Username & Password?'),
-                    element('br', { key: 'br-1' }), ,
-                    element('a', { className: 'loginsystem', style: { cursor: 'pointer' }, onClick: this.forgot.bind(this) }, 'Forgot Password?'),
-                    element('br', { key: 'br-2' }),
+                    element('br', { key: 'br-3' }),
+                    element('input', Object.assign({ id: 'ips_remember', type: 'checkbox', key: 'remember'  }, memory)),
+                    element('span', { key: 'span-1'}, 'Remember Username & Password?'),
+                    element('br', { key: 'br-4' }), ,
+                    element('a', {  key: 'a-2', loginsystem: 'loginsystem', style: { cursor: 'pointer' }, onClick: this.forgot.bind(this) }, 'Forgot Password?'),
+                    element('br', { key: 'br-5' }),
                 ]);
             case 'start':
                 return element('div', { key: 'ipblogin', id: 'ipblogin', className: 'loginsystem', key: 'modal-2' }, [

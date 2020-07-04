@@ -149,14 +149,13 @@ class Field {
                 index: cardImage.state.index
             };
         });
-        console.log(deck);
         return deck;
     }
 
     constructor(state, store) {
         this.store = store;
         this.state = {
-            cards: [],
+            cards: {},
             phase: new PhaseIndicator(store, { phase: state.info.phase }),
             selectors: new FieldSelector(store)
         };

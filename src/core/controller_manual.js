@@ -246,7 +246,7 @@ function clientBinding(clients, spectators) {
      * @param {Array} stack of cards
      * @param {Function} callback gamestate watcher
      * @returns {Function} manual duel mode update state callback function
-     */
+     */this.state.deck
     function gameResponse(view, stack, callback) {
         try {
             if (!view) {
@@ -255,7 +255,7 @@ function clientBinding(clients, spectators) {
 
             clients[0].write((view.p0));
             clients[1].write((view.p1));
-            //spectators.write((view.spectators));
+            spectators.write((view.spectator));
         } catch (error) {
             console.log('failed messaging client', error);
         } finally {
@@ -268,9 +268,7 @@ function clientBinding(clients, spectators) {
 }
 
 function surrender(game, duel, slot) {
-    responseHandler(engine, players, client, message) {
 
-    }
 }
 
 module.exports = {

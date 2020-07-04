@@ -27,6 +27,10 @@ class DuelScreen extends React.Component {
 
     }
 
+    clear() {
+        this.field = new Field({ info: {}, field: {} }, this.store);
+    }
+
     onCardClick(event, state) {
 
         if (app.manual) {

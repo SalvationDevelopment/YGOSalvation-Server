@@ -692,6 +692,15 @@ div#sidechat {
     overflow: auto;
 }
 
+#siding ul#sidechattext {
+    width: 23vw;
+    float: right;
+    margin: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, .5);
+    height: 100vw;
+}
+
 #lobby #sidechattext {
     padding: 1%;
 }

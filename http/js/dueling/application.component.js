@@ -15,7 +15,7 @@ class ApplicationComponent extends React.Component {
             this.chat = new SideChat(this.store);
             this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
             this.choice = new ChoiceScreen(this.store, this.chat);
-            this.siding = new SideDeckEditScreen(this.store);
+            this.siding = new SideDeckEditScreen(this.store, this.chat);
             this.state = {
                 mode: 'lobby',
                 tick: 0
@@ -28,7 +28,7 @@ class ApplicationComponent extends React.Component {
     side(deck) {
         this.state.mode = 'siding';
         if (deck) {
-            this.siding.state.deck = deck;
+            this.siding.loadDeck(deck);
         }
         ReactDOM.render(this.render(), document.getElementById('main'));
     }
@@ -196,15 +196,11 @@ class ApplicationComponent extends React.Component {
         });
 
 
-        this.store.register('SIDING', (message, state) => {
-            this.sidedeck();
+        this.store.register('SIDE_DECKING', (message, state) => {
+
             this.primus.write({
-                action: 'question',
-                answer: {
-                    type: 'list',
-                    i: this.state.question_selection
-                },
-                uuid: this.state.question
+                action: 'side',
+                deck: message.deck
             });
             return state;
         });
@@ -252,6 +248,8 @@ class ApplicationComponent extends React.Component {
         this.duel.disableSelection();
         switch (message.duelAction) {
             case 'start':
+                this.duel.clear();
+                
                 this.state.mode = 'duel';
                 this.duel.update(message.info);
                 this.duel.updateField(message.field[0]);
@@ -442,7 +440,12 @@ class ApplicationComponent extends React.Component {
                 window.verification = message.verification;
                 break;
             case 'side':
+                this.duel.clear();
                 this.side(message.deck);
+                break;
+            case 'clear':
+                this.duel.clear();
+                this.lobby.start();
                 break;
             case 'ygopro':
                 this.duelAction(message.message);
@@ -450,20 +453,21 @@ class ApplicationComponent extends React.Component {
             default:
                 return;
         }
+        console.log(Object.keys(app.duel.field.state.cards).length);
     }
 
     render() {
         switch (this.state.mode) {
             case 'lobby':
-                return React.createElement('section', { id: 'lobby' }, this.lobby.render());
+                return React.createElement('section', { id: 'lobby', key: 'lobby' }, this.lobby.render());
             case 'choice':
-                return React.createElement('section', { id: 'choice' }, this.choice.render());
+                return React.createElement('section', { id: 'choice', key: 'choice' }, this.choice.render());
             case 'duel':
-                return React.createElement('section', { id: 'duel' }, this.duel.render());
+                return React.createElement('section', { id: 'duel', key: 'duel' }, this.duel.render());
             case 'siding':
-                return React.createElement('section', { id: 'siding' }, this.siding.render());
+                return React.createElement('section', { id: 'siding', key: 'siding' }, this.siding.render());
             default:
-                return React.createElement('section', { id: 'error' }, this.error.render());
+                return React.createElement('section', { id: 'error', key: 'error' }, this.error.render());
         }
     }
 
@@ -472,6 +476,13 @@ class ApplicationComponent extends React.Component {
         this.store.dispatch({ action: 'RENDER' });
     }
 
+
+    surrender() {
+        this.primus.write({
+            action: 'surrender',
+            slot: window.orientation
+        });
+    }
 
 }
 
