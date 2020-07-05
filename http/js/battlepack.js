@@ -128,4 +128,4 @@ function writeDeckList(deck) {
 }
 
 writeDeckList(makeDeck(9));
-makeDeck(2, true);
+makeDeck(2, true); 
