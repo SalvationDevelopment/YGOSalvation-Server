@@ -6,32 +6,25 @@ var battlePack3 = {
     },
     xyzs = ['1118', '1117', '1116', '1132', '1131', '1130', '1129', '1128', '1127', '1126', '1125', '1124', '1123', '1122', '1121', '1120', '1119'];
 
+//Picks an element from a list and removes it from the list
 function pick(list) {
     'use strict';
-    return list[Math.floor(Math.random() * (list.length))];
+    var returnPosition = Math.floor(Math.random() * (list.length));
+    var returnValue = list[returnPosition];
+    list.splice(returnPosition, 1);
+    return returnValue;
 }
 
+//Picks a number of elements from the list
 function pickNum(list, num) {
-
-
     'use strict';
 
-    var a = 0,
-        returnList = [],
-        cardToAdd;
-    while (a < num) {
-        cardToAdd = pick(list);
-
-        //Prevents duplicates if the number of cards requested isn't bigger than the length of the list
-        if (!(returnList.indexOf(cardToAdd) >= 0) || list.length < num) {
-            returnList.push(cardToAdd);
-            a++;
-
-        }
-
+    var returnList = [], cardToAdd, listClone;
+    listClone = list.map((x) => x);
+    for (var a = 0; a < num; a++) {
+        returnList.push(pick(listClone));
     }
     return returnList;
-
 }
 
 function makePack() {
