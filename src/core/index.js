@@ -94,7 +94,8 @@ const WARNING_COUNTDOWN = 3000000,
     shuffle = require('./lib_shuffle.js'),
     uuid = require('uuid/v4'),
     validateDeck = require('./lib_validate_deck.js'),
-    verificationSystem = new EventEmitter();
+    verificationSystem = new EventEmitter(),
+    choice = require('./lib_choice');
 
 let lastInteraction = new Date();
 
@@ -130,11 +131,12 @@ function broadcast(server, game) {
 /**
  * Broadcast current game lobby status to connected clients and management system.
  * @param {Object} server Primus instance.
- * @param {GameState} game public gamelist state information.
+ * @param {Boolean[]} player Player 1 and Player 2 lock status.
  * @returns {void}
  */
-function clearField(server, game) {
-    game.player.ready = [false, false];
+function clearField(server, player) {
+    player[0].ready = false;
+    player[1].ready = false;
 
     server.write({
         action: 'clear'
@@ -353,6 +355,94 @@ function kick(server, game, state, client, message) {
     return true;
 }
 
+
+/**
+ * Determine if a specific player has locked in their deck.
+ * @param {Object[]} player list of players.
+ * @param {Number} target queried slot number.
+ * @param {Boolean} status new deck lock status.
+ * @returns {void}
+ */
+function updatePlayer(player, target, status) {
+    player[target].ready = status;
+}
+
+/**
+ * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
+ * @returns {Duel} OCGCore Instance
+ */
+function Duel() {
+
+    const duel = {};
+
+    function failure() {
+        throw new Error('Duel has not started');
+    }
+
+    function load(game, state, errorHandler, players, spectators) {
+        process.recordOutcome = new EventEmitter();
+        process.recordOutcome.once('win', function (command) {
+
+            // process.replay requires filtering.
+            process.send({
+                action: 'win',
+                replay: process.replay,
+                ranked: Boolean(game.ranked === 'Ranked'),
+                loserID: game.player[Math.abs(command.player - 1)].id,
+                winnerID: game.player[command.player].id
+            });
+        });
+
+        if (game.shuffle) {
+            shuffle(players[0].main);
+            shuffle(players[1].main);
+        }
+
+        if (game.automatic === 'Automatic') {
+            const instance = automaticControlEngine.duel(game, state, errorHandler, players, spectators);
+            duel.respond = instance.respond;
+            duel.getField = function (client) {
+                client.write(instance.getField(client));
+            };
+            return;
+        }
+
+        const clientBinding = manualControlEngine.clientBinding(players, spectators),
+            engine = field(clientBinding);
+
+        engine.startDuel(players[0], players[1], true, game);
+        duel.engine = engine;
+        duel.surrender = manualControlEngine.surrender;
+        duel.getField = function (client) {
+            client.write({
+                action: 'ygopro',
+                message: engine.getField(client.slot)
+            });
+        };
+    }
+
+
+    duel.getField = failure;
+    duel.respond = failure;
+    duel.load = load;
+
+    return duel;
+}
+
+function startSiding(players, state, duel) {
+    players.forEach(function (player, slot) {
+        updatePlayer(players, slot, false);
+    });
+    state.clients.forEach(function (client) {
+        client.leave('');
+        client.write({
+            action: 'side',
+            deck: client.deck
+        });
+    });
+    duel = new Duel();
+}
+
 /**
  * Surrender in active duel.
  * @param {GameState} game public gamelist state information.
@@ -367,7 +457,7 @@ function surrender(game, state, duel, slot) {
         bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 1 : 2,
         aheadBy = Math.abs(game.bestOf[0] - game.bestOf[1]);
 
-    game.bestOf[winner]++;
+    game.bestOf[winner] = game.bestOf[winner] + 1;
     game.started = false;
 
     if (aheadBy >= bestOfXGames) {
@@ -430,16 +520,7 @@ function isReady(player, slot) {
 }
 
 
-/**
- * Determine if a specific player has locked in their deck.
- * @param {Object[]} player list of players.
- * @param {Number} target queried slot number.
- * @param {Boolean} status new deck lock status.
- * @returns {void}
- */
-function updatePlayer(player, target, status) {
-    player[target].ready = status;
-}
+
 
 /**
  * Check if a new deck is a legal side
@@ -470,9 +551,7 @@ function checkSideDeck(oldDeck, newDeck) {
 /**
  * Add additional error handling and then, process incoming messages from clients.
  * @param {Object} server Primus instance.
- * @param {Duel} duel Duel Field Instance
  * @param {GameState} game public gamelist state information.
- * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Spark} client connected websocket and Primus user (spark in documentation).
  * @param {ClientMessage} message JSON communication sent from client.
  * @returns {void}
@@ -491,85 +570,13 @@ function side(server, game, client, message) {
     }
 
     if (isReady(game.player, 0) && isReady(game.player, 1)) {
-        clearField(server, game);
+        clearField(server, game.player);
     }
 }
 
 
-/**
- * Create a new ocgcore duel instance with constructor, getter, and setter mechanisms.
- * @returns {Duel} OCGCore Instance
- */
-function Duel() {
-
-    const duel = {};
-
-    function failure() {
-        throw new Error('Duel has not started');
-    }
-
-    function load(game, state, errorHandler, players, spectators) {
-        process.recordOutcome = new EventEmitter();
-        process.recordOutcome.once('win', function (command) {
-
-            // process.replay requires filtering.
-            process.send({
-                action: 'win',
-                replay: process.replay,
-                ranked: Boolean(game.ranked === 'Ranked'),
-                loserID: game.player[Math.abs(command.player - 1)].id,
-                winnerID: game.player[command.player].id
-            });
-        });
-
-        if (game.shuffle) {
-            shuffle(players[0].main);
-            shuffle(players[1].main);
-        }
-
-        if (game.automatic === 'Automatic') {
-            const instance = automaticControlEngine.duel(game, state, errorHandler, players, spectators);
-            duel.respond = instance.respond;
-            duel.getField = function (client) {
-                client.write(instance.getField(client));
-            };
-            return;
-        }
-
-        const clientBinding = manualControlEngine.clientBinding(players, spectators);
-        const engine = field(clientBinding);
-        engine.startDuel(players[0], players[1], true, game);
-        duel.engine = engine;
-        duel.surrender = manualControlEngine.surrender;
-        duel.getField = function (client) {
-            client.write({
-                action: 'ygopro',
-                message: engine.getField(client.slot)
-            });
-        };
-    }
 
 
-    duel.getField = failure;
-    duel.respond = failure;
-    duel.load = load;
-
-    return duel;
-}
-
-function startSiding(players, state, duel) {
-    players.forEach(function (player, slot) {
-        updatePlayer(players, slot, false);
-    });
-    state.clients.forEach(function (client) {
-        client.leave('')
-        client.write({
-            action: 'side',
-            deck: client.deck
-        });
-    });
-    duel = new Duel();
-}
 
 /**
  * Validate a requested deck and if valid lock in the player as ready, otherwise toggle it off.
@@ -606,7 +613,7 @@ function lock(game, client, message) {
  * @returns {PlayerAbstraction} Representation of a player or group of players a client can reconnect to if disconnected.
  */
 function PlayerAbstraction(server, state, room, client) {
-    server
+
     if (client.username) {
         client.join(room);
         state.reconnection[room] = client.username;
@@ -647,28 +654,18 @@ function determine(server, game, state, client) {
         return;
     }
 
-    shuffle(state.clients);
-    state.clients[0].slot = 0;
-    state.clients[1].slot = 1;
 
-    server.write({
-        action: 'start'
-    });
-    state.clients[0].write({
-        action: 'cointoss',
-        result: 'heads',
-        slot: 0
-    });
-    state.clients[1].write({
-        action: 'cointoss',
-        result: 'tails',
-        slot: 1
-    });
-    state.clients[0].write({
-        action: 'turn_player',
-        verification: state.verification
-    });
-    game.started = true;
+    choice(state.clients, game.start_game)
+        .then(function () {
+            server.write({
+                action: 'start'
+            });
+            state.clients[0].write({
+                action: 'turn_player',
+                verification: state.verification
+            });
+            game.started = true;
+        });
 }
 
 /**
@@ -695,7 +692,7 @@ function start(server, duel, game, state, message) {
 
     const players = [
         new PlayerAbstraction(server, state, 'player1', state.clients[0]),
-        new PlayerAbstraction(server, state, 'player2', state.clients[1]),
+        new PlayerAbstraction(server, state, 'player2', state.clients[1])
     ],
         spectators = new PlayerAbstraction(server, state, 'spectator', {});
 
@@ -1061,7 +1058,8 @@ function Game(settings) {
         startLP: settings.LIFE_POINTS || 8000,
         start_hand_count: settings.STARTING_HAND || 5,
         time: settings.TIME_LIMIT || 3000,
-        usernames: []
+        usernames: [],
+        start_game: settings.START_GAME || 'rps'
     };
 }
 

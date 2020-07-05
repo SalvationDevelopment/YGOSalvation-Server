@@ -17,9 +17,10 @@ function flip() {
 function shoot(clients, p1, p2) {
     clients.forEach((client, i) => {
         client.write({
-            action: 'shoot',
+            action: 'result',
+            type : 'rps',
             results: [p1, p2]
-        })
+        });
     });
 
     return new Promise((resolve) => {
@@ -28,14 +29,20 @@ function shoot(clients, p1, p2) {
             if (p1 === p2) {
                 return resolve(null);
             }
+            if (p1 < 0 || p1 > 3 || p2 < 0 || p2 > 3) {
+                throw new Error('Enumeral of player result is out of range');
+            }
 
             switch (p1) {
                 case ROCK:
                     result = (p2 === SCISSORS) ? 0 : 1;
+                    break;
                 case PAPER:
                     result = (p2 === ROCK) ? 0 : 1;
+                    break;
                 case SCISSORS:
                     result = (p2 === PAPER) ? 0 : 1;
+                    break;
             }
             resolve(result);
 
@@ -47,7 +54,8 @@ function shoot(clients, p1, p2) {
 function ask(client) {
     return new Promise((resolve) => {
         client.write({
-            action: 'rps'
+            action: 'choice',
+            type : 'rps'
         });
         client.once('rps', resolve);
     });
@@ -85,11 +93,11 @@ function coin(clients) {
 }
 
 async function rps(clients) {
-    let result = null;
-    let p1;
-    let p2;
+    let result = null,
+        p1,
+        p2;
 
-    while (isNull(result)) {
+    while (Object.is(null, result)) {
         p1 = await ask(clients[0]);
         p2 = await ask(clients[0]);
         result = await shoot(clients, p1, p2);
@@ -101,12 +109,12 @@ async function rps(clients) {
     };
 }
 
-async function assign(clients, type, callback) {
+async function choice(clients, type = 'rps') {
     const games = {
         dice,
         coin,
         rps
-    }, gameResults = await games[type.toLowerCase()](client, callback);
+    }, gameResults = await games[type.toLowerCase()](clients);
 
     if (gameResults.winner !== 0) {
         clients[0].slot = 1;
@@ -115,23 +123,19 @@ async function assign(clients, type, callback) {
     }
 
     clients[0].write({
-        action: 'game',
+        action: 'choice',
         type,
-        result:gameResults.results,
+        result: gameResults.results,
         slot: 0
     });
 
     clients[1].write({
-        action: 'game',
+        action: 'choice',
         type,
-        result:gameResults.results,
+        result: gameResults.results,
         slot: 1
     });
 }
 
 
-module.exports = {
-    dice,
-    coin,
-    rps
-}
+module.exports = choice;
