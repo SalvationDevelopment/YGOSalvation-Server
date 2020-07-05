@@ -18,7 +18,6 @@ function pick(list) {
 //Picks a number of elements from the list
 function pickNum(list, num) {
     'use strict';
-
     var returnList = [], cardToAdd, listClone;
     listClone = list.map((x) => x);
     for (var a = 0; a < num; a++) {
