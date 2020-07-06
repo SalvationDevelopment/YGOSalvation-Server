@@ -451,7 +451,7 @@ class ApplicationComponent extends React.Component {
             case 'choice':
                 this.state.mode = 'choice';
                 this.choice.state.mode = message.type;
-                this.choice.state.result = undefined;
+                this.choice.state.result = message.result;
                 break;
             case 'ygopro':
                 this.duelAction(message.message);

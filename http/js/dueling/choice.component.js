@@ -6,6 +6,10 @@ class ChoiceScreen extends React.Component {
         this.sidechat = chat;
         this.store = store;
         this.result = null;
+        this.state = {
+            mode: 'coin',
+            result: undefined
+        };
     }
 
     goFirst(startplayer) {
@@ -19,17 +23,43 @@ class ChoiceScreen extends React.Component {
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 
-    rps() { }
+    rps() {
+        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
 
-    coin() { }
+        ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
+    }
 
-    die() { }
+    coin() {
+        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
 
-    rpsResult() { }
+        ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
+    }
 
-    coinResult() { }
+    die() {
+        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
 
-    dieResult() { }
+        ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
+    }
+
+    rpsResult() {
+        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
+
+        ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
+    }
+
+    coinResult() {
+        const result = (this.result) ? 'tails' : 'heads';
+        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
+            React.createElement('div', { id: 'flipped', key: 'flipped' }, `Flipped ${result}.`)
+        ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
+    }
+
+    dieResult() {
+        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
+            React.createElement('div', { id: 'p1rolled', key: 'p1rolled' }, 'Player 1 fliped a '),
+            React.createElement('div', { id: 'p2rolled', key: 'p2rolled' }, 'Go Second')
+        ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
+    }
 
 
     render() {

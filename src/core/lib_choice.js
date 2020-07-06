@@ -26,7 +26,7 @@ function shoot(clients, p1, p2) {
     clients.forEach((client, i) => {
         client.write({
             action: 'result',
-            type : 'rps',
+            type: 'rps',
             results: [p1, p2]
         });
     });
@@ -41,7 +41,7 @@ function shoot(clients, p1, p2) {
             if (p1 === p2) {
                 return resolve(null);
             }
-           
+
             switch (p1) {
                 case ROCK:
                     result = (p2 === SCISSORS) ? 0 : 1;
@@ -64,7 +64,7 @@ function ask(client) {
     return new Promise((resolve) => {
         client.write({
             action: 'choice',
-            type : 'rps'
+            type: 'rps'
         });
         client.once('rps', resolve);
     });
@@ -87,7 +87,7 @@ function dice(clients) {
 }
 
 function coin(clients) {
-    const p1 = 0,
+    let p1 = 0,
         p2 = 0;
 
     while (p1 === p2) {
@@ -118,12 +118,38 @@ async function rps(clients) {
     };
 }
 
+function animationPause() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, 2000);
+    });
+}
+
+
 async function choice(clients, type = 'rps') {
+
+    clients[0].write({
+        action: 'choice',
+        type,
+        slot: 0
+    });
+
+    clients[1].write({
+        action: 'choice',
+        type,
+        slot: 1
+    });
+
+    await animationPause();
+
     const games = {
         dice,
         coin,
         rps
     }, gameResults = await games[type.toLowerCase()](clients);
+
+    await animationPause();
 
     if (gameResults.winner !== 0) {
         clients[0].slot = 1;
