@@ -1,15 +1,23 @@
-const { assign } = require('nodemailer/lib/shared');
-
 const ROCK = 0,
     PAPER = 1,
     SCISSORS = 2,
     ANIMATION_TIME = 1000,
     shuffle = require('./lib_shuffle');
 
+/**
+ * Roll a multi sided die.
+ * @param {Number} sides number of sides on the die.
+ * @returns {Number} result
+ */
 function roll(sides = 6) {
     return Math.floor(Math.random() * sides) + 1;
 }
 
+
+/**
+ * Flip a coin
+ * @returns {Boolean} result
+ */
 function flip() {
     return roll(2) - 1;
 }
@@ -23,16 +31,17 @@ function shoot(clients, p1, p2) {
         });
     });
 
-    return new Promise((resolve) => {
+    if (p1 < 0 || p1 > 3 || p2 < 0 || p2 > 3) {
+        throw new Error('Enumeral of player result is out of range');
+    }
+
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
             let result;
             if (p1 === p2) {
                 return resolve(null);
             }
-            if (p1 < 0 || p1 > 3 || p2 < 0 || p2 > 3) {
-                throw new Error('Enumeral of player result is out of range');
-            }
-
+           
             switch (p1) {
                 case ROCK:
                     result = (p2 === SCISSORS) ? 0 : 1;

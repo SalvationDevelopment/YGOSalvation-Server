@@ -249,7 +249,7 @@ class ApplicationComponent extends React.Component {
         switch (message.duelAction) {
             case 'start':
                 this.duel.clear();
-                
+
                 this.state.mode = 'duel';
                 this.duel.update(message.info);
                 this.duel.updateField(message.field[0]);
@@ -437,6 +437,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'turn_player':
                 this.state.mode = 'choice';
+                this.choice.state.mode = 'turn_player';
                 window.verification = message.verification;
                 break;
             case 'side':
@@ -446,6 +447,11 @@ class ApplicationComponent extends React.Component {
             case 'clear':
                 this.duel.clear();
                 this.lobby.start();
+                break;
+            case 'choice':
+                this.state.mode = 'choice';
+                this.choice.state.mode = message.type;
+                this.choice.state.result = undefined;
                 break;
             case 'ygopro':
                 this.duelAction(message.message);

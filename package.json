@@ -26,6 +26,7 @@
         "function-queue": "0.0.12",
         "helmet": "^3.21.2",
         "hsts": "^2.2.0",
+        "jest": "^26.1.0",
         "json": "^9.0.6",
         "jsonfile": "^2.4.0",
         "jsonwebtoken": "^8.5.1",
@@ -58,7 +59,7 @@
     "license": "LicenseRef-LICENSE",
     "scripts": {
         "start": "node ./",
-        "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec test/test.js",
+        "test": "jest",
         "server": "node server",
         "ygopro": "cd src && node application_ygopro",
         "add-binaries": "npm run banlist && copy .\\node_modules\\ffi\\build\\Release\\ffi_bindings.node  .\\bin && copy .\\node_modules\\ref\\build\\Release\\binding.node .\\bin",
