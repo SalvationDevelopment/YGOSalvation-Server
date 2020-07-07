@@ -27,7 +27,8 @@ function shoot(clients, p1, p2) {
         client.write({
             action: 'result',
             type: 'rps',
-            results: [p1, p2]
+            results: [p1, p2],
+            slot: i
         });
     });
 
@@ -170,6 +171,8 @@ async function choice(clients, type = 'rps') {
         result: gameResults.results,
         slot: 1
     });
+
+    await animationPause();
 }
 
 

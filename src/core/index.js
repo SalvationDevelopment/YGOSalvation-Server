@@ -654,7 +654,8 @@ function determine(server, game, state, client) {
         return;
     }
 
-
+    game.started = true;
+    
     choice(state.clients, game.start_game)
         .then(function () {
             server.write({
@@ -664,7 +665,10 @@ function determine(server, game, state, client) {
                 action: 'turn_player',
                 verification: state.verification
             });
-            game.started = true;
+            state.clients[1].write({
+                action: 'choice',
+                type : 'waiting'
+            });
         });
 }
 
