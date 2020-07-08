@@ -814,7 +814,6 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'choice':
-            console.log('emmiting');
             client.emit('choice', message.answer);
             break;
         case 'restart':

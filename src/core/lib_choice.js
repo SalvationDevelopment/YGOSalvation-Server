@@ -23,7 +23,6 @@ function flip() {
 }
 
 function shoot(clients, p1, p2) {
-    console.log('SHOOT!');
     clients.forEach((client, i) => {
         client.write({
             action: 'choice',
@@ -68,7 +67,6 @@ function ask(client, i) {
             action: 'choice',
             type: 'rps'
         });
-        console.log('setup for ', i);
         client.once('choice', resolve);
     });
 

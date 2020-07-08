@@ -19,7 +19,8 @@ class HostScreen extends React.Component {
             SHUFFLE: true,
             LIFE_POINTS: 8000,
             TIME_LIMIT: 180000,
-            RANKED: false
+            RANKED: false,
+            START_GAME : 'coin'
         };
         this.store = store;
 
@@ -88,19 +89,26 @@ class HostScreen extends React.Component {
                 React.createElement('option', { key: 'match', value: 'Match', selected: true }, 'Match'),
                 React.createElement('option', { key: 'tag', value: 'Tag', disabled: true }, 'Tag')
             ]),
+            React.createElement('br', {key : 'brstartgame'}),
+            React.createElement('label', {}, 'Pre Game'),
+            React.createElement('select', { id: 'START_GAME', onChange: this.onChange.bind(this) }, [
+                React.createElement('option', { key: 'rps', value: 'rps' }, 'Rock/Paper/Scissors'),
+                React.createElement('option', { key: 'fac', value: 'coin', selected: true }, 'Flip a Coin'),
+                React.createElement('option', { key: 'rd', value: 'dice' }, 'Roll Dice')
+            ]),
             React.createElement('br', {}),
             React.createElement('label', {}, 'Time Limit'),
             React.createElement('select', { id: 'TIME_LIMIT', onChange: this.onChange.bind(this) }, [
-                React.createElement('option', { key: '', value: 180000 }, '3 Minutes'),
-                React.createElement('option', { key: '', value: 360000, selected: true }, '6 Minutes'),
-                React.createElement('option', { key: '', value: 540000 }, '9 Minutes'),
-                React.createElement('option', { key: '', value: 720000 }, '12 Minutes'),
-                React.createElement('option', { key: '', value: 900000 }, '15 Minutes')
+                React.createElement('option', { key: '3m', value: 180000 }, '3 Minutes'),
+                React.createElement('option', { key: '6m', value: 360000, selected: true }, '6 Minutes'),
+                React.createElement('option', { key: '9m', value: 540000 }, '9 Minutes'),
+                React.createElement('option', { key: '12m', value: 720000 }, '12 Minutes'),
+                React.createElement('option', { key: '15m', value: 900000 }, '15 Minutes')
             ]),
-            React.createElement('br', { key: '', }),
-            React.createElement('br', { key: '', }),
-            React.createElement('h2', { key: '', }, 'Additional Options'),
-            React.createElement('br', { key: '', }),
+            React.createElement('br', { key: 'k1' }),
+            React.createElement('br', { key: 'k2' }),
+            React.createElement('h2', { key: 'k3' }, 'Additional Options'),
+            React.createElement('br', { key: 'k4' }),
             //React.createElement('label', {}, 'Use AI'),
             //React.createElement('input', { type: 'checkbox', id: 'useai', disabled: true, onChange: this.onChange.bind(this) }),
             //React.createElement('select', { id: 'aidecks', disabled: true, onChange: this.onChange.bind(this) }, []),
