@@ -101,6 +101,14 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+         this.store.register('RPS', (message, state) => {
+            this.primus.write({
+                action: 'choice',
+                answer: message.answer
+            });
+            return state;
+        });
+
         this.store.register('ZONE_CLICK', (message, state) => {
             if (app.manual) {
                 debugger;
@@ -249,7 +257,7 @@ class ApplicationComponent extends React.Component {
         switch (message.duelAction) {
             case 'start':
                 this.duel.clear();
-                
+
                 this.state.mode = 'duel';
                 this.duel.update(message.info);
                 this.duel.updateField(message.field[0]);
@@ -437,6 +445,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'turn_player':
                 this.state.mode = 'choice';
+                this.choice.state.mode = 'turn_player';
                 window.verification = message.verification;
                 break;
             case 'side':
@@ -447,7 +456,14 @@ class ApplicationComponent extends React.Component {
                 this.duel.clear();
                 this.lobby.start();
                 break;
-            case 'ygopro':
+            case 'choice':  
+                this.state.mode = 'choice';
+                this.choice.state.mode = message.type;
+                this.choice.state.result = message.result;
+                this.choice.state.slot = message.slot;
+                this.choice.state.winner = message.winner;
+                break;
+            case 'ygopro':                      
                 this.duelAction(message.message);
                 break;
             default:
