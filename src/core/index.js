@@ -8,6 +8,8 @@
  * Configuration is passed via enviromental variables.
  */
 
+const { match } = require('assert');
+
 /**
  * @typedef {Object} ClientMessage
  * @property {String} action game model manipulation or general action to take place. 
@@ -468,6 +470,7 @@ function surrender(game, state, duel, slot) {
 
     startSiding(game.player, state, duel);
 
+    state.predetermined = { slot };
 }
 
 /**
@@ -655,7 +658,22 @@ function determine(server, game, state, client) {
     }
 
     game.started = true;
+    state.verification = uuid();
 
+    if (game.predetermined) {
+        server.write({
+            action: 'start'
+        });
+        state.clients[game.predetermined.slot].write({
+            action: 'turn_player',
+            verification: state.verification
+        });
+        state.clients[Math.abs(game.predetermined - 1)].write({
+            action: 'choice',
+            type: 'waiting'
+        });
+        return;
+    }
     choice(state.clients, game.start_game)
         .then(function () {
             server.write({
