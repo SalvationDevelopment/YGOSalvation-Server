@@ -23,9 +23,10 @@ function flip() {
 }
 
 function shoot(clients, p1, p2) {
+    console.log('SHOOT!');
     clients.forEach((client, i) => {
         client.write({
-            action: 'result',
+            action: 'choice',
             type: 'rps',
             results: [p1, p2],
             slot: i
@@ -61,13 +62,14 @@ function shoot(clients, p1, p2) {
 
 }
 
-function ask(client) {
+function ask(client, i) {
     return new Promise((resolve) => {
         client.write({
             action: 'choice',
             type: 'rps'
         });
-        client.once('rps', resolve);
+        console.log('setup for ', i);
+        client.once('choice', resolve);
     });
 
 }
@@ -108,8 +110,9 @@ async function rps(clients) {
         p2;
 
     while (Object.is(null, result)) {
-        p1 = await ask(clients[0]);
-        p2 = await ask(clients[0]);
+        const results = await Promise.all(clients.map(ask));
+        p1 = results[0];
+        p2 = results[1];
         result = await shoot(clients, p1, p2);
     }
 
@@ -142,7 +145,9 @@ async function choice(clients, type = 'rps') {
         slot: 1
     });
 
-    await animationPause();
+    if (type.toLowerCase() !== 'rps') {
+        await animationPause();
+    }
 
     const games = {
         dice,
@@ -162,7 +167,7 @@ async function choice(clients, type = 'rps') {
         action: 'choice',
         type,
         result: gameResults.results,
-        winner : gameResults.winner,
+        winner: gameResults.winner,
         slot: 0
     });
 
@@ -170,7 +175,7 @@ async function choice(clients, type = 'rps') {
         action: 'choice',
         type,
         result: gameResults.results,
-        winner : gameResults.winner,
+        winner: gameResults.winner,
         slot: 1
     });
 

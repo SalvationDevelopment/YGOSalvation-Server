@@ -655,7 +655,7 @@ function determine(server, game, state, client) {
     }
 
     game.started = true;
-    
+
     choice(state.clients, game.start_game)
         .then(function () {
             server.write({
@@ -667,7 +667,7 @@ function determine(server, game, state, client) {
             });
             state.clients[1].write({
                 action: 'choice',
-                type : 'waiting'
+                type: 'waiting'
             });
         });
 }
@@ -810,9 +810,12 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'side':
-            console.log('seeing side');
             side(server, game, client, message);
             broadcast(server, game);
+            break;
+        case 'choice':
+            console.log('emmiting');
+            client.emit('choice', message.answer);
             break;
         case 'restart':
             break;
@@ -1063,7 +1066,7 @@ function Game(settings) {
         start_hand_count: settings.STARTING_HAND || 5,
         time: settings.TIME_LIMIT || 3000,
         usernames: [],
-        start_game: settings.START_GAME || 'dice'
+        start_game: settings.START_GAME || 'rps'
     };
 }
 

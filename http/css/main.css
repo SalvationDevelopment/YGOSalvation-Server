@@ -962,6 +962,20 @@ div#selectwhogoesfirst {
     box-shadow: 0 0 50px 62px rgba(0, 0, 0, .95);
 }
 
+div#selectwhogoesfirst.rpscontainer {
+    display : flex;
+    justify-content: center;
+}
+
+.rpschoice {
+    width: 15vw;
+    max-width: 89px;
+    height: 30vh;
+    max-height: 128px;
+    float: left;
+    margin: 1vh 3vw;
+}
+
 #revealedclose {
     display: none;
     width: 40px;

@@ -101,6 +101,14 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
+         this.store.register('RPS', (message, state) => {
+            this.primus.write({
+                action: 'choice',
+                answer: message.answer
+            });
+            return state;
+        });
+
         this.store.register('ZONE_CLICK', (message, state) => {
             if (app.manual) {
                 debugger;

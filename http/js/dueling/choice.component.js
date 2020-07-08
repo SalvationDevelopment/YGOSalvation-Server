@@ -28,10 +28,22 @@ class ChoiceScreen extends React.Component {
     }
 
     rps() {
-        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
-            React.createElement('div', { id: 'Rock', key: 'one', onClick: this.rpsAnswer.bind(this, 0) }, 'Rock'),
-            React.createElement('div', { id: 'Paper', key: 'two', onClick: this.rpsAnswer.bind(this, 1) }, 'Paper'),
-            React.createElement('div', { id: 'Scissors', key: 'three', onClick: this.rpsAnswer.bind(this, 2) }, 'Scissors')
+        return [React.createElement('div', { id: 'selectwhogoesfirst', className: 'rpscontainer' }, [
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/rock.jpg) no-repeat'
+                }, id: 'Rock', className: 'rpschoice', key: 'one', onClick: this.rpsAnswer.bind(this, 0)
+            }),
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/paper.jpg) no-repeat'
+                }, id: 'Paper', className: 'rpschoice', key: 'two', onClick: this.rpsAnswer.bind(this, 1)
+            }),
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/scissors.jpg) no-repeat'
+                }, id: 'Scissors', className: 'rpschoice', key: 'three', onClick: this.rpsAnswer.bind(this, 2)
+            })
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 
@@ -64,8 +76,8 @@ class ChoiceScreen extends React.Component {
     }
 
     diceResult() {
-    const you = this.state.result[this.state.slot],
-        opponent = this.state.result[Math.abs(this.state.slot - 1 )];
+        const you = this.state.result[this.state.slot],
+            opponent = this.state.result[Math.abs(this.state.slot - 1)];
 
         return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
             React.createElement('div', { id: 'gofirst', key: 'p1rolled' }, `You rolled a ${you} your opponent rolled a ${opponent}`),
