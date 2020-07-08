@@ -1063,7 +1063,7 @@ function Game(settings) {
         start_hand_count: settings.STARTING_HAND || 5,
         time: settings.TIME_LIMIT || 3000,
         usernames: [],
-        start_game: settings.START_GAME || 'coin'
+        start_game: settings.START_GAME || 'dice'
     };
 }
 

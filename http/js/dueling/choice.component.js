@@ -42,7 +42,7 @@ class ChoiceScreen extends React.Component {
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 
-    die() {
+    dice() {
         return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
             React.createElement('div', { id: 'gofirst' }, 'Rolling a die.')
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
@@ -63,10 +63,12 @@ class ChoiceScreen extends React.Component {
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 
-    dieResult() {
+    diceResult() {
+    const you = this.state.result[this.state.slot],
+        opponent = this.state.result[Math.abs(this.state.slot - 1 )];
+
         return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
-            React.createElement('div', { id: 'p1rolled', key: 'p1rolled' }, 'Player 1 fliped a '),
-            React.createElement('div', { id: 'p2rolled', key: 'p2rolled' }, 'Go Second')
+            React.createElement('div', { id: 'gofirst', key: 'p1rolled' }, `You rolled a ${you} your opponent rolled a ${opponent}`),
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 
@@ -87,10 +89,10 @@ class ChoiceScreen extends React.Component {
                     return React.createElement('section', { id: 'rps', key: 'rps' }, this.rpsResult());
                 case 'coin':
                     return React.createElement('section', { id: 'coin', key: 'coin' }, this.coinResult());
-                case 'die':
-                    return React.createElement('section', { id: 'die', key: 'die' }, this.dieResult());
+                case 'dice':
+                    return React.createElement('section', { id: 'dice', key: 'dice' }, this.diceResult());
                 case 'waiting':
-                    return React.createElement('section', { id: 'die', key: 'die' }, this.waiting());
+                    return React.createElement('section', { id: 'waiting', key: 'waiting' }, this.waiting());
                 default:
                     return React.createElement('section', { id: 'error', key: 'error' }, this.error.render());
             }
@@ -102,10 +104,10 @@ class ChoiceScreen extends React.Component {
                 return React.createElement('section', { id: 'rps', key: 'rps' }, this.rps());
             case 'coin':
                 return React.createElement('section', { id: 'coin', key: 'coin' }, this.coin());
-            case 'die':
-                return React.createElement('section', { id: 'die', key: 'die' }, this.die());
+            case 'dice':
+                return React.createElement('section', { id: 'dice', key: 'dice' }, this.dice());
             case 'waiting':
-                return React.createElement('section', { id: 'die', key: 'die' }, this.waiting());
+                return React.createElement('section', { id: 'waiting', key: 'waiting' }, this.waiting());
             default:
                 return React.createElement('section', { id: 'error', key: 'error' }, this.error.render());
         }

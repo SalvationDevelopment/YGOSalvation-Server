@@ -448,13 +448,14 @@ class ApplicationComponent extends React.Component {
                 this.duel.clear();
                 this.lobby.start();
                 break;
-            case 'choice':
+            case 'choice':  
                 this.state.mode = 'choice';
                 this.choice.state.mode = message.type;
                 this.choice.state.result = message.result;
                 this.choice.state.slot = message.slot;
+                this.choice.state.winner = message.winner;
                 break;
-            case 'ygopro':
+            case 'ygopro':                      
                 this.duelAction(message.message);
                 break;
             default:

@@ -73,7 +73,7 @@ function ask(client) {
 }
 
 function dice(clients) {
-    const p1 = 0,
+    let p1 = 0,
         p2 = 0;
 
     while (p1 === p2) {
@@ -162,6 +162,7 @@ async function choice(clients, type = 'rps') {
         action: 'choice',
         type,
         result: gameResults.results,
+        winner : gameResults.winner,
         slot: 0
     });
 
@@ -169,6 +170,7 @@ async function choice(clients, type = 'rps') {
         action: 'choice',
         type,
         result: gameResults.results,
+        winner : gameResults.winner,
         slot: 1
     });
 
