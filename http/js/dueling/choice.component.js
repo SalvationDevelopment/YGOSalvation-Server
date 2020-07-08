@@ -61,8 +61,43 @@ class ChoiceScreen extends React.Component {
     }
 
     rpsResult() {
-        return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
-
+        const opponentOptions =  [
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/rock.jpg) no-repeat'
+                }, id: 'p2Rock', className: 'rpschoice opponent', key: 'p1one'
+            }),
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/paper.jpg) no-repeat'
+                }, id: 'p2Paper', className: 'rpschoice opponent', key: 'p1two'
+            }),
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/scissors.jpg) no-repeat'
+                }, id: 'p2Scissors', className: 'rpschoice opponent', key: 'p1three'
+            })
+        ],
+        options = [
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/rock.jpg) no-repeat'
+                }, id: 'Rock', className: 'rpschoice', key: 'one'
+            }),
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/paper.jpg) no-repeat'
+                }, id: 'Paper', className: 'rpschoice', key: 'two'
+            }),
+            React.createElement('div', {
+                style: {
+                    background: 'url(../img/textures/scissors.jpg) no-repeat'
+                }, id: 'Scissors', className: 'rpschoice', key: 'three'
+            })
+        ]
+        return [React.createElement('div', { id: 'selectwhogoesfirst', className: 'rpscontainer result', key: 'p1' }, [
+            React.createElement('div', { className: 'rpszones', key: 'div1' }, opponentOptions[this.state.result[Math.abs(this.state.slot -1)]]),
+            React.createElement('div', { className: 'rpszones', key: 'div2' }, options[this.state.result[this.state.slot]])
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 

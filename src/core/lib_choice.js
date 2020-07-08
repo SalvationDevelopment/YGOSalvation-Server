@@ -28,7 +28,7 @@ function shoot(clients, p1, p2) {
         client.write({
             action: 'choice',
             type: 'rps',
-            results: [p1, p2],
+            result: [p1, p2],
             slot: i
         });
     });
@@ -104,6 +104,16 @@ function coin(clients) {
     };
 }
 
+
+
+function animationPause() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, 2000);
+    });
+}
+
 async function rps(clients) {
     let result = null,
         p1,
@@ -122,13 +132,6 @@ async function rps(clients) {
     };
 }
 
-function animationPause() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve();
-        }, 2000);
-    });
-}
 
 
 async function choice(clients, type = 'rps') {

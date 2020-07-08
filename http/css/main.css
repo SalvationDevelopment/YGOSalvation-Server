@@ -967,6 +967,11 @@ div#selectwhogoesfirst.rpscontainer {
     justify-content: center;
 }
 
+div#selectwhogoesfirst.rpscontainer.result {
+    display : flex;
+    justify-content: center;
+    flex-direction: column;
+}
 .rpschoice {
     width: 15vw;
     max-width: 89px;
@@ -974,6 +979,15 @@ div#selectwhogoesfirst.rpscontainer {
     max-height: 128px;
     float: left;
     margin: 1vh 3vw;
+}
+
+.rpszones {
+    display: flex;
+    justify-content: center;
+}
+
+.rpschoice.opponent {
+    transform: rotate(180deg);
 }
 
 #revealedclose {
