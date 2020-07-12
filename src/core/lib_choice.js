@@ -156,12 +156,9 @@ async function choice(clients, type = 'rps') {
         rps
     }, gameResults = await games[type.toLowerCase()](clients);
 
-    await animationPause();
-
-    if (gameResults.winner !== 0) {
-        clients[0].slot = 1;
-        clients[1].slot = 0;
-        clients.reverse();
+  
+    if (type.toLowerCase() !== 'rps') {
+        await animationPause();
     }
 
     clients[0].write({
@@ -181,6 +178,12 @@ async function choice(clients, type = 'rps') {
     });
 
     await animationPause();
+
+    if (gameResults.winner !== 0) {
+        clients[0].slot = 1;
+        clients[1].slot = 0;
+        clients.reverse();
+    }
 }
 
 

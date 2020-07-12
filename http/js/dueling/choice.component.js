@@ -94,7 +94,7 @@ class ChoiceScreen extends React.Component {
                     background: 'url(../img/textures/scissors.jpg) no-repeat'
                 }, id: 'Scissors', className: 'rpschoice', key: 'three'
             })
-        ]
+        ];
         return [React.createElement('div', { id: 'selectwhogoesfirst', className: 'rpscontainer result', key: 'p1' }, [
             React.createElement('div', { className: 'rpszones', key: 'div1' }, opponentOptions[this.state.result[Math.abs(this.state.slot -1)]]),
             React.createElement('div', { className: 'rpszones', key: 'div2' }, options[this.state.result[this.state.slot]])
@@ -115,7 +115,7 @@ class ChoiceScreen extends React.Component {
             opponent = this.state.result[Math.abs(this.state.slot - 1)];
 
         return [React.createElement('div', { id: 'selectwhogoesfirst' }, [
-            React.createElement('div', { id: 'gofirst', key: 'p1rolled' }, `You rolled a ${you} your opponent rolled a ${opponent}`),
+            React.createElement('div', { id: 'gofirst', key: 'p1rolled' }, `You rolled a ${you} your opponent rolled a ${opponent}`)
         ]), React.createElement('div', { id: 'lobbychat', key: 'sidechat' }, this.sidechat.render())];
     }
 

@@ -153,6 +153,8 @@ function enableClient(client, person) {
     client.avatar = person.avatar;
     client.points = person.points || 0;
     client.elo = person.elo || 1200;
+    // eslint-disable-next-line no-underscore-dangle
+    client.id = person._id;
     client.write({
         action: 'registered'
     });
@@ -256,6 +258,7 @@ function join(duel, game, state, client, callback) {
     if (game.player.length < 2) {
         client.slot = game.player.length;
         game.player.push({
+            id : client.id,
             ready: Boolean(client.ready),
             points: client.points,
             elo: client.elo,
@@ -383,12 +386,13 @@ function Duel() {
         process.recordOutcome.once('win', function (command) {
 
             // process.replay requires filtering.
+            console.log(game.player, command);
             process.send({
                 action: 'win',
                 replay: process.replay,
                 ranked: Boolean(game.ranked === 'Ranked'),
-                loserID: game.player[Math.abs(command.player - 1)].id,
-                winnerID: game.player[command.player].id
+                loserID: game.player[Math.abs(command - 1)].id,
+                winnerID: game.player[command].id
             });
         });
 
@@ -444,13 +448,14 @@ function startSiding(players, state, duel) {
 
 /**
  * Surrender in active duel.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Duel} duel Duel Field Instance
  * @param {Number} slot surrendering player identifier.
  * @returns {void}
  */
-function surrender(game, state, duel, slot) {
+function surrender(server, game, state, duel, slot) {
 
     const winner = Math.abs(slot - 1),
         bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 1 : 2,
@@ -461,6 +466,9 @@ function surrender(game, state, duel, slot) {
 
     if (aheadBy >= bestOfXGames) {
         process.recordOutcome.emit('win', winner);
+        chat(server, state, {
+            username: '[SYSTEM]'
+        }, `${game.player[winner].username} has won!`, undefined);
         return;
     }
 
@@ -830,7 +838,7 @@ function processMessage(server, duel, game, state, client, message) {
             break;
         case 'surrender':
             chat(server, state, client, `${game.usernames[client.slot]} surrendered`);
-            surrender(game, state, duel, client.slot);
+            surrender(server, game, state, duel, client.slot);
             broadcast(server, game);
             break;
         case 'side':
@@ -1064,7 +1072,7 @@ function boot(httpserver, server, game, state) {
  * @returns {GameState} public gamelist state information.
  */
 function Game(settings) {
-
+    
     return {
         automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
         banlist: settings.BANLIST || 'No Banlist',
