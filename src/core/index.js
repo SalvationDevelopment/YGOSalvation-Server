@@ -137,9 +137,6 @@ function broadcast(server, game) {
  * @returns {void}
  */
 function clearField(server, player) {
-    player[0].ready = false;
-    player[1].ready = false;
-
     server.write({
         action: 'clear'
     });
@@ -647,12 +644,16 @@ function PlayerAbstraction(server, state, room, client) {
  * @returns {void}
  */
 function determine(server, game, state, client) {
-    if (client.slot !== 0) {
-        return;
-    }
+    
     if (!game.player[0] || !game.player[1]) {
         return;
     }
+
+    if (client.slot !== 0 && !game.predetermined) {
+        return;
+    }
+
+    
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
@@ -660,20 +661,25 @@ function determine(server, game, state, client) {
     game.started = true;
     state.verification = uuid();
 
-    if (game.predetermined) {
+
+    if (state.predetermined) {
+        const oppossingPlayer = Math.abs(state.predetermined.slot - 1),
+            defeatedPlayer = state.predetermined.slot;
+
         server.write({
             action: 'start'
         });
-        state.clients[game.predetermined.slot].write({
+        state.clients[defeatedPlayer].write({
             action: 'turn_player',
             verification: state.verification
         });
-        state.clients[Math.abs(game.predetermined - 1)].write({
+        state.clients[oppossingPlayer].write({
             action: 'choice',
             type: 'waiting'
         });
         return;
     }
+
     choice(state.clients, game.start_game)
         .then(function () {
             server.write({
