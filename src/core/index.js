@@ -137,9 +137,6 @@ function broadcast(server, game) {
  * @returns {void}
  */
 function clearField(server, player) {
-    player[0].ready = false;
-    player[1].ready = false;
-
     server.write({
         action: 'clear'
     });
@@ -156,6 +153,8 @@ function enableClient(client, person) {
     client.avatar = person.avatar;
     client.points = person.points || 0;
     client.elo = person.elo || 1200;
+    // eslint-disable-next-line no-underscore-dangle
+    client.id = person._id;
     client.write({
         action: 'registered'
     });
@@ -259,6 +258,8 @@ function join(duel, game, state, client, callback) {
     if (game.player.length < 2) {
         client.slot = game.player.length;
         game.player.push({
+            id: client.id,
+            wins : 0,
             ready: Boolean(client.ready),
             points: client.points,
             elo: client.elo,
@@ -386,12 +387,13 @@ function Duel() {
         process.recordOutcome.once('win', function (command) {
 
             // process.replay requires filtering.
+            console.log(game.player, command);
             process.send({
                 action: 'win',
                 replay: process.replay,
                 ranked: Boolean(game.ranked === 'Ranked'),
-                loserID: game.player[Math.abs(command.player - 1)].id,
-                winnerID: game.player[command.player].id
+                loserID: game.player[Math.abs(command - 1)].id,
+                winnerID: game.player[command].id
             });
         });
 
@@ -446,24 +448,47 @@ function startSiding(players, state, duel) {
 }
 
 /**
+ * Notify connected users and parent process that the game has ended.
+ * @param {Object} server Primus instance.
+ * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
+ * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
+ */
+function quit(server, game, state) {
+    chat(server, state, {
+        username: '[SYSTEM]'
+    }, 'Game has expired!', undefined);
+    process.send({
+        action: 'quit',
+        game: game
+    });
+    return setTimeout(process.exit, CLEANUP_LATENCY);
+}
+
+/**
  * Surrender in active duel.
+ * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
  * @param {ApplicationState} state internal private state information not shown on the game list.
  * @param {Duel} duel Duel Field Instance
  * @param {Number} slot surrendering player identifier.
  * @returns {void}
  */
-function surrender(game, state, duel, slot) {
+function surrender(server, game, state, duel, slot) {
 
     const winner = Math.abs(slot - 1),
-        bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 1 : 2,
-        aheadBy = Math.abs(game.bestOf[0] - game.bestOf[1]);
+        bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 0 : 1,
+        aheadBy = Math.abs(game.player[0].wins - game.player[1].wins);
 
-    game.bestOf[winner] = game.bestOf[winner] + 1;
+    game.player[winner].wins = game.player[winner].wins + 1;
     game.started = false;
 
     if (aheadBy >= bestOfXGames) {
         process.recordOutcome.emit('win', winner);
+        chat(server, state, {
+            username: '[SYSTEM]'
+        }, `${game.player[winner].username} has won!`, undefined);
+        quit(server, game, state);
         return;
     }
 
@@ -647,12 +672,16 @@ function PlayerAbstraction(server, state, room, client) {
  * @returns {void}
  */
 function determine(server, game, state, client) {
-    if (client.slot !== 0) {
-        return;
-    }
+
     if (!game.player[0] || !game.player[1]) {
         return;
     }
+
+    if (client.slot !== 0 && !game.predetermined) {
+        return;
+    }
+
+
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
@@ -660,20 +689,25 @@ function determine(server, game, state, client) {
     game.started = true;
     state.verification = uuid();
 
-    if (game.predetermined) {
+
+    if (state.predetermined) {
+        const oppossingPlayer = Math.abs(state.predetermined.slot - 1),
+            defeatedPlayer = state.predetermined.slot;
+
         server.write({
             action: 'start'
         });
-        state.clients[game.predetermined.slot].write({
+        state.clients[defeatedPlayer].write({
             action: 'turn_player',
             verification: state.verification
         });
-        state.clients[Math.abs(game.predetermined - 1)].write({
+        state.clients[oppossingPlayer].write({
             action: 'choice',
             type: 'waiting'
         });
         return;
     }
+
     choice(state.clients, game.start_game)
         .then(function () {
             server.write({
@@ -823,8 +857,10 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'surrender':
-            chat(server, state, client, `${game.usernames[client.slot]} surrendered`);
-            surrender(game, state, duel, client.slot);
+            chat(server, state, {
+                username: '[SYSTEM]'
+            }, `${game.usernames[client.slot]} surrendered`);
+            surrender(server, game, state, duel, client.slot);
             broadcast(server, game);
             break;
         case 'side':
@@ -875,24 +911,6 @@ function messageHandler(server, duel, game, state, client, message) {
     }
 }
 
-
-/**
- * Notify connected users and parent process that the game has ended.
- * @param {Object} server Primus instance.
- * @param {GameState} game public gamelist state information.
- * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
- */
-function quit(server, game, state) {
-    chat(server, state, {
-        username: '[SYSTEM]'
-    }, 'Game has expired!', undefined);
-    process.send({
-        action: 'quit',
-        game: game
-    });
-    return setTimeout(process.exit, CLEANUP_LATENCY);
-}
 
 /**
  * Culmulative connected clients on a server.

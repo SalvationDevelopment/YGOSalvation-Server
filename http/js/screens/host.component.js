@@ -20,7 +20,7 @@ class HostScreen extends React.Component {
             LIFE_POINTS: 8000,
             TIME_LIMIT: 180000,
             RANKED: false,
-            START_GAME : 'coin'
+            START_GAME: 'coin'
         };
         this.store = store;
 
@@ -89,11 +89,11 @@ class HostScreen extends React.Component {
                 React.createElement('option', { key: 'match', value: 'Match', selected: true }, 'Match'),
                 React.createElement('option', { key: 'tag', value: 'Tag', disabled: true }, 'Tag')
             ]),
-            React.createElement('br', {key : 'brstartgame'}),
+            React.createElement('br', { key: 'brstartgame' }),
             React.createElement('label', {}, 'Pre Game'),
             React.createElement('select', { id: 'START_GAME', onChange: this.onChange.bind(this) }, [
-                React.createElement('option', { key: 'rps', value: 'rps' }, 'Rock/Paper/Scissors'),
-                React.createElement('option', { key: 'fac', value: 'coin', selected: true }, 'Flip a Coin'),
+                React.createElement('option', { key: 'rps', value: 'rps', selected: true }, 'Rock/Paper/Scissors'),
+                React.createElement('option', { key: 'fac', value: 'coin' }, 'Flip a Coin'),
                 React.createElement('option', { key: 'rd', value: 'dice' }, 'Roll Dice')
             ]),
             React.createElement('br', {}),
