@@ -258,7 +258,8 @@ function join(duel, game, state, client, callback) {
     if (game.player.length < 2) {
         client.slot = game.player.length;
         game.player.push({
-            id : client.id,
+            id: client.id,
+            wins : 0,
             ready: Boolean(client.ready),
             points: client.points,
             elo: client.elo,
@@ -447,6 +448,24 @@ function startSiding(players, state, duel) {
 }
 
 /**
+ * Notify connected users and parent process that the game has ended.
+ * @param {Object} server Primus instance.
+ * @param {GameState} game public gamelist state information.
+ * @param {ApplicationState} state internal private state information not shown on the game list.
+ * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
+ */
+function quit(server, game, state) {
+    chat(server, state, {
+        username: '[SYSTEM]'
+    }, 'Game has expired!', undefined);
+    process.send({
+        action: 'quit',
+        game: game
+    });
+    return setTimeout(process.exit, CLEANUP_LATENCY);
+}
+
+/**
  * Surrender in active duel.
  * @param {Object} server Primus instance.
  * @param {GameState} game public gamelist state information.
@@ -458,10 +477,10 @@ function startSiding(players, state, duel) {
 function surrender(server, game, state, duel, slot) {
 
     const winner = Math.abs(slot - 1),
-        bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 1 : 2,
-        aheadBy = Math.abs(game.bestOf[0] - game.bestOf[1]);
+        bestOfXGames = (game.MODE === 'Single' || game.MODE === 'Tag') ? 0 : 1,
+        aheadBy = Math.abs(game.player[0].wins - game.player[1].wins);
 
-    game.bestOf[winner] = game.bestOf[winner] + 1;
+    game.player[winner].wins = game.player[winner].wins + 1;
     game.started = false;
 
     if (aheadBy >= bestOfXGames) {
@@ -469,6 +488,7 @@ function surrender(server, game, state, duel, slot) {
         chat(server, state, {
             username: '[SYSTEM]'
         }, `${game.player[winner].username} has won!`, undefined);
+        quit(server, game, state);
         return;
     }
 
@@ -652,7 +672,7 @@ function PlayerAbstraction(server, state, room, client) {
  * @returns {void}
  */
 function determine(server, game, state, client) {
-    
+
     if (!game.player[0] || !game.player[1]) {
         return;
     }
@@ -661,7 +681,7 @@ function determine(server, game, state, client) {
         return;
     }
 
-    
+
     if (!game.player[0].ready && !game.player[1].ready) {
         return;
     }
@@ -837,7 +857,9 @@ function processMessage(server, duel, game, state, client, message) {
             broadcast(server, game);
             break;
         case 'surrender':
-            chat(server, state, client, `${game.usernames[client.slot]} surrendered`);
+            chat(server, state, {
+                username: '[SYSTEM]'
+            }, `${game.usernames[client.slot]} surrendered`);
             surrender(server, game, state, duel, client.slot);
             broadcast(server, game);
             break;
@@ -889,24 +911,6 @@ function messageHandler(server, duel, game, state, client, message) {
     }
 }
 
-
-/**
- * Notify connected users and parent process that the game has ended.
- * @param {Object} server Primus instance.
- * @param {GameState} game public gamelist state information.
- * @param {ApplicationState} state internal private state information not shown on the game list.
- * @returns {NodeJS.Timeout} setTimeout reference number for lifetime cycle.
- */
-function quit(server, game, state) {
-    chat(server, state, {
-        username: '[SYSTEM]'
-    }, 'Game has expired!', undefined);
-    process.send({
-        action: 'quit',
-        game: game
-    });
-    return setTimeout(process.exit, CLEANUP_LATENCY);
-}
 
 /**
  * Culmulative connected clients on a server.
@@ -1072,7 +1076,7 @@ function boot(httpserver, server, game, state) {
  * @returns {GameState} public gamelist state information.
  */
 function Game(settings) {
-    
+
     return {
         automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
         banlist: settings.BANLIST || 'No Banlist',
