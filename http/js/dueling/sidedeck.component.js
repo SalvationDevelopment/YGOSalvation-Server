@@ -172,7 +172,7 @@ class SideDeckEditScreen extends React.Component {
         this.searchFilter = new SearchFilter([]);
         this.info = new CardInfo([]);
         this.state = {
-            lobby : {},
+            lobby: {},
             search: [],
             setcodes: [],
             releases: [],
@@ -214,6 +214,10 @@ class SideDeckEditScreen extends React.Component {
             this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
         });
+    }
+
+    update(update) {
+        Object.assign(this.state.lobby, update);
     }
 
     loadDeck(deckRecord) {
@@ -478,12 +482,21 @@ class SideDeckEditScreen extends React.Component {
         this.store.dispatch({ action: 'SIDE_DECKING', deck });
     }
 
+    lobbyStatus() {
+        const element = React.createElement,
+            p1 = this.state.lobby.player[0].ready,
+            p2 = this.state.lobby.player[1].ready;
+        return [element('div', { className: 'lockindicator', 'data-state': p1 }),
+             element('div', { className: 'lockindicator', 'data-state': p2 })];
+
+    }
+
     render() {
         const element = React.createElement;
-        
+
         return [
             element('div', { id: 'deckarea' }, [
-                
+
                 element('div', { id: 'cardinformation' }, this.info.render()),
                 element('Button', {
                     id: 'sidedeckcomplete',
@@ -494,6 +507,10 @@ class SideDeckEditScreen extends React.Component {
                     id: 'sidereset',
                     onClick: this.resetDeck.bind(this)
                 }, 'Reset'),
+                element('div', {
+                    id: 'lobby',
+                    onClick: this.resetDeck.bind(this)
+                }, this.lobbyStatus()),
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
                     element('div', {

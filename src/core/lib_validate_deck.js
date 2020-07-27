@@ -210,7 +210,9 @@ function validateDeck(deck, banlist, database, cardpool = 'OCG/TCG') {
         checkRegion(main, side, extra, banlist, cardpool, getCardById, getFilteredCardById);
         return { error: null };
     } catch (error) {
-        return { error };
+        return {
+            error: error.toString()
+        };
     }
 }
 

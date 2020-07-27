@@ -20,7 +20,7 @@ class HostScreen extends React.Component {
             LIFE_POINTS: 8000,
             TIME_LIMIT: 180000,
             RANKED: false,
-            START_GAME: 'coin'
+            START_GAME: 'rps'
         };
         this.store = store;
 
