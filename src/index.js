@@ -503,6 +503,7 @@ function onData(data, socket) {
         case 'save':
 
             if (!socket.username) {
+                console.log('no user cant save');
                 return;
             }
             delete data.action;
@@ -513,7 +514,7 @@ function onData(data, socket) {
             data.deck.owner = socket.username;
 
             data.username = socket.username;
-
+            console.log(data);
             decks.saveDeck(socket.session, data.deck, socket.username, function (error, savedDecks)  {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'savedDeck',
@@ -527,6 +528,7 @@ function onData(data, socket) {
             if (!socket.username) {
                 return;
             }
+            
             decks.deleteDeck(socket.session, data.deck.id, socket.username, function (error, savedDecks) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deletedDeck',

@@ -307,11 +307,12 @@ class DeckEditScreen extends React.Component {
     }
 
     newDeck() {
-        const deck = {
-            main: [],
-            extra: [],
-            side: []
-        }, name = window.prompt('New Deck Name?', this.state.decks[this.settings.decklist].name);
+        const oldDeck = (this.state.decks[this.settings.decklist]) ? this.state.decks[this.settings.decklist] : { name: 'New Deck' },
+            deck = {
+                main: [],
+                extra: [],
+                side: []
+            }, name = window.prompt('New Deck Name?', oldDeck.name);
 
         if (!name) {
             return;
@@ -361,12 +362,13 @@ class DeckEditScreen extends React.Component {
         if (!ok) {
             return;
         }
-        this.state.decks.splice(this.settings.decklist, 1);
-        this.settings.decklist = this.state.decks.length - 1;
-        this.state.activeDeck = this.state.decks[this.settings.decklist];
+
 
         store.dispatch({ action: 'DELETE_DECK', deck: this.state.activeDeck });
         this.store.dispatch({ action: 'RENDER' });
+        this.state.decks.splice(this.settings.decklist, 1);
+        this.settings.decklist = this.state.decks.length - 1;
+        this.state.activeDeck = this.state.decks[this.settings.decklist];
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = this.settings.decklist;
@@ -381,10 +383,14 @@ class DeckEditScreen extends React.Component {
         this.save();
     }
     clear() {
-        this.state.activeDeck.main = [];
-        this.state.activeDeck.extra = [];
-        this.state.activeDeck.side = [];
+        this.state.activeDeck = {
+            name: 'New Deck',
+            main: [],
+            extra: [],
+            side: []
+        };
     }
+
     sort() {
         this.state.activeDeck.main.sort(cardEvaluate);
         this.state.activeDeck.extra.sort(cardEvaluate);
@@ -771,10 +777,10 @@ class DeckEditScreen extends React.Component {
     renderStats() {
         const element = React.createElement;
         if (this.settings.cardtype !== 1) {
-            return element('br', {key : 'blank-stats'});
+            return element('br', { key: 'blank-stats' });
         }
-        return [element('div', { className: 'filterrow', key :'div-render-stats' }, [
-            element('input', { key : 'atk', id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
+        return [element('div', { className: 'filterrow', key: 'div-render-stats' }, [
+            element('input', { key: 'atk', id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
             element('select', { key: 'atkop', id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
                 element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
@@ -981,7 +987,7 @@ class DeckEditScreen extends React.Component {
                             }))
 
                         ]),
-                        element('div', { className: 'deckcontrols',  key: 'deckedit-deckcontrols-div1', }, [
+                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div1', }, [
                             element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
                             element('input', { type: 'file', accept: '.ydk', placeholder: 'Choose File', onChange: this.upload.bind() })]),
                         element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div2', }, [

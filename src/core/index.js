@@ -266,6 +266,7 @@ function join(duel, game, state, client, callback) {
             slot: client.slot,
             settings: client.settings,
             username: client.username,
+            session: client.session,
             avatar: (client.avatar) ? client.avatar.url : ''
         });
         state.clients[client.slot] = client;
@@ -393,7 +394,9 @@ function Duel() {
                 replay: process.replay,
                 ranked: Boolean(game.ranked === 'Ranked'),
                 loserID: game.player[Math.abs(command - 1)].id,
-                winnerID: game.player[command].id
+                loserSession : game.player[Math.abs(command - 1)].session,
+                winnerID: game.player[command].id,
+                winnerSession : game.player[command].session
             });
         });
 
@@ -525,7 +528,7 @@ function deckCheck(game, client, message) {
             errorType: 'validation',
             action: 'error',
             error: validation.error,
-            msg: validation.msg
+            msg: validation
         }));
         return false;
     }

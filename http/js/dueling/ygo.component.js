@@ -1,5 +1,5 @@
 /*global React, ReactDOM*/
-/*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, databaseSystem*/
+/*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, SideDeckEditScreen, databaseSystem*/
 
 window.orientation = 0;
 function orient(player) {
@@ -424,6 +424,7 @@ class ApplicationComponent extends React.Component {
                 break;
             case 'lobby':
                 this.lobby.update(message.game);
+                this.siding.update(message.game);
                 break;
             case 'registered':
                 this.primus.write({
