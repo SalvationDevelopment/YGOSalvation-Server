@@ -9,7 +9,7 @@ class HostScreen extends React.Component {
         this.settings = {
             AUTOMATIC: true,
             BANLIST: 'No Banlist',
-            CARD_POOL: 0,
+            CARD_POOL: 'OCG/TCG',
             DECK_CHECK: true,
             DRAW_COUNT: 1,
             LOCKED: false,
