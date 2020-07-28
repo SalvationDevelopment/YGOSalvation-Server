@@ -2,7 +2,7 @@
 /*global store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
 /*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen, CreditsScreen, SettingsScreen*/
 /*global RankingScreen, FAQsScreen*/
-/*global ManualControls*/
+/*global ManualControls, Forum, NewsScreen, DownloadsPage*/
 
 class ApplicationComponent extends React.Component {
     constructor(store) {
@@ -30,7 +30,9 @@ class ApplicationComponent extends React.Component {
         this.credits = new CreditsScreen();
         this.settings = new SettingsScreen(store);
         this.downloads = new DownloadsPage();
+        this.forum = new Forum('');
         this.root = document.getElementById('application');
+
 
         window.addEventListener('unload', function (event) {
             if (localStorage.remember === 'true') {
@@ -309,6 +311,8 @@ class ApplicationComponent extends React.Component {
                 return React.createElement('section', { id: 'downloads', key: 'screen-downloads' }, this.downloads.render());
             case 'credits':
                 return React.createElement('section', { id: 'credits', key: 'screen-credits' }, this.credits.render());
+            case 'forum':
+                return React.createElement('section', { id: 'forum', key: 'screen-forum' }, this.forum.render());
             default:
                 return React.createElement('section', { id: 'error', key: 'screen-error' }, '');
         }

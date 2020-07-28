@@ -30,6 +30,7 @@ class SuperHeaderComponent extends React.Component {
                 React.createElement('li', { onClick: this.nav.bind(this, 'settings'), key: 'super-header-settings', className: 'psudolinksingle' }, 'Settings'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'faqs'), key: 'super-header-faqs', className: 'psudolinksingle' }, 'FAQs'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'downloads'), key: 'super-header-downloads', className: 'psudolinksingle' }, 'Downloads'),
+                React.createElement('li', { onClick: this.nav.bind(this, 'forum'), key: 'super-header-forum', className: 'psudolinksingle' }, 'Forum'),
                 React.createElement('li', { onClick: this.nav.bind(this, 'credits'), key: 'super-header-credits', className: 'psudolinksingle' }, 'Credits')
             ];
         }
@@ -46,6 +47,7 @@ class SuperHeaderComponent extends React.Component {
             //React.createElement('li', { onClick: this.nav.bind(this, 'settings'), key: 'super-header-settings', className: 'psudolinksingle' }, 'Settings'),
             React.createElement('li', { onClick: this.nav.bind(this, 'faqs'), key: 'super-header-faqs', className: 'psudolinksingle' }, 'FAQs'),
             React.createElement('li', { onClick: this.nav.bind(this, 'downloads'), key: 'super-header-downloads', className: 'psudolinksingle' }, 'Downloads'),
+            React.createElement('li', { onClick: this.nav.bind(this, 'forum'), key: 'super-header-forum', className: 'psudolinksingle' }, 'Forum'),
             React.createElement('li', { onClick: this.nav.bind(this, 'credits'), key: 'super-header-credits', className: 'psudolinksingle' }, 'Credits')
         ];
     }
