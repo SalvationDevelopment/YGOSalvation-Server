@@ -237,6 +237,7 @@ function mainProcess(game) {
  * @class
  * @param {Duel} game duel in question
  * @param {Player} player Player inputer will be linked to
+ * @param {Number} slot connection id
  * @returns {Requester} Player-Core connection
  */
 function Responser(game, player, slot) {
@@ -511,6 +512,7 @@ function makeGame(pduel, game, ocgapi) {
 /**
  * Start a duel
  * @param {DuelSettings} game parameters for starting the duel
+ * @param {GameState} state game configuration
  * @param {Function} errorHandler error reporting function, sends to UI.
  * @param {Socket[]} players  1-4 players for the duel
  * @param {Socket} spectators  observer abstraction
@@ -576,6 +578,7 @@ function duel(game, state, errorHandler, players, spectators) {
     ocgapi.start_duel(pduel, rule);
 
     instance.getField = function (client) {
+        const slot = client.slot;
         if (client.slot === 0 || client.slot === 1) {
             console.log('writing for a player');
             client.write(playerConnections[slot].getField());
@@ -587,7 +590,7 @@ function duel(game, state, errorHandler, players, spectators) {
         console.log('writing for a spectator');
         spectators.write(observers.getField());
 
-    }
+    };
     instance.ocgapi = ocgapi;
     mainProcess(instance);
 

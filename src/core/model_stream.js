@@ -10,7 +10,7 @@
  * @returns {DataStream} data stream with input method.
  */
 function DataStream() {
-    var memory = new Buffer([]);
+    var memory = Buffer.from([]);
 
     /**
      * Take in new information, see if new messages can be generated.
@@ -38,7 +38,7 @@ function DataStream() {
             output.push(recordOfBuffer);
 
             if (memory.length === (frameLength + 2)) {
-                memory = new Buffer([]);
+                memory = Buffer.from([]);
                 incomplete = false;
                 continue;
             }

@@ -1,7 +1,4 @@
 /* eslint-disable new-cap */
-/**
-
-*/
 
 const ffi = require('ffi'),
     ref = require('ref'),
