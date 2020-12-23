@@ -61,8 +61,8 @@ function massAck() {
 }
 
 
-function unsafePort() {
-    return Math.floor(Math.random() * (9000 - 2000) + 2000);
+function unsafePort({ minPort, maxPort }) {
+    return Math.floor(Math.random() * (maxPort - minPort) + minPort);
 }
 
 function registrationCall(data, socket) {
@@ -481,7 +481,11 @@ function onData(data, socket) {
             break;
         case ('host'):
             const port = unsafePort(),
-                execArgv = (process.env.CORE_DEBUG) ? [`--inspect=${unsafePort()}`] : undefined,
+                minPort = process.env.PORT_RANGE_MIN || 2000,
+                maxPort = process.env.PORT_RANGE_MAX || 9000,
+                execArgv = (process.env.CORE_DEBUG) 
+                    ? [`--inspect=${unsafePort({minPort, maxPort })}`] 
+                    : undefined,
                 child = child_process.fork(
                     './core/index.js', process.argv, {
                     cwd: __dirname,
