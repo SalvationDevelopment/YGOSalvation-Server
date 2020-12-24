@@ -1,28 +1,30 @@
+/* eslint-disable no-underscore-dangle */
 class ForumService {
     constructor(session) {
         this.session = session;
     }
 
-    get(url) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const forums = await fetch(url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.session}`
-                    }
-                });
-                return resolve(forums);
-            } catch (error) {
-                return resolve([]);
-            }
-        });
+    async get(url) {
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.session}`
+                }
+            });
+            return response.json();
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+
     }
 
     post(url, content) {
         return new Promise(async (resolve, reject) => {
             try {
-                const forums = await fetch(url, {
+                const response = await fetch(url, {
                     method: 'POST',
                     body: JSON.stringify(content),
                     headers: {
@@ -30,7 +32,7 @@ class ForumService {
                         'Authorization': `Bearer ${this.session}`
                     }
                 });
-                return resolve(forums);
+                return resolve(response);
             } catch (error) {
                 reject(error);
             }
@@ -40,8 +42,8 @@ class ForumService {
     delete(url) {
         return new Promise(async (resolve, reject) => {
             try {
-                const forums = await fetch(url);
-                return resolve(forums);
+                const response = await fetch(url);
+                return resolve(response);
             } catch (error) {
                 reject(error);
             }
@@ -51,7 +53,7 @@ class ForumService {
     put(url, update) {
         return new Promise(async (resolve, reject) => {
             try {
-                const forums = await fetch(url, {
+                const response = await fetch(url, {
                     method: 'PUT',
                     body: JSON.stringify(update),
                     headers: {
@@ -59,7 +61,7 @@ class ForumService {
                         'Authorization': `Bearer ${this.session}`
                     }
                 });
-                return resolve(forums);
+                return resolve(response);
             } catch (error) {
                 reject(error);
             }
@@ -81,5 +83,17 @@ class ForumService {
 
     async threads(forum) {
         return this.get(`/threads?forum=${forum}`);
+    }
+
+    async homepage() {
+        console.log('homecalled');
+        const sections = await this.sections();
+        console.log(sections);
+        for (const section in sections) {
+            for (const forum in section.forums) {
+                forum.threads = await this.threads(forum._id);
+            }    
+        }
+        return sections;
     }
 }

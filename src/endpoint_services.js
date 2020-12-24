@@ -87,6 +87,10 @@ async function getAvatar(request, response) {
     return avatar.data
 }
 
+
+
+
+
 async function logDuel(info, callback) {
     const settings = {
         headers: {
@@ -127,6 +131,7 @@ async function logDuel(info, callback) {
 
 function setupEndpoints(app) {
     app.get('/news', async (request, response) => {
+        console.log(request.headers['host']);
         try {
             const news = await getNews();
             response.send(news);
@@ -175,7 +180,7 @@ function setupEndpoints(app) {
 module.exports = {
     setupEndpoints,
     logDuel
-}
+};
 
 setSession();
 setInterval(setSession, 600000);

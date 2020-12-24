@@ -23,6 +23,12 @@
  * @property {Error|null} error validation error message
  */
 
+ /**
+  * Make sure the deck is of legal size
+  * @param {Deck} deck Deck being tested
+  * @param {Banlist} banlist provided banlist
+  * @returns {Boolean} if the deck is legal returns true, else throws.
+  */
 function checkSize(deck, banlist) {
     if (deck.main.length < 40) {
         throw new Error('Main Deck size below 40');
@@ -42,9 +48,18 @@ function checkSize(deck, banlist) {
     return true;
 }
 
-function checkSubDeckAmounts(passcode, main, side, extra, getCardById) {
+/**
+ * Make sure specific copies of cards don't go over between decks
+ * @param {Number} passcode Unique 8 digit identifier.
+ * @param {Number[]} main Passcode/YGOPRO_ID of cards representing the main deck.
+ * @param {Number[]} side Passcode/YGOPRO_ID of cards representing the side deck.
+ * @param {Number[]} extra Passcode/YGOPRO_ID of cards representing the extra deck.
+ * @param {Function} search Database getter for card information.
+ * @returns {Boolean} if the deck is legal returns true, else throws.
+ */
+function checkSubDeckAmounts(passcode, main, side, extra, search) {
     const MAXIMUM_COPIES = 3,
-        reference = getCardById(passcode),
+        reference = search(passcode),
         totals = main[passcode] + side[passcode] + extra[passcode];
 
     if (!reference) {
@@ -53,11 +68,22 @@ function checkSubDeckAmounts(passcode, main, side, extra, getCardById) {
     if (totals > MAXIMUM_COPIES) {
         throw new Error(`You can\'t have ${totals} copies of "${reference.name}"`);
     }
+    return true;
 }
 
-function checkBanlist(main, side, extra, banlist, getCardById) {
+
+/**
+ * Check if the deck follows the provided banlist
+ * @param {Number[]} main Passcode/YGOPRO_ID of cards representing the main deck.
+ * @param {Number[]} side Passcode/YGOPRO_ID of cards representing the side deck.
+ * @param {Number[]} extra Passcode/YGOPRO_ID of cards representing the extra deck.
+ * @param {Banlist} banlist provided banlist
+ * @param {Function} search Database getter for card information.
+ * @returns {Boolean} if the deck is legal returns true, else throws.
+ */
+function checkBanlist(main, side, extra, banlist, search) {
     for (let passcode in banlist.bannedCards) {
-        const reference = getCardById(passcode);
+        const reference = search(passcode);
         let cardAmount = 0;
 
         if (reference.alias) {
@@ -78,30 +104,10 @@ function checkBanlist(main, side, extra, banlist, getCardById) {
     }
 }
 
-function CardSearcher(database) {
-    function getCardById(cardId) {
-        const result = database.find(function (card) {
-            return (card.id === parseInt(cardId, 10));
-        });
-        return result || {};
-    }
 
-    function getFilteredCardById(cardId) {
-        const result = database.find(function (card) {
-            return (card.id === parseInt(cardId, 10));
-        });
-        return result || {};
-    }
-
-    return {
-        getCardById,
-        getFilteredCardById
-    };
-}
-
-function mapSubDeck(subDeck, getCardById) {
-    return subDeck.reduce(function (deck, passcode) {
-        const cardObject = getCardById(passcode);
+function mapSubDeck(subDeck, search) {
+    return subDeck.reduce( (deck, passcode) =>{
+        const cardObject = search(passcode);
         if (cardObject.alias) {
             passcode = cardObject.alias;
         }
@@ -114,7 +120,7 @@ function mapSubDeck(subDeck, getCardById) {
     }, {});
 }
 
-function mapDecks(deck, getCardById) {
+function mapDecks(deck, search) {
     if (
         !deck.main
         || !deck.side
@@ -127,15 +133,15 @@ function mapDecks(deck, getCardById) {
     }
 
     return {
-        main: mapSubDeck(deck.main, getCardById),
-        side: mapSubDeck(deck.side, getCardById),
-        extra: mapSubDeck(deck.extra, getCardById)
+        main: mapSubDeck(deck.main, search),
+        side: mapSubDeck(deck.side, search),
+        extra: mapSubDeck(deck.extra, search)
     };
 }
 
-function validateDeckToRegion(card, region, cardpool, banlist, getCardById, getFilteredCardById) {
-    const reference = getFilteredCardById(card),
-        subreference = getCardById(card);
+function validateDeckToRegion(card, region, cardpool, banlist, search) {
+    const reference = search(card),
+        subreference = search(card);
 
     if (cardpool === 'OCG/TCG') {
         return true;
@@ -156,34 +162,34 @@ function validateDeckToRegion(card, region, cardpool, banlist, getCardById, getF
     return true;
 }
 
-function checkAmounts(main, side, extra, getCardById) {
+function checkAmounts(main, side, extra, search) {
     for (const card in main) {
-        checkSubDeckAmounts(card, main, side, extra, getCardById);
+        checkSubDeckAmounts(card, main, side, extra, search);
     }
 
     for (const card in side) {
-        checkSubDeckAmounts(card, main, side, extra, getCardById);
+        checkSubDeckAmounts(card, main, side, extra, search);
     }
 
     for (const card in extra) {
-        checkSubDeckAmounts(card, main, side, extra, getCardById);
+        checkSubDeckAmounts(card, main, side, extra, search);
     }
 }
 
-function checkRegion(main, side, extra, banlist, cardpool, getCardById, getFilteredCardById) {
+function checkRegion(main, side, extra, banlist, cardpool, search) {
 
     const region = banlist.region;
 
     for (const card in main) {
-        validateDeckToRegion(card, region, cardpool, banlist, getCardById, getFilteredCardById);
+        validateDeckToRegion(card, region, cardpool, banlist, search);
     }
 
     for (const card in side) {
-        validateDeckToRegion(card, region, cardpool, banlist, getCardById, getFilteredCardById);
+        validateDeckToRegion(card, region, cardpool, banlist, search);
     }
 
     for (const card in extra) {
-        validateDeckToRegion(card, region, cardpool, banlist, getCardById, getFilteredCardById);
+        validateDeckToRegion(card, region, cardpool, banlist, search);
     }
 }
 
@@ -197,17 +203,24 @@ function checkRegion(main, side, extra, banlist, cardpool, getCardById, getFilte
  */
 function validateDeck(deck, banlist, database, cardpool = 'OCG/TCG') {
 
-    const {
-        getCardById,
-        getFilteredCardById
-    } = new CardSearcher(database);
+     /**
+     * Finds a single card based on ID
+     * @param {Number} cardId Passcode/YGOPRO_ID
+     * @return {Object} Full card data
+     */
+    function search(cardId) {
+        const result = database.find( (card) =>{
+            return (card.id === parseInt(cardId, 10));
+        });
+        return result || {};
+    }
 
     try {
-        const { main, side, extra } = mapDecks(deck, getCardById);
+        const { main, side, extra } = mapDecks(deck, search);
         checkSize(deck, banlist);
-        checkAmounts(main, side, extra, getCardById);
-        checkBanlist(main, side, extra, banlist, getCardById);
-        checkRegion(main, side, extra, banlist, cardpool, getCardById, getFilteredCardById);
+        checkAmounts(main, side, extra, search);
+        checkBanlist(main, side, extra, banlist, search);
+        checkRegion(main, side, extra, banlist, cardpool, search);
         return { error: null };
     } catch (error) {
         return {

@@ -151,7 +151,7 @@ function responseHandler(engine, players, client, message) {
                     location: message.location
                 }
             });
-            engine.duelistChat('Server', `${players[client.slot].username} signaled the effect of ${message.name}`)
+            engine.duelistChat('Server', `${players[client.slot].username} signaled the effect of ${message.name}`);
             break;
         case 'target':
             broadcast(players, {
@@ -246,7 +246,7 @@ function clientBinding(clients, spectators) {
      * @param {Array} stack of cards
      * @param {Function} callback gamestate watcher
      * @returns {Function} manual duel mode update state callback function
-     */this.state.deck
+     */
     function gameResponse(view, stack, callback) {
         try {
             if (!view) {

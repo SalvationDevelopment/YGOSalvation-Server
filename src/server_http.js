@@ -8,6 +8,7 @@ const express = require('express'),
     compression = require('compression'),
     users = require('./endpoint_users.js'),
     news = require('./endpoint_services.js'),
+    forum = require('./endpoint_forum.js'),
     // Ddos = require('ddos'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
@@ -110,6 +111,7 @@ module.exports = function () {
     });
     users.setupEndpoints(app);
     news.setupEndpoints(app);
+    forum.setupEndpoints(app);
     let primusServer;
 
     try {
