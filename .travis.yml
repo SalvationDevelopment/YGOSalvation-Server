@@ -2,6 +2,17 @@ language: node_js
 node_js:
   - 10
 
+services:
+  - docker
+
 before_script:
   - npm i
   - npm run banlist
+  - npm run test
+
+install:
+  - docker build -t ygosalvation
+  - docker run -d
+
+script:
+  - docker ps | grep -q ygosalvation
