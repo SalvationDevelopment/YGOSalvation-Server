@@ -259,7 +259,7 @@ function join(duel, game, state, client, callback) {
         client.slot = game.player.length;
         game.player.push({
             id: client.id,
-            wins : 0,
+            wins: 0,
             ready: Boolean(client.ready),
             points: client.points,
             elo: client.elo,
@@ -394,9 +394,9 @@ function Duel() {
                 replay: process.replay,
                 ranked: Boolean(game.ranked === 'Ranked'),
                 loserID: game.player[Math.abs(command - 1)].id,
-                loserSession : game.player[Math.abs(command - 1)].session,
+                loserSession: game.player[Math.abs(command - 1)].session,
                 winnerID: game.player[command].id,
-                winnerSession : game.player[command].session
+                winnerSession: game.player[command].session
             });
         });
 
@@ -1199,12 +1199,18 @@ function main(callback) {
         disconnectionHandler(server, duel, game, state, deadSpark);
     });
 
-    boot(httpserver, server, game, state);
+    if (!callback) {
+        boot(httpserver, server, game, state);
+    }
+
     console.log(title);
 }
 
 main(undefined);
 
 module.exports = {
-    main
+    main,
+    State,
+    Game,
+    processMessage
 };
