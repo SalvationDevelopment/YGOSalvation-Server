@@ -62,7 +62,9 @@ function massAck() {
 
 
 function unsafePort() {
-    return Math.floor(Math.random() * (9000 - 2000) + 2000);
+    const maxPort = 9000;
+    const minPort = 8995;
+    return Math.floor(Math.random() * (maxPort - minPort) + minPort);
 }
 
 function registrationCall(data, socket) {
@@ -480,8 +482,18 @@ function onData(data, socket) {
             mindCrushCall(data);
             break;
         case ('host'):
-            const port = unsafePort(),
-                execArgv = (process.env.CORE_DEBUG) ? [`--inspect=${unsafePort()}`] : undefined,
+            const minPort = process.env.PORT_RANGE_MIN || 2000,
+                maxPort = process.env.PORT_RANGE_MAX || 9000;
+
+            console.log({
+                minPort,
+                maxPort
+            });
+
+            const port = unsafePort({ minPort, maxPort }),
+                execArgv = (process.env.CORE_DEBUG) 
+                    ? [`--inspect=${unsafePort({ minPort, maxPort })}`] 
+                    : undefined,
                 child = child_process.fork(
                     './core/index.js', process.argv, {
                     cwd: __dirname,
