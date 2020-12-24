@@ -15,4 +15,4 @@ install:
   - docker run -d ygosalvation
 
 script:
-  - docker ps | grep -q ygosalvation
+  - docker ps | grep -q node
