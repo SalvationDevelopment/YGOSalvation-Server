@@ -11,8 +11,8 @@ before_script:
   - npm run test
 
 install:
-  - docker build .
-  - docker run -d
+  - docker build -t ygosalvation .
+  - docker run -d ygosalvation
 
 script:
   - docker ps | grep -q ygosalvation
