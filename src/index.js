@@ -9,7 +9,7 @@
 
 // Mostly just stuff so that Express runs
 const child_process = require('child_process'),
-    
+
     cardIDMap = require('../http/cardidmap.js'),
     userController = require('./endpoint_users.js'),
     decks = require('./endpoint_decks.js'),
@@ -62,8 +62,9 @@ function massAck() {
 
 
 function unsafePort() {
-    const maxPort = 9000;
-    const minPort = 8995;
+    const minPort = process.env.PORT_RANGE_MIN || 2000,
+        maxPort = process.env.PORT_RANGE_MAX || 9000;
+        
     return Math.floor(Math.random() * (maxPort - minPort) + minPort);
 }
 
@@ -482,17 +483,9 @@ function onData(data, socket) {
             mindCrushCall(data);
             break;
         case ('host'):
-            const minPort = process.env.PORT_RANGE_MIN || 2000,
-                maxPort = process.env.PORT_RANGE_MAX || 9000;
-
-            console.log({
-                minPort,
-                maxPort
-            });
-
-            const port = unsafePort({ minPort, maxPort }),
-                execArgv = (process.env.CORE_DEBUG) 
-                    ? [`--inspect=${unsafePort({ minPort, maxPort })}`] 
+            const port = unsafePort(),
+                execArgv = (process.env.CORE_DEBUG)
+                    ? [`--inspect=${unsafePort()}`]
                     : undefined,
                 child = child_process.fork(
                     './core/index.js', process.argv, {
@@ -527,7 +520,7 @@ function onData(data, socket) {
 
             data.username = socket.username;
             console.log(data);
-            decks.saveDeck(socket.session, data.deck, socket.username, function (error, savedDecks)  {
+            decks.saveDeck(socket.session, data.deck, socket.username, function (error, savedDecks) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'savedDeck',
                     error,
@@ -540,13 +533,13 @@ function onData(data, socket) {
             if (!socket.username) {
                 return;
             }
-            
+
             decks.deleteDeck(socket.session, data.deck.id, socket.username, function (error, savedDecks) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deletedDeck',
                     error,
                     savedDecks,
-                    id : data.deck.id
+                    id: data.deck.id
                 });
             });
             break;
