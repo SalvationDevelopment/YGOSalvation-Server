@@ -101,7 +101,7 @@ class ApplicationComponent extends React.Component {
             return state;
         });
 
-         this.store.register('RPS', (message, state) => {
+        this.store.register('RPS', (message, state) => {
             this.primus.write({
                 action: 'choice',
                 answer: message.answer
@@ -143,6 +143,7 @@ class ApplicationComponent extends React.Component {
         });
 
         this.store.register('EMPTY_SPACE', (message, state) => {
+            console.log('empty space clicked');
             this.duel.closeRevealer();
             this.store.dispatch({ action: 'RENDER' });
             return;
@@ -150,6 +151,7 @@ class ApplicationComponent extends React.Component {
 
         this.store.register('REVEAL_CARD_CLICK', (message, state) => {
             if (message.selected) {
+                console.log('removing a selection');
                 const remove = this.state.question_selection.indexOf(message.option);
                 this.state.question_selection.splice(remove, 1);
                 this.state.question_options.select_options[message.option].selected = false;
@@ -169,9 +171,30 @@ class ApplicationComponent extends React.Component {
                 });
                 return state;
             }
-            console.log(this.state.question_options, message);
+            if (this.state.question_selection.length > this.state.question_min) {
+                const keepGoing = window.confirm('Select Additional Targets?');
+                if (!keepGoing) {
+                    this.primus.write({
+                        action: 'question',
+                        answer: {
+                            type: 'list',
+                            i: this.state.question_selection
+                        },
+                        uuid: this.state.question
+                    });
+                }
+
+            }
+            
+            
             this.state.question_options.select_options[message.option].selected = true;
-            this.duel.reveal(this.state.question_options.select_options);
+            setTimeout(()=>{
+                this.duel.reveal(this.state.question_options.select_options);
+                this.store.dispatch({ action: 'RENDER' });
+            }, 300);
+            
+            
+
             return state;
         });
 
@@ -457,14 +480,14 @@ class ApplicationComponent extends React.Component {
                 this.duel.clear();
                 this.lobby.start();
                 break;
-            case 'choice':  
+            case 'choice':
                 this.state.mode = 'choice';
                 this.choice.state.mode = message.type;
                 this.choice.state.result = message.result;
                 this.choice.state.slot = message.slot;
                 this.choice.state.winner = message.winner;
                 break;
-            case 'ygopro':                      
+            case 'ygopro':
                 this.duelAction(message.message);
                 break;
             default:
