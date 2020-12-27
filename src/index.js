@@ -20,6 +20,8 @@ const child_process = require('child_process'),
     services = require('./endpoint_services');
 
 const { log } = logger.create(logger.config.main, '[INDEX]');
+const { log: debug } = logger.create(logger.config.debug, '[DEBUG]');
+const { log: logError } = logger.create(logger.config.error, '[ERROR]');
 
 var userlist = [],
     chatbox = [],
@@ -64,8 +66,12 @@ function massAck() {
 
 
 function unsafePort() {
-    const minPort = process.env.PORT_RANGE_MIN || 2000,
-        maxPort = process.env.PORT_RANGE_MAX || 9000;
+    const minPort = process.env.PORT_RANGE_MIN 
+            ? Number(process.env.PORT_RANGE_MIN) 
+            : 2000,
+        maxPort = process.env.PORT_RANGE_MAX 
+            ? Number(process.env.PORT_RANGE_MAX) 
+            : 9000;
         
     return Math.floor(Math.random() * (maxPort - minPort) + minPort);
 }
@@ -74,7 +80,7 @@ function registrationCall(data, socket) {
     userController.validate(true, data, function (error, valid, responseData) {
 
         if (error) {
-            log(error);
+            logError(error);
             socket.write({
                 clientEvent: 'servererror',
                 message: currentGlobalMessage
@@ -564,7 +570,7 @@ function onPrimusData(socket, data) {
         onData(data, socket);
 
     } catch (error) {
-        log(error);
+        logError(error);
     }
 }
 

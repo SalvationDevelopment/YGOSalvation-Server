@@ -2,13 +2,15 @@ const DEV_MODE = true;
 
 const config = {
   main: true,
+  debug: false,
+  error: false,
 };
 
 /**
  * Usage is the same as console.log, but can be turned on/off as needed
  *
  * @param {boolean} enabled whether or not the log should be enabled
- * @param {string} prefix the prefix for the log 
+ * @param {string} prefix the prefix for the log
  */
 const create = (enabled, prefix) =>
   Object.create(
