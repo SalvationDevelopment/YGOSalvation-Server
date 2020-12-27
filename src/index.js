@@ -9,7 +9,7 @@
 
 // Mostly just stuff so that Express runs
 const child_process = require('child_process'),
-
+    logger = require('./logger'),
     cardIDMap = require('../http/cardidmap.js'),
     userController = require('./endpoint_users.js'),
     decks = require('./endpoint_decks.js'),
@@ -18,6 +18,8 @@ const child_process = require('child_process'),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
     services = require('./endpoint_services');
+
+const { log } = logger.create(logger.config.main, '[INDEX]');
 
 var userlist = [],
     chatbox = [],
@@ -72,7 +74,7 @@ function registrationCall(data, socket) {
     userController.validate(true, data, function (error, valid, responseData) {
 
         if (error) {
-            console.log(error);
+            log(error);
             socket.write({
                 clientEvent: 'servererror',
                 message: currentGlobalMessage
@@ -94,7 +96,7 @@ function registrationCall(data, socket) {
 
             socket.session = info.session;
             socket.admin = (info.role.name === 'Administrator');
-            console.log(`${socket.username} has logged in`.bold);
+            log(`${socket.username} has logged in`.bold);
             socket.write({
                 clientEvent: 'global',
                 message: currentGlobalMessage,
@@ -150,7 +152,7 @@ function registrationCall(data, socket) {
 function globalCall(data) {
     userController.validate(false, data, function (error, info, body) {
         if (error) {
-            console.log('[Gamelist]', error);
+            log('[Gamelist]', error);
             return;
         }
         if (info.success && adminlist[data.username]) {
@@ -162,7 +164,7 @@ function globalCall(data) {
             return;
         }
 
-        console.log(data, 'asked for global', 'Info Was', info.success, 'Is Admin was', adminlist[data.username]);
+        log(data, 'asked for global', 'Info Was', info.success, 'Is Admin was', adminlist[data.username]);
     });
 }
 
@@ -188,7 +190,7 @@ function genocideCall(data) {
             return;
         }
 
-        console.log(data, 'asked for genocide');
+        log(data, 'asked for genocide');
     });
 }
 
@@ -197,7 +199,7 @@ function reviveCall(data) {
         if (error) {
             return;
         }
-        console.log(data, 'asked for murder');
+        log(data, 'asked for murder');
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'revive',
@@ -214,7 +216,7 @@ function murderCall(data) {
         if (error) {
             return;
         }
-        console.log(data, 'asked for murder');
+        log(data, 'asked for murder');
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'murder',
@@ -235,7 +237,7 @@ function censorCall(data) {
             return;
         }
 
-        console.log(data, 'asked for censor');
+        log(data, 'asked for censor');
         if (info.success && adminlist[data.username]) {
             announce({
                 clientEvent: 'censor',
@@ -261,7 +263,7 @@ function mindCrushCall(data) {
             });
             return;
         }
-        console.log(data, 'asked for mind crush');
+        log(data, 'asked for mind crush');
     });
 }
 
@@ -365,7 +367,7 @@ function onData(data, socket) {
             break;
         case ('ai'):
             if (socket.username && socket.aiReady) {
-                console.log(socket.username, 'requested AI Duel');
+                log(socket.username, 'requested AI Duel');
                 announce({
                     clientEvent: 'duelrequest',
                     target: 'SnarkyChild',
@@ -398,7 +400,7 @@ function onData(data, socket) {
                     return;
                 }
                 socket.username = info.username;
-                console.log(`${socket.username} has rejoined session`.bold);
+                log(`${socket.username} has rejoined session!`.bold);
                 socket.session = data.session;
                 socket.write({
                     clientEvent: 'global',
@@ -508,7 +510,7 @@ function onData(data, socket) {
         case 'save':
 
             if (!socket.username) {
-                console.log('no user cant save');
+                log('no user cant save');
                 return;
             }
             delete data.action;
@@ -519,7 +521,7 @@ function onData(data, socket) {
             data.deck.owner = socket.username;
 
             data.username = socket.username;
-            console.log(data);
+            log(data);
             decks.saveDeck(socket.session, data.deck, socket.username, function (error, savedDecks) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'savedDeck',
@@ -562,7 +564,7 @@ function onPrimusData(socket, data) {
         onData(data, socket);
 
     } catch (error) {
-        console.log(error);
+        log(error);
     }
 }
 
