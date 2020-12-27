@@ -1074,11 +1074,14 @@ function boot(httpserver, server, game, state) {
 }
 
 /**
- * Create a game object
- * @param {Object} settings enviromental variables.
+ * Create a game object based on given and enviromental settings
+ * @param {Object} configuration enviromental variables.
  * @returns {GameState} public gamelist state information.
  */
-function Game(settings) {
+function Game(configuration) {
+    const settings = {};
+
+    Object.assign(settings, process.env, configuration);
 
     return {
         automatic: (settings.AUTOMATIC === 'true') ? 'Automatic' : 'Manual',
@@ -1159,10 +1162,11 @@ function PrimusInstance(httpserver) {
 
 /**
  * Start the server.
+ * @param {Object} configuration enviromental variables.
  * @param {Function} callback replacement for process.send
  * @returns {void}
  */
-function main(callback, configuration) {
+function main(configuration, callback) {
 
 
     // If the callback is given, use the callback,
@@ -1178,7 +1182,7 @@ function main(callback, configuration) {
     process.send = (process.send) ? process.send : console.log;
 
     const duel = new Duel(),
-        game = new Game(process.env),
+        game = new Game(configuration),
         httpserver = new HTTPServer(),
         server = new PrimusInstance(httpserver),
         state = new State(server, game),
@@ -1187,7 +1191,9 @@ function main(callback, configuration) {
 
     process.title = title;
     server.plugin('rooms', Rooms);
-    // server.save(__dirname + '/../../http/js/vendor/server.js');
+    if (configuration.production) {
+        // server.save(__dirname + '/../../http/js/vendor/server.js');
+    }
     server.on('connection', function (client) {
         client.on('data', function (message) {
             messageHandler(server, duel, game, state, client, message);
@@ -1204,6 +1210,14 @@ function main(callback, configuration) {
     }
 
     console.log(title);
+
+    return {
+        duel,
+        game,
+        httpserver,
+        server,
+        state
+    };
 }
 
 
