@@ -36,4 +36,6 @@ EXPOSE 80 443
 #ENV ADMIN_SERVER_LOCAL false
 #ENV DATABASE_SERVER_LOCAL false
 
-CMD ["bash", "-c", "npm run banlist && npm run start"]`
+RUN npm install nodemon
+
+CMD ["bash", "-c", "npm run banlist && npm run dev"]`

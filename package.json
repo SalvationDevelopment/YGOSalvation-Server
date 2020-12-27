@@ -61,6 +61,7 @@
     "license": "LicenseRef-LICENSE",
     "scripts": {
         "start": "node ./",
+        "dev": "nodemon ./",
         "test": "jest --forceExit",
         "server": "node server",
         "ygopro": "cd src && node application_ygopro",
