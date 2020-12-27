@@ -69,7 +69,7 @@
         "add-binaries": "npm run banlist && copy .\\node_modules\\ffi\\build\\Release\\ffi_bindings.node  .\\bin && copy .\\node_modules\\ref\\build\\Release\\binding.node .\\bin",
         "build": "npm run add-binaries && pkg . --targets node10-win-x64 --out-path ./bin",
         "banlist": "node ./src/updater/banlist.js",
-        "cypress:open" : "./node_modules/.bin/cypress open"
+        "cypress:open": "./node_modules/.bin/cypress open"
     },
     "bin": "bin.js",
     "pkg": {
