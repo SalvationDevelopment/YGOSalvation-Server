@@ -1206,9 +1206,9 @@ function main(configuration, callback) {
         disconnectionHandler(server, duel, game, state, deadSpark);
     });
 
-    if (!callback) {
-        boot(httpserver, server, game, state);
-    }
+    
+    boot(httpserver, server, game, state);
+    
 
     console.log(title);
 
