@@ -1177,6 +1177,7 @@ function main(configuration, callback) {
         console.log(fatal);
     });
 
+    configuration = (typeof configuration === 'object') ? configuration : {};
     process.child = (process.send) ? true : false;
     process.send = (callback) ? callback : process.send;
     process.send = (process.send) ? process.send : console.log;
