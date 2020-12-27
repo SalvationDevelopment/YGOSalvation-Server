@@ -9,6 +9,9 @@
  */
 
 const { match } = require('assert');
+const logger = require('../logger');
+
+const { log } = logger.create(logger.config.main, '[CORE/INDEX]');
 
 /**
  * @typedef {Object} ClientMessage
@@ -388,7 +391,7 @@ function Duel() {
         process.recordOutcome.once('win', function (command) {
 
             // process.replay requires filtering.
-            console.log(game.player, command);
+            log(game.player, command);
             process.send({
                 action: 'win',
                 replay: process.replay,
@@ -905,7 +908,7 @@ function messageHandler(server, duel, game, state, client, message) {
             // while using a direct debugger, kill the process and investigate.
             throw error;
         }
-        console.log(error);
+        log(error);
         client.write({
             error: error.message,
             stack: error.stack,
@@ -955,7 +958,7 @@ function disconnectionHandler(server, duel, game, state, deadSpark) {
     try {
         messageHandler(server, duel, game, state, deadSpark, message);
     } catch (error) {
-        console.log(error);
+        log(error);
         process.send({
             action: 'error',
             error: error
@@ -1054,7 +1057,7 @@ function boot(httpserver, server, game, state) {
             try {
                 adminMessageHandler(server, game, message);
             } catch (error) {
-                console.log(error);
+                log(error);
                 process.send({
                     action: 'error',
                     error: error
@@ -1174,13 +1177,13 @@ function main(configuration, callback) {
     // if it does not, print to the console.
 
     process.on('unhandledException', function (fatal) {
-        console.log(fatal);
+        log(fatal);
     });
 
     configuration = (typeof configuration === 'object') ? configuration : {};
     process.child = (process.send) ? true : false;
     process.send = (callback) ? callback : process.send;
-    process.send = (process.send) ? process.send : console.log;
+    process.send = (process.send) ? process.send : log;
 
     const duel = new Duel(),
         game = new Game(configuration),
@@ -1197,6 +1200,7 @@ function main(configuration, callback) {
     }
     server.on('connection', function (client) {
         client.on('data', function (message) {
+            log('Message', message);
             messageHandler(server, duel, game, state, client, message);
         });
         broadcast(server, game);
@@ -1210,7 +1214,7 @@ function main(configuration, callback) {
     boot(httpserver, server, game, state);
     
 
-    console.log(title);
+    log(title);
 
     return {
         duel,

@@ -174,6 +174,10 @@ class ApplicationComponent extends React.Component {
             this.alert('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
+        if (window.Cypress) {
+            window.__port = port;
+            return;
+        }
         window.open('/ygopro.html?room=' + port);
     }
 
