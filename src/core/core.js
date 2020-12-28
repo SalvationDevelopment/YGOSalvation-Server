@@ -1200,7 +1200,7 @@ function main(configuration, callback) {
     }
     server.on('connection', function (client) {
         client.on('data', function (message) {
-            log('Message', message);
+            // log('Message', message);
             messageHandler(server, duel, game, state, client, message);
         });
         broadcast(server, game);

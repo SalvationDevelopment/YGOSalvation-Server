@@ -50,7 +50,7 @@ class CardImage extends React.Component {
         }
 
         if (state.location === 'MONSTERZONE' && state.overlayindex) {
-            console.log(state);
+            // console.log(state);
             const offsetX = (state.overlayindex % 2) ? (-1) * (state.overlayindex + 1) * 3 : state.overlayindex + (-1) * 3,
                 offsetY = state.overlayindex * 4;
 

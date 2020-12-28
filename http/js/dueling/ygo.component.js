@@ -1,6 +1,22 @@
 /*global React, ReactDOM*/
 /*global Store, ChoiceScreen, DuelScreen, SideChat, LobbyScreen, SideDeckEditScreen, databaseSystem*/
 
+const player = window.parent.__isPlayer1 ? 'player2' : 'player1';
+
+const create = (enabled, prefix) =>
+  Object.create(
+    {},
+    {
+      log: {
+        get: () => {
+            return console.log.bind(console, prefix);
+        },
+      },
+    }
+  );
+
+const { log } = create(true, `[${player}]`);
+
 window.orientation = 0;
 function orient(player) {
     return (window.orientation) ? (player ? 0 : 1) : player;
@@ -54,7 +70,7 @@ class ApplicationComponent extends React.Component {
         });
 
         this.primus.on('open', () => {
-            console.log('connected, registering');
+            log('connected, registering');
             this.primus.write({
                 action: 'register',
                 username: localStorage.username,
@@ -63,7 +79,7 @@ class ApplicationComponent extends React.Component {
         });
 
         this.primus.on('error', (error) => {
-            console.log('error', error);
+            log('error', error);
         });
 
         this.store.register('CHAT_ENTRY', (message, state) => {
@@ -143,7 +159,7 @@ class ApplicationComponent extends React.Component {
         });
 
         this.store.register('EMPTY_SPACE', (message, state) => {
-            console.log('empty space clicked');
+            log('empty space clicked');
             this.duel.closeRevealer();
             this.store.dispatch({ action: 'RENDER' });
             return;
@@ -151,7 +167,7 @@ class ApplicationComponent extends React.Component {
 
         this.store.register('REVEAL_CARD_CLICK', (message, state) => {
             if (message.selected) {
-                console.log('removing a selection');
+                log('removing a selection');
                 const remove = this.state.question_selection.indexOf(message.option);
                 this.state.question_selection.splice(remove, 1);
                 this.state.question_options.select_options[message.option].selected = false;
@@ -244,6 +260,7 @@ class ApplicationComponent extends React.Component {
     }
 
     chain(message) {
+        log('[CHAIN]', message);
         if (!message.select_trigger
             && !message.forced
             && (!message.count || !message.specount)
@@ -269,7 +286,7 @@ class ApplicationComponent extends React.Component {
             });
             return;
         }
-        console.log('solve', message);
+        log('[solve]', message);
         //this.state.question_max = message.count;
         this.state.question_min = (message.forced) ? 1 : 1;
         this.duel.chain(message.select_options);
@@ -315,7 +332,7 @@ class ApplicationComponent extends React.Component {
     }
 
     setupQuestion(message) {
-        console.log('???', message.options.command, message);
+        log('[SETUP_QUESTION]', message.options.command, message);
         this.state.question = message.uuid;
         this.state.question_min = message.options.select_min;
         this.state.question_max = message.options.select_max;
@@ -369,7 +386,8 @@ class ApplicationComponent extends React.Component {
                 this.duel.positionDialog.trigger(message.options);
                 break;
             case 'MSG_SELECT_EFFECTYN':
-                debugger;
+                log('[DEBUG_YES_NO]', this.duel.yesnoDialog.state)
+                // debugger;
                 this.duel.yesnoDialog.state.active = true;
                 break;
             case 'MSG_SELECT_YESNO':
@@ -405,7 +423,7 @@ class ApplicationComponent extends React.Component {
     }
 
     announcement(message) {
-        console.log('!!!', message.command, message);
+        log(`[MESSAGE_${message.command}]`, message);
         switch (message.command) {
             case 'MSG_ORIENTATION':
                 window.orientation = message.slot;
@@ -440,10 +458,10 @@ class ApplicationComponent extends React.Component {
     }
 
     action(message) {
-        console.log(message);
+        // log(`[ACTION_MESSAGE] ${message.action}`, message.message);
         switch (message.action) {
             case 'error':
-                console.log(message.msg);
+                log('[ERROR]', message.msg);
                 break;
             case 'lobby':
                 this.lobby.update(message.game);
@@ -493,7 +511,7 @@ class ApplicationComponent extends React.Component {
             default:
                 return;
         }
-        console.log(Object.keys(app.duel.field.state.cards).length);
+        // log(Object.keys(app.duel.field.state.cards).length);
     }
 
     render() {

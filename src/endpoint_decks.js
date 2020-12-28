@@ -65,7 +65,7 @@ async function saveDeck(jwt, deck, owner, callback) {
     try {
         const call = (deck.id) ? await callUpdateDeck(jwt, deck) : await callCreateDeck(jwt, deck);
     } catch (e) {
-        console.log('Failed to save deck', deck.owner, deck.name);
+        console.log('[ENDPOINT/DECKS] Failed to save deck', deck.owner, deck.name);
     }
 
 
