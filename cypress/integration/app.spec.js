@@ -100,7 +100,7 @@ context('App', () => {
 
     cy.contains('Yes').click();
 
-    cy.get('[data-reactid=".4.$revealer.0.9"]').click();
+    cy.get('[data-reactid=".4.$revealer.0.9"]').click({force : true});
 
     cy.get('.cardselectionzone.p0.MONSTERZONE.i1').click();
 
