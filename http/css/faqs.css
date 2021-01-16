@@ -1,0 +1,47 @@
+p.question {
+    color: white;
+    width: 50%;
+    font-size: 1.5em;
+    margin: 0 auto;
+}
+
+p.answer {
+    color: white;
+    width: 50%;
+    margin: 0 auto;
+    background: rgb(0, 0, 0, .8);
+    padding: 1vh 1vw;
+    border: 1px solid silver;
+    margin-bottom: 5vh;
+}
+
+div#faqs {
+    overflow-y: scroll;
+    height: 89vh;
+}
+
+.rankinguser {
+
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#rankholder {
+    display: block;
+    overflow-y: auto;
+    height: 89vh;
+}
+
+#rankings table {
+    width: 50%;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, .5);
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+#rankings td {
+    border: 1px solid white;
+    background: rgba(0, 0, 0, .5);
+}

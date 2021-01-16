@@ -1,0 +1,80 @@
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac crap
+.DS_Store
+
+
+#############
+## Python
+#############
+
+*.py[co]
+
+# Packages
+*.egg
+*.egg-info
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+
+#Translations
+*.mo
+
+#Mr Developer
+.mr.developer.cfg
+
+#nodejs
+node_modules/*
+coverage/*
+
+server/http/setups/*
+*.bat
+*.mp3
+*.ogg
+*.log
+*.ini
+*.msi
+*.zip
+
+
+#project-Agnotistic
+*.manifest
+*.zip
+*.tar
+*.tar.gz
+*crash*
+*.log.*
+*.yrp
+*.env
+server/http/ygopro/deck.exe
+*.lua
+!premake4.lua
+documentation/~$ygopro id sheet.xlsx
+databases/deckStorage.nedb
+coverage
+.vscode
+bin/*
+databases/*.nedb
+http/manifest/banlist.json
+
+*.lock

@@ -1,0 +1,47 @@
+checks:
+  file-lines:
+      config:
+        threshold: 1250
+plugins:
+  csslint:
+    enabled: false
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - javascript
+  nodesecurity:
+    enabled: true
+  eslint:
+    enabled: true
+    checks:
+      max-statements:
+        enabled: false
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.inc"
+  - "**.js"
+  - "**.jsx"
+  - "**.module"
+  - "**.php"
+  - "**.py"
+  - "**.rb"
+exclude_patterns:
+- "**.css"
+- "**.woff2"
+- "**.ttf"
+- "**.ico"
+- "**.txt"
+- "**.md"
+- "**.json"
+- "**.png"
+- "**.jpg"
+- "**.jpeg"
+- "**.wav"
+- "**.*db"
+- test/**/*
+- http/js/translations.js
+- http/js/vendor/*
+- node_modules/*

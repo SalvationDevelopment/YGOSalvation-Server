@@ -1,0 +1,67 @@
+.marquee {
+    width: 50%;
+    margin: 0 auto;
+    padding-bottom: 30%;
+}
+
+
+
+
+
+.creditsperson {
+    margin: 9px auto;
+    /* height: 1.5em; */
+    font-size: 10px;
+    /* background: blue; */
+    overflow: auto;
+}
+
+header#credits {
+    overflow-y: scroll;
+}
+
+.creditsperson span {
+    display: block;
+    float: left;
+    width: 50%;
+}
+
+span.creditsname {
+    justify-content: flex-end;
+    padding-right: 8px;
+    color: white;
+    display: flex;
+    flex: 1;
+}
+
+span.creditsroles {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+div#creditslink {
+    color: #222;
+}
+
+div#creditslink:hover {
+    color: purple;
+}
+
+.credit {
+    display: flex;
+    background: rgba(0, 0, 0, .8);
+    margin-bottom: 1vh;
+    box-shadow: 0 0 16px rgba(0, 0, 0, .8);
+}
+
+h2.creditsfield {
+    margin-bottom: 4vh;
+    color: white;
+    font-size: 5vh;
+}
+
+div#superheader {
+    z-index: 1;
+    position: relative;
+}

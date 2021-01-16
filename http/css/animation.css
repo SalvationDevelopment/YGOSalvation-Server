@@ -1,0 +1,632 @@
+div#selectionsystem {
+    z-index: 200;
+}
+
+.card, .overlayunit, .cardselectionzone {
+    transform-style: preserve-3d;
+    width: 63px;
+    height: 86px;
+    position: absolute;
+    transition: all 200ms;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+}
+
+.cardselectionzone {
+    outline: 2px dashed transparent;
+    z-index: 10;
+    background: transparent;
+    transition: none;
+    outline-offset: 0px;
+}
+
+.cardselectionzone:hover {
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 1);
+    animation: 1500ms animateBorder infinite linear;
+}
+
+@keyframes animateBorder {
+    25% {
+        outline-color: white;
+        background: rgba(255, 0, 0, .8);
+    }
+    100% {
+        outline-color: transparent;
+        box-shadow: 0 0 0 0px rgba(255, 0, 0, 0);
+        outline-offset: 30px;
+    }
+}
+
+.card.DECK {
+    transition: left 150ms;
+}
+
+.attackglow {
+    box-shadow: 0px 0px 20px 10px yellow;
+    background-color: yellow;
+}
+
+.linkglow {
+    box-shadow: 0px 0px 20px 10px rgba(102, 102, 255, 0.5);
+    background-color: rgba(102, 102, 255, 0.5);
+}
+
+.nocard {
+    display: none;
+}
+
+.p0, .p1 {
+    position: absolute;
+    display: block
+}
+
+.card.p1 {
+    transform: rotate(180deg);
+}
+
+#siding .card.p1 {
+    transform: rotate(0deg);
+}
+
+.p0.DECK {
+    bottom: 10px;
+    left: 632px;
+}
+
+.p0.HAND {
+    bottom: -50px;
+    left: 350px;
+    transition-delay: 200ms;
+    transform: matrix3d(1, 0, 0, 0, 0, 1, -1.5, 0, 1, 0, 1, 0, 1, 0, 0, 1) !important
+}
+
+.p0.EXTRA {
+    bottom: 10px;
+    left: 97px;
+}
+
+.p0.GRAVE {
+    bottom: 207px;
+    left: 633px;
+}
+
+.p0.BANISHED {
+    bottom: 207px;
+    left: 713px;
+}
+
+.p0.EXCAVATED {
+    bottom: 10px;
+    left: 732px;
+}
+
+.newfield .p0.GRAVE {
+    bottom: 108px;
+    left: 633px;
+}
+
+/*new grave*/
+
+.newfield .p0.BANISHED {
+    bottom: 207px;
+    left: 633px;
+}
+
+/*removed*/
+
+.p0.SPELLZONE.i0 {
+    bottom: 64px;
+    left: 190px;
+}
+
+.p0.SPELLZONE.i1 {
+    bottom: 64px;
+    left: 276px;
+}
+
+.p0.SPELLZONE.i2 {
+    bottom: 64px;
+    left: 364px;
+}
+
+.p0.SPELLZONE.i3 {
+    bottom: 64px;
+    left: 453px;
+}
+
+.p0.SPELLZONE.i4 {
+    bottom: 64px;
+    left: 541px;
+}
+
+.p0.SPELLZONE.i5 {
+    bottom: 207px;
+    left: 97px;
+}
+
+/*old fieldspell*/
+
+.p0.SPELLZONE.i6 {
+    bottom: 108px;
+    left: 97px;
+}
+
+/*penzoneblue*/
+
+.p0.SPELLZONE.i7 {
+    bottom: 108px;
+    left: 633px;
+}
+
+/*penzonered*/
+
+.newfield .p0.SPELLZONE.i5 {
+    bottom: 108px;
+    left: 97px;
+}
+
+/*new fieldspell*/
+
+.p0.MONSTERZONE.i0, .overlayunit.p0.i0 {
+    bottom: 154px;
+    left: 190px;
+}
+
+.p0.MONSTERZONE.i1, .overlayunit.p0.i1 {
+    bottom: 154px;
+    left: 276px;
+}
+
+.p0.MONSTERZONE.i2, .overlayunit.p0.i2 {
+    bottom: 154px;
+    left: 364px;
+}
+
+.p0.MONSTERZONE.i3, .overlayunit.p0.i3 {
+    bottom: 154px;
+    left: 453px;
+}
+
+.p0.MONSTERZONE.i4, .overlayunit.p0.i4 {
+    bottom: 154px;
+    left: 541px;
+}
+
+.p0.MONSTERZONE.i5, .overlayunit.p0.i5 {
+    bottom: 255px;
+    left: 276px;
+}
+
+/*speczone left*/
+
+.p0.MONSTERZONE.i6, .overlayunit.p0.i6 {
+    bottom: 255px;
+    left: 453px;
+}
+
+/*speczone right*/
+
+.p1.DECK {
+    bottom: 500px;
+    left: 98px;
+}
+
+.p1.HAND {
+    bottom: 580px;
+    left: 350px;
+    transition-delay: 200ms;
+    transform: matrix3d(1, 0, 0, 0, 0, -1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1) !important;
+}
+
+.p1.EXTRA {
+    bottom: 500px;
+    left: 631px;
+}
+
+.p1.GRAVE {
+    bottom: 306px;
+    left: 98px;
+}
+
+.p1.BANISHED {
+    bottom: 306px;
+    left: 18px;
+}
+
+.p1.EXCAVATED {
+    bottom: 300px;
+    left: -2px;
+}
+
+.newfield .p1.GRAVE {
+    bottom: 406px;
+    left: 97px;
+}
+
+.newfield .p1.BANISHED {
+    bottom: 306px;
+    left: 98px;
+}
+
+.p1.SPELLZONE.i0 {
+    bottom: 450px;
+    left: 541px;
+}
+
+.p1.SPELLZONE.i1 {
+    bottom: 450px;
+    left: 453px;
+}
+
+.p1.SPELLZONE.i2 {
+    bottom: 450px;
+    left: 364px;
+}
+
+.p1.SPELLZONE.i3 {
+    bottom: 450px;
+    left: 276px;
+}
+
+.p1.SPELLZONE.i4 {
+    bottom: 450px;
+    left: 190px;
+}
+
+.p1.SPELLZONE.i5 {
+    bottom: 306px;
+    left: 631px;
+}
+
+/*fieldspell*/
+
+.p1.SPELLZONE.i6 {
+    bottom: 406px;
+    left: 631px;
+}
+
+/*penzoneblue*/
+
+.p1.SPELLZONE.i7 {
+    bottom: 406px;
+    left: 97px;
+}
+
+/*penzonered*/
+
+.newfield .p1.SPELLZONE.i5 {
+    bottom: 406px;
+    left: 631px;
+}
+
+/*new fieldspell*/
+
+.p1.MONSTERZONE.i0, .overlayunit.p1.i0 {
+    bottom: 360px;
+    left: 541px;
+}
+
+.p1.MONSTERZONE.i1, .overlayunit.p1.i1 {
+    bottom: 360px;
+    left: 453px;
+}
+
+.p1.MONSTERZONE.i2, .overlayunit.p1.i2 {
+    bottom: 360px;
+    left: 364px;
+}
+
+.p1.MONSTERZONE.i3, .overlayunit.p1.i3 {
+    bottom: 360px;
+    left: 276px;
+}
+
+.p1.MONSTERZONE.i4, .overlayunit.p1.i4 {
+    bottom: 360px;
+    left: 190px;
+}
+
+.p1.MONSTERZONE.i5, .overlayunit.p1.i5 {
+    bottom: 255px;
+    left: 453px;
+}
+
+/*speczone left*/
+
+.p1.MONSTERZONE.i6, .overlayunit.p1.i6 {
+    bottom: 255px;
+    left: 276px;
+}
+
+/*speczone right*/
+
+.p0[data-position=FaceDown] {
+    transform: rotate3d(0, 1, 0, 180deg);
+    content: url(../img/textures/cover.jpg)
+}
+
+.p0[data-position=FaceDownAttack] {
+    transform: rotate3d(0, 0, 0, 0deg);
+    content: url(../img/textures/cover.jpg)
+}
+
+.p0[data-position=FaceDownDefence] img {
+    transform: rotate(90deg);
+    content: url(../img/textures/cover.jpg)
+}
+
+.p0[data-position=FaceUpDefence] img {
+    transform: rotate(90deg);
+}
+
+.p0[data-position=AttackFaceUp], .p0[data-position=FaceUp] {
+    transform: rotate3d(0, 0, 0, 0deg);
+}
+
+.p1[data-position=FaceDown] {
+    rotate3d(0, 1, 0, 180deg);
+    content: url(../img/textures/cover.jpg)
+}
+
+.p1[data-position=FaceDownAttack] {
+    transform: rotate3d(0, 0, 1, 180deg);
+    content: url(../img/textures/cover.jpg)
+}
+
+.p1[data-position=FaceDownDefence] img {
+    transform: rotate(90deg) rotate3d(0, 0, 1, 180deg);
+    content: url(../img/textures/cover.jpg)
+}
+
+.p1[data-position=FaceUpDefence] img {
+    transform: rotate(90deg) rotate3d(0, 0, 1, 180deg);
+}
+
+.p1[data-position=AttackFaceUp], .p1[data-position=FaceUp] {
+    transform: rotate3d(0, 0, 1, 180deg);
+}
+
+.overlayunit.p0[data-overlayunit="0"] {
+    transform: translateX(3px)
+}
+
+.overlayunit.p0[data-overlayunit="1"] {
+    transform: translateX(-3px)
+}
+
+.overlayunit.p0[data-overlayunit="2"] {
+    transform: translateX(6px)
+}
+
+.overlayunit.p1[data-overlayunit="0"] {
+    transform: translateX(-3px)
+}
+
+.overlayunit.p1[data-overlayunit="1"] {
+    transform: translateX(3px)
+}
+
+.overlayunit.p1[data-overlayunit="3"] {
+    transform: translateX(-6px)
+}
+
+meter.p1lp {
+    transform: rotateY(180deg);
+}
+
+/*transform: scale(1.5,2.5) rotate3d(1,0,0,-55deg) translate(8px,-10px) !important;*/
+
+meter::-webkit-meter-optimum-value {
+    -webkit-transition: width 1s;
+}
+
+.p0lp::before, .p1lp::before {
+    content: attr(value);
+    position: absolute;
+    top: 0;
+    width: 20.9%;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.2em;
+}
+
+.p1lp::before {
+    transform: rotateY(180deg);
+    left: 40%;
+}
+
+#attackanimation {
+    z-index: 90000;
+    position: absolute;
+    transition: all 1000ms ease;
+}
+
+#attackanimation[data-orient="0"] {
+    transform: rotate(0deg);
+}
+
+#attackanimation[data-orient="1"] {
+    transform: rotate(180deg);
+}
+
+.phaseindicator {
+    width: 44px;
+    margin: 0;
+    display: block;
+    float: left;
+    overflow: hidden;
+    z-index: 30;
+    opacity: .5;
+    background: black;
+    border: 1px solid white;
+    color: white;
+    position: absolute;
+    pointer-events: all;
+    height: 50px;
+}
+
+.phaseindicator.enabled {
+    background: white;
+    color: black;
+}
+
+#drawphi {
+    top: 275px;
+    left: 176px;
+}
+
+#standbyphi {
+    top: 275px;
+    left: 222px;
+}
+
+#main1phi {
+    top: 285px;
+    left: 349px;
+}
+
+#battlephi {
+    top: 285px;
+    left: 400px;
+}
+
+#main2phi {
+    top: 275px;
+    left: 530px;
+}
+
+#endphi {
+    top: 275px;
+    left: 576px;
+}
+
+#nextturn {
+    left: 346px;
+    width: 100px;
+    top: 253px;
+    height: 26px;
+}
+
+#phaseindicator[data-currentphase="0"] #drawphi, #phaseindicator[data-currentphase="1"] #standbyphi, #phaseindicator[data-currentphase="2"] #main1phi, #phaseindicator[data-currentphase="3"] #battlephi, #phaseindicator[data-currentphase="4"] #main2phi, #phaseindicator[data-currentphase="5"] #endphi, #phaseindicator[data-currentphase="6"] #nextturn {
+    opacity: 1;
+    font-weight: bold;
+    box-shadow: inset 0 0 7px #ccc, 0 0 7px #ccc;
+    border: 2px solid white;
+}
+
+#phaseindicator[data-currentphase="5"] #nextturn {
+    box-shadow: 0 0 10px white;
+}
+
+.phaseindicatorslide {
+    background: black;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 46;
+    color: white;
+    font-size: 10em;
+    left: -300%;
+}
+
+.phaseindicatorslide.animated {
+    animation: phaseslide 2s ease;
+}
+
+@keyframes phaseslide {
+    from {
+        opacity: 0;
+        left: -300%;
+    }
+    to {
+        opacity: 1;
+        left: 300%;
+    }
+}
+
+[data-content]:after {
+    position: absolute;
+    content: attr(data-content);
+    color: yellow;
+    font-size: 1.2em;
+    text-shadow: 0 0 7px yellow;
+    text-align: center;
+    top: 104%;
+}
+
+.INMATERIAL, [data-deletedToken] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+.revealedcard[data-position="FaceDownREMOVED"], .revealedcard[data-position="FaceDownAttackREMOVED"], .revealedcard[data-position="FaceDownDefenceREMOVED"] {
+    content: url(../img/textures/cover.jpg)
+}
+
+}
+
+.revealedcard:hover {
+    content: initial !important;
+}
+
+.FaceUpDefence img, img.FaceUpDefence {
+    transform: rotate(90deg) translate(0, -25%);
+}
+
+#tooltip {
+    position: fixed;
+    top: -4em;
+    font-size: 1.2vh;
+    background: rgba(255, 255, 255, .5);
+    color: black;
+    left: -50%;
+    white-space: pre;
+    text-align: center;
+    padding: 3px;
+    box-shadow: 0 0 2px white;
+    z-index: 9000 !important;
+}
+
+.p0.MONSTERZONE:after, .p1.MONSTERZONE:before {
+    content: attr(data-footer);
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    width: 120%;
+    position: absolute;
+    text-shadow: -2px -2px black, 2px 2px black;
+    bottom: -3px;
+    left: 0;
+}
+
+.p0.MONSTERZONE:before, .p1.MONSTERZONE:after {
+    content: attr(data-header);
+    color: white;
+    font-size: 14px;
+    width: 8em;
+    position: absolute;
+    text-shadow: -2px -2px black, 2px 2px black;
+    font-weight: bold;
+    left: -10px;
+}
+
+.cardselectionzone.DECK:after, .cardselectionzone.EXTRA:after, .cardselectionzone.GRAVE:after, .cardselectionzone.BANISHED:after {
+    content: attr(data-count);
+    color: white;
+    /* width: 100%; */
+    /* height: 3em; */
+    position: absolute;
+    bottom: -31px;
+    left: 25px;
+}
+
+#siding #description {
+    color : white;
+}

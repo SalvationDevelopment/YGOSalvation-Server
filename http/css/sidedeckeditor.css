@@ -1,0 +1,495 @@
+#cardDescription {
+    background-color: rgba(0, 0, 0, 0.70);
+}
+
+#deckedit ::-webkit-input-placeholder {
+    text-align: center;
+}
+
+#deckedit :-moz-placeholder {
+    /* Firefox 18- */
+    text-align: center;
+}
+
+#deckedit ::-moz-placeholder {
+    /* Firefox 19+ */
+    text-align: center;
+}
+
+#deckedit :-ms-input-placeholder {
+    text-align: center;
+}
+
+#deckedit {
+    padding: 1vh 1vw;
+}
+
+#decksetup {
+    width: 20%;
+    float: left;
+    font-size: 70%;
+    display: flex;
+    height: 87.3vh;
+    flex-direction: column;
+}
+
+#decksearch, #deckarea {
+    width: 77%;
+    float: left;
+}
+
+#deckedit #prev, #deckedit #next {
+    float: left;
+    height: 100%;
+    margin-top: 16vh;
+    color: white;
+    background: transparent;
+    border: none;
+}
+
+#deckedit #prev {
+    margin-right: 1%;
+}
+
+#deckarea {
+    padding-top: 4vh;
+}
+
+#decksearchresults {
+    width: 45vw;
+    height: 40vh;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+    float: left;
+    display: block;
+    flex-wrap: wrap;
+    padding: .5vh .5vw;
+    overflow-y: auto;
+}
+
+#decksearchresults>div {
+    flex: 1;
+    height: 33%;
+    padding: 1%;
+    transition: opacity 500ms;
+    width: 10%;
+    float: left;
+}
+
+.transitioning {
+    opacity: 0;
+}
+
+#decksearchresults div img {
+    height: 100%;
+    border: 1px solid black;
+}
+
+#decksearchresults div>img:hover {
+    border: 1px solid white;
+}
+
+#decksearchresults>div>div {
+    height: 100%;
+}
+
+#decksearch {
+    position: relative;
+}
+
+#deckedit * {
+    box-sizing: border-box;
+}
+
+#deckedit h2 {
+    font-size: 2vh;
+    float: left;
+    color: white;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+    font-weight: bold;
+    padding: 0 .5em;
+    background-color: rgba(0, 0, 0, 0.70);
+}
+
+#decktextlist {
+    border: 1px solid gray;
+    float: left;
+    width: 97%;
+    margin-top: 1vh;
+    height: 24vh;
+    overflow: auto;
+    padding: .5vh .5vw;
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+}
+
+#deckedit h3 {
+    font-size: 2vh;
+    float: left;
+    font-weight: bold;
+    width: 50%;
+    margin: 1vh 0;
+    text-shadow: 1px 1px 1px #000;
+}
+
+#deckedit controls {
+    clear: both;
+    display: block;
+}
+
+#deckedit button {
+    background-color: rgba(0, 0, 0, 0.70);
+    border: 1px solid #fff;
+    color: white;
+    float: left;
+}
+
+#deckedit input[type=text] {
+    float: left;
+    margin-bottom: 1vh;
+    clear: left;
+    width: 45%;
+}
+
+img.imgContainer {
+    max-height: 100%;
+    max-width: 100%;
+    height: 100%;
+}
+
+.deckcontrols {
+    float: left;
+    width: 50%;
+}
+
+.deckcontrols button {
+    width: 45%;
+    margin: 1%;
+}
+
+#deckedit br {
+    clear: both;
+}
+
+control#linkmarkers {
+    height: 50px;
+    display: block;
+    float: right;
+    position: absolute;
+    left: 11%;
+    top: 26%;
+}
+
+.filtercol {
+    clear: left;
+}
+
+#deckedit input[type=number] {
+    float: left;
+    margin-right: 5%;
+    width: 45%;
+    padding-left: 1.5em;
+}
+
+#deckedit input[type=number]+select {
+    float: left;
+    width: 3em;
+}
+
+#deckedit select option {
+    text-align: center;
+    font-weight: bold;
+}
+
+#deckedit select {
+    float: left;
+    width: 45%;
+    margin-right: 5%;
+    margin-bottom: 1vh;
+    text-align-last: center;
+    text-align: center;
+}
+
+.filterrow {
+    width: 100%;
+    height: auto;
+    display: block;
+    clear: both;
+    float: left;
+}
+
+#decksearchtitles {
+    float: left;
+    width: 100%;
+}
+
+#decksearchtitles h2:first-child {
+    margin-right: 51.75%;
+}
+
+#deckareamain, #deckareaextra, #deckareaside {
+    height: 21vw;
+    width: 13vw;
+    float: left;
+    margin-right: 2vw;
+}
+
+#deckareaside {
+    margin-right: 0;
+}
+
+#deckareamain {
+    width: 45vw;
+}
+
+.deckmetainfo {
+    border: 1px solid gray;
+    /* background: rgba(255, 0, 255, .1); */
+    height: 90%;
+    width: 100%;
+    float: left;
+}
+
+#cardinformation {
+    font-weight: bold;
+    font-size: 70%;
+    width: 38%;
+    float: left;
+    height: 40vh;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+    margin-left: 1.7vw;
+}
+
+#cardinformation .description {
+    margin-top: 2vh;
+}
+
+#cardinformation .cardImage {
+    float: left;
+    width: 50%;
+    height: 100%
+}
+
+#cardinformation .cardDescription {
+    float: left;
+    width: 50%;
+    height: 100%;
+    padding: 1vh .25vw;
+}
+
+#cardinformation .description+br+.description {
+    overflow: auto;
+    height: 23vh;
+}
+
+.deckmetainfo {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+}
+
+.deckmetainfo>div {
+    height: 25%;
+    width: 10%;
+    position: relative;
+}
+
+.deckmetainfo>div>div {
+    height: 100%;
+    width: 100%;
+}
+
+.deckmetainfo.c48>div {
+    height: 25%;
+    width: 8%;
+}
+
+.deckmetainfo.c60>div {
+    height: 25%;
+    width: 6.6%;
+}
+
+.deckmetainfo img {
+    height: 100%;
+    border: 1px solid black;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.deckmetainfo img:hover {
+    border: 1px solid white;
+}
+
+#deckareaextra .deckmetainfo>div {
+    height: 25%;
+    width: 25%;
+}
+
+#deckareaside .deckmetainfo>div {
+    height: 25%;
+    width: 25%;
+}
+
+#decksearchresultsofx {
+    position: absolute;
+    top: 43vh;
+    left: 6vw;
+    width: 43%;
+    text-align: center;
+    background: rgba(0, 0, 0, .7);
+    box-shadow: 0 0 10px #000;
+}
+
+[data-limit] {
+    position: relative;
+}
+
+[data-limit]:before {
+    height: 1.5em;
+    width: 1.5em;
+    background: black;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -5px;
+    text-align: center;
+    font-weight: bold;
+    color: yellow;
+    border-radius: 7vw;
+    line-height: 1.2em;
+    border: 3px solid red;
+    z-index: 1;
+}
+
+[data-limit="0"]:before {
+    content: "X";
+    color: red;
+}
+
+[data-limit="1"]:before {
+    content: "1";
+}
+
+[data-limit="2"]:before {
+    content: "2";
+}
+
+#linkmarkers {
+    background: white;
+}
+
+#linkmarkers>input[type="checkbox"] {
+    visibility: hidden;
+}
+
+input[type="checkbox"]:after {
+    content: " ";
+    width: 0;
+    height: 0;
+    background: blue;
+    z-index: 50;
+    opacity: 1;
+    position: absolute;
+    visibility: visible;
+}
+
+input[type="checkbox"]:checked:after {
+    background: red;
+}
+
+#link1:after {
+    border-right: 13px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link3:after {
+    border-left: 13px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link6:after {
+    border-right: 13px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link8:after {
+    border-left: 13px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link2:after {
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link4:after {
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    border-right: 13px solid transparent;
+}
+
+#link5:after {
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    border-left: 13px solid transparent;
+}
+
+#link7:after {
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link1 {
+    position: relative;
+    left: -5px;
+    top: -5px;
+}
+
+#link2 {
+    position: relative;
+    top: -5px;
+}
+
+#link3 {
+    position: relative;
+    left: 5px;
+    top: -5px;
+}
+
+#link4 {
+    position: relative;
+    left: -5px;
+}
+
+#link5 {
+    position: relative;
+    left: 5px;
+}
+
+#link6 {
+    position: relative;
+    left: -5px;
+    top: 5px;
+}
+
+#link7 {
+    position: relative;
+    top: 5px;
+}
+
+#link8 {
+    position: relative;
+    left: 5px;
+    top: 5px;
+}
+
+.searchfilter {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px #000;
+}
