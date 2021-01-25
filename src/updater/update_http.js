@@ -8,7 +8,7 @@ var zlib = require('zlib'),
     jsonfile = require('jsonfile');
 
 module.exports = function getManifestFromAPI(callback) {
-    var options = {
+    const options = {
         host: '127.0.0.1',
         port: 8082,
         path: '/manifest.json',
@@ -17,8 +17,7 @@ module.exports = function getManifestFromAPI(callback) {
 
     callback = callback || function () { };
 
-    var call;
-
+    let call;
 
     call = http.request(options, function (res) {
         console.log('Attempting to obtain new Card DB');

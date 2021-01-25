@@ -34,9 +34,9 @@ const express = require('express'),
 
 function systemLoad(req, res, next) {
     toobusy.maxLag(10000);
-    var processing = false;
+    const processing = false;
     if (processing && req.headers['Content-Type'] !== 'application/json') {
-        res.status(503).send(`<html><head>
+        res.status(503).send(`<html lang=""><head>
         <title>YGOSalvation</title>
         <style>
         body {color:white;background:black; text-align:center}
@@ -53,6 +53,7 @@ function systemLoad(req, res, next) {
     }
 
     if (req.get('host') === 'ygopro.us') {
+        console.log('req.get(\'host\') === \'ygopro.us\'')
         res.redirect(301, 'https://ygosalvation.com' + req.url);
         res.end();
         return;
@@ -84,7 +85,7 @@ function useSSL(primusServer) {
         const direction = (req.get('host') === 'ygopro.us')
             ? res.redirect(301, 'https://ygosalvation.com' + req.url)
             : res.redirect(301, 'https://' + req.get('host') + req.url);
-        return;
+
     });
     openserver.listen(HTTP_PORT);
     return primusServer;

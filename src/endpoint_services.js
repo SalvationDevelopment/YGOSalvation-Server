@@ -15,8 +15,15 @@ const axios = require('axios'),
     };
 
 let session = '';
-
-
+axios.interceptors.request.use(
+    config => {
+        if(!!session)
+        config.headers.Authorization = `Bearer ${session}`
+        return config
+    },
+    err => {
+        return Promise.reject(err)
+    })
 
 async function setRank(user) {
     try {
@@ -32,7 +39,6 @@ function setSession() {
         password: process.env.ADMIN_SERVER_PASSWORD
     }, function (error, valid, responseData) {
         if (error) {
-
             console.log('[SERVER] Admin Server Permissions Failure: '.bold + error.toString());
             setTimeout(setSession, 3000);
             return;
@@ -43,7 +49,10 @@ function setSession() {
 }
 
 async function getNews() {
-    const news = await axios.get(`${ADMIN_SERVER_URL}/updates?_sort=createdAt:ASC`);
+    const news = await axios.get(`${ADMIN_SERVER_URL}/updates?_sort=createdAt:ASC`, {
+        // headers: {host: 'ygopro.us'},
+        // host: 'ygopro.us'
+    });
     return news.data;
 }
 
@@ -58,12 +67,7 @@ async function getCovers() {
 }
 
 async function getRanking() {
-    const ranking = await axios.get(`${ADMIN_SERVER_URL}/users?_sort=elo:desc`,
-        {
-            headers: {
-                Authorization: `Bearer ${session}`
-            }
-        });
+    const ranking = await axios.get(`${ADMIN_SERVER_URL}/users?_sort=elo:desc`);
     const data = ranking.data.filter((user) => {
         return !user.service;
     });
@@ -80,15 +84,12 @@ async function getRanking() {
 
 async function getAvatar(request, response) {
     const avatar = (await axios.get(`${ADMIN_SERVER_URL}${request.path}`, {
-        responseType: 'arraybuffer'
-    })),
+            responseType: 'arraybuffer'
+        })),
         type = mime[path.extname(request.path).slice(1)] || 'text/plain';
     response.set('Content-Type', type);
     return avatar.data
 }
-
-
-
 
 
 async function logDuel(info, callback) {
@@ -98,7 +99,7 @@ async function logDuel(info, callback) {
             'Content-Type': 'application/json',
             Accept: '*/*'
         }
-    }, { winnerID, loserID, ranked, replay } = info;
+    }, {winnerID, loserID, ranked, replay} = info;
 
     if (!ranked) {
         callback();
@@ -116,8 +117,8 @@ async function logDuel(info, callback) {
         winner.elo = elo.updateRating(elo.getExpected(winner.elo, loser.elo), 1, winner.elo);
         loser.elo = elo.updateRating(elo.getExpected(loser.elo, winner.elo), 0, loser.elo);
 
-        await axios.put(`${ADMIN_SERVER_URL}/users/${winnerID}`, { elo: winner.elo, points: winner.points }, settings);
-        await axios.put(`${ADMIN_SERVER_URL}/users/${loserID}`, { elo: loser.elo, points: loser.points }, settings);
+        await axios.put(`${ADMIN_SERVER_URL}/users/${winnerID}`, {elo: winner.elo, points: winner.points}, settings);
+        await axios.put(`${ADMIN_SERVER_URL}/users/${loserID}`, {elo: loser.elo, points: loser.points}, settings);
 
     } catch (error) {
         console.log(error);
@@ -131,7 +132,6 @@ async function logDuel(info, callback) {
 
 function setupEndpoints(app) {
     app.get('/news', async (request, response) => {
-        console.log(request.headers['host']);
         try {
             const news = await getNews();
             response.send(news);
