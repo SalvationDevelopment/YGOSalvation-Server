@@ -23,6 +23,7 @@
         "dotenv": "^4.0.0",
         "elo-rank": "^1.0.3",
         "express": "^4.17.1",
+        "express-http-proxy": "^1.6.2",
         "ffi": "^2.3.0",
         "function-queue": "0.0.12",
         "helmet": "^3.21.2",

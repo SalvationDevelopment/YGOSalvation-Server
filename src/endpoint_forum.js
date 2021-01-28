@@ -1,7 +1,9 @@
 
 const ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
     ADMIN_HOST = new URL(ADMIN_SERVER_URL).host,
-    http = require('http');
+    http = require('http'),
+    proxy = require('express-http-proxy');
+
 
 
 
@@ -28,21 +30,10 @@ function proxyRequest(request, response) {
 }
 
 function setupEndpoints(app) {
-    app.get('/sections', (request, response) => {
-        proxyRequest(request, response);
-    });
-
-    app.get('/forums', (request, response) => {
-        proxyRequest(request, response);
-    });
-
-    app.get('/threads', (request, response) => {
-        proxyRequest(request, response);
-    });
-
-    app.get('/comments', (request, response) => {
-        proxyRequest(request, response);
-    });
+    app.get('/sections', proxy(ADMIN_SERVER_URL));
+    app.get('/forums',proxy(ADMIN_SERVER_URL));
+    app.get('/threads',proxy(ADMIN_SERVER_URL));
+    app.get('/comments', proxy(ADMIN_SERVER_URL));
 }
 
 module.exports = {
