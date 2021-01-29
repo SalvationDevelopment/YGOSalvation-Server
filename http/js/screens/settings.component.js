@@ -7,14 +7,11 @@ class SettingsScreen extends React.Component {
         super();
         this.state = {};
         this.settings = {
-            theme: '../img/magimagipinkshadow.jpg',
-            themes: [{value: '../img/magimagipinkshadow.jpg', label: '../img/magimagipinkshadow.jpg'}],
-            cover: '../img/textures/cover.jpg',
-            covers: [{value: '../img/textures/cover.jpg', label: '../img/textures/cover.jpg'}],
+            theme: localStorage.theme || '../img/magimagipinkshadow.jpg',
+            cover: localStorage.cover || '../img/textures/cover.jpg',
             imageURL: localStorage.imageURL || 'http://127.0.0.1:8887',
             hide_banlist: Boolean(localStorage.all_banlist),
             language: localStorage.language || 'en'
-
         };
         this.store = store;
         this.backgrounds = [];

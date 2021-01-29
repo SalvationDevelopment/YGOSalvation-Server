@@ -8,7 +8,7 @@ class LoginScreen extends React.Component {
         this.store = store;
         store.register('LOGGEDIN', (action) => {
             this.state.mode = 'loggedin';
-            document.body.style.backgroundImage = `url('../img/magimagipink.jpg')`;
+            document.body.style.backgroundImage = `url(${localStorage.theme})`;
         });
 
         store.register('LOAD_LOGIN', (action) => {
