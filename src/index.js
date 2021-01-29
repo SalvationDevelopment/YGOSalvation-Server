@@ -19,9 +19,9 @@ const child_process = require('child_process'),
     Rooms = require('primus-rooms'),
     services = require('./endpoint_services');
 
-const { log } = logger.create(logger.config.main, '[INDEX]');
-const { log: debug } = logger.create(logger.config.debug, '[DEBUG]');
-const { log: logError } = logger.create(logger.config.error, '[ERROR]');
+const {log} = logger.create(logger.config.main, '[INDEX]');
+const {log: debug} = logger.create(logger.config.debug, '[DEBUG]');
+const {log: logError} = logger.create(logger.config.error, '[ERROR]');
 
 var userlist = [],
     chatbox = [],
@@ -66,13 +66,13 @@ function massAck() {
 
 
 function unsafePort() {
-    const minPort = process.env.PORT_RANGE_MIN 
-            ? Number(process.env.PORT_RANGE_MIN) 
-            : 2000,
-        maxPort = process.env.PORT_RANGE_MAX 
-            ? Number(process.env.PORT_RANGE_MAX) 
+    const minPort = process.env.PORT_RANGE_MIN
+        ? Number(process.env.PORT_RANGE_MIN)
+        : 2000,
+        maxPort = process.env.PORT_RANGE_MAX
+            ? Number(process.env.PORT_RANGE_MAX)
             : 9000;
-        
+
     return Math.floor(Math.random() * (maxPort - minPort) + minPort);
 }
 
@@ -232,8 +232,6 @@ function murderCall(data) {
         }
 
 
-
-
     });
 }
 
@@ -358,11 +356,7 @@ function onData(data, socket) {
 
     socket.join(socket.address.ip + data.uniqueID);
     switch (action) {
-
-
-
         case ('duelrequest'):
-
             announce({
                 clientEvent: 'duelrequest',
                 target: data.target,
@@ -497,10 +491,10 @@ function onData(data, socket) {
                     : undefined,
                 child = child_process.fork(
                     './core/index.js', process.argv, {
-                    cwd: __dirname,
-                    env: Object.assign({}, process.env, data.info, { PORT: port }),
-                    execArgv
-                }
+                        cwd: __dirname,
+                        env: Object.assign({}, process.env, data.info, {PORT: port}),
+                        execArgv
+                    }
                 );
             child.on('message', function (message) {
                 childHandler(child, socket, message);
@@ -514,18 +508,15 @@ function onData(data, socket) {
             }
             break;
         case 'save':
-
             if (!socket.username) {
                 log('no user cant save');
                 return;
             }
             delete data.action;
-
             data.deck.main = mapCards(data.deck.main);
             data.deck.side = mapCards(data.deck.side);
             data.deck.extra = mapCards(data.deck.extra);
             data.deck.owner = socket.username;
-
             data.username = socket.username;
             log(data);
             decks.saveDeck(socket.session, data.deck, socket.username, function (error, savedDecks) {
@@ -541,7 +532,6 @@ function onData(data, socket) {
             if (!socket.username) {
                 return;
             }
-
             decks.deleteDeck(socket.session, data.deck.id, socket.username, function (error, savedDecks) {
                 primus.room(socket.address.ip + data.uniqueID).write({
                     clientEvent: 'deletedDeck',
@@ -555,8 +545,6 @@ function onData(data, socket) {
             return;
     }
 }
-
-
 
 
 function onPrimusData(socket, data) {
@@ -580,6 +568,7 @@ function onPrimusConnection(socket) {
         onPrimusData(socket, data);
     });
 }
+
 function start() {
     require('json');
     primus = new Primus(primusServer, {

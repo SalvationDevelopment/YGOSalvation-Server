@@ -19,7 +19,7 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-color: black;
-    background-image: url(../img/magimagipinkshadow2.jpg);
+    background-image: url(http/img/magimagipinkshadow2.jpg);
     background-size: cover;
     font-family: 'Roboto', sans-serif;
     font-size: 2vh;
@@ -42,16 +42,16 @@ body.unlogged {
 
 @keyframes lightshow {
     0% {
-        background-image: url(../img/magimagipinkshadow2.jpg);
+        background-image: url(http/img/magimagipinkshadow2.jpg);
     }
     25% {
-        background-image: url(../img/magimagipinkshadow2.jpg);
+        background-image: url(http/img/magimagipinkshadow2.jpg);
     }
     75% {
-        background-image: url(../img/magimagipinkshadow.jpg);
+        background-image: url(http/img/magimagipinkshadow.jpg);
     }
     100% {
-        background-image: url(../img/magimagipinkshadow2.jpg);
+        background-image: url(http/img/magimagipinkshadow2.jpg);
     }
 }
 

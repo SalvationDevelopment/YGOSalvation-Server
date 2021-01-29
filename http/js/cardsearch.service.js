@@ -127,11 +127,7 @@ class SearchFilter {
     fType(obj, ty) {
 
         var val = obj.type;
-        if ((val & ty) > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (val & ty) > 0;
     }
 
     //As Level, but for ATK/DEF

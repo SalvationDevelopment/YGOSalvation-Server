@@ -1,30 +1,42 @@
-
-const ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL,
-    ADMIN_HOST = new URL(ADMIN_SERVER_URL).host,
+var ADMIN_SERVER_HOST = process.env.ADMIN_SERVER_HOST,
     http = require('http');
 
-
-
 function proxyRequest(request, response) {
-    request.headers.host = ADMIN_HOST;
-    var proxy = http.request(80, request.headers.host),
-        proxy_request = proxy.request(request.method, request.url, request.headers);
+    let config = {};
+    config.host = ADMIN_SERVER_HOST;
+    config.port = 1337;
+    config.method = request.method;
+    config.url = request.url;
 
-    proxy_request.addListener('response', function (proxy_response) {
-        proxy_response.addListener('data', function (chunk) {
+    // const proxy = http.createClient(80, request.headers.host),
+    //     proxy_request = proxy.request(request.method, request.url, request.headers);
+
+    http.request(config, res => {
+        res.on('data', function (chunk) {
+            // console.log('chunk', chunk)
             response.write(chunk, 'binary');
         });
-        proxy_response.addListener('end', function () {
+        res.on('end', function () {
             response.end();
         });
-        response.writeHead(proxy_response.statusCode, proxy_response.headers);
-    });
-    request.addListener('data', function (chunk) {
-        proxy_request.write(chunk, 'binary');
-    });
-    request.addListener('end', function () {
-        proxy_request.end();
-    });
+    }).end()
+
+    // proxy_request.on('response', function (proxy_response) {
+    //     proxy_response.addListener('data', function (chunk) {
+    //         response.write(chunk, 'binary');
+    //     });
+    //     proxy_response.addListener('end', function () {
+    //         response.end();
+    //     });
+    //     response.writeHead(proxy_response.statusCode, proxy_response.headers);
+    // });
+    // request.addListener('data', function (chunk) {
+    //     proxy_request.write(chunk, 'binary');
+    // });
+    // request.addListener('end', function () {
+    //     proxy_request.end();
+    // });
+
 }
 
 function setupEndpoints(app) {
@@ -46,5 +58,5 @@ function setupEndpoints(app) {
 }
 
 module.exports = {
-    setupEndpoints
+    setupEndpoints,
 };

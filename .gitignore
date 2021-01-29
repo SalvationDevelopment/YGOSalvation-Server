@@ -73,6 +73,7 @@ documentation/~$ygopro id sheet.xlsx
 databases/deckStorage.nedb
 coverage
 .vscode
+.idea
 bin/*
 databases/*.nedb
 http/manifest/banlist.json

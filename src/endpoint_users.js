@@ -13,12 +13,13 @@ function validate(attempt, data, callback) {
 }
 
 async function login(data) {
+    // console.log('data', data)
     const response = await axios.post(`${ADMIN_SERVER_URL}/auth/local`, {
         identifier: data.username,
         password: data.password,
     }), decks = await axios.get(`${ADMIN_SERVER_URL}/decks?owner=${data.username}&_sort=name:ASC`, {
         headers: {
-            Authorization: `Bearer ${response.data.jwt}`
+            Authorization: `Bearer ${response.data['jwt']}`
         }
     });
     response.data.decks = decks.data;
