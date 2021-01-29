@@ -13,7 +13,7 @@ function validate(attempt, data, callback) {
 }
 
 async function login(data) {
-    console.log('data', data)
+    // console.log('data', data)
     const response = await axios.post(`${ADMIN_SERVER_URL}/auth/local`, {
         identifier: data.username,
         password: data.password,

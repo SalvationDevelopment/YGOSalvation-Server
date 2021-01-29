@@ -11,7 +11,7 @@ function proxyRequest(request, response) {
     // const proxy = http.createClient(80, request.headers.host),
     //     proxy_request = proxy.request(request.method, request.url, request.headers);
 
-    http.request(config,res => {
+    http.request(config, res => {
         res.on('data', function (chunk) {
             // console.log('chunk', chunk)
             response.write(chunk, 'binary');
@@ -58,5 +58,5 @@ function setupEndpoints(app) {
 }
 
 module.exports = {
-    setupEndpoints
+    setupEndpoints,
 };
