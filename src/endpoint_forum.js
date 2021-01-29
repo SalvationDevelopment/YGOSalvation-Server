@@ -1,6 +1,4 @@
 var ADMIN_SERVER_HOST = process.env.ADMIN_SERVER_HOST,
-    ADMIN_HOST = new URL(ADMIN_SERVER_URL).host,//127.0.0.1:1337
-    httpProxy = require('http-proxy'),
     http = require('http');
 
 function proxyRequest(request, response) {
