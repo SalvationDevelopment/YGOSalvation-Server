@@ -36,6 +36,7 @@ To run the system use `node ./`. This will create a version of the system on you
   - Set `HTTPS=<number>` When SSL is on the port that gets used for viewing the site.
   - Set `PORT_RANGE_MIN` To the lowest port that cores can run on.
   - Set `PORT_RANGE_MAX` To the highest port that cores can run on.
+  - Set `PROXY_PORT` Proxy gate port for inbound game connections to reach the rest of the intranet.
   - Set `ADMIN_SERVER_USERNAME=<string>` and `ADMIN_SERVER_PASSWORD=<string>` based on a "Server" Permission level user in the admin.
   - Set `ADMIN_SERVER_URL` if connecting to a centralized hub, (staging, production), default should suffice for local development 
   - Set `ADMIN_SERVER_LOCAL` to false if using external admin server.

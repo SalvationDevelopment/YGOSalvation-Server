@@ -13,7 +13,8 @@ const
 
 let adminServer,
     databaseServer,
-    srvpro;
+    srvpro,
+    proxyServer;
 
 /**
 * Program Entry Point
@@ -54,6 +55,13 @@ function main() {
         console.log('[SERVER] Starting Database Server'.bold.green);
         srvpro = child_process.fork('../srvpro/', [], {
 
+        });
+    }
+
+    if (Boolean(process.env.PROXY_PORT)) {
+        console.log('[SERVER] Starting Network Proxy Server'.bold.green);
+        proxyServer = child_process.fork('./src/server_proxy.js', [], {
+            env: process.env
         });
     }
 
