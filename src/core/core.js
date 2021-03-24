@@ -1140,8 +1140,6 @@ function HTTPServer() {
         certFile = path.resolve(process.env.SSL + '\\certificate.crt'),
         app = express();
 
-    app.use(express.static(path.join(__dirname, '../http')));
-
     try {
         const privateKey = fs.readFileSync(keyFile).toString(),
             certificate = fs.readFileSync(certFile).toString();
