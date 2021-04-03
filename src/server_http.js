@@ -54,7 +54,6 @@ function systemLoad(req, res, next) {
     }
 
     if (req.get('host') === 'ygopro.us') {
-        console.log('req.get(\'host\') === \'ygopro.us\'')
         res.redirect(301, 'https://ygosalvation.com' + req.url);
         res.end();
         return;

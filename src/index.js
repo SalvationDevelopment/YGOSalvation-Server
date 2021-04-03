@@ -17,23 +17,22 @@ const child_process = require('child_process'),
     primusServer = require('./server_http')(),
     Primus = require('primus'),
     Rooms = require('primus-rooms'),
-    services = require('./endpoint_services');
-
-const {log} = logger.create(logger.config.main, '[INDEX]');
-const {log: debug} = logger.create(logger.config.debug, '[DEBUG]');
-const {log: logError} = logger.create(logger.config.error, '[ERROR]');
-
-var userlist = [],
-    chatbox = [],
+    services = require('./endpoint_services'),
+    uuid = require('uuid').uuid4,
+    sanitize = require('./lib_html_sanitizer.js'),
+    { log } = logger.create(logger.config.main, '[INDEX]'),
+    { log: debug } = logger.create(logger.config.debug, '[DEBUG]'),
+    { log: logError } = logger.create(logger.config.error, '[ERROR]'),
+    userlist = [],
     games = [],
     gamelist = {},
-    gamePorts = {},
+    gamePorts = {};
+
+let chatbox = [],
     primus,
     acklevel = 0,
-    currentGlobalMessage = '',
-    uuid = require('uuid').uuid4,
-    sanitize = require('./lib_html_sanitizer.js');
-
+    currentGlobalMessage = '';
+   
 
 /**
  * Maps a deck to updated IDs.
@@ -51,10 +50,20 @@ function mapCards(deck) {
     });
 }
 
+/**
+ * Server wide client onmessage Event
+ * @param {Object} announcement structured message for the client
+ * @returns {undefined}
+ */
 function announce(announcement) {
     primus.write(announcement);
 }
 
+
+/**
+ * Request that ever client respond and say it is connected.
+ * @returns {undefined}
+ */
 function massAck() {
     acklevel = 0;
     userlist = [];
@@ -491,10 +500,10 @@ function onData(data, socket) {
                     : undefined,
                 child = child_process.fork(
                     './core/index.js', process.argv, {
-                        cwd: __dirname,
-                        env: Object.assign({}, process.env, data.info, {PORT: port}),
-                        execArgv
-                    }
+                    cwd: __dirname,
+                    env: Object.assign({}, process.env, data.info, { PORT: port }),
+                    execArgv
+                }
                 );
             child.on('message', function (message) {
                 childHandler(child, socket, message);
