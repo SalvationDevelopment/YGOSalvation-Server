@@ -18,11 +18,11 @@ function wireProxyConnection(Socket, outboundClient, inboundClient, room) {
         inboundClient.write(data);
     });
 
-    outboundClient.on('disconnection',function () {
+    outboundClient.on('disconnection', function () {
         inboundClient.disconnect();
     });
 
-    inboundClient.on('disconnection',function () {
+    inboundClient.on('disconnection', function () {
         outboundClient.disconnect();
     });
 }
@@ -44,20 +44,24 @@ function createProxyServer(port) {
         debug('connection event');
         socket.write({ action: 'proxy', status: 'down' });
         socket.on('data', function (message) {
-            if (client) {
-                client.write(message);
-                return;
-            }
+            try {
+                if (client) {
+                    client.write(message);
+                    return;
+                }
 
-            if (typeof message.room !== 'number') {
-                client.write({
-                    error : 'Proxy Connection not establismed provide internal port number.'
-                });
-                return;
-            }
-            
-            if (!client && message.room) {
-                wireProxyConnection(server.Socket, client, socket, message.room);
+                if (typeof message.room !== 'number') {
+                    socket.write({
+                        error: 'Proxy Connection not establismed provide internal port number.'
+                    });
+                    return;
+                }
+
+                if (!client && message.room) {
+                    wireProxyConnection(server.Socket, client, socket, message.room);
+                }
+            } catch (error) {
+                logError(error);
             }
         });
     });

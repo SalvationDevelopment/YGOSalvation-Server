@@ -23,16 +23,15 @@ const child_process = require('child_process'),
     { log } = logger.create(logger.config.main, '[INDEX]'),
     { log: debug } = logger.create(logger.config.debug, '[DEBUG]'),
     { log: logError } = logger.create(logger.config.error, '[ERROR]'),
-    userlist = [],
-    games = [],
     gamelist = {},
     gamePorts = {};
 
 let chatbox = [],
+    userlist = [],
     primus,
     acklevel = 0,
     currentGlobalMessage = '';
-   
+
 
 /**
  * Maps a deck to updated IDs.
