@@ -8,10 +8,9 @@
  * Configuration is passed via enviromental variables.
  */
 
-const { match } = require('assert');
-const logger = require('../logger');
-
-const { log } = logger.create(logger.config.main, '[CORE/INDEX]');
+const { match } = require('assert'),
+    logger = require('../logger'),
+    { log } = logger.create(logger.config.main, '[CORE/INDEX]');
 
 /**
  * @typedef {Object} ClientMessage
@@ -1140,8 +1139,6 @@ function HTTPServer() {
         certFile = path.resolve(process.env.SSL + '\\certificate.crt'),
         app = express();
 
-    app.use(express.static(path.join(__dirname, '../http')));
-
     try {
         const privateKey = fs.readFileSync(keyFile).toString(),
             certificate = fs.readFileSync(certFile).toString();
@@ -1210,9 +1207,9 @@ function main(configuration, callback) {
         disconnectionHandler(server, duel, game, state, deadSpark);
     });
 
-    
+
     boot(httpserver, server, game, state);
-    
+
 
     log(title);
 
