@@ -14,7 +14,8 @@ const express = require('express'),
     helmet = require('helmet'),
     child_process = require('child_process'),
     HTTP_PORT = process.env.HTTP_PORT || 80,
-    HTTPS_PORT = process.env.HTTPS_PORT || 443;
+    HTTPS_PORT = process.env.HTTPS_PORT || 443,
+    PROXY_PORT = process.env.PROXY_PORT || 8080;
 // ddos = new Ddos({
 //     maxcount: 2000,
 //     burst: 500,
@@ -53,7 +54,6 @@ function systemLoad(req, res, next) {
     }
 
     if (req.get('host') === 'ygopro.us') {
-        console.log('req.get(\'host\') === \'ygopro.us\'')
         res.redirect(301, 'https://ygosalvation.com' + req.url);
         res.end();
         return;
@@ -103,13 +103,20 @@ module.exports = function () {
 
     app.use(express.static(path.join(__dirname, '../http')));
 
-    app.post('/git', function (req, res, next) {
-        gitRoute(req, res, next);
+    app.post('/git', function (request, response, next) {
+        gitRoute(request, response, next);
     });
 
-    app.get('/git', function (req, res, next) {
-        gitRoute(req, res, next);
+    app.get('/git', function (request, response, next) {
+        gitRoute(request, response, next);
     });
+
+    app.get('/status.json', function (request, response, next) {
+        response.send({
+            PROXY_PORT
+        });
+    });
+
     users.setupEndpoints(app);
     news.setupEndpoints(app);
     forum.setupEndpoints(app);

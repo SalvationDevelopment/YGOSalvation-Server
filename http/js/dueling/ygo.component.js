@@ -30,26 +30,9 @@ class ApplicationComponent extends React.Component {
             databaseSystem = await databaseResponse.json();
 
         this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-
-
-
-
         this.connect(serverStatus.PROXY_PORT);
         document.body.style.backgroundImage = `url(${localStorage.theme})`;
 
-        $.getJSON('/manifest/manifest_0-en-OCGTCG.json', (databaseSystem) => {
-            this.store = store;
-            this.chat = new SideChat(this.store);
-            this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-            this.choice = new ChoiceScreen(this.store, this.chat);
-            this.siding = new SideDeckEditScreen(this.store, this.chat);
-            this.state = {
-                mode: 'lobby',
-                tick: 0
-            };
-            this.connect();
-            document.body.style.backgroundImage = `url(${localStorage.theme})`;
-        });
     }
 
     side(deck) {
@@ -60,11 +43,12 @@ class ApplicationComponent extends React.Component {
         ReactDOM.render(this.render(), document.getElementById('main'));
     }
 
-    connect() {
+    connect(PROXY_PORT) {
         const urlParams = new URLSearchParams(window.location.search),
             primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
 
-        this.primus = window.Primus.connect(primusprotocol + location.host + ':' + urlParams.get('room'));
+        this.primus = window.Primus.connect(primusprotocol + location.host + ':' + PROXY_PORT);
+        console.log(primusprotocol + location.host + ':' + PROXY_PORT);
         this.lobby = new LobbyScreen(this.store, this.chat, this.primus);
         this.manualControls = new ManualControls(this.store, this.primus);
         this.chat.manualControls = this.manualControls;
@@ -82,6 +66,9 @@ class ApplicationComponent extends React.Component {
 
         this.primus.on('open', () => {
             console.log('connected, registering');
+            this.primus.write({
+                room: Number(urlParams.get('room'))
+            });
             this.primus.write({
                 action: 'register',
                 username: localStorage.username,
@@ -217,15 +204,15 @@ class ApplicationComponent extends React.Component {
                 }
 
             }
-            
-            
+
+
             this.state.question_options.select_options[message.option].selected = true;
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.duel.reveal(this.state.question_options.select_options);
                 this.store.dispatch({ action: 'RENDER' });
             }, 300);
-            
-            
+
+
 
             return state;
         });

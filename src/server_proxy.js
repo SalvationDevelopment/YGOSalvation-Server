@@ -6,24 +6,24 @@ const http = require('http'),
     { log: logError } = logger.create(logger.config.error, '[ERROR]');
 
 
-function wireProxyConnection(Socket, outbound, inbound, room) {
-    outbound = new Socket(`ws://localhost:${room}`);
-    inbound.write({ action: 'proxy', status: 'connecting' });
+function wireProxyConnection(Socket, outboundClient, inboundClient, room) {
+    outboundClient = new Socket(`ws://localhost:${room}`);
+    inboundClient.write({ action: 'proxy', status: 'connecting' });
 
-    outbound.on('open', function open() {
-        inbound.write({ action: 'proxy', status: 'up' });
+    outboundClient.on('open', function open() {
+        inboundClient.write({ action: 'proxy', status: 'up' });
     });
 
-    outbound.on('data', function (data) {
-        inbound.write(data);
+    outboundClient.on('data', function (data) {
+        inboundClient.write(data);
     });
 
-    outbound.on('disconnection',function () {
-        inbound.disconnect();
+    outboundClient.on('disconnection', function () {
+        inboundClient.disconnect();
     });
 
-    inbound.on('disconnection',function () {
-        outbound.disconnect();
+    inboundClient.on('disconnection', function () {
+        outboundClient.disconnect();
     });
 }
 
@@ -44,12 +44,24 @@ function createProxyServer(port) {
         debug('connection event');
         socket.write({ action: 'proxy', status: 'down' });
         socket.on('data', function (message) {
-            if (client) {
-                client.write(message);
-                return;
-            }
-            if (!client && message.room) {
-                wireProxyConnection(server.Socket, client, socket, message.room);
+            try {
+                if (client) {
+                    client.write(message);
+                    return;
+                }
+
+                if (typeof message.room !== 'number') {
+                    socket.write({
+                        error: 'Proxy Connection not establismed provide internal port number.'
+                    });
+                    return;
+                }
+
+                if (!client && message.room) {
+                    wireProxyConnection(server.Socket, client, socket, message.room);
+                }
+            } catch (error) {
+                logError(error);
             }
         });
     });
