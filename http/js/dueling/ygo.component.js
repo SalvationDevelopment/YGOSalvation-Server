@@ -9,6 +9,33 @@ function orient(player) {
 class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
+        this.store = store;
+        this.chat = new SideChat(this.store);
+        this.choice = new ChoiceScreen(this.store, this.chat);
+        this.siding = new SideDeckEditScreen(this.store, this.chat);
+        this.state = {
+            mode: 'lobby',
+            tick: 0
+        };
+        this.chainingMode = false;
+        this.isSelectingChain = false;
+        this.isAdvancedSelection = false;
+        this.setup(store);
+    }
+
+    async setup(store) {
+        const databaseResponse = await fetch('/manifest/manifest_0-en-OCGTCG.json'),
+            serverStatusResponse = await fetch('/status.json'),
+            serverStatus = await serverStatusResponse.json(),
+            databaseSystem = await databaseResponse.json();
+
+        this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
+
+
+
+
+        this.connect(serverStatus.PROXY_PORT);
+        document.body.style.backgroundImage = `url(${localStorage.theme})`;
 
         $.getJSON('/manifest/manifest_0-en-OCGTCG.json', (databaseSystem) => {
             this.store = store;
@@ -149,6 +176,11 @@ class ApplicationComponent extends React.Component {
             return;
         });
 
+        this.store.register('CANCEL_CHAIN', (message, state) => {
+            const NO_RESPONSE = -1;
+            this.respondChain(NO_RESPONSE);
+        });
+
         this.store.register('REVEAL_CARD_CLICK', (message, state) => {
             if (message.selected) {
                 console.log('removing a selection');
@@ -243,37 +275,39 @@ class ApplicationComponent extends React.Component {
         });
     }
 
-    chain(message) {
-        if (!message.select_trigger
-            && !message.forced
-            && (!message.count || !message.specount)
-            && !message.count) {
-            this.primus.write({
-                action: 'question',
-                answer: {
-                    type: 'number',
-                    i: -1
-                },
-                uuid: this.state.question
-            });
-            return;
-        }
-        if (message.forced) {
-            this.primus.write({
-                action: 'question',
-                answer: {
-                    type: 'number',
-                    i: 0
-                },
-                uuid: this.state.question
-            });
-            return;
-        }
-        console.log('solve', message);
-        //this.state.question_max = message.count;
-        this.state.question_min = (message.forced) ? 1 : 1;
-        this.duel.chain(message.select_options);
+    respondChain(response) {
+        this.primus.send({
+            action: 'question',
+            answer: {
+                type: 'number',
+                i: response
+            }
+        });
     }
+
+    chain(message) {
+        const NO_RESPONSE = -1,
+            DEFAULT_RESPONSE = 0,
+            USER_IGNORES_MOST_CHAINING = 2,
+            cards = message.select_options,
+            specialCondition = cards.length && message.specialCount,
+            onlyOnField = !cards.some((card) => {
+                return ['DECK', 'EXTRA', 'GRAVEYARD', 'BANISHED', 'OVERLAY'].includes(card.location);
+            });
+
+        if (!message.forced || this.chainingMode === USER_IGNORES_MOST_CHAINING) {
+            this.respondChain(NO_RESPONSE);
+            return;
+        }
+
+        if (!this.chainingMode || !specialCondition) {
+            this.respondChain(DEFAULT_RESPONSE);
+            return;
+        }
+
+        return (onlyOnField) ? this.duel.select(cards) : this.duel.reveal(cards);
+    }
+
 
     duelAction(message) {
         this.duel.disableSelection();
@@ -362,7 +396,6 @@ class ApplicationComponent extends React.Component {
                 this.duel.reveal(message.options.selectable_targets);
                 break;
             case 'MSG_CONFIRM_CARDS':
-                debugger;
                 this.duel.reveal(message.options.select_options);
                 break;
             case 'MSG_SELECT_POSITION':
