@@ -32,18 +32,21 @@ class Chainer extends React.Component {
                     display: 'flex'
                 }, id: 'revealed',
                 onClick: this.click.bind(this, {}, (-1))
-            }, this.state.cards.map((card, i) => this.img(card, i)))
+            }, this.state.cards.map((card, i) => this.img(card, i)));
         }
         return '';
     }
 
-    trigger(state) {
-        Object.assign(this.state, state);
+    trigger(cards, onlyOnField, forced) {
         this.state.active = true;
+        this.state.cards = cards;
+        this.state.onlyOnField = onlyOnField;
+        this.state.forced = forced;
     }
 
     close() {
         this.state.cards = [];
-        this.active = false;
+        this.state.active = false;
+
     }
 }

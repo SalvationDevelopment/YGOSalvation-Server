@@ -272,6 +272,18 @@ class ApplicationComponent extends React.Component {
         });
     }
 
+    attemptChain(cards, onlyOnField) {
+        const ignoreChain = window.confirm('Chain a card?'),
+            NO_RESPONSE = -1;
+
+        if (ignoreChain) {
+            this.respondChain(NO_RESPONSE);
+            return;
+        }
+
+        this.duel.chain(cards, onlyOnField);
+    }
+
     chain(message) {
         const NO_RESPONSE = -1,
             DEFAULT_RESPONSE = 0,
@@ -292,7 +304,8 @@ class ApplicationComponent extends React.Component {
             return;
         }
 
-        return (onlyOnField) ? this.duel.select(cards) : this.duel.reveal(cards);
+        this.attemptChain(cards, onlyOnField);
+
     }
 
 
@@ -376,7 +389,6 @@ class ApplicationComponent extends React.Component {
                 this.duel.reveal(message.options.must_select.concat(message.options.can_select));
                 break;
             case 'MSG_ADD_COUNTER':
-                debugger;
                 this.duel.select(message.options.select_options);
                 break;
             case 'MSG_SELECT_TRIBUTE':
@@ -389,11 +401,9 @@ class ApplicationComponent extends React.Component {
                 this.duel.positionDialog.trigger(message.options);
                 break;
             case 'MSG_SELECT_EFFECTYN':
-                debugger;
                 this.duel.yesnoDialog.state.active = true;
                 break;
             case 'MSG_SELECT_YESNO':
-                debugger;
                 this.duel.yesnoDialog.state.active = true;
                 break;
             case 'MSG_SELECT_CHAIN':

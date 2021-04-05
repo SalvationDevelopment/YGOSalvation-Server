@@ -127,8 +127,12 @@ class DuelScreen extends React.Component {
         this.revealer.trigger({ active: true, cards });
     }
 
-    chain(cards) {
-        this.chainer.trigger({ active: true, cards });
+    chain(cards, onlyOnField) {
+        if (onlyOnField) {
+            this.select(cards);
+            return;
+        }
+        this.reveal(cards);
     }
 
     closeRevealer() {
@@ -139,7 +143,7 @@ class DuelScreen extends React.Component {
         this.field.disableSelection();
     }
 
-    select(query) {
+    select(query, chained, forced) {
         this.field.select(query);
     }
 
