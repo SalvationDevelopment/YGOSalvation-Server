@@ -28,7 +28,7 @@
         "function-queue": "0.0.12",
         "helmet": "^3.21.2",
         "hsts": "^2.2.0",
-        "json": "^9.0.6",
+        "json": "^10.0.0",
         "jsonfile": "^2.4.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.12.2",
