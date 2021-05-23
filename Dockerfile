@@ -3,7 +3,7 @@ RUN apt update && \
         apt -y install wget git build-essential libsqlite3-dev libevent-dev && \
         rm -rf /var/lib/apt/lists/*
 WORKDIR /
-RUN git clone --branch=server --recursive --depth=1 https://github.com/purerosefallen/ygopro && \
+RUN git clone --branch=server --recursive --depth=1 https://github.com/ProjectIgnis/EDOPro-Core && \
         cd ygopro && \
         git submodule foreach git checkout master && \
         wget -O - https://www.lua.org/ftp/lua-5.3.5.tar.gz | tar zfx - && \
