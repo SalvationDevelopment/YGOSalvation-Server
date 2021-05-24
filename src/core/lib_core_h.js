@@ -46,6 +46,14 @@ const struct = require('ref-struct'),
         startingDrawCount: uint32_t,
         drawCountPerTurn: uint32_t
     }),
+    DuelOptions = struct({
+        startingLP: uint32_t,
+        startingDrawCount: uint32_t,
+        drawCountPerTurn: uint32_t,
+        duelFlags: uint64_t,
+        handTestNoOpponent: 'bool',
+        handTestNoShuffle: 'bool'
+    }),
     OCG_DuelOptions = struct({
         seed: uint32_t,
         flags: uint64_t,
@@ -88,6 +96,7 @@ module.exports = {
     uint32_t_pointer,
     OCG_Duel,
     Array_uint16_t,
+    DuelOptions,
     OCG_CardData,
     OCG_Player,
     OCG_DuelOptions,

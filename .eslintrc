@@ -2,7 +2,7 @@
   "env": {
     "node": true,
     "mocha": false,
-    "es6": true
+    "es2020": true
   },
   "parserOptions": {
     "ecmaVersion": 8

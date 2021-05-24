@@ -41,23 +41,7 @@ const ffi = require('ffi'),
     LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
     makeCard = require('./lib_card'),
-    cardData = new StructType({
-        code: 'uint',
-        alias: 'uint',
-        setcode: 'ulonglong',
-        type: 'uint',
-        level: 'uint',
-        attribute: 'uint',
-        race: 'uint',
-        attack: 'int',
-        defense: 'int',
-        lscale: 'uint',
-        rscale: 'uint',
-        link_marker: 'uint'
-    }),
-    size_t = new StructType({
-        size: 'uint'
-    }),
+
     queue = require('function-queue'),
     enums = require('./enums'),
     analyze = require('./lib_analyzer'),
@@ -67,6 +51,22 @@ const ffi = require('ffi'),
     libOCGAPI = require('./lib_core'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     scriptsFolder = '../../ygopro-scripts',
+    {
+        uint64_t,
+        uint32_t,
+        uint8_t,
+        uint32_t_pointer,
+        OCG_Duel,
+        Array_uint16_t,
+        DuelOptions,
+        OCG_CardData,
+        OCG_Player,
+        OCG_DuelOptions,
+        OCG_NewCardInfo,
+        OCG_QueryInfo,
+        OCG_CardData_pointer,
+        OCG_Duel_pointer
+    } = require('./lib_core_h'),
     {
         createCardReader,
         createScriptReader,
@@ -395,7 +395,7 @@ function makeGame(pduel, game, OCGAPI) {
      * @returns {void}
      */
     function sendToObservers() {
-        
+
         observers.write(lastMessage);
     }
 
@@ -515,6 +515,17 @@ function makeGame(pduel, game, OCGAPI) {
     };
 }
 
+function OrDuelFlags(game) {
+    // https://github.com/ProjectIgnis/EDOPro/blob/0c9e2c18cb9c29ff87480fe52f9886d75418c696/gframe/deck_con.cpp#L174
+    return DuelOptions({
+        startingLP: game.startingLP,
+        startingDrawCount: game.start_hand_count,
+        drawCountPerTurn: 1,
+        duelFlags: game.mode,
+        handTestNoOpponent: false,
+        handTestNoShuffle: false
+    });
+}
 /**
  * Start a duel
  * @param {DuelSettings} game parameters for starting the duel
@@ -525,20 +536,27 @@ function makeGame(pduel, game, OCGAPI) {
  * @returns {void}
  */
 function duel(game, state, errorHandler, players, spectators) {
-    var pduel,
+    var pduel = ref.NULL_POINTER,
         instance = {},
         OCGAPI = libOCGAPI(),
+        duelSeed = seed(),
         payload1 = new Buffer.alloc(0x40000),
         payload2 = new Buffer.alloc(0x40000),
         payload3 = new Buffer.alloc(0x40000),
         payload4 = new Buffer.alloc(0x40000),
-
-   
-        const options = OCG_DuelOptions({
-            seed: seed,
+        options = OCG_DuelOptions({
+            seed: duelSeed,
             flags,
-            team1: OCG_Player(),
-            team2: OCG_Player(),
+            team1: OCG_Player({
+                startingLP: game.startLP,
+                startingDrawCount: game.start_hand_count,
+                drawCountPerTurn: game.draw_count
+            }),
+            team2: OCG_Player({
+                startingLP: game.startLP,
+                startingDrawCount: game.start_hand_count,
+                drawCountPerTurn: game.draw_count
+            }),
             cardReader: createCardReader(),
             payload1,
             scriptReader: createScriptReader(),
@@ -546,35 +564,58 @@ function duel(game, state, errorHandler, players, spectators) {
             logHandler: createLogHandler(),
             payload3,
             cardReaderDone: createDataReaderDone(),
-            payload4,
-        }); 
+            payload4
+        });
 
-    pduel = OCGAPI.create_duel(seed());
-
-   
-    
-    OCGAPI.set_script_reader(script_reader_function); // good
-    OCGAPI.set_card_reader(card_reader_function); //bad
-    OCGAPI.set_message_handler(responsei_function); //bad
-    OCGAPI.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
-    OCGAPI.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    OCGAPI.set_responsei(pduel, message_handler_function);
-
-    OCGAPI.set_player_info(pduel, 0, game.start_lp, game.start_hand_count, game.draw_count);
-    OCGAPI.set_player_info(pduel, 1, game.start_lp, game.start_hand_count, game.draw_count);
+    OCGAPI.OCG_CreateDuel(pduel, options);
+    OCGAPI.OCG_LoadScript(pduel, Buffer(0x10000000), 0x10000000, '/constant.lua');
+    OCGAPI.OCG_LoadScript(pduel, Buffer(0x10000000), 0x10000000, '/utility.lua');
     players[0].main.forEach(function (cardID, sequence) {
-        OCGAPI.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.OCG_DuelNewCard(pduel, OCG_NewCardInfo({
+            team: 0, /* either 0 or 1 */
+            duelist: 0, /* index of original owner */
+            code: cardID,
+            con: 0,
+            loc: LOCATION_DECK,
+            seq: sequence,
+            pos: POS_FACEDOWN_DEFENSE
+        }));
+
     });
     players[0].extra.forEach(function (cardID, sequence) {
-        OCGAPI.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.OCG_DuelNewCard(pduel, OCG_NewCardInfo({
+            team: 0, /* either 0 or 1 */
+            duelist: 0, /* index of original owner */
+            code: cardID,
+            con: 0,
+            loc: LOCATION_EXTRA,
+            seq: sequence,
+            pos: POS_FACEDOWN_DEFENSE
+        }));
     });
     players[1].main.forEach(function (cardID, sequence) {
-        OCGAPI.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.OCG_DuelNewCard(pduel, OCG_NewCardInfo({
+            team: 1, /* either 0 or 1 */
+            duelist: 1, /* index of original owner */
+            code: cardID,
+            con: 1,
+            loc: LOCATION_DECK,
+            seq: sequence,
+            pos: POS_FACEDOWN_DEFENSE
+        }));
     });
     players[1].extra.forEach(function (cardID, sequence) {
-        OCGAPI.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.OCG_DuelNewCard(pduel, OCG_NewCardInfo({
+            team: 1, /* either 0 or 1 */
+            duelist: 1, /* index of original owner */
+            code: cardID,
+            con: 1,
+            loc: LOCATION_EXTRA,
+            seq: sequence,
+            pos: POS_FACEDOWN_DEFENSE
+        }));
     });
-    //send start msg
+
     instance = makeGame(pduel, game, OCGAPI);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, instance, game);
