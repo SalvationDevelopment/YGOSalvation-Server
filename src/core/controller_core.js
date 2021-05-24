@@ -64,11 +64,17 @@ const ffi = require('ffi'),
     boardController = require('./controller_automatic'),
     ManualControlEngine = require('./model_automatic_field'),
     DataStream = require('./model_stream'),
-    libocgapi = require('./lib_core'),
+    libOCGAPI = require('./lib_core'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
-    scriptsFolder = '../../ygopro-scripts';
+    scriptsFolder = '../../ygopro-scripts',
+    {
+        createCardReader,
+        createScriptReader,
+        createLogHandler,
+        createDataReaderDone
+    } = require('./lib_core_callbacks');
 
-global.gc_protected = [];
+
 process.replay = [[], []];
 /**
  * Read a card from file.
@@ -216,12 +222,12 @@ function mainProcess(game) {
         if (flag === 2) {
             break;
         }
-        const result = game.ocgapi.process(game.pduel),
+        const result = game.OCGAPI.process(game.pduel),
             length = result & 0xffff;
 
         flag = result >> 16;
         if (length) {
-            game.ocgapi.get_message(game.pduel, coreMessage);
+            game.OCGAPI.get_message(game.pduel, coreMessage);
         }
         message = analyze(coreMessage, length, game);
 
@@ -246,8 +252,8 @@ function Responser(game, player, slot) {
         game.last(slot);
 
         const result = (typeof data === 'number')
-            ? game.ocgapi.set_responsei(game.pduel, data)
-            : game.ocgapi.set_responseb(game.pduel, Buffer(data));
+            ? game.OCGAPI.set_responsei(game.pduel, data)
+            : game.OCGAPI.set_responseb(game.pduel, Buffer(data));
 
         mainProcess(game);
         return result;
@@ -298,10 +304,10 @@ function playerInstance(playerConnection, slot, game, settings) {
  * Setup duel control functions
  * @param {Buffer} pduel pointer representing the duel inside ygopro-core
  * @param {*} game game settings
- * @param {*} ocgapi game logic
+ * @param {*} OCGAPI game logic
  * @returns {Duel} Game instance with controls.
  */
-function makeGame(pduel, game, ocgapi) {
+function makeGame(pduel, game, OCGAPI) {
     let lastMessage = new Buffer(''),
         last_response = -1,
         time_limit = game.time_limit,
@@ -398,10 +404,10 @@ function makeGame(pduel, game, ocgapi) {
             command: 'MSG_START',
             lifepoints1: game.start_lp,
             lifepoints2: game.start_lp,
-            player1decksize: ocgapi.query_field_count(pduel, 0, 0x1),
-            player1extrasize: ocgapi.query_field_count(pduel, 0, 0x40),
-            player2decksize: ocgapi.query_field_count(pduel, 1, 0x1),
-            player2extrasize: ocgapi.query_field_count(pduel, 1, 0x40)
+            player1decksize: OCGAPI.query_field_count(pduel, 0, 0x1),
+            player1extrasize: OCGAPI.query_field_count(pduel, 0, 0x40),
+            player2decksize: OCGAPI.query_field_count(pduel, 1, 0x1),
+            player2extrasize: OCGAPI.query_field_count(pduel, 1, 0x40)
         };
     }
 
@@ -447,13 +453,13 @@ function makeGame(pduel, game, ocgapi) {
     }
 
     function msg_update_data(player, location) {
-        const count = ocgapi.query_field_count(pduel, player, location),
+        const count = OCGAPI.query_field_count(pduel, player, location),
             cards = [],
             message = {};
         for (let index = 0; count > index; ++index) {
             const qbuf = Buffer.alloc(0x40000);
             qbuf.type = ref.types.byte;
-            ocgapi.query_card(pduel, player, location, index, 0xff9999, qbuf, 0);
+            OCGAPI.query_card(pduel, player, location, index, 0xff9999, qbuf, 0);
             const pack = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
             cards.push(pack.card);
         }
@@ -476,7 +482,7 @@ function makeGame(pduel, game, ocgapi) {
     function refreshSingle(player, location, index, flag = 0x834333) {
         const qbuf = Buffer.alloc(0x40000);
         qbuf.type = ref.types.byte;
-        ocgapi.query_card(pduel, player, location, index, flag, qbuf, 0);
+        OCGAPI.query_card(pduel, player, location, index, flag, qbuf, 0);
         var message = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
         sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);
@@ -521,50 +527,55 @@ function makeGame(pduel, game, ocgapi) {
 function duel(game, state, errorHandler, players, spectators) {
     var pduel,
         instance = {},
-        ocgapi = libocgapi();
+        OCGAPI = libOCGAPI(),
+        payload1 = new Buffer.alloc(0x40000),
+        payload2 = new Buffer.alloc(0x40000),
+        payload3 = new Buffer.alloc(0x40000),
+        payload4 = new Buffer.alloc(0x40000),
 
-    function messageHandler(external_pduel, type) {
-        var messageBuffer = Buffer.alloc(1024);
-        ocgapi.get_log_message(external_pduel, messageBuffer);
-        ///errorHandler(messageBuffer.toString(), type);
-    }
+   
+        const options = OCG_DuelOptions({
+            seed: seed,
+            flags,
+            team1: OCG_Player(),
+            team2: OCG_Player(),
+            cardReader: createCardReader(),
+            payload1,
+            scriptReader: createScriptReader(),
+            payload2,
+            logHandler: createLogHandler(),
+            payload3,
+            cardReaderDone: createDataReaderDone(),
+            payload4,
+        }); 
 
-    const card_reader_function = ffi.Callback('uint32', ['uint32', ref.refType(cardData)], card_reader),
-        responsei_function = ffi.Callback('int32', ['pointer', 'uint32'], messageHandler),
-        script_reader_function = ffi.Callback('string', ['string', ref.refType(size_t)], scriptReader),
-        message_handler_function = ffi.Callback('uint32', ['pointer', 'uint32'], console.log);
+    pduel = OCGAPI.create_duel(seed());
 
-    global.gc_protected.push({
-        card_reader_function,
-        responsei_function,
-        script_reader_function,
-        message_handler_function
-    });
+   
+    
+    OCGAPI.set_script_reader(script_reader_function); // good
+    OCGAPI.set_card_reader(card_reader_function); //bad
+    OCGAPI.set_message_handler(responsei_function); //bad
+    OCGAPI.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
+    OCGAPI.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
+    OCGAPI.set_responsei(pduel, message_handler_function);
 
-    pduel = ocgapi.create_duel(seed());
-    ocgapi.set_script_reader(script_reader_function); // good
-    ocgapi.set_card_reader(card_reader_function); //bad
-    ocgapi.set_message_handler(responsei_function); //bad
-    ocgapi.preload_script(pduel, './expansions/script/constant.lua', 0x10000000);
-    ocgapi.preload_script(pduel, './expansions/script/utility.lua', 0x10000000);
-    ocgapi.set_responsei(pduel, message_handler_function);
-
-    ocgapi.set_player_info(pduel, 0, game.start_lp, game.start_hand_count, game.draw_count);
-    ocgapi.set_player_info(pduel, 1, game.start_lp, game.start_hand_count, game.draw_count);
+    OCGAPI.set_player_info(pduel, 0, game.start_lp, game.start_hand_count, game.draw_count);
+    OCGAPI.set_player_info(pduel, 1, game.start_lp, game.start_hand_count, game.draw_count);
     players[0].main.forEach(function (cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.new_card(pduel, cardID, 0, 0, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     players[0].extra.forEach(function (cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.new_card(pduel, cardID, 0, 0, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     players[1].main.forEach(function (cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.new_card(pduel, cardID, 1, 1, LOCATION_DECK, 0, POS_FACEDOWN_DEFENSE);
     });
     players[1].extra.forEach(function (cardID, sequence) {
-        ocgapi.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
+        OCGAPI.new_card(pduel, cardID, 1, 1, LOCATION_EXTRA, 0, POS_FACEDOWN_DEFENSE);
     });
     //send start msg
-    instance = makeGame(pduel, game, ocgapi);
+    instance = makeGame(pduel, game, OCGAPI);
     const playerConnections = players.map(function (playerConnection, slot) {
         return playerInstance(playerConnection, slot, instance, game);
     }),
@@ -575,7 +586,7 @@ function duel(game, state, errorHandler, players, spectators) {
     instance.sendStartInfo();
     instance.refresh(0);
     instance.refresh(1);
-    ocgapi.start_duel(pduel, rule);
+    OCGAPI.start_duel(pduel, rule);
 
     instance.getField = function (client) {
         const slot = client.slot;
@@ -591,7 +602,7 @@ function duel(game, state, errorHandler, players, spectators) {
         spectators.write(observers.getField());
 
     };
-    instance.ocgapi = ocgapi;
+    instance.OCGAPI = OCGAPI;
     mainProcess(instance);
 
 

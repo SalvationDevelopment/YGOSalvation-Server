@@ -1,15 +1,21 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-sync */
 /* eslint-disable new-cap */
 
 const fs = require('fs'),
     ffi = require('ffi'),
+
     ref = require('ref'), {
         uint32_t,
+        Array_uint16_t,
         OCG_Duel,
         OCG_CardData,
         OCG_CardData_pointer
     } = require('./lib_core_h');
 
+
+
+global.gc_protected = [];
 
 /**
  * Determine if a card has a certain type. Effect/Fusion/Sychro etc
@@ -38,23 +44,41 @@ function unMaskRightScale(dbEntry) {
 }
 
 function unMaskLinkMarker(dbEntry) {
-    return (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0
+    return (hasType(dbEntry, 0x4000000)) ? dbEntry.defense : 0;
 }
 
-function cardReader(database, payload, code, data) {
+function unMaskSetcode(dbEntry) {
+    
+    const results = [];
+    for (let i = 0; i < 4; i++) {
+        const setcode = (BigInt(dbEntry.setcodes) >> (BigInt(i) * BigInt(16))) & BigInt(0xffff);
+        if (setcode) {
+            results.push(Number(BigInt.asUintN(64, setcode)));
+        }
+    }
+
+    results.push(0);
+    //return results;
+    return Array_uint16_t(results);
+
+}
+
+function cardReader(database, setcodes, payload, code, data) {
 
     const dbEntry = database.find(function (cardEntry) {
         return cardEntry.id === code;
     });
 
+    dbEntry.setCodeArray = unMaskSetcode(dbEntry, setcodes);
+
     if (!dbEntry) {
         return;
     }
 
-    data = OCG_CardData({
+    dbEntry.data = OCG_CardData({
         code: dbEntry.id,
         alias: dbEntry.alias,
-        setcode: dbEntry.setcode,
+        setcode: dbEntry.setCodeArray.ref(),
         type: dbEntry.type,
         level: unMaskedLevel(dbEntry),
         attribute: dbEntry.attribute,
@@ -82,14 +106,14 @@ function scriptReader(scriptsFolder, payload, duel, name) {
             const script = fs.readFileSync(file);
             size.writeUInt32LE(script.length);
             global.gc_protected.push(script);
-            return ref.readCString(script, 0);
+            return 1;
         } catch (e) {
-            return ref.alloc('pointer');
+            return 0;
         }
     }
 
     console.log(name, 'at', file, 'does not exist');
-    return ref.alloc('pointer');
+    return 0;
 }
 
 function logHander(logger, payload, str, type) {
@@ -111,26 +135,40 @@ function dataReaderDone(payloadPointer, dataPointer) {
 
     payload.copy(data);
 }
-function createCardReader(database) {
-    return ffi.Callback('void', ['void*', uint32_t, OCG_CardData_pointer],
-        (payload, code, data) => cardReader(database, payload, code, data));
+function createCardReader(database, setcodeMap) {
+    const setcodes = Object.keys(setcodeMap).map((setcode) => parseInt(setcode, 16)),
+        callback = ffi.Callback('void', ['void*', uint32_t, OCG_CardData_pointer],
+            (payload, code, data) => cardReader(database, setcodes, payload, code, data));
+
+    global.gc_protected.push(callback);
+    return callback;
 }
 
 function createScriptReader(scriptsFolder) {
-    return ffi.Callback('int', ['void*', OCG_Duel, 'char*'],
+    const callback = ffi.Callback('int', ['void*', OCG_Duel, 'char*'],
         (payload, duel, name) => scriptReader(scriptsFolder, payload, duel, name));
+
+    global.gc_protected.push(callback);
+    return callback;
 }
 function createLogHandler(logger) {
-    return ffi.Callback('void', ['void*', 'char*', 'int'],
+    const callback = ffi.Callback('void', ['void*', 'char*', 'int'],
         (payload, str, type) => logHander(logger, payload, str, type));
+
+    global.gc_protected.push(callback);
+    return callback;
 }
 
 function createDataReaderDone() {
-    return 
+    const callback = ffi.Callback('void', ['void*', OCG_CardData_pointer], dataReaderDone);
+
+    global.gc_protected.push(callback);
+    return callback;
 }
+
 module.export = {
     createCardReader,
     createScriptReader,
     createLogHandler,
-    dataReaderDone : ffi.Callback('void', ['void*', OCG_CardData_pointer], dataReaderDone)
+    createDataReaderDone
 };
