@@ -454,7 +454,7 @@ class ApplicationComponent extends React.Component {
         console.log(message);
         switch (message.action) {
             case 'proxy':
-                if (!message.status === 'up') {
+                if (message.status !== 'up') {
                     break;
                 }
                 this.primus.write({
