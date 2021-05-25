@@ -17,6 +17,7 @@
         "node": ">=0.10 <12"
     },
     "dependencies": {
+        "arch": "^2.2.0",
         "axios": "^0.21.1",
         "body-parser": "^1.19.0",
         "bufferutil": "^4.0.1",

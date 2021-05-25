@@ -19,7 +19,10 @@ const {
     fileExtension = (platform === 'win32') ? 'dll' : 'so',
     core_location = path.resolve(__dirname, `./bin/${platform}/${arch}/ocgcore.${fileExtension}`);
 
-exports = function () {
+var archy = require('arch')
+console.log(archy(), os.arch())
+
+module.exports = function () {
     return new ffi.Library(core_location, {
         OCG_GetVersion: ['void', ['int*', 'int*']],
         OCG_CreateDuel: ['int', [OCG_Duel_pointer, OCG_DuelOptions]],
@@ -60,3 +63,6 @@ OCGAPI void* OCG_DuelQueryLocation(OCG_Duel duel, uint32_t* length, OCG_QueryInf
 OCGAPI void* OCG_DuelQueryField(OCG_Duel duel, uint32_t* length);
 
  */
+
+console.log(core_location);
+module.exports();

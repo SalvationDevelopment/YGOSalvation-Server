@@ -26,8 +26,8 @@
  * @property {Number} startLP
  * @property {Object} player
  */
-const    ref = require('ref'),
-    
+const ref = require('ref'),
+
     cloneBuffer = require('clone-buffer'),
     fs = require('fs'),
     BufferStreamReader = require('./model_stream_reader'),
@@ -528,7 +528,7 @@ function duel(game, state, errorHandler, players, spectators) {
         payload4 = new Buffer.alloc(0x40000),
         options = OCG_DuelOptions({
             seed: duelSeed,
-            flags : 0,
+            flags: 0,
             team1: OCG_Player({
                 startingLP: game.startLP,
                 startingDrawCount: game.start_hand_count,
@@ -539,19 +539,27 @@ function duel(game, state, errorHandler, players, spectators) {
                 startingDrawCount: game.start_hand_count,
                 drawCountPerTurn: game.draw_count
             }),
-            cardReader: createCardReader(),
+            cardReader: createCardReader(database),
             payload1,
-            scriptReader: createScriptReader(),
+            scriptReader: createScriptReader(scriptsFolder),
             payload2,
-            logHandler: createLogHandler(),
+            logHandler: createLogHandler(console.log),
             payload3,
             cardReaderDone: createDataReaderDone(),
             payload4
         });
 
+    function loadScript(name) {
+        let file = scriptsFolder + '/' + name;
+      
+       const script = fs.readFileSync(file);
+
+        OCGAPI.OCG_LoadScript(pduel, Buffer(script).ref(), script.length, Buffer(name).ref());
+    }
+
     OCGAPI.OCG_CreateDuel(pduel, options);
-    OCGAPI.OCG_LoadScript(pduel, Buffer(0x10000000), 0x10000000, '/constant.lua');
-    OCGAPI.OCG_LoadScript(pduel, Buffer(0x10000000), 0x10000000, '/utility.lua');
+    loadScript('/constant.lua');
+    OCGAPI.OCG_LoadScript(pduel, Buffer(0x10000000), 0x10000000, ref(Buffer('/utility.lua')));
     players[0].main.forEach(function (cardID, sequence) {
         OCGAPI.OCG_DuelNewCard(pduel, OCG_NewCardInfo({
             team: 0, /* either 0 or 1 */

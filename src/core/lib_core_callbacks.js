@@ -48,7 +48,7 @@ function unMaskLinkMarker(dbEntry) {
 }
 
 function unMaskSetcode(dbEntry) {
-    
+
     const results = [];
     for (let i = 0; i < 4; i++) {
         const setcode = (BigInt(dbEntry.setcodes) >> (BigInt(i) * BigInt(16))) & BigInt(0xffff);
@@ -63,13 +63,13 @@ function unMaskSetcode(dbEntry) {
 
 }
 
-function cardReader(database, setcodes, payload, code, data) {
+function cardReader(database, payload, code, data) {
 
     const dbEntry = database.find(function (cardEntry) {
         return cardEntry.id === code;
     });
 
-    dbEntry.setCodeArray = unMaskSetcode(dbEntry, setcodes);
+    dbEntry.setCodeArray = unMaskSetcode(dbEntry);
 
     if (!dbEntry) {
         return;
@@ -92,15 +92,10 @@ function cardReader(database, setcodes, payload, code, data) {
 }
 
 function scriptReader(scriptsFolder, payload, duel, name) {
-    let file = scriptsFolder + '/' + name.substr(9, 13);
+    console.log(scriptsFolder, payload, duel, name, payload.deref(), duel.deref(), name.deref());
+    let file = scriptsFolder + '/' + name.deref();
     const size = ref.reinterpret(payload.deref()['ref.buffer'], 32);
 
-    if (name === './expansions/script/constant.lua') {
-        file = scriptsFolder + '/constant.lua';
-    }
-    if (name === './expansions/script/utility.lua') {
-        file = scriptsFolder + '/utility.lua';
-    }
     if (fs.existsSync(file)) {
         try {
             const script = fs.readFileSync(file);
@@ -135,10 +130,10 @@ function dataReaderDone(payloadPointer, dataPointer) {
 
     payload.copy(data);
 }
-function createCardReader(database, setcodeMap) {
-    const setcodes = Object.keys(setcodeMap).map((setcode) => parseInt(setcode, 16)),
-        callback = ffi.Callback('void', ['void*', uint32_t, OCG_CardData_pointer],
-            (payload, code, data) => cardReader(database, setcodes, payload, code, data));
+
+function createCardReader(database) {
+    const callback = ffi.Callback('void', ['void*', uint32_t, OCG_CardData_pointer],
+        (payload, code, data) => cardReader(database,  payload, code, data));
 
     global.gc_protected.push(callback);
     return callback;
@@ -166,7 +161,7 @@ function createDataReaderDone() {
     return callback;
 }
 
-module.export = {
+module.exports = {
     createCardReader,
     createScriptReader,
     createLogHandler,
