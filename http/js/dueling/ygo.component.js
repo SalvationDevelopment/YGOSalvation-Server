@@ -17,7 +17,7 @@ class ApplicationComponent extends React.Component {
             mode: 'lobby',
             tick: 0
         };
-        
+
         this.setup(store);
     }
 
@@ -28,7 +28,7 @@ class ApplicationComponent extends React.Component {
             databaseSystem = await databaseResponse.json();
 
         this.duel = new DuelScreen(this.store, this.chat, databaseSystem);
-       
+
 
 
 
@@ -70,11 +70,6 @@ class ApplicationComponent extends React.Component {
             console.log('connected, registering');
             this.primus.write({
                 room: Number(urlParams.get('room'))
-            });
-            this.primus.write({
-                action: 'register',
-                username: localStorage.username,
-                session: localStorage.session
             });
         });
 
@@ -458,6 +453,16 @@ class ApplicationComponent extends React.Component {
     action(message) {
         console.log(message);
         switch (message.action) {
+            case 'proxy':
+                if (!message.status === 'up') {
+                    break;
+                }
+                this.primus.write({
+                    action: 'register',
+                    username: localStorage.username,
+                    session: localStorage.session
+                });
+                break;
             case 'error':
                 console.log(message.msg);
                 break;
