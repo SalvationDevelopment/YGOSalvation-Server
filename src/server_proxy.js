@@ -12,6 +12,9 @@ function wireProxyConnection(Socket, outboundClient, inboundClient, room) {
 
     outboundClient.on('open', function open() {
         inboundClient.write({ action: 'proxy', status: 'up' });
+        inboundClient.on('data', function (data) {
+            outboundClient.write(data);
+        });
     });
 
     outboundClient.on('data', function (data) {
