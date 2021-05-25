@@ -26,11 +26,9 @@
  * @property {Number} startLP
  * @property {Object} player
  */
-const ffi = require('ffi'),
-    ref = require('ref'),
-    bytePointer = ref.refType(ref.types.byte),
-    voidPointer = ref.refType(ref.types.void),
-    StructType = require('ref-struct'),
+const    ref = require('ref'),
+    
+    cloneBuffer = require('clone-buffer'),
     fs = require('fs'),
     BufferStreamReader = require('./model_stream_reader'),
     POS_FACEDOWN_DEFENSE = 0x8,
@@ -41,7 +39,6 @@ const ffi = require('ffi'),
     LOCATION_GRAVE = 0x10,
     LOCATION_HAND = 0x02,
     makeCard = require('./lib_card'),
-
     queue = require('function-queue'),
     enums = require('./enums'),
     analyze = require('./lib_analyzer'),
@@ -52,20 +49,11 @@ const ffi = require('ffi'),
     database = require('../../http/manifest/manifest_0-en-OCGTCG.json'),
     scriptsFolder = '../../ygopro-scripts',
     {
-        uint64_t,
-        uint32_t,
-        uint8_t,
-        uint32_t_pointer,
-        OCG_Duel,
-        Array_uint16_t,
         DuelOptions,
-        OCG_CardData,
         OCG_Player,
         OCG_DuelOptions,
         OCG_NewCardInfo,
-        OCG_QueryInfo,
-        OCG_CardData_pointer,
-        OCG_Duel_pointer
+        OCG_QueryInfo
     } = require('./lib_core_h'),
     {
         createCardReader,
@@ -222,12 +210,12 @@ function mainProcess(game) {
         if (flag === 2) {
             break;
         }
-        const result = game.OCGAPI.process(game.pduel),
+        const result = game.OCGAPI.OCG_DuelProcess(game.pduel),
             length = result & 0xffff;
 
         flag = result >> 16;
         if (length) {
-            game.OCGAPI.get_message(game.pduel, coreMessage);
+            game.OCGAPI.OCG_DuelGetMessage(game.pduel, coreMessage);
         }
         message = analyze(coreMessage, length, game);
 
@@ -251,12 +239,11 @@ function Responser(game, player, slot) {
     function write(data) {
         game.last(slot);
 
-        const result = (typeof data === 'number')
-            ? game.OCGAPI.set_responsei(game.pduel, data)
-            : game.OCGAPI.set_responseb(game.pduel, Buffer(data));
+        game.OCGAPI.OCG_DuelSetResponse(game.pduel, data, data.length);
+
 
         mainProcess(game);
-        return result;
+        return;
     }
 
     return {
@@ -404,10 +391,10 @@ function makeGame(pduel, game, OCGAPI) {
             command: 'MSG_START',
             lifepoints1: game.start_lp,
             lifepoints2: game.start_lp,
-            player1decksize: OCGAPI.query_field_count(pduel, 0, 0x1),
-            player1extrasize: OCGAPI.query_field_count(pduel, 0, 0x40),
-            player2decksize: OCGAPI.query_field_count(pduel, 1, 0x1),
-            player2extrasize: OCGAPI.query_field_count(pduel, 1, 0x40)
+            player1decksize: OCGAPI.OCG_DuelQueryCount(pduel, 0, 0x1),
+            player1extrasize: OCGAPI.OCG_DuelQueryCount(pduel, 0, 0x40),
+            player2decksize: OCGAPI.OCG_DuelQueryCount(pduel, 1, 0x1),
+            player2extrasize: OCGAPI.OCG_DuelQueryCount(pduel, 1, 0x40)
         };
     }
 
@@ -453,14 +440,12 @@ function makeGame(pduel, game, OCGAPI) {
     }
 
     function msg_update_data(player, location) {
-        const count = OCGAPI.query_field_count(pduel, player, location),
+        const count = OCGAPI.OCG_DuelQueryCount(pduel, player, location),
             cards = [],
             message = {};
-        for (let index = 0; count > index; ++index) {
-            const qbuf = Buffer.alloc(0x40000);
-            qbuf.type = ref.types.byte;
-            OCGAPI.query_card(pduel, player, location, index, 0xff9999, qbuf, 0);
-            const pack = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
+        for (let sequence = 0; count > sequence; ++sequence) {
+            const qbuf = OCGAPI.query_card(pduel, 0, OCG_QueryInfo({ flag: 0xff9999, player, location, sequence }));
+            const pack = msg_update_card({ player, location: enums.locations[location], index: sequence }, {}, new BufferStreamReader(cloneBuffer(qbuf)));
             cards.push(pack.card);
         }
         message.command = 'MSG_UPDATE_DATA';
@@ -479,15 +464,12 @@ function makeGame(pduel, game, OCGAPI) {
         msg_update_data(player, LOCATION_HAND);
     }
 
-    function refreshSingle(player, location, index, flag = 0x834333) {
-        const qbuf = Buffer.alloc(0x40000);
-        qbuf.type = ref.types.byte;
-        OCGAPI.query_card(pduel, player, location, index, flag, qbuf, 0);
-        var message = msg_update_card({ player, location: enums.locations[location], index }, {}, new BufferStreamReader(qbuf));
+    function refreshSingle(player, location, sequence, flag = 0x834333) {
+        const qbuf = OCGAPI.query_card(pduel, 0, OCG_QueryInfo({ flag, player, location, sequence }));
+        var message = msg_update_card({ player, location: enums.locations[location], index: sequence }, {}, new BufferStreamReader(cloneBuffer(qbuf)));
         sendBufferToPlayer(player, message);
         reSendToPlayer(1 - player);
         sendToObservers();
-
     }
 
     function getTurnPlayer() {
@@ -546,7 +528,7 @@ function duel(game, state, errorHandler, players, spectators) {
         payload4 = new Buffer.alloc(0x40000),
         options = OCG_DuelOptions({
             seed: duelSeed,
-            flags,
+            flags : 0,
             team1: OCG_Player({
                 startingLP: game.startLP,
                 startingDrawCount: game.start_hand_count,
@@ -627,7 +609,7 @@ function duel(game, state, errorHandler, players, spectators) {
     instance.sendStartInfo();
     instance.refresh(0);
     instance.refresh(1);
-    OCGAPI.start_duel(pduel, rule);
+    OCGAPI.OCG_StartDuel(pduel);
 
     instance.getField = function (client) {
         const slot = client.slot;
