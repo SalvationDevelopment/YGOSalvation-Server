@@ -46,6 +46,7 @@ pip-log.txt
 #nodejs
 node_modules/*
 coverage/*
+http/node_modules/*
 
 server/http/setups/*
 *.bat
@@ -79,3 +80,5 @@ databases/*.nedb
 http/manifest/banlist.json
 
 *.lock
+http/node_modules/*
+http/.next/*

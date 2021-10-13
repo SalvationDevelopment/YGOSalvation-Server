@@ -94,8 +94,8 @@ sction#gamelist {
     margin: 1vh;
     color: white;
     background: rgba(190, 0, 100, .50);
-    box-shadow: 0 0 20px black, inset 0 0 2px #fff,
-        border: 1px solid black;
+    /* box-shadow: 0 0 20px black, inset 0 0 2px #fff;
+        border: 1px solid black; */
 }
 
 .game.started {
