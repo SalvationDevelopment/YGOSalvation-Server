@@ -101,7 +101,7 @@ module.exports = function () {
     app.use(systemLoad);
 
 
-    app.use(express.static(path.join(__dirname, '../http')));
+    app.use(express.static(path.join(__dirname, '../build')));
 
     app.post('/git', function (request, response, next) {
         gitRoute(request, response, next);
