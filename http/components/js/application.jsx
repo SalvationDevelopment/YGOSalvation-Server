@@ -1,11 +1,13 @@
-/*global React, ReactDOM, $*/
+import React from 'react';
 /*global store, SideChat, SuperFooterComponent, SuperHeaderComponent*/
 /*global HostScreen, LoginScreen, DeckEditScreen, GamelistScreen, CreditsScreen, SettingsScreen*/
 /*global RankingScreen, FAQsScreen*/
 
 /*global ManualControls, Forum, NewsScreen, DownloadsPage*/
 
-class ApplicationComponent extends React.Component {
+
+
+export default class ApplicationComponent extends React.Component {
     constructor(store) {
         super();
         this.store = store;
