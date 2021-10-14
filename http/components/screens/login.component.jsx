@@ -1,29 +1,30 @@
 import React from 'react';
+import store from '../../services/store';
 
 export default class LoginScreen extends React.Component {
-    constructor(store, initialState) {
+    constructor(initialState) {
         super();
         this.state = {
             mode: 'loading'
         };
         this.store = store;
-        store.register('LOGGEDIN', (action) => {
+        store.listen'LOGGEDIN', (action) => {
             this.state.mode = 'loggedin';
             document.body.style.backgroundImage = `url(${localStorage.theme})`;
         });
 
-        store.register('LOAD_LOGIN', (action) => {
+        store.listen'LOAD_LOGIN', (action) => {
             this.state.mode = 'start';
         });
 
-        store.register('OPEN_LOGIN', (action) => {
+        store.listen'OPEN_LOGIN', (action) => {
             this.openLogin();
         });
     }
 
 
     nav() {
-        this.store.dispatch({action: 'NAVIGATE', screen: 'login'});
+        this.store.hey({action: 'NAVIGATE', screen: 'login'});
     }
 
     openLogin() {
@@ -34,7 +35,7 @@ export default class LoginScreen extends React.Component {
 
     logout() {
         this.state.mode = 'login';
-        this.store.dispatch({action: 'LOGOUT_ACCOUNT'});
+        this.store.hey({action: 'LOGOUT_ACCOUNT'});
         this.nav();
     }
 
@@ -60,24 +61,24 @@ export default class LoginScreen extends React.Component {
 
     login(login) {
         localStorage.remember = document.getElementById('ips_remember').checked;
-        this.store.dispatch({action: 'LOGIN_ACCOUNT'});
+        this.store.hey({action: 'LOGIN_ACCOUNT'});
         this.nav();
     }
 
     recoverAccount(login) {
-        this.store.dispatch({action: 'RECOVER_ACCOUNT'});
+        this.store.hey({action: 'RECOVER_ACCOUNT'});
         this.openRecover();
         this.nav();
     }
 
     useRecoverCode(login) {
-        this.store.dispatch({action: 'RECOVER_CODE'});
+        this.store.hey({action: 'RECOVER_CODE'});
         this.openRecover();
         this.nav();
     }
 
     registerAccount() {
-        this.store.dispatch({action: 'REGISTER_ACCOUNT'});
+        this.store.hey({action: 'REGISTER_ACCOUNT'});
         this.nav();
     }
 

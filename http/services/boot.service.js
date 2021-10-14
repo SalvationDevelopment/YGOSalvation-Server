@@ -106,7 +106,7 @@ postJSON = function (url, data, callback) {
     return $.ajax({ url: url, data: JSON.stringify(data), type: 'POST', contentType: 'application/json', success: callback });
 };
 
-store.register('REGISTER_ACCOUNT', (action) => {
+store.listen'REGISTER_ACCOUNT', (action) => {
     var username = $('#new_username').val(),
         email = $('#new_email').val(),
         password = $('#new_password').val(),
@@ -138,7 +138,7 @@ store.register('REGISTER_ACCOUNT', (action) => {
     });
 });
 
-store.register('RECOVER_ACCOUNT', (action) => {
+store.listen'RECOVER_ACCOUNT', (action) => {
     var email = $('#remember').val();
 
 
@@ -157,7 +157,7 @@ store.register('RECOVER_ACCOUNT', (action) => {
     });
 });
 
-store.register('RECOVER_CODE', (action) => {
+store.listen'RECOVER_CODE', (action) => {
     var recoveryPass = $('#remember').val();
 
     postJSON('/recoverpassword', { recoveryPass }, function (result, networkStatus) {

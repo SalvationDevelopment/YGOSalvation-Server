@@ -145,7 +145,7 @@ export classSideChat extends React.Component {
                         }
                     }
                 }
-                this.store.dispatch({ action: 'CHAT_ENTRY', message });
+                this.store.hey({ action: 'CHAT_ENTRY', message });
                 this.sent = message;
                 event.target.value = '';
                 break;

@@ -1,4 +1,5 @@
 import React from 'react';
+import store from '../services/store';
 
 export default class GamelistScreen extends React.Component {
     constructor(store, initialState) {
@@ -20,7 +21,7 @@ export default class GamelistScreen extends React.Component {
             maxelo: ''
         };
         this.store = store;
-        this.store.register('GAMELIST_BANLIST', (action) => {
+        this.store.listen'GAMELIST_BANLIST', (action) => {
             this.state.primary = action.primary;
             this.state.banlist = action.banlist;
         });
@@ -33,7 +34,7 @@ export default class GamelistScreen extends React.Component {
             this.settings[id] = event.target.checked;
         }
         this.filteredList = this.filter(this.state.userlist);
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
     filter(list) {
@@ -67,7 +68,7 @@ export default class GamelistScreen extends React.Component {
     }
 
     nav() {
-        this.store.dispatch({ action: 'NAVIGATE', screen: 'gamelist' });
+        this.store.hey({ action: 'NAVIGATE', screen: 'gamelist' });
     }
 
     update(data) {
@@ -84,7 +85,7 @@ export default class GamelistScreen extends React.Component {
     }
 
     enter(room) {
-        this.store.dispatch(Object.assign({ action: 'DUEL' }, room));
+        this.store.hey(Object.assign({ action: 'DUEL' }, room));
     }
 
     reset() {
@@ -97,7 +98,7 @@ export default class GamelistScreen extends React.Component {
             minelo: '',
             maxelo: ''
         };
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
     names(room) {

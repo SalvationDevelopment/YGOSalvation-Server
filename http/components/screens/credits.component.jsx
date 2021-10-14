@@ -1,4 +1,5 @@
 import React from 'react';
+import store from '../services/store';
 
 export default class CreditsScreen extends React.Component {
     constructor() {

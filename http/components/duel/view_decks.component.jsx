@@ -10,17 +10,17 @@ export default class DeckDialog extends React.Component {
             deck: []
         };
 
-        this.store.register('OPEN_DECK', (message) => {
+        this.store.listen'OPEN_DECK', (message) => {
             this.state.deck = message.deck;
             this.state.active = true;
-            this.store.dispatch({ action: 'RENDER' });
+            this.store.hey({ action: 'RENDER' });
         });
     }
 
     click(card, event) {
         this.state.active = false; // create a real close button
         console.log({ action: 'DECK_CARD_CLICK', card, y: event.pageY, x: event.pageX });
-        this.store.dispatch({ action: 'DECK_CARD_CLICK', card, y: event.pageY, x: event.pageX });
+        this.store.hey({ action: 'DECK_CARD_CLICK', card, y: event.pageY, x: event.pageX });
     }
 
     img(card, i) {

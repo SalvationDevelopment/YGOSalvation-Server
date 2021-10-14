@@ -1,13 +1,17 @@
 module.exports = {
     'env': {
-        'node': true,
-        'mocha': false,
-        'es6': true
+        'browser': true,
+    'es6': true,
+    'commonjs': true,
+    'node': true
     },
+    'extends': ['plugin:react/recommended'],
     'parserOptions': {
         'ecmaVersion': 8,
-        'sourceType' : 'module'
+        'sourceType': 'module'
+        
     },
+
     'rules': {
         'no-alert': 2,
         'no-array-constructor': 2,

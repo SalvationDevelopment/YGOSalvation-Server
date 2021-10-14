@@ -13,11 +13,11 @@ export classChoiceScreen extends React.Component {
     }
 
     goFirst(startplayer) {
-        this.store.dispatch({ action: 'START_CHOICE', player: startplayer });
+        this.store.hey({ action: 'START_CHOICE', player: startplayer });
     }
 
     rpsAnswer(answer) {
-        this.store.dispatch({ action: 'RPS', answer });
+        this.store.hey({ action: 'RPS', answer });
     }
 
     turnPlayer() {

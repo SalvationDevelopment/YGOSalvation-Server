@@ -4,7 +4,7 @@ export default class PhaseIndicator extends React.Component {
         super();
         this.state = state || {};
         this.store = store;
-        this.store.register('ENABLE_PHASE', (message) => {
+        this.store.listen'ENABLE_PHASE', (message) => {
             this.state.battlephase = message.battlephase;
             this.state.mainphase2 = message.mainphase2;
             this.state.endphase = message.endphase;
@@ -22,7 +22,7 @@ export default class PhaseIndicator extends React.Component {
     }
 
     click(phase) {
-        this.store.dispatch({
+        this.store.hey({
             action: 'PHASE_CLICK', phase: {
                 type: phase
             }

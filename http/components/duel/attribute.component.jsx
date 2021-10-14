@@ -45,7 +45,7 @@ export default class SelectAttributes extends React.Component {
     reply() {
         if (this.state.value !== undefined) {
             this.state.active = false;
-            this.store.dispatch({ action: 'CHAIN_CARD_CLICK', option: this.state.value });
+            this.store.hey({ action: 'CHAIN_CARD_CLICK', option: this.state.value });
 
         }
     }

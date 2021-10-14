@@ -13,7 +13,7 @@ export default class SuperHeaderComponent extends React.Component {
     }
 
     nav(screen) {
-        this.store.dispatch({action: 'NAVIGATE', screen});
+        this.store.hey({action: 'NAVIGATE', screen});
     }
 
     links(loggedIn) {

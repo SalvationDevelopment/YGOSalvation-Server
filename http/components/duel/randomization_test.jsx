@@ -145,7 +145,7 @@ function generateField() {
 
 
 
-store.register('UPDATE_FIELD', (event, state) => {
+store.listen'UPDATE_FIELD', (event, state) => {
     const newState = {
         info: {
             phase: random(0, 7),
@@ -168,7 +168,7 @@ store.register('UPDATE_FIELD', (event, state) => {
 });
 
 // setInterval(() => {
-//     store.dispatch({ action: 'UPDATE_FIELD' });
+//     store.hey({ action: 'UPDATE_FIELD' });
 // }, speed);
 
 

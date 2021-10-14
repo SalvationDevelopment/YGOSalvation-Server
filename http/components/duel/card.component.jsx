@@ -105,7 +105,7 @@ function makeCardheader(state) {
     }
 
     hover(tooltip) {
-        this.store.dispatch({
+        this.store.hey({
             action: 'CARD_HOVER',
             id: this.state.id
         });
@@ -129,8 +129,8 @@ function makeCardheader(state) {
     }
 
     click(event) {
-        this.store.dispatch({ action: 'CARD_CLICK', card: this.state, y: event.pageY, x: event.pageX });
-        this.store.dispatch({ action: 'UPDATE_FIELD' });
+        this.store.hey({ action: 'CARD_CLICK', card: this.state, y: event.pageY, x: event.pageX });
+        this.store.hey({ action: 'UPDATE_FIELD' });
     }
     render() {
         const element = createElement('div', this.getContainerProperties(this.state, this.hover),

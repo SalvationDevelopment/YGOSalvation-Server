@@ -46,13 +46,13 @@ export default class ApplicationComponent extends React.Component {
         });
 
 
-        store.register('NAVIGATE', (action) => {
+        store.listen'NAVIGATE', (action) => {
             this.state.screen = action.screen;
             ReactDOM.render(this.render(), this.root);
             return this.state;
         });
 
-        store.register('RENDER', (action) => {
+        store.listen'RENDER', (action) => {
             if (this.rendering) {
                 return;
             }
@@ -64,7 +64,7 @@ export default class ApplicationComponent extends React.Component {
         });
 
 
-        store.register('LOGOUT_ACCOUNT', (action) => {
+        store.listen'LOGOUT_ACCOUNT', (action) => {
             this.state.loggedIn = false;
             window.localStorage.removeItem('remember');
             window.localStorage.removeItem('username');
@@ -73,7 +73,7 @@ export default class ApplicationComponent extends React.Component {
 
         });
 
-        store.register('LOGIN_ACCOUNT', (action) => {
+        store.listen'LOGIN_ACCOUNT', (action) => {
             const username = document.getElementById('ips_username').value,
                 password = document.getElementById('ips_password').value;
 
@@ -84,7 +84,7 @@ export default class ApplicationComponent extends React.Component {
             });
         });
 
-        store.register('LOAD_SESSION', (action) => {
+        store.listen'LOAD_SESSION', (action) => {
             const session = localStorage.session;
             this.primus.write({
                 action: 'loadSession',
@@ -93,7 +93,7 @@ export default class ApplicationComponent extends React.Component {
             });
         });
 
-        store.register('HOST', (action) => {
+        store.listen'HOST', (action) => {
             this.primus.write({
                 action: 'host',
                 info: action.settings
@@ -104,11 +104,11 @@ export default class ApplicationComponent extends React.Component {
             }, 5000);
         });
 
-        store.register('DUEL', (action) => {
+        store.listen'DUEL', (action) => {
             this.lobby(action.key, action.locked, action.port);
         });
 
-        store.register('SAVE_DECK', (action) => {
+        store.listen'SAVE_DECK', (action) => {
 
             var message = {
                 action: 'save',
@@ -118,7 +118,7 @@ export default class ApplicationComponent extends React.Component {
             this.primus.write(message);
         });
 
-        store.register('DELETE_DECK', (action) => {
+        store.listen'DELETE_DECK', (action) => {
 
             var message = {
                 action: 'delete',
@@ -209,8 +209,8 @@ export default class ApplicationComponent extends React.Component {
         localStorage.session = info.session;
         localStorage.username = info.username;
         console.log(info);
-        this.store.dispatch({action: 'LOAD_DECKS', decks: info.decks});
-        this.store.dispatch({action: 'LOGGEDIN'});
+        this.store.hey({action: 'LOAD_DECKS', decks: info.decks});
+        this.store.hey({action: 'LOGGEDIN'});
 
     }
 

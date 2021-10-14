@@ -13,8 +13,8 @@ export default class Chainer extends React.Component {
 
     click(selected, option, event) {
         this.state.active = false;
-        this.store.dispatch({ action: 'CHAIN_CARD_CLICK', option, selected });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'CHAIN_CARD_CLICK', option, selected });
+        this.store.hey({ action: 'RENDER' });
         event.preventDefault();
     }
 

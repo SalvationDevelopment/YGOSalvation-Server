@@ -10,7 +10,7 @@ export default class  NewsScreen extends React.Component {
             .then(data => {
                 console.log('news', data)
             this.articles = Array.isArray(data) ? data : [];
-            this.store.dispatch({action: 'RENDER'});
+            this.store.hey({action: 'RENDER'});
         });
     }
 

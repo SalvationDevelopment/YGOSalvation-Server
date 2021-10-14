@@ -190,19 +190,19 @@ export classSideDeckEditScreen extends React.Component {
 
         $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
             data.sort(cardStackSort);
-            store.dispatch({ action: 'LOAD_DATABASE', data });
+            store.hey({ action: 'LOAD_DATABASE', data });
         });
 
         this.store = store;
         this.debounce = false;
-        this.store.register('CARD_HOVER', (event, state) => {
+        this.store.listen'CARD_HOVER', (event, state) => {
             if (!event.id) {
                 return;
             }
             const description = this.info.update({
                 id: event.id
             });
-            this.store.dispatch({ action: 'RENDER' });
+            this.store.hey({ action: 'RENDER' });
             return {
                 id: event.id,
                 description
@@ -210,7 +210,7 @@ export classSideDeckEditScreen extends React.Component {
         });
 
 
-        store.register('LOAD_DATABASE', (action) => {
+        store.listen'LOAD_DATABASE', (action) => {
             this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
         });
@@ -231,7 +231,7 @@ export classSideDeckEditScreen extends React.Component {
 
     resetDeck() {
         this.state.activeDeck = JSON.stringify(this.state.deck);
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
     applyBanlist() {
@@ -289,7 +289,7 @@ export classSideDeckEditScreen extends React.Component {
 
     shuffle() {
         deepShuffle(this.state.activeDeck.main);
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
 
@@ -399,16 +399,16 @@ export classSideDeckEditScreen extends React.Component {
             if (isExtra(card)) {
                 legal = checkLegality(card, 'extra', this.state.activeDeck, banlist);
                 this.state.activeDeck.extra.push(card);
-                this.store.dispatch({ action: 'RENDER' });
+                this.store.hey({ action: 'RENDER' });
                 return;
             }
             this.state.activeDeck.main.push(card);
-            this.store.dispatch({ action: 'RENDER' });
+            this.store.hey({ action: 'RENDER' });
             return;
         }
 
         this.state.activeDeck[source].splice(index, 1);
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
 
     }
 
@@ -421,7 +421,7 @@ export classSideDeckEditScreen extends React.Component {
         }
 
         this.state.activeDeck[source].splice(index, 1);
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         event.preventDefault();
     }
 
@@ -460,7 +460,7 @@ export classSideDeckEditScreen extends React.Component {
             }
         }
 
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         event.preventDefault();
     }
 
@@ -479,7 +479,7 @@ export classSideDeckEditScreen extends React.Component {
         deck.extra = deck.extra.map((card) => card.id);
         deck.side = deck.side.map((card) => card.id);
 
-        this.store.dispatch({ action: 'SIDE_DECKING', deck });
+        this.store.hey({ action: 'SIDE_DECKING', deck });
     }
 
     lobbyStatus() {

@@ -12,8 +12,8 @@ export default class SelectPosition extends React.Component {
 
     click(position) {
         this.state.active = false;
-        this.store.dispatch({ action: 'RENDER' });
-        this.store.dispatch({ action: 'POSITION_CARD_CLICK', position });
+        this.store.hey({ action: 'RENDER' });
+        this.store.hey({ action: 'POSITION_CARD_CLICK', position });
         this.state.cards = [];
 
 

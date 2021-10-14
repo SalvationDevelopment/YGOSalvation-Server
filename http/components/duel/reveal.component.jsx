@@ -13,15 +13,15 @@ export default class Revealer extends React.Component {
 
     click(selected, option) {
         this.state.active = false;
-        this.store.dispatch({ action: 'REVEAL_CARD_CLICK', option, selected });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'REVEAL_CARD_CLICK', option, selected });
+        this.store.hey({ action: 'RENDER' });
     }
 
     manualClick(card, event) {
         event.stopPropagation();
         card.status = 'revealed';
         app.duel.controls.enable(card, { x: event.pageX, y: event.pageY });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         return;
 
     }
@@ -53,6 +53,6 @@ export default class Revealer extends React.Component {
     close() {
         this.state.cards = [];
         this.state.active = false;
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 }

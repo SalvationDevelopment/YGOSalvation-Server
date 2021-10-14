@@ -42,7 +42,7 @@ export default class ZoneSelector extends React.Component {
 
     hover() {
         this.state.hover = !Boolean(this.state.hover);
-        this.store.dispatch({
+        this.store.hey({
             action: 'ZONE_HOVER',
             id: this.state.id
         });
@@ -59,7 +59,7 @@ export default class ZoneSelector extends React.Component {
             BANISHED: 32,
             SPELLZONE: 8
         };
-        this.store.dispatch({
+        this.store.hey({
             action: 'ZONE_CLICK',
             manual: {
                 choice: this.state.index,

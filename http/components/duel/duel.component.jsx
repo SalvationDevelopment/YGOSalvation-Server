@@ -21,9 +21,9 @@ export classDuelScreen extends React.Component {
         this.pickAttribute = new SelectAttributes(this.store);
         this.yesnoDialog = new YesNoDialog(this.store);
         this.extracontrols = new ExtraControls(this.store, this.controls, databaseSystem);
-        this.store.register('CARD_HOVER', this.onHover.bind(this));
-        this.store.register('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
-        this.store.register('CARD_CLICK', this.onCardClick.bind(this));
+        this.store.listen'CARD_HOVER', this.onHover.bind(this));
+        this.store.listen'DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
+        this.store.listen'CARD_CLICK', this.onCardClick.bind(this));
 
     }
 
@@ -41,27 +41,27 @@ export classDuelScreen extends React.Component {
         const decks = ['EXTRA', 'GRAVE', 'EXTRA', 'BANISHED'];
         if (!event.viewDeck && decks.includes(event.card.location)) {
             const deck = this.field.getDeck(event.card.player, event.card.location);
-            this.store.dispatch({ action: 'OPEN_DECK', deck });
+            this.store.hey({ action: 'OPEN_DECK', deck });
             return;
         }
         if (event.card.location === 'DECK') {
             return;
         }
         this.controls.enable(event.card, { x: event.x, y: event.y });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         return event;
     }
 
     onManualCardClick(event, state) {
 
         this.controls.enable(event.card, { x: event.x, y: event.y });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         return event;
     }
 
     onDeckCardClick(event, state) {
         this.controls.enable(event.card, { x: event.x, y: event.y });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         return event;
     }
 
@@ -72,7 +72,7 @@ export classDuelScreen extends React.Component {
         const description = this.info.update({
             id: event.id
         });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
         return {
             id: event.id,
             description

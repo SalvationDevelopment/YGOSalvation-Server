@@ -11,7 +11,7 @@ export default class RankingScreen extends React.Component {
         fetch(`/ranking`).then((response) => {
             response.json().then(data => {
                 this.state.ranks = Array.isArray(data) ? data : [];
-                this.store.dispatch({ action: 'RENDER' });
+                this.store.hey({ action: 'RENDER' });
             });
 
         });

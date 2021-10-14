@@ -1,5 +1,5 @@
 import React from 'react';
-
+import store from '../services/store';
 export default class DownloadsPage extends React.Component {
     constructor() {
         super();

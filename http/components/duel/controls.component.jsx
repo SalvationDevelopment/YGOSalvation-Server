@@ -27,7 +27,7 @@ function excludeTokens(card) {
 export default class GameplayControlButton extends React.Component {
 
     click() {
-        this.store.dispatch({ action: 'CONTROL_CLICK', card: this.state.card, uuid: this.uuid });
+        this.store.hey({ action: 'CONTROL_CLICK', card: this.state.card, uuid: this.uuid });
         app.duel.closeRevealer();
     }
 
@@ -477,13 +477,13 @@ export classControlButtons {
     update(newState) {
         this.state = {};
         Object.assign(this.state, newState);
-        this.store.dispatch({
+        this.store.hey({
             action: 'ENABLE_PHASE',
             battlephase: (this.state.enableBattlePhase) ? 'enableBattlePhase' : false,
             mainphase2: (this.state.enableMainPhase2) ? 'enableMainPhase2' : false,
             endphase: (this.state.enableEndPhase) ? 'enableEndPhase' : false
         });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
     enable(query, coords) {

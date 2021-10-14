@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import store from '../services/store';
-import SuperHeaderComponent from './../components/screens/superheader.component';
-import SuperFooterComponent from './../components/screens/superfooter.component';
+import { hey, listen  } from '../services/store';
+import Screen from '../components/screens/screen';
+import LoginScreen from './../components/screens/login.component';
 
 
 export default function Application(props) {
@@ -16,14 +16,14 @@ export default function Application(props) {
 function ApplicationComponent() {
 
 
-    const [admin, setAdmin] = useState(false);
-    const [activeUsers, setactiveUsers] = useState(0);
-    const [globalMessage, setglobalMessage] = useState('');
-    const [session, setsession] = useState(false);
-    const [username, setusername] = useState(false);
-    const [modalActive, setModalActive] = useState(false);
-    const [loggedIn,] = useState(false);
-    const [language, setLanguage] = useState('en');
+    const [admin, setAdmin] = useState(false),
+        [activeUsers, setactiveUsers] = useState(0),
+        [globalMessage, setglobalMessage] = useState(''),
+        [session, setsession] = useState(false),
+        [username, setusername] = useState(false),
+        [modalActive, setModalActive] = useState(false),
+        [loggedIn] = useState(false);
+
 
     let primus;
 
@@ -41,10 +41,14 @@ function ApplicationComponent() {
             password = document.getElementById('ips_password').value;
 
         primus.write({
-            action: 'register',
+            action: 'listen',
             username,
             password
         });
+    }
+
+    function closeModal() {
+        hey()
     }
 
     useEffect(() => {
@@ -57,11 +61,11 @@ function ApplicationComponent() {
         });
 
 
-        store.register('LOGIN_ACCOUNT', (action) => {
-
+        listen('LOGIN_ACCOUNT', (action) => {
+            logInAccount();
         });
 
-        store.register('LOAD_SESSION', (action) => {
+        listen('LOAD_SESSION', (action) => {
             const session = localStorage.session;
             primus.write({
                 action: 'loadSession',
@@ -70,7 +74,7 @@ function ApplicationComponent() {
             });
         });
 
-        store.register('HOST', (action) => {
+        listen('HOST', (action) => {
             primus.write({
                 action: 'host',
                 info: action.settings
@@ -81,11 +85,11 @@ function ApplicationComponent() {
             }, 5000);
         });
 
-        store.register('DUEL', (action) => {
+        listen('DUEL', (action) => {
             lobby(action.key, action.locked, action.port);
         });
 
-        store.register('SAVE_DECK', (action) => {
+        listen('SAVE_DECK', (action) => {
 
             var message = {
                 action: 'save',
@@ -95,7 +99,7 @@ function ApplicationComponent() {
             primus.write(message);
         });
 
-        store.register('DELETE_DECK', (action) => {
+        listen('DELETE_DECK', (action) => {
 
             var message = {
                 action: 'delete',
@@ -113,23 +117,12 @@ function ApplicationComponent() {
     });
 
 
-    function alert(message) {
-        setModalActive(true);
-        modalMessage = message;
-        ReactDOM.render(render(), root);
-    }
 
     function prompt(message) {
         // modalActive = true;
         // modalMessage = message;
         ReactDOM.render(render(), root);
 
-    }
-
-    function closeModal() {
-        modalActive = false;
-        modalMessage = '';
-        ReactDOM.render(render(), root);
     }
 
     function ack() {
@@ -187,15 +180,15 @@ function ApplicationComponent() {
         localStorage.session = info.session;
         localStorage.username = info.username;
         console.log(info);
-        store.dispatch({ action: 'LOAD_DECKS', decks: info.decks });
-        store.dispatch({ action: 'LOGGEDIN' });
+        store.hey({ action: 'LOAD_DECKS', decks: info.decks });
+        store.hey({ action: 'LOGGEDIN' });
 
     }
 
     function registrationRequest() {
         if (username && password) {
             primus.write({
-                action: 'register',
+                action: 'listen',
                 username: username,
                 password: password
             });
@@ -274,60 +267,17 @@ function ApplicationComponent() {
     }
 
 
-    function Screen() {
-        return React.createElement('section', { id: 'login', key: 'screen-login' },);
-    }
 
-    function Modal() {
-        if (!modalActive) {
-            return '';
-        }
-        return React.createElement('div', { id: 'lightbox', key: 'screen-lightbox' }, [
-            React.createElement('p', { id: 'error' }, [
-                modalMessage,
-                React.createElement('button', { id: 'modal-ok', onClick: closeModal.bind(this) }, 'OK')
-            ])
-        ]);
-    }
 
-    function translate(lang) {
-        setLanguage(lang);
-    }
 
-    function Language() {
-        return React.createElement('div', { id: 'languagesetter', key: 'screen-languagesetter' }, [
-            React.createElement('span', { key: 'screen-en', onClick: translate('en') }, 'English'),
-            React.createElement('span', { key: 'screen-es', onClick: translate('es') }, 'Español'),
-            React.createElement('span', { key: 'screen-de', onClick: translate('de') }, 'Deutsch'),
-            React.createElement('span', {
-                key: 'screen-fr',
-                onClick: translate('fr')
-            }, 'Français(France)'),
-            React.createElement('span', {
-                key: 'screen-frca',
-                onClick: translate('fr-ca')
-            }, 'Français(Québec)'),
-            React.createElement('span', { key: 'screen-it', onClick: translate('it') }, 'Italiano'),
-            React.createElement('span', { key: 'screen-pt', onClick: translate('pt') }, 'Português'),
-            React.createElement('span', { key: 'screen-nl', onClick: translate('nl') }, 'Nederlands'),
-            React.createElement('span', { key: 'screen-jp', onClick: translate('jp') }, '日本語'),
-            React.createElement('span', { key: 'screen-tr', onClick: translate('tr') }, 'Türkçe'),
-            React.createElement('span', { key: 'screen-el', onClick: translate('el') }, 'Ελληνικά'),
-            React.createElement('span', { key: 'screen-fa', onClick: translate('fa') }, 'فارسی'),
-            React.createElement('span', { key: 'screen-ar', onClick: translate('ar') }, 'لغةعربي'),
-            React.createElement('span', { key: 'screen-zh', onClick: translate('zh') }, '中文(简体)'),
-            React.createElement('span', { key: 'screen-he', onClick: translate('he') }, 'עברית')
-        ]);
-    }
+
 
 
     return (
-        <div key='screen-top'>
-            <SuperHeaderComponent loggedIn={loggedIn} />
-            <Screen />,
-            <Language />,
-            <SuperFooterComponent />
-            <Modal />
-        </div>
+
+        <Screen>
+            <LoginScreen />,
+        </Screen>
+
     );
 }

@@ -77,7 +77,7 @@ export default class ApplicationComponent extends React.Component {
             console.log('error', error);
         });
 
-        this.store.register('CHAT_ENTRY', (message, state) => {
+        this.store.listen'CHAT_ENTRY', (message, state) => {
             this.primus.write({
                 action: 'chat',
                 message: message.message
@@ -85,7 +85,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('START_CHOICE', (message, state) => {
+        this.store.listen'START_CHOICE', (message, state) => {
             this.primus.write({
                 action: 'start',
                 turn_player: message.player,
@@ -94,7 +94,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('CONTROL_CLICK', (message, state) => {
+        this.store.listen'CONTROL_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
                 answer: message.card,
@@ -103,7 +103,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('PHASE_CLICK', (message, state) => {
+        this.store.listen'PHASE_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
                 answer: message.phase,
@@ -112,7 +112,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('RPS', (message, state) => {
+        this.store.listen'RPS', (message, state) => {
             this.primus.write({
                 action: 'choice',
                 answer: message.answer
@@ -120,7 +120,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('ZONE_CLICK', (message, state) => {
+        this.store.listen'ZONE_CLICK', (message, state) => {
             if (app.manual) {
                 debugger;
                 app.manualControls.selectionzoneonclick(message.manual.choice, message.manual.location);
@@ -134,7 +134,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('POSITION_CARD_CLICK', (message, state) => {
+        this.store.listen'POSITION_CARD_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
                 answer: message.position,
@@ -144,7 +144,7 @@ export default class ApplicationComponent extends React.Component {
         });
 
 
-        this.store.register('YESNO_CLICK', (message, state) => {
+        this.store.listen'YESNO_CLICK', (message, state) => {
             this.primus.write({
                 action: 'question',
                 answer: message.option,
@@ -153,21 +153,21 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('EMPTY_SPACE', (message, state) => {
+        this.store.listen'EMPTY_SPACE', (message, state) => {
             console.log('empty space clicked');
             this.duel.closeRevealer();
-            this.store.dispatch({ action: 'RENDER' });
+            this.store.hey({ action: 'RENDER' });
             return;
         });
 
-        this.store.register('REVEAL_CARD_CLICK', (message, state) => {
+        this.store.listen'REVEAL_CARD_CLICK', (message, state) => {
             if (message.selected) {
                 console.log('removing a selection');
                 const remove = this.state.question_selection.indexOf(message.option);
                 this.state.question_selection.splice(remove, 1);
                 this.state.question_options.select_options[message.option].selected = false;
                 this.duel.reveal(this.state.question_options.select_options);
-                this.store.dispatch({ action: 'RENDER' });
+                this.store.hey({ action: 'RENDER' });
                 return;
             }
             this.state.question_selection.push(message.option);
@@ -201,7 +201,7 @@ export default class ApplicationComponent extends React.Component {
             this.state.question_options.select_options[message.option].selected = true;
             setTimeout(() => {
                 this.duel.reveal(this.state.question_options.select_options);
-                this.store.dispatch({ action: 'RENDER' });
+                this.store.hey({ action: 'RENDER' });
             }, 300);
 
 
@@ -209,7 +209,7 @@ export default class ApplicationComponent extends React.Component {
             return state;
         });
 
-        this.store.register('CHAIN_CARD_CLICK', (message, state) => {
+        this.store.listen'CHAIN_CARD_CLICK', (message, state) => {
 
             this.primus.write({
                 action: 'question',
@@ -223,7 +223,7 @@ export default class ApplicationComponent extends React.Component {
 
         });
 
-        this.store.register('REVEALER_CLOSE', (message, state) => {
+        this.store.listen'REVEALER_CLOSE', (message, state) => {
             if (this.state.question_selection.length > this.state.question_min) {
                 this.primus.write({
                     action: 'question',
@@ -238,7 +238,7 @@ export default class ApplicationComponent extends React.Component {
         });
 
 
-        this.store.register('SIDE_DECKING', (message, state) => {
+        this.store.listen'SIDE_DECKING', (message, state) => {
 
             this.primus.write({
                 action: 'side',
@@ -248,7 +248,7 @@ export default class ApplicationComponent extends React.Component {
         });
 
 
-        this.store.register('RENDER', (message, state) => {
+        this.store.listen'RENDER', (message, state) => {
             ReactDOM.render(this.render(), document.getElementById('main'));
             return state;
         });
@@ -534,7 +534,7 @@ export default class ApplicationComponent extends React.Component {
 
 
     refreshUI() {
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
 

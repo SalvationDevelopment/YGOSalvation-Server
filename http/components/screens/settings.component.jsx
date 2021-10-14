@@ -23,7 +23,7 @@ export default class SettingsScreen extends React.Component {
             .then(data => {
                 console.log('backgrounds', data)
                 this.backgrounds = Array.isArray(data) ? data : [];
-                this.store.dispatch({ action: 'RENDER' });
+                this.store.hey({ action: 'RENDER' });
             });
 
         fetch('/covers')
@@ -31,7 +31,7 @@ export default class SettingsScreen extends React.Component {
             .then(data => {
                 console.log('covers', data)
                 this.covers = Array.isArray(data) ? data : [];
-                this.store.dispatch({ action: 'RENDER' });
+                this.store.hey({ action: 'RENDER' });
             });
 
     }
@@ -49,7 +49,7 @@ export default class SettingsScreen extends React.Component {
         localStorage.language = this.settings.language;
         localStorage.imageURL = this.settings.imageURL;
         document.body.style.backgroundImage = `url(${this.settings.theme})`;
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
     }
 
     renderBackground() {

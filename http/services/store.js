@@ -1,24 +1,32 @@
-/*global React */
- class Store {
+class Navi {
     constructor(initialStates) {
         this.states = Object.assign({}, initialStates);
-        this.reducers = {};
+        this.events = {};
     }
 
-    register(action, behavior) {
+    listen(action, behavior) {
 
+        if (this.events[action]) {
+            throw new Error(`Action ${action}} is already registered`);
+        }
         this.states[action] = {};
-        this.reducers[action] = behavior;
+        this.events[action] = behavior;
     }
 
-    dispatch(event) {
+    hey(event) {
         //console.log(event);
-        if (!this.reducers[event.action]) {
+        if (!this.events[event.action]) {
             return;
         }
-        
-        Object.assign(this.states[event.action], (this.reducers[event.action](event, this.states[event.action])));
+
+        // for debugging
+        Object.assign(this.states[event.action], (this.events[event.action](event, this.states[event.action])));
+    }
+
+    watchOut(action) {
+        delete this.states[action];
+        delete this.events[action];
     }
 }
 
-export default new Store();
+export default new Navi();

@@ -30,7 +30,7 @@ export default class Flasher extends React.Component {
         setTimeout(() => {
             this.state.active = false;
             console.log('closing flash');
-            this.store.dispatch({ action: 'RENDER' });
+            this.store.hey({ action: 'RENDER' });
         }, 500);
     }
 }

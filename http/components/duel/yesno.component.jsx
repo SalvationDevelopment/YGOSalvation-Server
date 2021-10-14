@@ -13,13 +13,13 @@ export default class YesNoDialog extends React.Component {
 
     click(option) {
         this.state.active = false;
-        this.store.dispatch({
+        this.store.hey({
             action: 'YESNO_CLICK', option: {
                 type: 'yesno',
                 i: option
             }
         });
-        this.store.dispatch({ action: 'RENDER' });
+        this.store.hey({ action: 'RENDER' });
 
     }
 
