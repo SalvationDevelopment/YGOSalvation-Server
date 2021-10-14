@@ -18,7 +18,6 @@ function ApplicationComponent() {
 
     const [admin, setAdmin] = useState(false),
         [activeUsers, setactiveUsers] = useState(0),
-        [globalMessage, setglobalMessage] = useState(''),
         [session, setsession] = useState(false),
         [username, setusername] = useState(false),
         [modalActive, setModalActive] = useState(false),
@@ -50,72 +49,6 @@ function ApplicationComponent() {
     function closeModal() {
         hey()
     }
-
-    useEffect(() => {
-        window.addEventListener('unload', function (event) {
-            if (localStorage.remember === 'true') {
-                return;
-            }
-            window.localStorage.removeItem('username');
-            window.localStorage.removeItem('session');
-        });
-
-
-        listen('LOGIN_ACCOUNT', (action) => {
-            logInAccount();
-        });
-
-        listen('LOAD_SESSION', (action) => {
-            const session = localStorage.session;
-            primus.write({
-                action: 'loadSession',
-                username: localStorage.username,
-                session: localStorage.session
-            });
-        });
-
-        listen('HOST', (action) => {
-            primus.write({
-                action: 'host',
-                info: action.settings
-            });
-            alert('Requesting new game room...');
-            setTimeout(() => {
-                closeModal();
-            }, 5000);
-        });
-
-        listen('DUEL', (action) => {
-            lobby(action.key, action.locked, action.port);
-        });
-
-        listen('SAVE_DECK', (action) => {
-
-            var message = {
-                action: 'save',
-                deck: action.deck,
-                username: localStorage.nickname
-            };
-            primus.write(message);
-        });
-
-        listen('DELETE_DECK', (action) => {
-
-            var message = {
-                action: 'delete',
-                deck: action.deck,
-                username: localStorage.nickname
-            };
-            primus.write(message);
-        });
-
-
-        connect();
-
-        localStorage.imageURL = localStorage.imageURL || 'http://127.0.0.1:8887';
-
-    });
-
 
 
     function prompt(message) {
@@ -267,7 +200,70 @@ function ApplicationComponent() {
     }
 
 
+    useEffect(() => {
+        window.addEventListener('unload', function (event) {
+            if (localStorage.remember === 'true') {
+                return;
+            }
+            window.localStorage.removeItem('username');
+            window.localStorage.removeItem('session');
+        });
 
+
+        listen('LOGIN_ACCOUNT', (action) => {
+            logInAccount();
+        });
+
+        listen('LOAD_SESSION', (action) => {
+            const session = localStorage.session;
+            primus.write({
+                action: 'loadSession',
+                username: localStorage.username,
+                session: localStorage.session
+            });
+        });
+
+        listen('HOST', (action) => {
+            primus.write({
+                action: 'host',
+                info: action.settings
+            });
+            alert('Requesting new game room...');
+            setTimeout(() => {
+                closeModal();
+            }, 5000);
+        });
+
+        listen('DUEL', (action) => {
+            lobby(action.key, action.locked, action.port);
+        });
+
+        listen('SAVE_DECK', (action) => {
+
+            const message = {
+                action: 'save',
+                deck: action.deck,
+                username: localStorage.nickname
+            };
+            primus.write(message);
+        });
+
+        listen('DELETE_DECK', (action) => {
+
+            const message = {
+                action: 'delete',
+                deck: action.deck,
+                username: localStorage.nickname
+            };
+            primus.write(message);
+        });
+
+
+        connect();
+
+        localStorage.imageURL = localStorage.imageURL || 'http://127.0.0.1:8887';
+
+    }, []);
 
 
 

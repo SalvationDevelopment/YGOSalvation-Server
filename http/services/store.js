@@ -1,6 +1,7 @@
 function Navi(initialStates) {
     const states = Object.assign({}, initialStates),
-        events = {};
+        events = {},
+        subscriptions = {};
 
 
     function listen(action, behavior) {
@@ -14,18 +15,30 @@ function Navi(initialStates) {
     }
 
     function hey(event) {
-        //console.log(event);
-        if (!events[event.action]) {
-            throw new Error(`Action ${action}} is not registered`);
+        console.log(event);
+        if (!events[event.action] && !subscriptions[event.action]) {
+            throw new Error(`Action ${event.action}} is not registered`);
         }
 
-        // for debugging
-        Object.assign(states[event.action], (events[event.action](event, states[event.action])));
+        if (events[event.action]) {
+            events[event.action](event, states[event.action]);
+        }
+
+        if (subscriptions[event.action]) {
+            subscriptions[event.action].forEach((behavior) => {
+                behavior(event);
+            });
+        }
     }
 
-    function watchOut(action) {
-        delete states[action];
-        delete events[action];
+    function watchOut(action, behavior) {
+        if (!subscriptions[action]) {
+            subscriptions[action] = [];
+        }
+
+
+        subscriptions[action].push(behavior);
+        console.log('Watching:', action);
     }
 
     return {

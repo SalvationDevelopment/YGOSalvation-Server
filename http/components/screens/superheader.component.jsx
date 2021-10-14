@@ -1,36 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { listen } from '../../services/store';
+import { listen, watchOut } from '../../services/store';
+import { getTranslation } from './../../services/useTranslation';
 
 
-export default function SuperHeaderComponent(props) {
+export default function SuperHeaderComponent() {
 
-    const [isLoggedIn, setLogInStatus] = useState(false);
+    const [isLoggedIn, setLogInStatus] = useState(true),
+        [translation, setTranslation] = useState(getTranslation());
+
 
     useEffect(() => {
         listen('LOGIN_SUPER_HEADER', () => {
             setLogInStatus(true);
         });
+
         listen('LOGOUT_SUPER_HEADER', () => {
             setLogInStatus(false);
         });
-    });
+
+        watchOut('TRANSLATION', ({ newTranslation }) => {
+            setTranslation(newTranslation);
+        });
+    }, []);
+
+
 
     function LoggedInContent() {
         return <>
             <li className="psudolinksingle">
                 <Link href="/news">
-                    <a>News</a>
+                    <a>{translation.NEWS}</a>
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/deckedit">
-                    <a>deckedit</a>
+                    <a>{translation.DECKEDIT}</a>
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/host">
-                    <a>Host</a>
+                    <a>{translation.HOST}</a>
                 </Link>
             </li>
             <li className="psudolinksingle">

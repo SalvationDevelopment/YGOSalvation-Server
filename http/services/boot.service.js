@@ -1,6 +1,6 @@
 /*global store, $, app, Store, cardId, cardIs */
 
-const store = new Store();
+import {hey, listen} from './store';
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -102,11 +102,11 @@ function cardStackSort(a, b) {
 }
 
 
-postJSON = function (url, data, callback) {
+const postJSON = function (url, data, callback) {
     return $.ajax({ url: url, data: JSON.stringify(data), type: 'POST', contentType: 'application/json', success: callback });
 };
 
-store.listen'REGISTER_ACCOUNT', (action) => {
+listen('REGISTER_ACCOUNT', (action) => {
     var username = $('#new_username').val(),
         email = $('#new_email').val(),
         password = $('#new_password').val(),
@@ -133,12 +133,12 @@ store.listen'REGISTER_ACCOUNT', (action) => {
             app.alert(result.error);
         } else {
             app.alert('Account Created. Please check your email.');
-            store.dispatch({ action: 'OPEN_LOGIN' });
+           hey({ action: 'OPEN_LOGIN' });
         }
     });
 });
 
-store.listen'RECOVER_ACCOUNT', (action) => {
+listen('RECOVER_ACCOUNT', (action) => {
     var email = $('#remember').val();
 
 
@@ -157,7 +157,7 @@ store.listen'RECOVER_ACCOUNT', (action) => {
     });
 });
 
-store.listen'RECOVER_CODE', (action) => {
+listen('RECOVER_CODE', (action) => {
     var recoveryPass = $('#remember').val();
 
     postJSON('/recoverpassword', { recoveryPass }, function (result, networkStatus) {
@@ -173,13 +173,13 @@ store.listen'RECOVER_CODE', (action) => {
 $.getJSON('/ranking', function (data) {
     const ranks = data.ranks;
     // ranks.sort((user) => user.points);
-    store.dispatch({ action: 'LOAD_RANKING', ranks });
+   hey({ action: 'LOAD_RANKING', ranks });
 });
 
 
 $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
     data.sort(cardStackSort);
-    store.dispatch({ action: 'LOAD_DATABASE', data });
+   hey({ action: 'LOAD_DATABASE', data });
     const cardsets = data.reduce((hash, item) => {
         item.links = item.links || [];
         if (item.type === 16401) {
@@ -197,7 +197,7 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
         return hash;
     }, {}), sets = Object.keys(cardsets).sort();
 
-    store.dispatch({ action: 'LOAD_RELEASES', sets });
+   hey({ action: 'LOAD_RELEASES', sets });
     $.getJSON('/manifest/banlist.json', (bdata) => {
         const banlist = [];
         let primary;
@@ -209,9 +209,9 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
             }
         });
         banlist.reverse();
-        store.dispatch({ action: 'HOST_BANLIST', banlist, primary });
-        store.dispatch({ action: 'GAMELIST_BANLIST', banlist, primary });
-        store.dispatch({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
+       hey({ action: 'HOST_BANLIST', banlist, primary });
+       hey({ action: 'GAMELIST_BANLIST', banlist, primary });
+       hey({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
 
         $.getJSON('./setcodes.json', 'utf-8', function (data) {
             var raw = data,
@@ -226,26 +226,26 @@ $.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
                         sensitivity: 'base'
                     }));
                 });
-            store.dispatch({ action: 'LOAD_SETCODES', data: setcodes });
-            store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
+           hey({ action: 'LOAD_SETCODES', data: setcodes });
+           hey({ action: 'SYSTEM_LOADED', banlist, primary });
             if (localStorage.remember === 'true' && localStorage.username && localStorage.session) {
 
-                store.dispatch({ action: 'LOAD_SESSION', banlist, primary });
+               hey({ action: 'LOAD_SESSION', banlist, primary });
                 $.getJSON('api/session/' + localStorage.session, (userInfo) => {
                     console.log('Session Login', userInfo);
-                    store.dispatch({ action: 'SYSTEM_LOADED', banlist, primary });
-                    store.dispatch({ action: 'LOAD_LOGIN' });
+                   hey({ action: 'SYSTEM_LOADED', banlist, primary });
+                   hey({ action: 'LOAD_LOGIN' });
                     console.log(userInfo.success);
                     const state = (userInfo.success)
-                        ? store.dispatch({ action: 'LOAD_SESSION', banlist, primary })
-                        : store.dispatch({ action: 'LOAD_LOGIN' });
+                        ?hey({ action: 'LOAD_SESSION', banlist, primary })
+                        :hey({ action: 'LOAD_LOGIN' });
 
                 }).fail((e) => {
                     console.log(e);
-                    store.dispatch({ action: 'LOAD_LOGIN' });
+                   hey({ action: 'LOAD_LOGIN' });
                 });
             } else {
-                store.dispatch({ action: 'LOAD_LOGIN' });
+               hey({ action: 'LOAD_LOGIN' });
             }
         });
     });
