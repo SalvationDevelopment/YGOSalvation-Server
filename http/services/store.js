@@ -1,32 +1,43 @@
-class Navi {
-    constructor(initialStates) {
-        this.states = Object.assign({}, initialStates);
-        this.events = {};
-    }
+function Navi(initialStates) {
+    const states = Object.assign({}, initialStates),
+        events = {};
 
-    listen(action, behavior) {
 
-        if (this.events[action]) {
-            throw new Error(`Action ${action}} is already registered`);
-        }
-        this.states[action] = {};
-        this.events[action] = behavior;
-    }
+    function listen(action, behavior) {
 
-    hey(event) {
-        //console.log(event);
-        if (!this.events[event.action]) {
+        if (events[action]) {
             return;
+        }
+        states[action] = {};
+        events[action] = behavior;
+        console.log('registering:', action);
+    }
+
+    function hey(event) {
+        //console.log(event);
+        if (!events[event.action]) {
+            throw new Error(`Action ${action}} is not registered`);
         }
 
         // for debugging
-        Object.assign(this.states[event.action], (this.events[event.action](event, this.states[event.action])));
+        Object.assign(states[event.action], (events[event.action](event, states[event.action])));
     }
 
-    watchOut(action) {
-        delete this.states[action];
-        delete this.events[action];
+    function watchOut(action) {
+        delete states[action];
+        delete events[action];
     }
+
+    return {
+        listen,
+        hey,
+        watchOut
+    };
 }
 
-export default new Navi();
+export const {
+    listen,
+    hey,
+    watchOut
+} = new Navi({});
+

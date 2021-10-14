@@ -10,7 +10,7 @@ export default class DeckDialog extends React.Component {
             deck: []
         };
 
-        this.store.listen'OPEN_DECK', (message) => {
+        this.store.listen('OPEN_DECK', (message) => {
             this.state.deck = message.deck;
             this.state.active = true;
             this.store.hey({ action: 'RENDER' });

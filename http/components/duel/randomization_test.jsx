@@ -145,7 +145,7 @@ function generateField() {
 
 
 
-store.listen'UPDATE_FIELD', (event, state) => {
+store.listen('UPDATE_FIELD', (event, state) => {
     const newState = {
         info: {
             phase: random(0, 7),

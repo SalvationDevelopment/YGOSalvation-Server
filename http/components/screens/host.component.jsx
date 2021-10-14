@@ -26,7 +26,7 @@ export default class HostScreen extends React.Component {
         };
         this.store = store;
 
-        store.listen'HOST_BANLIST', (action) => {
+        store.listen('HOST_BANLIST', (action) => {
             this.settings.BANLIST = action.primary;
             this.state.banlist = action.banlist;
         });

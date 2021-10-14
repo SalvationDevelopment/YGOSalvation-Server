@@ -156,7 +156,7 @@ export default class DeckEditScreen extends React.Component {
         this.filterKeys = Object.keys(this.settings);
         this.store = store;
         this.debounce = false;
-        this.store.listen'CARD_HOVER', (event, state) => {
+        this.store.listen('CARD_HOVER', (event, state) => {
             if (!event.id) {
                 return;
             }
@@ -170,7 +170,7 @@ export default class DeckEditScreen extends React.Component {
             };
         });
 
-        store.listen'DECK_EDITOR_BANLIST', (action) => {
+        store.listen('DECK_EDITOR_BANLIST', (action) => {
             this.settings.banlist = action.primary;
             this.state.banlist = action.banlist;
             this.applyBanlist();
@@ -178,7 +178,7 @@ export default class DeckEditScreen extends React.Component {
         });
 
 
-        store.listen'LOAD_DECKS', (action) => {
+        store.listen('LOAD_DECKS', (action) => {
             this.settings.decklist = '0';
             if (!action.decks) {
                 return;
@@ -196,21 +196,21 @@ export default class DeckEditScreen extends React.Component {
             this.store.hey({ action: 'RENDER' });
         });
 
-        store.listen'LOAD_DATABASE', (action) => {
+        store.listen('LOAD_DATABASE', (action) => {
             this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
         });
 
-        store.listen'LOAD_SETCODES', (action) => {
+        store.listen('LOAD_SETCODES', (action) => {
             this.state.setcodes = action.data;
             this.store.hey({ action: 'RENDER' });
         });
-        store.listen'LOAD_RELEASES', (action) => {
+        store.listen('LOAD_RELEASES', (action) => {
             this.state.releases = action.sets;
             this.store.hey({ action: 'RENDER' });
         });
 
-        store.listen'IMPORT', (action) => {
+        store.listen('IMPORT', (action) => {
             this.importDeck(action.file, action.name);
         });
     }

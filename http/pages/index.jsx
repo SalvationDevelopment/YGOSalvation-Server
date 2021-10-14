@@ -41,7 +41,7 @@ function ApplicationComponent() {
             password = document.getElementById('ips_password').value;
 
         primus.write({
-            action: 'listen',
+            action: 'listen(',
             username,
             password
         });
@@ -188,7 +188,7 @@ function ApplicationComponent() {
     function registrationRequest() {
         if (username && password) {
             primus.write({
-                action: 'listen',
+                action: 'listen(',
                 username: username,
                 password: password
             });

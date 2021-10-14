@@ -195,7 +195,7 @@ export classSideDeckEditScreen extends React.Component {
 
         this.store = store;
         this.debounce = false;
-        this.store.listen'CARD_HOVER', (event, state) => {
+        this.store.listen('CARD_HOVER', (event, state) => {
             if (!event.id) {
                 return;
             }
@@ -210,7 +210,7 @@ export classSideDeckEditScreen extends React.Component {
         });
 
 
-        store.listen'LOAD_DATABASE', (action) => {
+        store.listen('LOAD_DATABASE', (action) => {
             this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
         });

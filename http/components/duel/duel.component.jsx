@@ -21,9 +21,9 @@ export classDuelScreen extends React.Component {
         this.pickAttribute = new SelectAttributes(this.store);
         this.yesnoDialog = new YesNoDialog(this.store);
         this.extracontrols = new ExtraControls(this.store, this.controls, databaseSystem);
-        this.store.listen'CARD_HOVER', this.onHover.bind(this));
-        this.store.listen'DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
-        this.store.listen'CARD_CLICK', this.onCardClick.bind(this));
+        this.store.listen('CARD_HOVER', this.onHover.bind(this));
+        this.store.listen('DECK_CARD_CLICK', this.onDeckCardClick.bind(this));
+        this.store.listen('CARD_CLICK', this.onCardClick.bind(this));
 
     }
 
