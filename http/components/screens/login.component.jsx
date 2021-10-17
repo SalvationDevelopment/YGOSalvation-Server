@@ -1,11 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { hey, listen } from '../../services/store';
+import { deRef } from '../../services/util/deRef';
 
 export default function LoginScreen(props) {
 
     const [mode, setMode] = useState('loading'),
-        [memory, setMemory] = useState({});
+        [memory, setMemory] = useState({}),
+        username = useRef(''),
+        email = useRef(''),
+        password = useRef(''),
+        repeatedPassword = useRef(''),
+        rememberCode = useRef('');
 
+    function onChangeHandler(event) {
+        const data = {
+            memory,
+            username,
+            email,
+            password,
+            repeatedPassword,
+            rememberCode,
+        };
+
+        if (data[event.target.name]) {
+            data[event.target.name].current = event.target.value;
+        }
+    }
 
     function openLogin() {
         setMode('login');
@@ -13,7 +33,8 @@ export default function LoginScreen(props) {
     }
 
     useEffect(() => {
-        setMemory((localStorage.remember === 'true') ? { defaultChecked: true } : {});
+
+        memory.current = (localStorage.remember === 'true') ? { defaultChecked: true } : {}
 
         listen('LOGGEDIN', (action) => {
             setMode('loggedIn');
@@ -61,31 +82,60 @@ export default function LoginScreen(props) {
     }
 
     function login() {
+        
+        const values = deRef({
+            username,
+            email,
+            password,
+            repeatedPassword,
+            rememberCode
+        });
         localStorage.remember = document.getElementById('ips_remember').checked;
-        hey({ action: 'LOGIN_ACCOUNT' });
+        hey({ action: 'LOGIN_ACCOUNT', ...values });
 
     }
 
     function recoverAccount() {
-        hey({ action: 'RECOVER_ACCOUNT' });
+        const values = deRef({
+            username,
+            email,
+            password,
+            repeatedPassword,
+            rememberCode
+        });
+        hey({ action: 'RECOVER_ACCOUNT', ...values });
         openRecover();
 
     }
 
     function useRecoverCode() {
-        hey({ action: 'RECOVER_CODE' });
+        const values = deRef({
+            username,
+            email,
+            password,
+            repeatedPassword,
+            rememberCode
+        });
+        hey({ action: 'RECOVER_CODE', ... values });
         openRecover();
 
     }
 
     function registerAccount() {
-        hey({ action: 'REGISTER_ACCOUNT' });
+        const values = deRef({
+            username,
+            email,
+            password,
+            repeatedPassword,
+            rememberCode
+        });
+        hey({ action: 'REGISTER_ACCOUNT', ...values });
 
     }
 
-    function passwordKeyPress(event, n) {
+    function passwordKeyPress(event) {
         if (event.key === 'Enter') {
-            login.apply(this);
+            login();
         }
     }
 
@@ -96,8 +146,8 @@ export default function LoginScreen(props) {
         switch (mode) {
             case 'login':
                 return <div id="loginmodal">
-                    <input id="ips_username" type="text" className="loginsystem" name="ips_username" tabIndex="1" placeholder="Username" />
-                    <input id="ips_password" type="password" className="loginsystem" name="ips_password" tabIndex="2" placeholder="Password" />
+                    <input id="ips_username" type="text" className="loginsystem" onChange={onChangeHandler} name="username" tabIndex="1" placeholder="Username" />
+                    <input id="ips_password" type="password" className="loginsystem" onChange={onChangeHandler} onKeyPress={passwordKeyPress} name="password" tabIndex="2" placeholder="Password" />
                     <br />
                     <a>
                         <button id="dolog" className="loginsystem" onClick={login}>Login</button>

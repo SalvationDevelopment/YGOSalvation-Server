@@ -4,6 +4,7 @@
     "main": "bin.js",
     "version": "6.0.0",
     "private": true,
+    "type": "commonjs",
     "keywords": [
         "ygopro",
         "Salvation Development",

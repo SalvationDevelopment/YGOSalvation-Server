@@ -1,6 +1,7 @@
 /*global store, $, app, Store, cardId, cardIs */
-
-import {hey, listen} from './store';
+import { userAlert } from './modal';
+import { hey, listen } from './store';
+import { cardStackSort } from './util/cardManipulation';
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -8,248 +9,208 @@ function validateEmail(email) {
 }
 
 
-function isExtra(card) {
-    'use strict';
-    return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));
+function postJSON(url, data) {
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify(data)
+        }).then((response) => {
+            return response.json();
+        }).then((response) => {
+            resolve(JSON.stringify(response));
+        }).catch(reject);
+    });
 }
 
-function cardEvaluate(card) {
-    'use strict';
-    var value = 0;
-
-    if (cardIs('monster', card)) {
-        value -= 100;
-    }
-    if (card.type === 17) { // normal monster
-        value -= 100;
-    }
-    if (cardIs('ritual', card)) {
-        value += 300;
-    }
-    if (cardIs('fusion', card)) {
-        value += 400;
-    }
-    if (cardIs('synchro', card)) {
-        value += 500;
-    }
-    if (cardIs('xyz', card)) {
-        value += 600;
-    }
-    if (cardIs('link', card)) {
-        value += 700;
-    }
-    if (cardIs('spell', card)) {
-        value += 10000;
-    }
-    if (cardIs('trap', card)) {
-        value += 100000;
-    }
-    return value;
-
+function getJSON(url) {
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer'
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            resolve(JSON.stringify(data));
+        }).catch(reject);
+    });
 }
 
-function getLevel(card) {
-    'use strict';
-    return card.level & 0xff;
-}
+function wireRegisterAccount() {
+    listen('REGISTER_ACCOUNT', async ({ username, email, password, repeatedPassword }) => {
 
-function cardStackSort(a, b) {
-    'use strict';
-    if (cardEvaluate(a) > cardEvaluate(b)) {
-        return 1;
-    }
-    if (cardEvaluate(a) < cardEvaluate(b)) {
-        return -1;
-    }
-    if (getLevel(a) > getLevel(b)) {
-        return -1;
-    }
-    if ((getLevel(a) < getLevel(b))) {
-        return 1;
-    }
-    if (a.atk > b.atk) {
-        return -1;
-    }
-    if (a.atk < b.atk) {
-        return 1;
-    }
-    if (a.def < b.def) {
-        return 1;
-    }
-    if (a.def > b.def) {
-        return -1;
-    }
+        if (password.length < 7) {
+            userAlert('Stronger Password Required');
+            return false;
+        }
 
-    if (a.type > b.type) {
-        return 1;
-    }
-    if (a.type < b.type) {
-        return -1;
-    }
-    if (a.name > b.name) {
-        return 1;
-    }
-    if (a.name < b.name) {
-        return -1;
-    }
-    if (a.id > b.id) {
-        return 1;
-    }
-    if (a.id < b.id) {
-        return -1;
-    }
-    return 0;
-}
+        if (repeatedPassword !== password) {
+            userAlert('Passwords do not match');
+            return false;
+        }
 
+        if (!validateEmail(email)) {
+            userAlert('Invalid Email address');
+            return false;
+        }
 
-const postJSON = function (url, data, callback) {
-    return $.ajax({ url: url, data: JSON.stringify(data), type: 'POST', contentType: 'application/json', success: callback });
-};
+        const result = await postJSON('/register', { email: email, username: username, password: password });
 
-listen('REGISTER_ACCOUNT', (action) => {
-    var username = $('#new_username').val(),
-        email = $('#new_email').val(),
-        password = $('#new_password').val(),
-        repeatedPassword = $('#repeat_new_password').val();
-
-    if (password.length < 7) {
-        app.alert('Stronger Password Required');
-        return false;
-    }
-
-    if (repeatedPassword !== password) {
-        app.alert('Passwords do not match');
-        return false;
-    }
-
-    if (!validateEmail(email)) {
-        app.alert('Invalid Email address');
-        return false;
-    }
-
-    postJSON('/register', { email: email, username: username, password: password }, function (result, networkStatus) {
-        console.log(result);
         if (result.error) {
-            app.alert(result.error);
+            userAlert(result.error);
         } else {
-            app.alert('Account Created. Please check your email.');
-           hey({ action: 'OPEN_LOGIN' });
+            userAlert('Account Created. Please check your email.');
+            hey({ action: 'OPEN_LOGIN' });
+        }
+
+    });
+}
+
+function wireRecoverAccount() {
+    listen('RECOVER_ACCOUNT', async ({ email }) => {
+
+        if (!validateEmail(email)) {
+            userAlert('Invalid Email address');
+            return false;
+        }
+
+        const result = await postJSON('/recover', { email: email });
+
+        if (result.error) {
+            userAlert(result.error);
+        } else {
+            userAlert('Recovery Code Sent.');
         }
     });
-});
 
-listen('RECOVER_ACCOUNT', (action) => {
-    var email = $('#remember').val();
+    listen('RECOVER_CODE', async ({ recoveryPass }) => {
+        const result = await postJSON('/recoverpassword', { recoveryPass });
 
-
-    if (!validateEmail(email)) {
-        app.alert('Invalid Email address');
-        return false;
-    }
-
-    postJSON('/recover', { email: email }, function (result, networkStatus) {
-        console.log(result);
         if (result.error) {
-            app.alert(result.error);
+            userAlert(result.error);
         } else {
-            app.alert('Recovery Code Sent.');
+            userAlert('Account Password Updated.');
         }
     });
-});
+}
 
-listen('RECOVER_CODE', (action) => {
-    var recoveryPass = $('#remember').val();
-
-    postJSON('/recoverpassword', { recoveryPass }, function (result, networkStatus) {
-        console.log(result);
-        if (result.error) {
-            app.alert(result.error);
-        } else {
-            app.alert('Account Password Updated.');
-        }
-    });
-});
-
-$.getJSON('/ranking', function (data) {
-    const ranks = data.ranks;
+async function getRanking() {
+    const ranking = await getJSON('/ranking'),
+        ranks = ranking.ranks;
     // ranks.sort((user) => user.points);
-   hey({ action: 'LOAD_RANKING', ranks });
-});
+    hey({ action: 'LOAD_RANKING', ranks });
+}
 
+function reduceCardDB(hash, item) {
 
-$.getJSON('/manifest/manifest_0-en-OCGTCG.json', function (data) {
-    data.sort(cardStackSort);
-   hey({ action: 'LOAD_DATABASE', data });
-    const cardsets = data.reduce((hash, item) => {
-        item.links = item.links || [];
-        if (item.type === 16401) {
-            // no token packs
-            return hash;
-        }
-        if (item.ocg && item.ocg.pack) {
-            item.ocg.pack = item.ocg.pack.trim();
-            hash[item.ocg.pack] = 0;
-        }
-        if (item.tcg && item.tcg.pack) {
-            item.tcg.pack = item.tcg.pack.trim();
-            hash[item.tcg.pack] = 0;
-        }
+    item.links = item.links || [];
+    if (item.type === 16401) {
+        // no token packs
         return hash;
-    }, {}), sets = Object.keys(cardsets).sort();
+    }
+    if (item.ocg && item.ocg.pack) {
+        item.ocg.pack = item.ocg.pack.trim();
+        hash[item.ocg.pack] = 0;
+    }
+    if (item.tcg && item.tcg.pack) {
+        item.tcg.pack = item.tcg.pack.trim();
+        hash[item.tcg.pack] = 0;
+    }
+    return hash;
+}
 
-   hey({ action: 'LOAD_RELEASES', sets });
-    $.getJSON('/manifest/banlist.json', (bdata) => {
-        const banlist = [];
-        let primary;
-        Object.keys(bdata).forEach((list) => {
-            bdata[list].name = list;
-            banlist.push(bdata[list]);
-            if (bdata[list].primary) {
-                primary = bdata[list].name;
-            }
-        });
-        banlist.reverse();
-       hey({ action: 'HOST_BANLIST', banlist, primary });
-       hey({ action: 'GAMELIST_BANLIST', banlist, primary });
-       hey({ action: 'DECK_EDITOR_BANLIST', banlist, primary });
-
-        $.getJSON('./setcodes.json', 'utf-8', function (data) {
-            var raw = data,
-                setcodes = Object.keys(raw).map(function (arch) {
-                    return {
-                        num: arch,
-                        name: raw[arch]
-                    };
-                }).sort(function (a, b) {
-                    return (a.name.localeCompare(b.name, undefined, {
-                        numeric: true,
-                        sensitivity: 'base'
-                    }));
-                });
-           hey({ action: 'LOAD_SETCODES', data: setcodes });
-           hey({ action: 'SYSTEM_LOADED', banlist, primary });
-            if (localStorage.remember === 'true' && localStorage.username && localStorage.session) {
-
-               hey({ action: 'LOAD_SESSION', banlist, primary });
-                $.getJSON('api/session/' + localStorage.session, (userInfo) => {
-                    console.log('Session Login', userInfo);
-                   hey({ action: 'SYSTEM_LOADED', banlist, primary });
-                   hey({ action: 'LOAD_LOGIN' });
-                    console.log(userInfo.success);
-                    const state = (userInfo.success)
-                        ?hey({ action: 'LOAD_SESSION', banlist, primary })
-                        :hey({ action: 'LOAD_LOGIN' });
-
-                }).fail((e) => {
-                    console.log(e);
-                   hey({ action: 'LOAD_LOGIN' });
-                });
-            } else {
-               hey({ action: 'LOAD_LOGIN' });
-            }
-        });
+async function getBanlist() {
+    const bdata = await getJSON('/manifest/banlist.json'),
+        banlist = [];
+    let primary;
+    Object.keys(bdata).forEach((list) => {
+        bdata[list].name = list;
+        banlist.push(bdata[list]);
+        if (bdata[list].primary) {
+            primary = bdata[list].name;
+        }
     });
-});
+    banlist.reverse();
+
+    return {
+        primary,
+        banlist
+    };
+}
+
+async function getSetCodes() {
+    const raw = await getJSON('./setcodes.json', 'utf-8');
+
+    return Object.keys(raw).map(function (arch) {
+        return {
+            num: arch,
+            name: raw[arch]
+        };
+    }).sort(function (a, b) {
+        return (a.name.localeCompare(b.name, undefined, {
+            numeric: true,
+            sensitivity: 'base'
+        }));
+    });
+}
+
+async function loadCardDB() {
+    const cardDB = (await getJSON('/manifest/manifest_0-en-OCGTCG.json')),
+        cardsets = cardDB.reduce(reduceCardDB, {}),
+        sets = Object.keys(cardsets).sort(),
+        setcodes = await getSetCodes(),
+        { banlist, primary } = await getBanlist();
+
+    cardDB.sort(cardStackSort);
+
+    hey({ action: 'LOAD_DATABASE', data: cardDB });
+    hey({ action: 'LOAD_RELEASES', sets });
+    hey({ action: 'BANLIST', banlist, primary });
+    hey({ action: 'LOAD_SETCODES', data: setcodes });
+    hey({ action: 'SYSTEM_LOADED' });
+}
+
+async function tryToLoadSession() {
+    if (localStorage.remember === 'true' && localStorage.username && localStorage.session) {
+        try {
+            const userInfo = await getJSON('api/session/' + localStorage.session);
+
+            if (userInfo.success) {
+                hey({ action: 'LOAD_SESSION'});
+                return true;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
+
+export default async function boot() {
+    wireRegisterAccount();
+    wireRecoverAccount();
+    getRanking();
+    loadCardDB();
+
+    if (await tryToLoadSession()) {
+        return;
+    }
+
+    hey({ action: 'LOAD_LOGIN' });
 
 
-
+}

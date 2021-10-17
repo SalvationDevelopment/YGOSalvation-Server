@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { hey, listen  } from '../services/store';
+import { hey, listen } from '../services/store';
 import Screen from '../components/screens/screen';
 import LoginScreen from './../components/screens/login.component';
+import { userAlert } from './../services/modal';
+import { connect, write, setSession } from '../services/primus.service';
 
 
 export default function Application(props) {
@@ -15,16 +17,15 @@ export default function Application(props) {
 
 function ApplicationComponent() {
 
-
     const [admin, setAdmin] = useState(false),
-        [activeUsers, setactiveUsers] = useState(0),
+        [activeUsers, setActiveUsers] = useState(0),
         [session, setsession] = useState(false),
         [username, setusername] = useState(false),
         [modalActive, setModalActive] = useState(false),
-        [loggedIn] = useState(false);
+        [loggedIn, setLoggedIn] = useState(false),
+        [userlist, setUserlist] = useState([]);
 
 
-    let primus;
 
 
     function logOutAccount() {
@@ -34,35 +35,26 @@ function ApplicationComponent() {
         window.localStorage.removeItem('session');
     }
 
-    function logInAccount() {
-        //useRef
-        const username = document.getElementById('ips_username').value,
-            password = document.getElementById('ips_password').value;
+    function logInAccount({
+        username: loginUsername,
+        password
+    }) {
 
-        primus.write({
-            action: 'listen(',
-            username,
+        setusername(loginUsername);
+        write({
+            action: 'listen',
+            username: loginUsername,
             password
         });
     }
 
-    function closeModal() {
-        hey()
-    }
 
-
-    function prompt(message) {
-        // modalActive = true;
-        // modalMessage = message;
-        ReactDOM.render(render(), root);
-
-    }
 
     function ack() {
         if (!username) {
             return;
         }
-        primus.write({
+        write({
             action: 'ack',
             name: username
         });
@@ -73,12 +65,12 @@ function ApplicationComponent() {
             let guess = '';
             guess = window.prompt('Password?', guess);
             if (identifier !== guess) {
-                alert('Wrong Password!');
+                userAlert('Wrong Password!');
                 return;
             }
         }
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-            alert('Firefox isnt supported at this time, please use Google Chrome.');
+            userAlert('Firefox isnt supported at this time, please use Google Chrome.');
             return;
         }
         if (window.Cypress) {
@@ -94,7 +86,7 @@ function ApplicationComponent() {
         }
 
         if (data.error) {
-            alert(data.info.message);
+            userAlert(data.info.message);
             return;
         }
         const info = data.info || data.result;
@@ -103,24 +95,29 @@ function ApplicationComponent() {
             return;
         }
 
-        session = info.session;
-        admin = info.admin;
-        loggedIn = true;
-        primus.write({
+
+        setsession(info.session);
+
+
+        setAdmin = (info.admin);
+
+        setloggedIn(true);
+
+        write({
             username: username,
             action: 'load'
         });
         localStorage.session = info.session;
         localStorage.username = info.username;
         console.log(info);
-        store.hey({ action: 'LOAD_DECKS', decks: info.decks });
-        store.hey({ action: 'LOGGEDIN' });
+        hey({ action: 'LOAD_DECKS', decks: info.decks });
+        hey({ action: 'LOGGEDIN' });
 
     }
 
     function registrationRequest() {
         if (username && password) {
-            primus.write({
+            write({
                 action: 'listen(',
                 username: username,
                 password: password
@@ -134,13 +131,13 @@ function ApplicationComponent() {
                 ack();
                 break;
             case 'ackresult':
-                userlist = data.userlist;
-                activeUsers = data.ackresult;
+                setUserlist(data.userlist);
+                setActiveUsers(data.ackresult);
                 break;
             case 'gamelist':
-                activeUsers = data.ackresult;
-                userlist = data.userlist;
-                gameList.update(data);
+                setActiveUsers(data.ackresult);
+                setUserlist(data.userlist);
+                hey({action : 'GAMELIST', data});
                 break;
             case 'global':
                 superFooter.update({ global: data.message });
@@ -155,14 +152,14 @@ function ApplicationComponent() {
                 registrationRequest();
                 break;
             case 'savedDeck':
-                app.alert('Saved Deck');
+                userAlert('Saved Deck');
                 setTimeout(() => {
                     closeModal();
                 }, 1000);
                 console.log(data);
                 break;
             case 'deletedDeck':
-                app.alert('Deleted Deck');
+                userAlert('Deleted Deck');
                 setTimeout(() => {
                     closeModal();
                 }, 1000);
@@ -172,32 +169,9 @@ function ApplicationComponent() {
                 console.log('Error: Unknown Data', data);
                 return;
         }
-        ReactDOM.render(render(), root);
 
     }
 
-    function connect() {
-        const primusprotocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-        primus = Primus.connect(primusprotocol + location.host);
-        primus.on('open', () => {
-            console.log('Connected to YGOSalvation Server');
-        });
-        primus.on('close', () => {
-            console.log('Disconnected from YGOSalvation Server');
-        });
-
-        primus.on('data', onData.bind(this));
-
-        setInterval(function () {
-            if (!session) {
-                return;
-            }
-            primus.write({
-                action: 'sessionUpdate',
-                session: session
-            });
-        }.bind(this), 10000);
-    }
 
 
     useEffect(() => {
@@ -210,13 +184,11 @@ function ApplicationComponent() {
         });
 
 
-        listen('LOGIN_ACCOUNT', (action) => {
-            logInAccount();
-        });
+        listen('LOGIN_ACCOUNT', logInAccount);
 
         listen('LOAD_SESSION', (action) => {
             const session = localStorage.session;
-            primus.write({
+            write({
                 action: 'loadSession',
                 username: localStorage.username,
                 session: localStorage.session
@@ -224,11 +196,11 @@ function ApplicationComponent() {
         });
 
         listen('HOST', (action) => {
-            primus.write({
+            write({
                 action: 'host',
                 info: action.settings
             });
-            alert('Requesting new game room...');
+            userAlert('Requesting new game room...');
             setTimeout(() => {
                 closeModal();
             }, 5000);
@@ -245,7 +217,7 @@ function ApplicationComponent() {
                 deck: action.deck,
                 username: localStorage.nickname
             };
-            primus.write(message);
+            write(message);
         });
 
         listen('DELETE_DECK', (action) => {
@@ -255,11 +227,11 @@ function ApplicationComponent() {
                 deck: action.deck,
                 username: localStorage.nickname
             };
-            primus.write(message);
+            write(message);
         });
 
 
-        connect();
+        connect(onData);
 
         localStorage.imageURL = localStorage.imageURL || 'http://127.0.0.1:8887';
 

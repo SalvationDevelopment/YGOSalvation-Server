@@ -170,7 +170,7 @@ export default class DeckEditScreen extends React.Component {
             };
         });
 
-        store.listen('DECK_EDITOR_BANLIST', (action) => {
+        store.watchOut('BANLIST', (action) => {
             this.settings.banlist = action.primary;
             this.state.banlist = action.banlist;
             this.applyBanlist();

@@ -10,7 +10,7 @@
 // Mostly just stuff so that Express runs
 const child_process = require('child_process'),
     logger = require('./logger'),
-    cardIDMap = require('../http/cardidmap.js'),
+    cardIDMap = require('../http/public/cardidmap.js'),
     userController = require('./endpoint_users.js'),
     decks = require('./endpoint_decks.js'),
     adminlist = {},

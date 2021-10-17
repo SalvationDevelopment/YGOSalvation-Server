@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import SuperHeaderComponent from './superheader.component';
 import SuperFooterComponent from './superfooter.component';
+import { listen } from '../../services/store';
 
 export default function Screen({ children }) {
 
@@ -9,7 +10,7 @@ export default function Screen({ children }) {
         [modalMessage, setModalMessage] = useState('');
 
 
-    function alert(message) {
+    function alert({ message }) {
         isModalActive(true);
         setModalMessage(message);
     }
@@ -34,7 +35,10 @@ export default function Screen({ children }) {
         );
     }
 
-
+    useEffect(() => {
+        listen('ALERT', alert);
+        listen('CLOSE_ALERT', closeModal);
+    }, []);
 
     return (
         <div key='screen-top'>
@@ -46,7 +50,3 @@ export default function Screen({ children }) {
     );
 
 }
-
-Screen.propTypes = {
-    children: PropTypes.string.isRequired
-};

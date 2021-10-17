@@ -1,10 +1,10 @@
 const fs = require('fs'),
     path = require('path'),
-    files = fs.readdirSync(path.resolve(__dirname, '../../http/banlist')),
+    files = fs.readdirSync(path.resolve(__dirname, '../../http/public/banlist')),
     banlist = {};
 
 files.forEach(function (filename) {
-    const location = path.resolve(__dirname, '../../http/banlist', filename);
+    const location = path.resolve(__dirname, '../../http/public/banlist', filename);
     const ex = path.extname(filename),
         base = path.basename(filename, ex);
 
@@ -13,4 +13,4 @@ files.forEach(function (filename) {
     }
 });
 
-fs.writeFile(path.resolve(__dirname, '../../http/manifest/banlist.json'), JSON.stringify(banlist, null, 4), console.log);
+fs.writeFile(path.resolve(__dirname, '../../http/public/manifest/banlist.json'), JSON.stringify(banlist, null, 4), console.log);

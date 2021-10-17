@@ -21,7 +21,7 @@ export default class GamelistScreen extends React.Component {
             maxelo: ''
         };
         this.store = store;
-        this.store.listen('GAMELIST_BANLIST', (action) => {
+        this.store.watchOut('BANLIST', (action) => {
             this.state.primary = action.primary;
             this.state.banlist = action.banlist;
         });

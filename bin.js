@@ -22,7 +22,7 @@ let adminServer,
 */
 function main() {
     console.log('[SERVER] YGO Salvation Server - Saving Yu-Gi-Oh!'.bold.green);
-    const banlist = './http/manifest/banlist.json';
+    const banlist = './http/public/manifest/banlist.json';
     
     if (os.platform() === 'win32' && process.env.NODIST_X64 !== '0') {
         console.error('Node is Running in 64bit mode, games can not start.');
@@ -41,12 +41,12 @@ function main() {
 
     if (Boolean(process.env.ADMIN_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Admin Server'.bold.green);
-        adminServer = child_process.fork('../ygosalvation-admin/src/server.js');
+        adminServer = child_process.fork('../admin/src');
     }
 
     if (Boolean(process.env.DATABASE_SERVER_LOCAL)) {
         console.log('[SERVER] Starting Database Server'.bold.green);
-        databaseServer = child_process.fork('../ygosalvation-database/app.js', [], {
+        databaseServer = child_process.fork('../database/app.js', [], {
 
         });
     }

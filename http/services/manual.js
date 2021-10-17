@@ -1,7 +1,10 @@
+
 /**global app, $*/
+
+import { hey, listen } from './store';
 class ManualControls {
     constructor(store, primus) {
-        this.store = store;
+        
         this.primus = primus;
         this.manualActionReference = {};
         this.zonetargetingmode = '';

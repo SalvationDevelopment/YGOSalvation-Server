@@ -1,41 +1,5 @@
 import React from 'react';
-
-function cardIs(cat, obj) {
-    'use strict';
-    if (cat === 'monster' && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
-        return true;
-    }
-    if (cat === 'monster') {
-        return (obj.type & 1) === 1;
-    }
-    if (cat === 'spell') {
-        return (obj.type & 2) === 2;
-    }
-    if (cat === 'trap') {
-        return (obj.type & 4) === 4;
-    }
-    if (cat === 'fusion') {
-        return (obj.type & 64) === 64;
-    }
-    if (cat === 'ritual') {
-        return (obj.type & 128) === 128;
-    }
-    if (cat === 'synchro') {
-        return (obj.type & 8192) === 8192;
-    }
-    if (cat === 'token') {
-        return (obj.type & 16400) === 16400;
-    }
-    if (cat === 'xyz') {
-        return (obj.type & 8388608) === 8388608;
-    }
-    if (cat === 'link') {
-        if (obj.links && obj.links.length) {
-            return true;
-        }
-        return ((obj.type & 0x4000000) === 0x4000000);
-    }
-}
+import { cardIs } from '../../services/util/cardManipulation';
 
 const attributeMap = {
     1: 'EARTH',
