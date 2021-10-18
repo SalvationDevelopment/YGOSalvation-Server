@@ -46,7 +46,8 @@ function getJSON(url) {
             return response.json();
         }).then((data) => {
             console.log(data);
-            resolve(JSON.stringify(data));
+
+            resolve(data);
         }).catch(reject);
     });
 }
@@ -170,7 +171,7 @@ async function getSetCodes() {
 }
 
 async function loadCardDB() {
-    const cardDB = (await getJSON('/manifest/manifest_0-en-OCGTCG.json')),
+    const cardDB = (await getJSON('./manifest/manifest_0-en-OCGTCG.json')),
         cardsets = cardDB.reduce(reduceCardDB, {}),
         sets = Object.keys(cardsets).sort(),
         setcodes = await getSetCodes(),
@@ -200,7 +201,7 @@ async function tryToLoadSession() {
     }
 }
 
-export default async function boot() {
+export async function boot() {
     wireRegisterAccount();
     wireRecoverAccount();
     getRanking();
@@ -211,6 +212,4 @@ export default async function boot() {
     }
 
     hey({ action: 'LOAD_LOGIN' });
-
-
 }

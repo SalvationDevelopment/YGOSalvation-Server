@@ -163,7 +163,7 @@ function condenseDecks(decks) {
 
 
 
-export classSideDeckEditScreen extends React.Component {
+export class SideDeckEditScreen extends React.Component {
 
 
     constructor(store, sidechat) {

@@ -35,7 +35,6 @@ function cardIs(cat, obj) {
         return ((obj.type & 0x4000000) === 0x4000000);
     }
 }
-
 export function isExtra(card) {
     'use strict';
     return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));

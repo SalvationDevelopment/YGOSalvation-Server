@@ -5,10 +5,14 @@ import '../styles/deckeditor.css';
 import '../styles/faqs.css';
 import '../styles/credits.css';
 import '../styles/roboto.css';
-import '../services/boot.service';
+import { boot } from '../services/boot.service';
 import { React } from 'react';
+import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
+  useEffect(() => { 
+    boot();
+  }, []);
   return (
     <>
       <Head>

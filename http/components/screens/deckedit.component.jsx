@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchFilter from '../../services/cardsearch.service';
 import CardInfo from '../duel/cardinfo.component';
-
+import { cardStackSort, cardEvaluate } from '../../services/util/cardManipulation';
 import { hey, listen, watchOut } from '../../services/store';
 
 /*global React, ReactDOM, SearchFilter, store, cardIs*/
@@ -12,6 +12,7 @@ import { hey, listen, watchOut } from '../../services/store';
  * @returns {void}
  */
 function deepShuffle(array) {
+    // eslint-disable-next-line no-plusplus
     for (var i = 0; i < array.length; i++) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1)),
@@ -72,6 +73,7 @@ function condenseDecks(decks) {
             owner: deck.owner,
             creationDate: deck.creationDate,
             id: deck.id,
+            // eslint-disable-next-line no-underscore-dangle
             _id: deck._id
         };
     });
@@ -111,28 +113,13 @@ function makeDeckfromydk(ydkFileContents) {
 }
 
 
-export default class DeckEditScreen extends React.Component {
+export default function DeckEditScreen() {
 
 
-    constructor(store) {
-        super();
-        this.searchFilter = new SearchFilter([]);
-        this.info = new CardInfo([]);
-        this.state = {
-            search: [],
-            setcodes: [],
-            releases: [],
-            banlist: [],
-            decks: [],
-            last: '',
-            activeDeck: {
-                name: 'New Deck',
-                main: [],
-                extra: [],
-                side: []
-            }
-        };
-        this.settings = {
+    let searchFilter = new SearchFilter([]),
+        info = new CardInfo([]),
+
+        settings = {
             cardtype: undefined,
             cardname: undefined,
             description: undefined,
@@ -154,15 +141,31 @@ export default class DeckEditScreen extends React.Component {
             scaleop: 0,
             limit: undefined,
             links: [null, null, null, null, null, null, null, null]
-        };
-        this.filterKeys = Object.keys(this.settings);
-        store = store;
-        this.debounce = false;
+        },
+
+        fullDatabase = [];
+
+    const [search] = useState([]),
+        [setcodes] = useState([]),
+        [releases] = useState([]),
+        [banlist] = useState([]),
+        [decks] = useState([]),
+        [last] = useState([]),
+        [activeDeck] = useState({
+            name: 'New Deck',
+            main: [],
+            extra: [],
+            side: []
+        }),
+        filterKeys = Object.keys(settings);
+
+
+    useEffect(() => {
         listen('CARD_HOVER', (event, state) => {
             if (!event.id) {
                 return;
             }
-            const description = this.info.update({
+            const description = info.update({
                 id: event.id
             });
             hey({ action: 'RENDER' });
@@ -173,74 +176,75 @@ export default class DeckEditScreen extends React.Component {
         });
 
         watchOut('BANLIST', (action) => {
-            this.settings.banlist = action.primary;
-            this.state.banlist = action.banlist;
-            this.applyBanlist();
+            settings.banlist = action.primary;
+            banlist = action.banlist;
+            console.log(action);
+            applyBanlist();
             hey({ action: 'RENDER' });
         });
 
 
         listen('LOAD_DECKS', (action) => {
-            this.settings.decklist = '0';
+            settings.decklist = '0';
             if (!action.decks) {
                 return;
             }
-            this.state.search = [];
-            this.state.decks = action.decks.map((deckIds) => {
+            search = [];
+            decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
-                deck.main = deck.main.map(this.findcard.bind(this));
-                deck.extra = deck.extra.map(this.findcard.bind(this));
-                deck.side = deck.side.map(this.findcard.bind(this));
+                deck.main = deck.main.map(findcard);
+                deck.extra = deck.extra.map(findcard);
+                deck.side = deck.side.map(findcard);
 
                 return deck;
             });
-            this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
+            activeDeck = decks[settings.decklist] || activeDeck;
             hey({ action: 'RENDER' });
         });
 
         listen('LOAD_DATABASE', (action) => {
-            this.fullDatabase = action.data;
-            this.info = new CardInfo(action.data);
+            fullDatabase = action.data;
+            info = new CardInfo(action.data);
         });
 
         listen('LOAD_SETCODES', (action) => {
-            this.state.setcodes = action.data;
+            setcodes = action.data;
             hey({ action: 'RENDER' });
         });
         listen('LOAD_RELEASES', (action) => {
-            this.state.releases = action.sets;
+            releases = action.sets;
             hey({ action: 'RENDER' });
         });
 
         listen('IMPORT', (action) => {
-            this.importDeck(action.file, action.name);
+            importDeck(action.file, action.name);
         });
-    }
+    });
 
-    applyBanlist() {
-        const banlist = this.state.banlist.find((list) => (list.name === this.settings.banlist)),
-            database = this.fullDatabase;
+    function applyBanlist() {
+        const activeBanlist = banlist.find((list) => (list.name === settings.banlist)),
+            database = fullDatabase;
         let map = {},
             result = [],
             filteredCards = [],
-            region = banlist.region;
+            region = activeBanlist.region;
         database.forEach(function (card) {
             map[card.id] = card;
         });
 
-        if (!banlist) {
+        if (!activeBanlist) {
             return;
         }
 
         result = Object.keys(map).map(function (id) {
-            map[id].limit = (banlist.bannedCards[id] !== undefined)
-                ? parseInt(banlist.bannedCards[id], 10)
+            map[id].limit = (activeBanlist.bannedCards[id] !== undefined)
+                ? parseInt(activeBanlist.bannedCards[id], 10)
                 : 3;
             return map[id];
         });
 
         filteredCards = result.filter(function (card) {
-            if (!(region && banlist.endDate)) {
+            if (!(region && activeBanlist.endDate)) {
                 return true;
             }
             if (!card[region]) {
@@ -248,28 +252,28 @@ export default class DeckEditScreen extends React.Component {
             }
 
             if (card[region].date) {
-                return new Date(banlist.endDate).getTime() > new Date(card[region].date).getTime();
+                return new Date(activeBanlist.endDate).getTime() > new Date(card[region].date).getTime();
             }
             return false;
 
         });
 
-        this.searchFilter = new SearchFilter(filteredCards.sort(cardStackSort));
-        this.searchFilter.preformSearch();
-        this.state.search = this.searchFilter.renderSearch();
+        searchFilter = new SearchFilter(filteredCards.sort(cardStackSort));
+        searchFilter.preformSearch();
+        search = searchFilter.renderSearch();
     }
 
-    findcard(card) {
-        return this.fullDatabase.find((item) => card.id === item.id);
+    function findcard(card) {
+        return fullDatabase.find((item) => card.id === item.id);
     }
 
-    search() {
-        Object.assign(this.searchFilter.currentFilter, this.settings);
-        this.searchFilter.preformSearch();
-        this.state.search = this.searchFilter.renderSearch();
+    function searchDB() {
+        Object.assign(searchFilter.currentFilter, settings);
+        searchFilter.preformSearch();
+        search = searchFilter.renderSearch();
         hey({ action: 'RENDER' });
     }
-    clearSearch() {
+    function clearSearch() {
         const searchBox = document.querySelector('#cardname'),
             description = document.querySelector('#description'),
             cardtype = document.querySelector('#cardtype');
@@ -278,9 +282,9 @@ export default class DeckEditScreen extends React.Component {
         description.value = '';
         cardtype.value = 5;
 
-        this.searchFilter.clearFilter();
-        this.state.search = this.searchFilter.renderSearch();
-        this.settings = {
+        searchFilter.clearFilter();
+        search = searchFilter.renderSearch();
+        settings = {
             cardtype: undefined,
             cardname: undefined,
             description: undefined,
@@ -307,13 +311,13 @@ export default class DeckEditScreen extends React.Component {
         hey({ action: 'RENDER' });
     }
 
-    save() {
-        this.state.decks[this.settings.decklist] = this.state.activeDeck;
-        hey({ action: 'SAVE_DECK', deck: this.state.activeDeck });
+    function save() {
+        decks[settings.decklist] = activeDeck;
+        hey({ action: 'SAVE_DECK', deck: activeDeck });
     }
 
-    newDeck() {
-        const oldDeck = (this.state.decks[this.settings.decklist]) ? this.state.decks[this.settings.decklist] : { name: 'New Deck' },
+    function newDeck() {
+        const oldDeck = (decks[settings.decklist]) ? decks[settings.decklist] : { name: 'New Deck' },
             deck = {
                 main: [],
                 extra: [],
@@ -323,73 +327,73 @@ export default class DeckEditScreen extends React.Component {
         if (!name) {
             return;
         }
-        if (this.state.decks.some((unit) => name === unit.name)) {
+        if (decks.some((unit) => name === unit.name)) {
             return;
         }
         deck.name = name;
         deck.creationDate = new Date();
-        this.state.decks.push(deck);
-        this.settings.decklist = this.state.decks.length - 1;
-        this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.save();
+        decks.push(deck);
+        settings.decklist = decks.length - 1;
+        activeDeck = decks[settings.decklist];
+        save();
         hey({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
-            element.value = this.settings.decklist;
+            element.value = settings.decklist;
         }, 200);
 
 
     }
 
-    saveAs() {
+    function saveAs() {
         const deck = {},
-            name = prompt('Save As?', this.state.decks[this.settings.decklist].name);
+            name = prompt('Save As?', decks[settings.decklist].name);
         if (!name) {
             return;
         }
-        if (name === this.state.decks[this.settings.decklist].name) {
+        if (name === decks[settings.decklist].name) {
             return;
         }
-        Object.assign(deck, JSON.parse(JSON.stringify(this.state.activeDeck)));
+        Object.assign(deck, JSON.parse(JSON.stringify(activeDeck)));
         deck.name = name;
         deck.creationDate = new Date();
-        this.state.decks.push(deck);
-        this.settings.decklist = this.state.decks.length - 1;
-        this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.save();
+        decks.push(deck);
+        settings.decklist = decks.length - 1;
+        activeDeck = decks[settings.decklist];
+        save();
         hey({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
-            element.value = this.settings.decklist;
+            element.value = settings.decklist;
         }, 200);
     }
-    delete() {
-        const ok = confirm(`Delete ${this.state.decks[this.settings.decklist].name}?`);
+    function deleteDeck() {
+        const ok = confirm(`Delete ${decks[settings.decklist].name}?`);
         if (!ok) {
             return;
         }
 
 
-        hey({ action: 'DELETE_DECK', deck: this.state.activeDeck });
+        hey({ action: 'DELETE_DECK', deck: activeDeck });
         hey({ action: 'RENDER' });
-        this.state.decks.splice(this.settings.decklist, 1);
-        this.settings.decklist = this.state.decks.length - 1;
-        this.state.activeDeck = this.state.decks[this.settings.decklist];
+        decks.splice(settings.decklist, 1);
+        settings.decklist = decks.length - 1;
+        activeDeck = decks[settings.decklist];
         setTimeout(() => {
             var element = document.getElementById('decklist');
-            element.value = this.settings.decklist;
+            element.value = settings.decklist;
         }, 200);
     }
-    rename() {
-        const name = prompt('Deck Name?', this.state.decks[this.settings.decklist].name);
+    function rename() {
+        const name = prompt('Deck Name?', decks[settings.decklist].name);
         if (!name) {
             return;
         }
-        this.state.decks[this.settings.decklist].name = name;
-        this.save();
+        decks[settings.decklist].name = name;
+        save();
     }
-    clear() {
-        this.state.activeDeck = {
+    function clear() {
+        activeDeck = {
             name: 'New Deck',
             main: [],
             extra: [],
@@ -397,33 +401,33 @@ export default class DeckEditScreen extends React.Component {
         };
     }
 
-    sort() {
-        this.state.activeDeck.main.sort(cardEvaluate);
-        this.state.activeDeck.extra.sort(cardEvaluate);
-        this.state.activeDeck.side.sort(cardEvaluate);
+    function sort() {
+        activeDeck.main.sort(cardEvaluate);
+        activeDeck.extra.sort(cardEvaluate);
+        activeDeck.side.sort(cardEvaluate);
     }
 
-    shuffle() {
-        deepShuffle(this.state.activeDeck.main);
+    function shuffle() {
+        deepShuffle(activeDeck.main);
         hey({ action: 'RENDER' });
     }
 
-    export() {
-        let file = '#Created by ' + this.state.activeDeck.owner + ' on ' + this.state.activeDeck.creationDate + '\r\n#main';
+    function exportDeck() {
+        let file = '#Created by ' + activeDeck.owner + ' on ' + activeDeck.creationDate + '\r\n#main';
 
         function printCard(card) {
             file += card.id + '\r\n';
         }
-        this.state.activeDeck.main.forEach(printCard);
+        activeDeck.main.forEach(printCard);
         file += '#extra\r\n';
-        this.state.activeDeck.extra.forEach(printCard);
+        activeDeck.extra.forEach(printCard);
         file += '!side\r\n';
-        this.state.activeDeck.side.forEach(printCard);
+        activeDeck.side.forEach(printCard);
 
         const url = 'data:application/octet-stream;charset=utf-16le;base64,' + btoa(file),
             element = document.createElement('a');
         element.setAttribute('href', url);
-        element.setAttribute('download', this.state.activeDeck.name + '.ydk');
+        element.setAttribute('download', activeDeck.name + '.ydk');
 
         element.style.display = 'none';
         document.body.appendChild(element);
@@ -433,7 +437,7 @@ export default class DeckEditScreen extends React.Component {
         document.body.removeChild(element);
     }
 
-    upload(event) {
+    function upload(event) {
         //Retrieve the first (and only!) File from the FileList object
         'use strict';
         var f = event.target.files[0],
@@ -456,11 +460,11 @@ export default class DeckEditScreen extends React.Component {
                     name: name.substring(0, name.lastIndexOf('.'))
                 });
             }
-        }).bind(this);
+        });
         r.readAsText(f);
     }
 
-    importDeck(file, name) {
+    function importDeck(file, name) {
 
 
         var deck = makeDeckfromydk(file);
@@ -468,35 +472,35 @@ export default class DeckEditScreen extends React.Component {
         deck.owner = localStorage.nickname;
         deck.creationDate = new Date();
         deck.main = deck.main.map((cardid) => {
-            return this.findcard({
+            return findcard({
                 id: parseInt(cardid, 10)
             });
         }).filter((card) => card);
         deck.side = deck.side.map((cardid) => {
-            return this.findcard({
+            return findcard({
                 id: parseInt(cardid, 10)
             });
         }).filter((card) => card);
         deck.extra = deck.extra.map((cardid) => {
-            return this.findcard({
+            return findcard({
                 id: parseInt(cardid, 10)
             });
         }).filter((card) => card);
-        this.state.decks.push(deck);
-        this.settings.decklist = this.state.decks.length - 1;
-        this.state.activeDeck = this.state.decks[this.settings.decklist];
-        this.save();
+        decks.push(deck);
+        settings.decklist = decks.length - 1;
+        activeDeck = decks[settings.decklist];
+        save();
         hey({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
-            element.value = this.settings.decklist;
+            element.value = settings.decklist;
         }, 200);
 
     }
 
-    prev() {
-        this.searchFilter.pageBack();
-        this.state.search = this.searchFilter.renderSearch();
+    function prev() {
+        searchFilter.pageBack();
+        search = searchFilter.renderSearch();
         hey({ action: 'RENDER' });
         const c = document.getElementById('decksearchresults');
         [].forEach.call(c.children, (k) => {
@@ -508,10 +512,10 @@ export default class DeckEditScreen extends React.Component {
             });
         }, 1000);
     }
-    next() {
+    function next() {
 
-        this.searchFilter.pageForward();
-        this.state.search = this.searchFilter.renderSearch();
+        searchFilter.pageForward();
+        search = searchFilter.renderSearch();
         hey({ action: 'RENDER' });
         const c = document.getElementById('decksearchresults');
         [].forEach.call(c.children, (k) => {
@@ -525,16 +529,16 @@ export default class DeckEditScreen extends React.Component {
 
     }
 
-    searchScroll(event) {
+    function searchScroll(event) {
         var searchBox = document.querySelector('#decksearchresults');
         if (searchBox.scrollTop >= (searchBox.scrollHeight - searchBox.offsetHeight)) {
-            this.searchFilter.currentSearchPageSize += 30;
-            this.state.search = this.searchFilter.renderSearch();
+            searchFilter.currentSearchPageSize += 30;
+            search = searchFilter.renderSearch();
             hey({ action: 'RENDER' });
         }
     }
 
-    marginClass(deck) {
+    function marginClass(deck) {
         if (deck.length <= 40) {
             return '';
         }
@@ -544,89 +548,90 @@ export default class DeckEditScreen extends React.Component {
         return 'c60';
     }
 
-    onChange(event) {
+    function onChange(event) {
         const id = event.target.id;
         if (!id) {
             return;
         }
 
-        this.settings[id] = event.target.value;
+        settings[id] = event.target.value;
         if (event.target.value === 'on') {
-            this.settings[id] = event.target.checked;
+            settings[id] = event.target.checked;
         }
         if (id === 'decklist') {
-            this.state.activeDeck = this.state.decks[this.settings[id]];
+            activeDeck = decks[settings[id]];
         }
-        this.search();
+        searchDB();
     }
 
-    onLinkChange(pointer, event) {
-        this.settings.links[pointer] = (event.target.checked) ? pointer : null;
-        this.search();
+    function onLinkChange(pointer, event) {
+        settings.links[pointer] = (event.target.checked) ? pointer : null;
+        searchDB();
     }
 
-    onSearchChange(event) {
+    function onSearchChange(event) {
         if (!event.target.id) {
             return;
         }
 
         const id = event.target.id;
         let value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
-        if (!this.filterKeys.includes(id)) {
+        if (!filterKeys.includes(id)) {
             return;
         }
         if (event.target.value === 'undefined') {
             value = undefined;
         }
-        if (this.settings[id] === value && value) {
+        if (settings[id] === value && value) {
             return;
         }
 
         switch (id) {
             case 'cardtype':
-                this.settings[id] = value;
-                this.settings.type = Number(event.target.value);
-                this.settings.exacttype = undefined;
-                this.settings.type1 = undefined;
-                this.settings.type2 = undefined;
+                settings[id] = value;
+                settings.type = Number(event.target.value);
+                settings.exacttype = undefined;
+                settings.type1 = undefined;
+                settings.type2 = undefined;
                 break;
             case 'release':
-                this.settings[id] = (event.target.value === 'undefined') ? undefined : event.target.value;
+                settings[id] = (event.target.value === 'undefined') ? undefined : event.target.value;
                 break;
             case 'cardname':
-                this.settings[id] = (event.target.value) ? event.target.value : undefined;
+                settings[id] = (event.target.value) ? event.target.value : undefined;
                 break;
             case 'description':
-                this.settings[id] = (event.target.value) ? event.target.value : undefined;
+                settings[id] = (event.target.value) ? event.target.value : undefined;
                 break;
             case 'banlist':
-                this.settings[id] = (event.target.value) ? event.target.value : undefined;
-                this.applyBanlist();
+                settings[id] = (event.target.value) ? event.target.value : undefined;
+                applyBanlist();
                 break;
             case 'level':
-                this.settings[id] = (value === 0) ? undefined : value;
+                settings[id] = (value === 0) ? undefined : value;
+                break;
             default:
-                this.settings[id] = value;
+                settings[id] = value;
         }
-        this.search();
+        searchDB();
     }
 
-    setIndex(source, index) {
-        this.state.overIndex = { source, index };
+    function setIndex(source, index) {
+        overIndex = { source, index };
     }
 
-    onDragStart(source, i, event) {
+    function onDragStart(source, i, event) {
         var c = event.target.childNodes;
         event.dataTransfer.setData('index', i);
         event.dataTransfer.setData('source', source);
         event.target.style.opacity = '0';
     }
 
-    onDragEnd(event) {
+    function onDragEnd(event) {
         event.target.style.opacity = '1';
     }
 
-    renderCardCollection(source, input) {
+    function renderCardCollection(source, input) {
         const element = React.createElement;
         return input.map((card, i) => {
             card.uid = i;
@@ -635,16 +640,16 @@ export default class DeckEditScreen extends React.Component {
                 key: `${card.uid}-${card.name}`,
                 draggable: true,
                 'data-limit': card.limit,
-                onDragOver: this.setIndex.bind(this, source, i),
-                onDragStart: this.onDragStart.bind(this, source, i),
-                onDragEnd: this.onDragEnd.bind(this),
-                onDoubleClick: this.onCardDoubleClick.bind(this, source, i),
-                onContextMenu: this.onCardDoubleClick.bind(this, source, i)
+                onDragOver: setIndex.bind(this, source, i),
+                onDragStart: onDragStart.bind(this, source, i),
+                onDragEnd: onDragEnd,
+                onDoubleClick: onCardDoubleClick.bind(this, source, i),
+                onContextMenu: onCardDoubleClick.bind(this, source, i)
             }, new CardImage(card, store).render());
         });
     }
 
-    listReduce(deck) {
+    function listReduce(deck) {
         const element = React.createElement,
             hashMap = deck.reduce((list, card) => {
                 if (!list[card.name]) {
@@ -660,25 +665,25 @@ export default class DeckEditScreen extends React.Component {
 
     }
 
-    renderCardList() {
+    function renderCardList() {
         const element = React.createElement,
-            main = this.listReduce(this.state.activeDeck.main),
-            side = this.listReduce(this.state.activeDeck.side),
-            extra = this.listReduce(this.state.activeDeck.extra);
+            main = listReduce(activeDeck.main),
+            side = listReduce(activeDeck.side),
+            extra = listReduce(activeDeck.extra);
         return [
-            element('h4', {}, `Main Deck - ${this.state.activeDeck.main.length}x`),
+            element('h4', {}, `Main Deck - ${activeDeck.main.length}x`),
             main,
-            element('h4', {}, `Side Deck - ${this.state.activeDeck.side.length}x`),
+            element('h4', {}, `Side Deck - ${activeDeck.side.length}x`),
             side,
-            element('h4', {}, `Extra Deck - ${this.state.activeDeck.extra.length}x`),
+            element('h4', {}, `Extra Deck - ${activeDeck.extra.length}x`),
             extra];
     }
 
-    cardTypes() {
+    function cardTypes() {
         const element = React.createElement;
-        switch (this.settings.cardtype) {
+        switch (settings.cardtype) {
             case 1:
-                return [element('select', { id: 'type1', onChange: this.onSearchChange.bind(this) }, [
+                return [element('select', { id: 'type1', onChange: onSearchChange }, [
                     element('option', { value: 'undefined' }, 'Frame'),
                     element('option', { value: 0x40 }, 'Fusion'),
                     element('option', { value: 0x80 }, 'Ritual'),
@@ -687,7 +692,7 @@ export default class DeckEditScreen extends React.Component {
                     element('option', { value: 0x1000000 }, 'Pendulum'),
                     element('option', { value: 0x4000000 }, 'Link')
                 ]),
-                element('select', { id: 'type2', onChange: this.onSearchChange.bind(this) }, [
+                element('select', { id: 'type2', onChange: onSearchChange }, [
                     element('option', { value: 'undefined' }, 'Sub Card Type'),
                     element('option', { value: 0x10 }, 'Normal'),
                     element('option', { value: 0x20 }, 'Effect'),
@@ -696,7 +701,7 @@ export default class DeckEditScreen extends React.Component {
                     element('option', { value: 0x1000 }, 'Tuner'),
                     element('option', { value: 0x800 }, 'Gemini'),
                     element('option', { value: 0x400000 }, 'Toon')]),
-                element('select', { id: 'attribute', onChange: this.onSearchChange.bind(this) }, [
+                element('select', { id: 'attribute', onChange: onSearchChange }, [
                     element('option', { value: 'undefined' }, 'Attribute'),
                     element('option', { value: 1 }, 'EARTH'),
                     element('option', { value: 2 }, 'WATER'),
@@ -705,7 +710,7 @@ export default class DeckEditScreen extends React.Component {
                     element('option', { value: 16 }, 'LIGHT'),
                     element('option', { value: 32 }, 'DARK'),
                     element('option', { value: 64 }, 'DIVINE')]),
-                element('select', { id: 'race', onChange: this.onSearchChange.bind(this) }, [
+                element('select', { id: 'race', onChange: onSearchChange }, [
                     element('option', { value: 'undefined' }, 'Type'),
                     element('option', { value: 1 }, 'Warrior'),
                     element('option', { value: 2 }, 'Spellcaster'),
@@ -734,7 +739,7 @@ export default class DeckEditScreen extends React.Component {
                     element('option', { value: 16777216 }, 'Cyberse')
                 ])];
             case 2: // Spells
-                return element('select', { id: 'exacttype', onChange: this.onSearchChange.bind(this) }, [
+                return element('select', { id: 'exacttype', onChange: onSearchChange }, [
                     element('option', { value: 'undefined' }, 'Icon'),
                     element('option', { value: 2 }, 'Normal'),
                     element('option', { value: 65538 }, 'Quick-Play'),
@@ -744,7 +749,7 @@ export default class DeckEditScreen extends React.Component {
                     element('option', { value: 524290 }, 'Equip')
                 ]);
             case 4: //Traps
-                return element('select', { id: 'exacttype', onChange: this.onSearchChange.bind(this) }, [
+                return element('select', { id: 'exacttype', onChange: onSearchChange }, [
                     element('option', { value: 'undefined' }, 'Icon'),
                     element('option', { value: 4 }, 'Normal'),
                     element('option', { value: 131076 }, 'Continous'),
@@ -755,39 +760,39 @@ export default class DeckEditScreen extends React.Component {
         }
     }
 
-    renderLinks() {
+    function renderLinks() {
         const element = React.createElement;
-        if (this.settings.cardtype !== 1) {
+        if (settings.cardtype !== 1) {
             return element('br', { key: 'linkbr1' });
         }
         return element('div', { key: 'deckedit-link-col', className: 'filtercol' }, [
             element('control', { id: 'linkmarkers', key: 'deckedit-link-col-coltrol' }, [
-                element('input', { id: 'link1', key: 'link0', type: 'checkbox', onChange: this.onLinkChange.bind(this, 0) }),
-                element('input', { id: 'link2', key: 'link1', type: 'checkbox', onChange: this.onLinkChange.bind(this, 1) }),
-                element('input', { id: 'link3', key: 'link2', type: 'checkbox', onChange: this.onLinkChange.bind(this, 2) }),
-                element('br', { key: 'link', }),
-                element('input', { id: 'link4', key: 'link3', type: 'checkbox', onChange: this.onLinkChange.bind(this, 3) }),
+                element('input', { id: 'link1', key: 'link0', type: 'checkbox', onChange: onLinkChange.bind(this, 0) }),
+                element('input', { id: 'link2', key: 'link1', type: 'checkbox', onChange: onLinkChange.bind(this, 1) }),
+                element('input', { id: 'link3', key: 'link2', type: 'checkbox', onChange: onLinkChange.bind(this, 2) }),
+                element('br', { key: 'link' }),
+                element('input', { id: 'link4', key: 'link3', type: 'checkbox', onChange: onLinkChange.bind(this, 3) }),
                 element('input', {
                     type: 'checkbox', key: 'linkx', style: {
                         visibility: 'hidden'
                     }
                 }),
-                element('input', { id: 'link5', key: 'link4', type: 'checkbox', onChange: this.onLinkChange.bind(this, 4) }),
-                element('br', { key: 'linkbr2', }),
-                element('input', { id: 'link6', key: 'link5', type: 'checkbox', onChange: this.onLinkChange.bind(this, 5) }),
-                element('input', { id: 'link7', key: 'link6', type: 'checkbox', onChange: this.onLinkChange.bind(this, 6) }),
-                element('input', { id: 'link8', key: 'link7', type: 'checkbox', onChange: this.onLinkChange.bind(this, 7) })
+                element('input', { id: 'link5', key: 'link4', type: 'checkbox', onChange: onLinkChange.bind(this, 4) }),
+                element('br', { key: 'linkbr2' }),
+                element('input', { id: 'link6', key: 'link5', type: 'checkbox', onChange: onLinkChange.bind(this, 5) }),
+                element('input', { id: 'link7', key: 'link6', type: 'checkbox', onChange: onLinkChange.bind(this, 6) }),
+                element('input', { id: 'link8', key: 'link7', type: 'checkbox', onChange: onLinkChange.bind(this, 7) })
             ])
         ]);
     }
-    renderStats() {
+    function renderStats() {
         const element = React.createElement;
-        if (this.settings.cardtype !== 1) {
+        if (settings.cardtype !== 1) {
             return element('br', { key: 'blank-stats' });
         }
         return [element('div', { className: 'filterrow', key: 'div-render-stats' }, [
-            element('input', { key: 'atk', id: 'atk', placeholder: 'Attack', type: 'number', onChange: this.onSearchChange.bind(this) }),
-            element('select', { key: 'atkop', id: 'atkop', onChange: this.onSearchChange.bind(this) }, [
+            element('input', { key: 'atk', id: 'atk', placeholder: 'Attack', type: 'number', onChange: onSearchChange }),
+            element('select', { key: 'atkop', id: 'atkop', onChange: onSearchChange }, [
                 element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
@@ -796,8 +801,8 @@ export default class DeckEditScreen extends React.Component {
             ])
         ]),
         element('div', { className: 'filterrow' }, [
-            element('input', { id: 'def', placeholder: 'Defense', type: 'number', onChange: this.onSearchChange.bind(this) }),
-            element('select', { id: 'defop', onChange: this.onSearchChange.bind(this) }, [
+            element('input', { id: 'def', placeholder: 'Defense', type: 'number', onChange: onSearchChange }),
+            element('select', { id: 'defop', onChange: onSearchChange }, [
                 element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
@@ -806,8 +811,8 @@ export default class DeckEditScreen extends React.Component {
             ])
         ]),
         element('div', { className: 'filterrow' }, [
-            element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number', onChange: this.onSearchChange.bind(this) }),
-            element('select', { id: 'levelop', onChange: this.onSearchChange.bind(this) }, [
+            element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number', onChange: onSearchChange }),
+            element('select', { id: 'levelop', onChange: onSearchChange }, [
                 element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
@@ -816,8 +821,8 @@ export default class DeckEditScreen extends React.Component {
             ])
         ]),
         element('div', { className: 'filterrow' }, [
-            element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: this.onSearchChange.bind(this) }),
-            element('select', { id: 'scaleop', onChange: this.onSearchChange.bind(this), max: 13, min: 0 }, [
+            element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: onSearchChange }),
+            element('select', { id: 'scaleop', onChange: onSearchChange, max: 13, min: 0 }, [
                 element('option', { value: 0 }, '='),
                 element('option', { value: -2 }, '<'),
                 element('option', { value: -1 }, '<='),
@@ -827,31 +832,31 @@ export default class DeckEditScreen extends React.Component {
         ])];
     }
 
-    onCardDoubleClick(source, index, event) {
+    function onCardDoubleClick(source, index, event) {
         event.preventDefault();
         if (source === 'search') {
-            const card = this.state.search[index];
-            let legal = checkLegality(card, 'main', this.state.activeDeck, banlist);
+            const card = search[index];
+            let legal = checkLegality(card, 'main', activeDeck, banlist);
             if (!legal) {
                 return;
             }
             if (isExtra(card)) {
-                legal = checkLegality(card, 'extra', this.state.activeDeck, banlist);
-                this.state.activeDeck.extra.push(card);
+                legal = checkLegality(card, 'extra', activeDeck, banlist);
+                activeDeck.extra.push(card);
                 hey({ action: 'RENDER' });
                 return;
             }
-            this.state.activeDeck.main.push(card);
+            activeDeck.main.push(card);
             hey({ action: 'RENDER' });
             return;
         }
 
-        this.state.activeDeck[source].splice(index, 1);
+        activeDeck[source].splice(index, 1);
         hey({ action: 'RENDER' });
 
     }
 
-    onDropExitZone(event) {
+    function onDropExitZone(event) {
         const index = event.dataTransfer.getData('index'),
             source = event.dataTransfer.getData('source');
 
@@ -859,17 +864,17 @@ export default class DeckEditScreen extends React.Component {
             return;
         }
 
-        this.state.activeDeck[source].splice(index, 1);
+        activeDeck[source].splice(index, 1);
         hey({ action: 'RENDER' });
         event.preventDefault();
     }
 
-    onDropDeckZone(zone, event) {
+    function onDropDeckZone(zone, event) {
 
         const index = event.dataTransfer.getData('index'),
             source = event.dataTransfer.getData('source'),
-            insert = this.state.overIndex,
-            list = (source === 'search') ? this.state.search : this.state.activeDeck[source],
+            insert = overIndex,
+            list = (source === 'search') ? search : activeDeck[source],
             card = list[index];
 
         if (!card) {
@@ -883,22 +888,22 @@ export default class DeckEditScreen extends React.Component {
         }
         if (source === 'search') {
 
-            const legal = (checkLegality(card, this.state.activeDeck[zone], this.state.activeDeck, banlist));
+            const legal = (checkLegality(card, activeDeck[zone], activeDeck, banlist));
             if (!legal) {
                 return;
             }
             if (insert.source === zone) {
-                this.state.activeDeck[zone].splice(insert.index, 0, card);
+                activeDeck[zone].splice(insert.index, 0, card);
             } else {
-                this.state.activeDeck[zone].push(card);
+                activeDeck[zone].push(card);
             }
         } else {
             if (insert.source === zone) {
-                this.state.activeDeck[source].splice(index, 1);
-                this.state.activeDeck[zone].splice(insert.index, 0, card);
+                activeDeck[source].splice(index, 1);
+                activeDeck[zone].splice(insert.index, 0, card);
             } else {
-                this.state.activeDeck[source].splice(index, 1);
-                this.state.activeDeck[zone].push(card);
+                activeDeck[source].splice(index, 1);
+                activeDeck[zone].push(card);
             }
         }
 
@@ -906,21 +911,21 @@ export default class DeckEditScreen extends React.Component {
         event.preventDefault();
     }
 
-    handleKeyPress(event) {
+    function handleKeyPress(event) {
         if (event.key === 'Enter') {
-            this.onSearchChange(event);
+            onSearchChange(event);
         }
     }
 
-    renderReleases() {
+    function renderReleases() {
         const element = React.createElement,
-            list = this.state.releases.map((set, i) => {
+            list = releases.map((set, i) => {
                 return element('option', { key: `release-${i}`, value: set }, set);
             });
         return [element('option', { value: 'undefined', key: 'releaseset' }, 'Release Set')].concat(list);
     }
 
-    render() {
+    return (function render() {
         const element = React.createElement;
         return [
             element('div', {
@@ -928,7 +933,7 @@ export default class DeckEditScreen extends React.Component {
                 onDragOver: function (event, x) {
                     event.preventDefault();
                 },
-                onDrop: this.onDropExitZone.bind(this)
+                onDrop: onDropExitZone
             }, [
 
                 element('div', { id: 'searchfilter' }, [
@@ -937,21 +942,21 @@ export default class DeckEditScreen extends React.Component {
                     element('h3', {}, 'Filter'),
                     element('controls', { key: 'deckedit-card-controls' }, [
                         element('div', { key: 'deckedit-col-1', className: 'filtercol', key: 'deckedit-filtercol-1' }, [
-                            element('select', { key: 'deckedit-cardtype', id: 'cardtype', onChange: this.onSearchChange.bind(this) }, [
+                            element('select', { key: 'deckedit-cardtype', id: 'cardtype', onChange: onSearchChange }, [
                                 element('option', { key: 'deckedit-cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
                                 element('option', { key: 'deckedit-cardtype-2', value: 1 }, 'Monster'),
                                 element('option', { key: 'deckedit-cardtype-3', value: 2 }, 'Spell'),
                                 element('option', { key: 'deckedit-cardtype-4', value: 4 }, 'Trap')
                             ]),
-                            element('div', { className: 'filtercol', key: 'deckedit-filtercol-2', }, this.cardTypes()),
+                            element('div', { className: 'filtercol', key: 'deckedit-filtercol-2' }, cardTypes()),
 
-                            element('select', { key: 'deckedit-setcode', id: 'setcode', onChange: this.onSearchChange.bind(this) }, [
+                            element('select', { key: 'deckedit-setcode', id: 'setcode', onChange: onSearchChange }, [
                                 element('option', { value: 'undefined', key: 'deckedit-setcode-undefined' }, 'Archetype')
-                            ].concat(this.state.setcodes.map((list, i) => {
+                            ].concat(setcodes.map((list, i) => {
                                 return React.createElement('option', { key: `setcode-${i}`, value: parseInt(list.num) }, list.name);
                             }))),
-                            element('select', { key: 'deckedit-release', id: 'release', onChange: this.onSearchChange.bind(this) }, this.renderReleases()),
-                            element('select', { key: 'deckedit-limit', id: 'limit', onChange: this.onSearchChange.bind(this) }, [
+                            element('select', { key: 'deckedit-release', id: 'release', onChange: onSearchChange }, renderReleases()),
+                            element('select', { key: 'deckedit-limit', id: 'limit', onChange: onSearchChange }, [
                                 element('option', { value: 'null', key: 'deckedit-limit-null' }, 'Limit'),
                                 element('option', { value: 3, key: 'deckedit-limit-0' }, 'Unlimited'),
                                 element('option', { value: 2, key: 'deckedit-limit-1' }, 'Semi-Limited'),
@@ -961,22 +966,22 @@ export default class DeckEditScreen extends React.Component {
                             element('input', {
                                 key: 'deckedit-cardname-input',
                                 id: 'cardname', type: 'text', placeholder: 'Name',
-                                onKeyPress: this.handleKeyPress.bind(this),
-                                onBlur: this.onSearchChange.bind(this)
+                                onKeyPress: handleKeyPress,
+                                onBlur: onSearchChange
                             }),
                             element('input', {
                                 key: 'deckedit-description-input',
                                 id: 'description', type: 'text', placeholder: 'Card Text',
-                                onKeyPress: this.handleKeyPress.bind(this),
-                                onBlur: this.onSearchChange.bind(this)
+                                onKeyPress: handleKeyPress,
+                                onBlur: onSearchChange
                             }),
-                            this.renderStats(),
+                            renderStats(),
                             element('button', {
                                 key: 'deckedit-clearsearch',
-                                onClick: this.clearSearch.bind(this)
+                                onClick: clearSearch
                             }, 'Reset')
                         ]),
-                        this.renderLinks()
+                        renderLinks()
                     ]),
                     element('controls', { key: 'deck-banlist-controls' }, [
                         element('div', { className: 'filtercol' }, [
@@ -985,33 +990,33 @@ export default class DeckEditScreen extends React.Component {
                         ]),
 
                         element('div', { className: 'filtercol' }, [
-                            element('select', { id: 'decklist', key: 'deckedit-decklist-select', onChange: this.onChange.bind(this) }, this.state.decks.map((list, i) => {
+                            element('select', { id: 'decklist', key: 'deckedit-decklist-select', onChange: onChange }, decks.map((list, i) => {
                                 return React.createElement('option', { value: i }, list.name);
                             })),
-                            React.createElement('select', { id: 'banlist', key: 'deckedit-ban;list-select', onChange: this.onSearchChange.bind(this) }, this.state.banlist.map((list, i) => {
+                            React.createElement('select', { id: 'banlist', key: 'deckedit-ban;list-select', onChange: onSearchChange }, banlist.map((list, i) => {
                                 return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
                             }))
 
                         ]),
-                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div1', }, [
+                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div1' }, [
                             element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
-                            element('input', { type: 'file', accept: '.ydk', placeholder: 'Choose File', onChange: this.upload.bind() })]),
-                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div2', }, [
-                            element('button', { key: 'deckedit-decklist-0', onClick: this.newDeck.bind(this) }, 'New'),
-                            element('button', { key: 'deckedit-decklist-1', onClick: this.save.bind(this) }, 'Save'),
-                            element('button', { key: 'deckedit-decklist-2', onClick: this.delete.bind(this) }, 'Delete'),
-                            element('button', { key: 'deckedit-decklist-3', onClick: this.rename.bind(this) }, 'Rename'),
-                            element('button', { key: 'deckedit-decklist-4', onClick: this.clear.bind(this) }, 'Clear'),
+                            element('input', { type: 'file', accept: '.ydk', placeholder: 'Choose File', onChange: upload })]),
+                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div2' }, [
+                            element('button', { key: 'deckedit-decklist-0', onClick: newDeck }, 'New'),
+                            element('button', { key: 'deckedit-decklist-1', onClick: save }, 'Save'),
+                            element('button', { key: 'deckedit-decklist-2', onClick: deleteDeck }, 'Delete'),
+                            element('button', { key: 'deckedit-decklist-3', onClick: rename }, 'Rename'),
+                            element('button', { key: 'deckedit-decklist-4', onClick: clear }, 'Clear'),
 
-                            element('button', { key: 'deckedit-decklist-5', onClick: this.sort.bind(this) }, 'Sort'),
-                            element('button', { key: 'deckedit-decklist-6', onClick: this.shuffle.bind(this) }, 'Shuffle'),
-                            element('button', { key: 'deckedit-decklist-7', onClick: this.export.bind(this) }, 'Export'),
-                            element('button', { key: 'deckedit-decklist-8', onClick: this.saveAs.bind(this) }, 'Save As')
+                            element('button', { key: 'deckedit-decklist-5', onClick: sort }, 'Sort'),
+                            element('button', { key: 'deckedit-decklist-6', onClick: shuffle }, 'Shuffle'),
+                            element('button', { key: 'deckedit-decklist-7', onClick: exportDeck }, 'Export'),
+                            element('button', { key: 'deckedit-decklist-8', onClick: saveAs }, 'Save As')
                         ])
 
                     ])
                 ]),
-                element('div', { id: 'decktextlist', key: 'deckedit-decktextlist-div', }, this.renderCardList())
+                element('div', { id: 'decktextlist', key: 'deckedit-decktextlist-div' }, renderCardList())
             ]),
 
             element('div', {
@@ -1019,7 +1024,7 @@ export default class DeckEditScreen extends React.Component {
                 onDragOver: function (event, x) {
                     event.preventDefault();
                 },
-                onDrop: this.onDropExitZone.bind(this)
+                onDrop: onDropExitZone
             }, [
 
                 element('div', { id: 'decksearchtitles' }, [
@@ -1027,20 +1032,20 @@ export default class DeckEditScreen extends React.Component {
                     element('h2', {}, 'Card Information')
                 ]),
 
-                element('div', { id: 'decksearchresults', onScroll: this.searchScroll.bind(this) }, this.renderCardCollection('search', this.state.search)),
-                element('div', { id: 'decksearchresultsofx' }, `${this.searchFilter.currentSearch.length} cards found`),
-                element('div', { id: 'cardinformation' }, this.info.render())
+                element('div', { id: 'decksearchresults', onScroll: searchScroll }, renderCardCollection('search', search)),
+                element('div', { id: 'decksearchresultsofx' }, `${searchFilter.currentSearch.length} cards found`),
+                element('div', { id: 'cardinformation' }, info.render())
             ]),
             element('div', { id: 'deckarea' }, [
                 element('div', { id: 'deckareamain' }, [
                     element('h2', {}, 'Main Deck'),
                     element('div', {
-                        className: `deckmetainfo ${this.marginClass(this.state.activeDeck.main)}`,
+                        className: `deckmetainfo ${marginClass(activeDeck.main)}`,
                         onDragOver: function (event, x) {
                             event.preventDefault();
                         },
-                        onDrop: this.onDropDeckZone.bind(this, 'main')
-                    }, this.renderCardCollection('main', this.state.activeDeck.main)),
+                        onDrop: onDropDeckZone.bind(this, 'main')
+                    }, renderCardCollection('main', activeDeck.main)),
                     element('div', { id: 'main' })
                 ]),
                 element('div', { id: 'deckareaextra' }, [
@@ -1050,8 +1055,8 @@ export default class DeckEditScreen extends React.Component {
                         onDragOver: function (event, x) {
                             event.preventDefault();
                         },
-                        onDrop: this.onDropDeckZone.bind(this, 'extra')
-                    }, this.renderCardCollection('extra', this.state.activeDeck.extra)),
+                        onDrop: onDropDeckZone.bind(this, 'extra')
+                    }, renderCardCollection('extra', activeDeck.extra)),
                     element('div', { id: 'main' })
                 ]),
                 element('div', { id: 'deckareaside' }, [
@@ -1061,11 +1066,11 @@ export default class DeckEditScreen extends React.Component {
                         onDragOver: function (event, x) {
                             event.preventDefault();
                         },
-                        onDrop: this.onDropDeckZone.bind(this, 'side')
-                    }, this.renderCardCollection('side', this.state.activeDeck.side)),
+                        onDrop: onDropDeckZone.bind(this, 'side')
+                    }, renderCardCollection('side', activeDeck.side)),
                     element('div', { id: 'main' })
                 ])
             ])
         ];
-    }
+    }());
 }
