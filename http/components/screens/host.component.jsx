@@ -1,5 +1,5 @@
 import React from 'react';
-import store from '../services/store';
+import { hey, listen, watchOut } from '../../services/store';
 
 export default class HostScreen extends React.Component {
     constructor( initialState) {
@@ -24,9 +24,8 @@ export default class HostScreen extends React.Component {
             RANKED: false,
             START_GAME: 'rps'
         };
-        this.store = store;
-
-        store.watchOut('BANLIST', (action) => {
+        
+        watchOut('BANLIST', (action) => {
             this.settings.BANLIST = action.primary;
             this.state.banlist = action.banlist;
         });
@@ -34,7 +33,7 @@ export default class HostScreen extends React.Component {
     }
 
     nav() {
-        this.store.hey({action: 'NAVIGATE', screen: 'gamelist'});
+        hey({action: 'NAVIGATE', screen: 'gamelist'});
     }
 
     onChange(event) {
@@ -62,11 +61,11 @@ export default class HostScreen extends React.Component {
             });
             this.settings.MASTER_RULE = banlist.masterRule;
         }
-        this.store.hey({action: 'RENDER'});
+        hey({action: 'RENDER'});
     }
 
     host() {
-        this.store.hey({action: 'HOST', settings: this.settings});
+        hey({action: 'HOST', settings: this.settings});
     }
 
     render() {

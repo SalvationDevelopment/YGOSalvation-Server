@@ -1,6 +1,6 @@
 import React from 'react';
 import ForumService from './../../services/forum.service';
-import store from '../services/store';
+
 export default class Forum extends React.Component {
 
 

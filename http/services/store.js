@@ -15,9 +15,9 @@ function Navi(initialStates) {
     }
 
     function hey(event) {
-        console.log(event);
+
         if (!events[event.action] && !subscriptions[event.action]) {
-            throw new Error(`Action ${event.action}} is not registered`);
+            console.log(new Error(`Action ${event.action}} is not registered`));
         }
 
         if (events[event.action]) {

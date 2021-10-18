@@ -485,14 +485,14 @@ button#doregister, #backuplogin {
     font-size: 1.1em;
 }
 
-.psudolinksingle {
+.psudolinksingle, a{
     cursor: pointer;
     color: white;
     font-weight: bold;
 }
 
-.psudolinksingle:hover {
-    color: hotpink;
+.psudolinksingle:hover, a:hover {
+    color: hotpink !;
 }
 
 ul#socialmediabuttons {
@@ -1264,7 +1264,7 @@ div#gofirst, #gosecond {
 }
 */
 
-main a, main a:visited, main {
+main a, main a:visited, main, a {
     color: #bbb;
     text-decoration: none;
 }

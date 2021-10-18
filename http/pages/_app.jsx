@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import '../styles/main.css';
 import '../styles/normalize.css';
+import '../styles/main.css';
 import '../styles/deckeditor.css';
-
 import '../styles/faqs.css';
 import '../styles/credits.css';
 import '../styles/roboto.css';

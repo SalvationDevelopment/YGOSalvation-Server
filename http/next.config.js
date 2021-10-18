@@ -10,5 +10,8 @@ module.exports = {
       aggregateTimeout: 300
     };
     return config;
+  },
+  env : {
+    WEBSOCKET: 'localhost'
   }
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import store from '../services/store';
+
 export default class FAQsScreen extends React.Component {
     constructor() {
         super();

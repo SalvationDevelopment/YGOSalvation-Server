@@ -1,7 +1,9 @@
 import React from 'react';
 import SearchFilter from '../../services/cardsearch.service';
 import CardInfo from '../duel/cardinfo.component';
-import store from '../services/store';
+
+import { hey, listen, watchOut } from '../../services/store';
+
 /*global React, ReactDOM, SearchFilter, store, cardIs*/
 
 /**
@@ -154,31 +156,31 @@ export default class DeckEditScreen extends React.Component {
             links: [null, null, null, null, null, null, null, null]
         };
         this.filterKeys = Object.keys(this.settings);
-        this.store = store;
+        store = store;
         this.debounce = false;
-        this.store.listen('CARD_HOVER', (event, state) => {
+        listen('CARD_HOVER', (event, state) => {
             if (!event.id) {
                 return;
             }
             const description = this.info.update({
                 id: event.id
             });
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
             return {
                 id: event.id,
                 description
             };
         });
 
-        store.watchOut('BANLIST', (action) => {
+        watchOut('BANLIST', (action) => {
             this.settings.banlist = action.primary;
             this.state.banlist = action.banlist;
             this.applyBanlist();
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
         });
 
 
-        store.listen('LOAD_DECKS', (action) => {
+        listen('LOAD_DECKS', (action) => {
             this.settings.decklist = '0';
             if (!action.decks) {
                 return;
@@ -193,24 +195,24 @@ export default class DeckEditScreen extends React.Component {
                 return deck;
             });
             this.state.activeDeck = this.state.decks[this.settings.decklist] || this.state.activeDeck;
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
         });
 
-        store.listen('LOAD_DATABASE', (action) => {
+        listen('LOAD_DATABASE', (action) => {
             this.fullDatabase = action.data;
             this.info = new CardInfo(action.data);
         });
 
-        store.listen('LOAD_SETCODES', (action) => {
+        listen('LOAD_SETCODES', (action) => {
             this.state.setcodes = action.data;
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
         });
-        store.listen('LOAD_RELEASES', (action) => {
+        listen('LOAD_RELEASES', (action) => {
             this.state.releases = action.sets;
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
         });
 
-        store.listen('IMPORT', (action) => {
+        listen('IMPORT', (action) => {
             this.importDeck(action.file, action.name);
         });
     }
@@ -265,7 +267,7 @@ export default class DeckEditScreen extends React.Component {
         Object.assign(this.searchFilter.currentFilter, this.settings);
         this.searchFilter.preformSearch();
         this.state.search = this.searchFilter.renderSearch();
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
     }
     clearSearch() {
         const searchBox = document.querySelector('#cardname'),
@@ -302,12 +304,12 @@ export default class DeckEditScreen extends React.Component {
             links: [null, null, null, null, null, null, null, null]
         };
 
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
     }
 
     save() {
         this.state.decks[this.settings.decklist] = this.state.activeDeck;
-        store.hey({ action: 'SAVE_DECK', deck: this.state.activeDeck });
+        hey({ action: 'SAVE_DECK', deck: this.state.activeDeck });
     }
 
     newDeck() {
@@ -330,7 +332,7 @@ export default class DeckEditScreen extends React.Component {
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
         this.save();
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = this.settings.decklist;
@@ -355,7 +357,7 @@ export default class DeckEditScreen extends React.Component {
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
         this.save();
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = this.settings.decklist;
@@ -368,8 +370,8 @@ export default class DeckEditScreen extends React.Component {
         }
 
 
-        store.hey({ action: 'DELETE_DECK', deck: this.state.activeDeck });
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'DELETE_DECK', deck: this.state.activeDeck });
+        hey({ action: 'RENDER' });
         this.state.decks.splice(this.settings.decklist, 1);
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
@@ -403,7 +405,7 @@ export default class DeckEditScreen extends React.Component {
 
     shuffle() {
         deepShuffle(this.state.activeDeck.main);
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
     }
 
     export() {
@@ -448,7 +450,7 @@ export default class DeckEditScreen extends React.Component {
                 name = f.name,
                 action = confirm('Upload Deck?');
             if (action) {
-                store.hey({
+                hey({
                     action: 'IMPORT',
                     file,
                     name: name.substring(0, name.lastIndexOf('.'))
@@ -484,7 +486,7 @@ export default class DeckEditScreen extends React.Component {
         this.settings.decklist = this.state.decks.length - 1;
         this.state.activeDeck = this.state.decks[this.settings.decklist];
         this.save();
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = this.settings.decklist;
@@ -495,7 +497,7 @@ export default class DeckEditScreen extends React.Component {
     prev() {
         this.searchFilter.pageBack();
         this.state.search = this.searchFilter.renderSearch();
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         const c = document.getElementById('decksearchresults');
         [].forEach.call(c.children, (k) => {
             k.classList = ['transitioning'];
@@ -510,7 +512,7 @@ export default class DeckEditScreen extends React.Component {
 
         this.searchFilter.pageForward();
         this.state.search = this.searchFilter.renderSearch();
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         const c = document.getElementById('decksearchresults');
         [].forEach.call(c.children, (k) => {
             k.classList = ['transitioning'];
@@ -528,7 +530,7 @@ export default class DeckEditScreen extends React.Component {
         if (searchBox.scrollTop >= (searchBox.scrollHeight - searchBox.offsetHeight)) {
             this.searchFilter.currentSearchPageSize += 30;
             this.state.search = this.searchFilter.renderSearch();
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
         }
     }
 
@@ -638,7 +640,7 @@ export default class DeckEditScreen extends React.Component {
                 onDragEnd: this.onDragEnd.bind(this),
                 onDoubleClick: this.onCardDoubleClick.bind(this, source, i),
                 onContextMenu: this.onCardDoubleClick.bind(this, source, i)
-            }, new CardImage(card, this.store).render());
+            }, new CardImage(card, store).render());
         });
     }
 
@@ -836,16 +838,16 @@ export default class DeckEditScreen extends React.Component {
             if (isExtra(card)) {
                 legal = checkLegality(card, 'extra', this.state.activeDeck, banlist);
                 this.state.activeDeck.extra.push(card);
-                this.store.hey({ action: 'RENDER' });
+                hey({ action: 'RENDER' });
                 return;
             }
             this.state.activeDeck.main.push(card);
-            this.store.hey({ action: 'RENDER' });
+            hey({ action: 'RENDER' });
             return;
         }
 
         this.state.activeDeck[source].splice(index, 1);
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
 
     }
 
@@ -858,7 +860,7 @@ export default class DeckEditScreen extends React.Component {
         }
 
         this.state.activeDeck[source].splice(index, 1);
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         event.preventDefault();
     }
 
@@ -900,7 +902,7 @@ export default class DeckEditScreen extends React.Component {
             }
         }
 
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
         event.preventDefault();
     }
 

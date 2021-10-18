@@ -29,54 +29,54 @@ export default function SuperHeaderComponent() {
     function LoggedInContent() {
         return <>
             <li className="psudolinksingle">
-                <Link href="/news">
-                    <a>{translation.NEWS}</a>
+                <Link href="/news" scroll={true}>
+                    {translation.NEWS}
                 </Link>
             </li>
             <li className="psudolinksingle">
-                <Link href="/deckedit">
-                    <a>{translation.DECKEDIT}</a>
+                <Link href="/deckedit" scroll={true}>
+                    {translation.DECKEDIT}
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/host">
-                    <a>{translation.HOST}</a>
+                    {translation.HOST}
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/gamelist">
-                    <a>Game List</a>
+                    Game List
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/rankings">
-                    <a>Rankings</a>
+                    Rankings
                 </Link>
             </li>
 
             <li className="psudolinksingle">
                 <Link href="/settings">
-                    <a>Settings</a>
+                    Settings
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/faqs">
-                    <a>FAQs</a>
+                    FAQs
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/downloads">
-                    <a>downloads</a>
+                    downloads
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/forum">
-                    <a>forum</a>
+                    forum
                 </Link>
             </li>
             <li className="psudolinksingle">
                 <Link href="/credits">
-                    <a>credits</a>
+                    credits
                 </Link>
             </li>
         </>;
@@ -87,32 +87,32 @@ export default function SuperHeaderComponent() {
             <>
                 <li className="psudolinksingle">
                     <Link href="/news">
-                        <a>News</a>
+                        News
                     </Link>
                 </li>
                 <li className="psudolinksingle">
                     <Link href="/rankings">
-                        <a>Rankings</a>
+                        Rankings
                     </Link>
                 </li>
                 <li className="psudolinksingle">
                     <Link href="/faqs">
-                        <a>FAQs</a>
+                        FAQs
                     </Link>
                 </li>
                 <li className="psudolinksingle">
                     <Link href="/downloads">
-                        <a>downloads</a>
+                        downloads
                     </Link>
                 </li>
                 <li className="psudolinksingle">
                     <Link href="/forum">
-                        <a>forum</a>
+                        forum
                     </Link>
                 </li>
                 <li className="psudolinksingle">
                     <Link href="/credits">
-                        <a>credits</a>
+                        credits
                     </Link>
                 </li>
             </>

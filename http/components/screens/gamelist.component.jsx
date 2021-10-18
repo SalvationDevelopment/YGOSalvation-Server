@@ -1,15 +1,16 @@
 import React from 'react';
-import store from '../services/store';
+import { hey, listen, watchOut } from '../../services/store';
 
 export default class GamelistScreen extends React.Component {
-    constructor(store, initialState) {
+    constructor() {
         super();
         this.state = {
             duelist: 0,
             activeduels: 0,
             userlist: [],
             gamelist: {},
-            filteredList: []
+            filteredList: [],
+            banlist: []
         };
         this.settings = {
             automatic: '',
@@ -20,11 +21,13 @@ export default class GamelistScreen extends React.Component {
             minelo: '',
             maxelo: ''
         };
-        this.store = store;
-        this.store.watchOut('BANLIST', (action) => {
+        
+        watchOut('BANLIST', (action) => {
             this.state.primary = action.primary;
             this.state.banlist = action.banlist;
         });
+        this.filteredList = [];
+        
     }
 
     onChange(event) {
@@ -34,7 +37,7 @@ export default class GamelistScreen extends React.Component {
             this.settings[id] = event.target.checked;
         }
         this.filteredList = this.filter(this.state.userlist);
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
     }
 
     filter(list) {
@@ -68,7 +71,7 @@ export default class GamelistScreen extends React.Component {
     }
 
     nav() {
-        this.store.hey({ action: 'NAVIGATE', screen: 'gamelist' });
+        hey({ action: 'NAVIGATE', screen: 'gamelist' });
     }
 
     update(data) {
@@ -85,7 +88,7 @@ export default class GamelistScreen extends React.Component {
     }
 
     enter(room) {
-        this.store.hey(Object.assign({ action: 'DUEL' }, room));
+        hey(Object.assign({ action: 'DUEL' }, room));
     }
 
     reset() {
@@ -98,7 +101,7 @@ export default class GamelistScreen extends React.Component {
             minelo: '',
             maxelo: ''
         };
-        this.store.hey({ action: 'RENDER' });
+        hey({ action: 'RENDER' });
     }
 
     names(room) {

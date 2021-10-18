@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { hey, listen } from '../services/store';
 import Screen from '../components/screens/screen';
 import LoginScreen from './../components/screens/login.component';
-import { userAlert } from './../services/modal';
+import { userAlert, closeModal } from './../services/modal';
 import { connect, write, setSession } from '../services/primus.service';
 
 
