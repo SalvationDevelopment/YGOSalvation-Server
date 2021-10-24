@@ -1,7 +1,7 @@
 
 /**global app, $*/
 
-import { hey, listen } from './store';
+import { hey, listen } from './listener.service';
 class ManualControls {
     constructor(store, primus) {
         

@@ -1,28 +1,71 @@
 import React, { useEffect, useState } from 'react';
 import SearchFilter from '../../services/cardsearch.service';
 import CardInfo from '../duel/cardinfo.component';
-import { cardStackSort, cardEvaluate } from '../../services/util/cardManipulation';
-import { hey, listen, watchOut } from '../../services/store';
+import { cardStackSort, cardEvaluate, deepShuffle, isExtra } from '../../util/cardManipulation';
+import { hey, listen, watchOut } from '../../services/listener.service';
+import { CardImage } from '../common/card.component';
 
-/*global React, ReactDOM, SearchFilter, store, cardIs*/
 
-/**
- * Shuffles an array in place, multiple times.
- * @param {Array} array to shuffle
- * @returns {void}
- */
-function deepShuffle(array) {
-    // eslint-disable-next-line no-plusplus
-    for (var i = 0; i < array.length; i++) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1)),
-                temp = array[i];
+let searchFilter = new SearchFilter([]),
+    fullDatabse = [],
+    settings = {
+        cardtype: undefined,
+        cardname: undefined,
+        description: undefined,
+        banlist: undefined,
+        type: undefined,
+        type1: undefined,
+        type2: undefined,
+        attribute: undefined,
+        race: undefined,
+        release: undefined,
+        setcode: undefined,
+        atk: undefined,
+        atkop: 0,
+        def: undefined,
+        defop: 0,
+        level: undefined,
+        levelop: 0,
+        scale: undefined,
+        scaleop: 0,
+        limit: undefined,
+        links: [null, null, null, null, null, null, null, null]
+    };
 
-            array[i] = array[j];
-            array[j] = temp;
+function listReduce(deck) {
+    const hashMap = deck.reduce((list, card) => {
+        if (!list[card.name]) {
+            list[card.name] = 1;
+            return list;
         }
-    }
+        list = list[card.name] + 1;
+        return list;
+    }, {}),
+        text = Object.keys(hashMap).map((name, i) => {
+            const text = `${hashMap[name]}x ${name}`;
+            return (<div key={`x${i}${name}`}>{text}</div>);
+        });
+
+    return function Deck() {
+        return <>{text}</>;
+    };
+
 }
+
+function CardList(activeDeck) {
+    const Main = listReduce(activeDeck.main),
+        Side = listReduce(activeDeck.side),
+        Extra = listReduce(activeDeck.extra);
+    return <>
+        <h4>{`Main Deck - ${activeDeck.main.length}x`}</h4>
+        <Main />
+        <h4>{`Side Deck - ${activeDeck.side.length}x`}</h4>
+        <Side />
+        <h4>{`Extra Deck - ${activeDeck.extra.length}x`}</h4>
+        <Extra />
+    </>;
+}
+
 
 function checkLegality(card, zone, deck, banlist) {
     function checkCard(reference) {
@@ -56,11 +99,6 @@ function condenseDeck(card) {
     return {
         id: card.id
     };
-}
-
-function isExtra(card) {
-    'use strict';
-    return (cardIs('fusion', card) || cardIs('synchro', card) || cardIs('xyz', card) || cardIs('link', card));
 }
 
 function condenseDecks(decks) {
@@ -116,47 +154,25 @@ function makeDeckfromydk(ydkFileContents) {
 export default function DeckEditScreen() {
 
 
-    let searchFilter = new SearchFilter([]),
-        info = new CardInfo([]),
 
-        settings = {
-            cardtype: undefined,
-            cardname: undefined,
-            description: undefined,
-            banlist: undefined,
-            type: undefined,
-            type1: undefined,
-            type2: undefined,
-            attribute: undefined,
-            race: undefined,
-            release: undefined,
-            setcode: undefined,
-            atk: undefined,
-            atkop: 0,
-            def: undefined,
-            defop: 0,
-            level: undefined,
-            levelop: 0,
-            scale: undefined,
-            scaleop: 0,
-            limit: undefined,
-            links: [null, null, null, null, null, null, null, null]
-        },
+    let info = new CardInfo([]),
+        overIndex;
 
-        fullDatabase = [];
 
-    const [search] = useState([]),
-        [setcodes] = useState([]),
-        [releases] = useState([]),
-        [banlist] = useState([]),
-        [decks] = useState([]),
-        [last] = useState([]),
-        [activeDeck] = useState({
+
+    const [search, setSearch] = useState([]),
+        [setcodes, setSetcodes] = useState([]),
+        [releases, setReleases] = useState([]),
+        [banlist, setBanlist] = useState([]),
+        [decks, setDecks] = useState([]),
+        [last, setLast] = useState([]),
+        [activeDeck, setActiveDeck] = useState({
             name: 'New Deck',
             main: [],
             extra: [],
             side: []
         }),
+        [loadedDatabase, loadDatabase] = useState(fullDatabse),
         filterKeys = Object.keys(settings);
 
 
@@ -177,10 +193,8 @@ export default function DeckEditScreen() {
 
         watchOut('BANLIST', (action) => {
             settings.banlist = action.primary;
-            banlist = action.banlist;
+            setBanlist(action.banlist);
             console.log(action);
-            applyBanlist();
-            hey({ action: 'RENDER' });
         });
 
 
@@ -189,7 +203,7 @@ export default function DeckEditScreen() {
             if (!action.decks) {
                 return;
             }
-            search = [];
+            setSearch([]);
             decks = action.decks.map((deckIds) => {
                 const deck = Object.assign({}, deckIds);
                 deck.main = deck.main.map(findcard);
@@ -203,32 +217,41 @@ export default function DeckEditScreen() {
         });
 
         listen('LOAD_DATABASE', (action) => {
-            fullDatabase = action.data;
-            info = new CardInfo(action.data);
+            loadDatabase(action.data);
+            fullDatabse = action.data;
         });
 
         listen('LOAD_SETCODES', (action) => {
-            setcodes = action.data;
+            setSetcodes(action.data);
             hey({ action: 'RENDER' });
         });
         listen('LOAD_RELEASES', (action) => {
-            releases = action.sets;
+            setReleases(action.sets);
             hey({ action: 'RENDER' });
         });
 
         listen('IMPORT', (action) => {
             importDeck(action.file, action.name);
         });
-    });
+    }, []);
+
+    useEffect(() => {
+        applyBanlist();
+    }, [banlist, loadedDatabase]);
 
     function applyBanlist() {
-        const activeBanlist = banlist.find((list) => (list.name === settings.banlist)),
-            database = fullDatabase;
+        if (!banlist.length) {
+            return;
+        }
+
+        const activeBanlist = banlist.find((list) => (list.name === settings.banlist)) || banlist[1];
+
+        console.log(activeBanlist);
         let map = {},
             result = [],
             filteredCards = [],
             region = activeBanlist.region;
-        database.forEach(function (card) {
+        loadedDatabase.forEach(function (card) {
             map[card.id] = card;
         });
 
@@ -257,21 +280,20 @@ export default function DeckEditScreen() {
             return false;
 
         });
-
+        console.log(filteredCards);
         searchFilter = new SearchFilter(filteredCards.sort(cardStackSort));
         searchFilter.preformSearch();
-        search = searchFilter.renderSearch();
+        setSearch(searchFilter.renderSearch());
     }
 
     function findcard(card) {
-        return fullDatabase.find((item) => card.id === item.id);
+        return loadedDatabase.find((item) => card.id === item.id);
     }
 
     function searchDB() {
         Object.assign(searchFilter.currentFilter, settings);
         searchFilter.preformSearch();
-        search = searchFilter.renderSearch();
-        hey({ action: 'RENDER' });
+        setSearch(searchFilter.renderSearch());
     }
     function clearSearch() {
         const searchBox = document.querySelector('#cardname'),
@@ -283,7 +305,7 @@ export default function DeckEditScreen() {
         cardtype.value = 5;
 
         searchFilter.clearFilter();
-        search = searchFilter.renderSearch();
+        setSearch(searchFilter.renderSearch());
         settings = {
             cardtype: undefined,
             cardname: undefined,
@@ -307,8 +329,6 @@ export default function DeckEditScreen() {
             limit: undefined,
             links: [null, null, null, null, null, null, null, null]
         };
-
-        hey({ action: 'RENDER' });
     }
 
     function save() {
@@ -466,7 +486,6 @@ export default function DeckEditScreen() {
 
     function importDeck(file, name) {
 
-
         var deck = makeDeckfromydk(file);
         deck.name = name;
         deck.owner = localStorage.nickname;
@@ -500,8 +519,7 @@ export default function DeckEditScreen() {
 
     function prev() {
         searchFilter.pageBack();
-        search = searchFilter.renderSearch();
-        hey({ action: 'RENDER' });
+        setSearch(searchFilter.renderSearch());
         const c = document.getElementById('decksearchresults');
         [].forEach.call(c.children, (k) => {
             k.classList = ['transitioning'];
@@ -512,11 +530,11 @@ export default function DeckEditScreen() {
             });
         }, 1000);
     }
+
     function next() {
 
         searchFilter.pageForward();
-        search = searchFilter.renderSearch();
-        hey({ action: 'RENDER' });
+        setSearch(searchFilter.renderSearch());
         const c = document.getElementById('decksearchresults');
         [].forEach.call(c.children, (k) => {
             k.classList = ['transitioning'];
@@ -533,8 +551,7 @@ export default function DeckEditScreen() {
         var searchBox = document.querySelector('#decksearchresults');
         if (searchBox.scrollTop >= (searchBox.scrollHeight - searchBox.offsetHeight)) {
             searchFilter.currentSearchPageSize += 30;
-            search = searchFilter.renderSearch();
-            hey({ action: 'RENDER' });
+            setSearch(searchFilter.renderSearch());
         }
     }
 
@@ -575,11 +592,12 @@ export default function DeckEditScreen() {
         }
 
         const id = event.target.id;
+        console.log(id);
         let value = (isNaN(Number(event.target.value))) ? undefined : Number(event.target.value);
         if (!filterKeys.includes(id)) {
             return;
         }
-        if (event.target.value === 'undefined') {
+        if (event.target.value === undefined) {
             value = undefined;
         }
         if (settings[id] === value && value) {
@@ -593,9 +611,11 @@ export default function DeckEditScreen() {
                 settings.exacttype = undefined;
                 settings.type1 = undefined;
                 settings.type2 = undefined;
+                settings.cardtype = value;
+                console.log(settings);
                 break;
             case 'release':
-                settings[id] = (event.target.value === 'undefined') ? undefined : event.target.value;
+                settings[id] = (event.target.value === undefined) ? undefined : event.target.value;
                 break;
             case 'cardname':
                 settings[id] = (event.target.value) ? event.target.value : undefined;
@@ -631,160 +651,156 @@ export default function DeckEditScreen() {
         event.target.style.opacity = '1';
     }
 
+    function onCardDoubleClick(source, index, event) {
+        event.preventDefault();
+        if (source === 'search') {
+            const card = search[index];
+            let legal = checkLegality(card, 'main', activeDeck, banlist);
+            if (!legal) {
+                return;
+            }
+            if (isExtra(card)) {
+                legal = checkLegality(card, 'extra', activeDeck, banlist);
+                activeDeck.extra.push(card);
+                hey({ action: 'RENDER' });
+                return;
+            }
+            activeDeck.main.push(card);
+            hey({ action: 'RENDER' });
+            return;
+        }
+
+        activeDeck[source].splice(index, 1);
+        hey({ action: 'RENDER' });
+
+    }
+
     function renderCardCollection(source, input) {
-        const element = React.createElement;
         return input.map((card, i) => {
             card.uid = i;
 
-            return element('div', {
-                key: `${card.uid}-${card.name}`,
-                draggable: true,
-                'data-limit': card.limit,
-                onDragOver: setIndex.bind(this, source, i),
-                onDragStart: onDragStart.bind(this, source, i),
-                onDragEnd: onDragEnd,
-                onDoubleClick: onCardDoubleClick.bind(this, source, i),
-                onContextMenu: onCardDoubleClick.bind(this, source, i)
-            }, new CardImage(card, store).render());
+            return <div
+                key={`${card.uid}-${card.name}`}
+                draggable={true}
+                data-limit={card.limit}
+                onDragOver={setIndex.bind(this, source, i)}
+                onDragStart={onDragStart.bind(this, source, i)}
+                onDragEnd={onDragEnd}
+                onDoubleClick={onCardDoubleClick.bind(this, source, i)}
+                onContextMenu={onCardDoubleClick.bind(this, source, i)}
+            ><CardImage state={card} />
+            </div>;
         });
     }
 
-    function listReduce(deck) {
-        const element = React.createElement,
-            hashMap = deck.reduce((list, card) => {
-                if (!list[card.name]) {
-                    list[card.name] = 1;
-                    return list;
-                }
-                list[card.name]++;
-                return list;
-            }, {});
-        return Object.keys(hashMap).map((name, i) => {
-            return element('div', { key: `x${i}${name}` }, `${hashMap[name]}x ${name}`);
-        });
 
-    }
-
-    function renderCardList() {
-        const element = React.createElement,
-            main = listReduce(activeDeck.main),
-            side = listReduce(activeDeck.side),
-            extra = listReduce(activeDeck.extra);
-        return [
-            element('h4', {}, `Main Deck - ${activeDeck.main.length}x`),
-            main,
-            element('h4', {}, `Side Deck - ${activeDeck.side.length}x`),
-            side,
-            element('h4', {}, `Extra Deck - ${activeDeck.extra.length}x`),
-            extra];
-    }
-
-    function cardTypes() {
-        const element = React.createElement;
+    function CardTypes() {
         switch (settings.cardtype) {
             case 1:
-                return [element('select', { id: 'type1', onChange: onSearchChange }, [
-                    element('option', { value: 'undefined' }, 'Frame'),
-                    element('option', { value: 0x40 }, 'Fusion'),
-                    element('option', { value: 0x80 }, 'Ritual'),
-                    element('option', { value: 0x2000 }, 'Synchro'),
-                    element('option', { value: 0x800000 }, 'Xyz'),
-                    element('option', { value: 0x1000000 }, 'Pendulum'),
-                    element('option', { value: 0x4000000 }, 'Link')
-                ]),
-                element('select', { id: 'type2', onChange: onSearchChange }, [
-                    element('option', { value: 'undefined' }, 'Sub Card Type'),
-                    element('option', { value: 0x10 }, 'Normal'),
-                    element('option', { value: 0x20 }, 'Effect'),
-                    element('option', { value: 0x200 }, 'Spirit'),
-                    element('option', { value: 0x400 }, 'Union'),
-                    element('option', { value: 0x1000 }, 'Tuner'),
-                    element('option', { value: 0x800 }, 'Gemini'),
-                    element('option', { value: 0x400000 }, 'Toon')]),
-                element('select', { id: 'attribute', onChange: onSearchChange }, [
-                    element('option', { value: 'undefined' }, 'Attribute'),
-                    element('option', { value: 1 }, 'EARTH'),
-                    element('option', { value: 2 }, 'WATER'),
-                    element('option', { value: 4 }, 'FIRE'),
-                    element('option', { value: 8 }, 'WIND'),
-                    element('option', { value: 16 }, 'LIGHT'),
-                    element('option', { value: 32 }, 'DARK'),
-                    element('option', { value: 64 }, 'DIVINE')]),
-                element('select', { id: 'race', onChange: onSearchChange }, [
-                    element('option', { value: 'undefined' }, 'Type'),
-                    element('option', { value: 1 }, 'Warrior'),
-                    element('option', { value: 2 }, 'Spellcaster'),
-                    element('option', { value: 4 }, 'Fairy'),
-                    element('option', { value: 8 }, 'Fiend'),
-                    element('option', { value: 16 }, 'Zombie'),
-                    element('option', { value: 32 }, 'Machine'),
-                    element('option', { value: 64 }, 'Aqua'),
-                    element('option', { value: 128 }, 'Pyro'),
-                    element('option', { value: 256 }, 'Rock'),
-                    element('option', { value: 512 }, 'Winged-Beast'),
-                    element('option', { value: 1024 }, 'Plant'),
-                    element('option', { value: 2048 }, 'Insect'),
-                    element('option', { value: 4096 }, 'Thunder'),
-                    element('option', { value: 8192 }, 'Dragon'),
-                    element('option', { value: 16384 }, 'Beast'),
-                    element('option', { value: 32768 }, 'Beast-Warrior'),
-                    element('option', { value: 65536 }, 'Dinosaur'),
-                    element('option', { value: 131072 }, 'Fish'),
-                    element('option', { value: 262144 }, 'Sea Serpent'),
-                    element('option', { value: 524288 }, 'Reptile'),
-                    element('option', { value: 1048576 }, 'Psychic'),
-                    element('option', { value: 2097152 }, 'Divine-Beast'),
-                    element('option', { value: 4194304 }, 'Creator God'),
-                    element('option', { value: 8388608 }, 'Wyrm'),
-                    element('option', { value: 16777216 }, 'Cyberse')
-                ])];
+                return <>
+                    <select id='type1' onChange={onSearchChange}>
+                        <option value={undefined}>Frame</option>,
+                        <option value={0x40}>Fusion</option>
+                        <option value={0x80}>Ritual</option>
+                        <option value={0x2000}>Synchro</option>
+                        <option value={0x800000}>Xyz</option>
+                        <option value={0x1000000}>Pendulum</option>
+                        <option value={0x4000000}>Link</option>
+                    </select>
+                    <select id='type2' onChange={onSearchChange}>
+                        <option value={undefined}>Sub Card Type</option>
+                        <option value={0x10}>Normal</option>
+                        <option value={0x20}>Effect</option>
+                        <option value={0x200}>Spirit</option>
+                        <option value={0x400}>Union</option>
+                        <option value={0x1000}>Tuner</option>
+                        <option value={0x800}>Gemini</option>
+                        <option value={0x400000}>Toon</option></select>
+                    <select id='attribute' onChange={onSearchChange}>
+                        <option value={undefined}>Attribute</option>
+                        <option value={1}>EARTH</option>
+                        <option value={2}>WATER</option>
+                        <option value={4}>FIRE</option>
+                        <option value={8}>WIND</option>
+                        <option value={16}>LIGHT</option>
+                        <option value={32}>DARK</option>
+                        <option value={64}>DIVINE</option></select>
+                    <select id='race' onChange={onSearchChange}>
+                        <option value={undefined}>Type</option>
+                        <option value={1}>Warrior</option>
+                        <option value={2}>Spellcaster</option>
+                        <option value={4}>Fairy</option>
+                        <option value={8}>Fiend</option>
+                        <option value={16}>Zombie</option>
+                        <option value={32}>Machine</option>
+                        <option value={64}>Aqua</option>
+                        <option value={128}>Pyro</option>
+                        <option value={256}>Rock</option>
+                        <option value={512}>Winged-Beast</option>
+                        <option value={1024}>Plant</option>
+                        <option value={2048}>Insect</option>
+                        <option value={4096}>Thunder</option>
+                        <option value={8192}>Dragon</option>
+                        <option value={16384}>Beast</option>
+                        <option value={32768}>Beast-Warrior</option>
+                        <option value={65536}>Dinosaur</option>
+                        <option value={131072}>Fish</option>
+                        <option value={262144}>Sea Serpent</option>
+                        <option value={524288}>Reptile</option>
+                        <option value={1048576}>Psychic</option>
+                        <option value={2097152}>Divine-Beast</option>
+                        <option value={4194304}>Creator God</option>
+                        <option value={8388608}>Wyrm</option>
+                        <option value={16777216}>Cyberse</option>
+                    </select>
+                </>;
             case 2: // Spells
-                return element('select', { id: 'exacttype', onChange: onSearchChange }, [
-                    element('option', { value: 'undefined' }, 'Icon'),
-                    element('option', { value: 2 }, 'Normal'),
-                    element('option', { value: 65538 }, 'Quick-Play'),
-                    element('option', { value: 131074 }, 'Continous'),
-                    element('option', { value: 130 }, 'Ritual'),
-                    element('option', { value: 262146 }, 'Field'),
-                    element('option', { value: 524290 }, 'Equip')
-                ]);
+                return <select id='exacttype' onChange={onSearchChange}>
+                    <option value={undefined}>Icon</option>
+                    <option value={2}>Normal</option>
+                    <option value={65538}>Quick-Play</option>
+                    <option value={131074}>Continous</option>
+                    <option value={130}>Ritual</option>
+                    <option value={262146}>Field</option>
+                    <option value={524290}>Equip</option></select>
             case 4: //Traps
-                return element('select', { id: 'exacttype', onChange: onSearchChange }, [
-                    element('option', { value: 'undefined' }, 'Icon'),
-                    element('option', { value: 4 }, 'Normal'),
-                    element('option', { value: 131076 }, 'Continous'),
-                    element('option', { value: 1048580 }, 'Counter')
-                ]);
-
+                return <select id='exacttype' onChange={onSearchChange}>
+                    <option value={undefined}>Icon</option>
+                    <option value={4}>Normal</option>
+                    <option value={131076}>Continous</option>
+                    <option value={1048580}>Counter</option></select>
             default:
+                return <></>;
         }
     }
 
-    function renderLinks() {
-        const element = React.createElement;
+    function LinkArrows() {
+
         if (settings.cardtype !== 1) {
-            return element('br', { key: 'linkbr1' });
+            return <br />;
         }
-        return element('div', { key: 'deckedit-link-col', className: 'filtercol' }, [
-            element('control', { id: 'linkmarkers', key: 'deckedit-link-col-coltrol' }, [
-                element('input', { id: 'link1', key: 'link0', type: 'checkbox', onChange: onLinkChange.bind(this, 0) }),
-                element('input', { id: 'link2', key: 'link1', type: 'checkbox', onChange: onLinkChange.bind(this, 1) }),
-                element('input', { id: 'link3', key: 'link2', type: 'checkbox', onChange: onLinkChange.bind(this, 2) }),
-                element('br', { key: 'link' }),
-                element('input', { id: 'link4', key: 'link3', type: 'checkbox', onChange: onLinkChange.bind(this, 3) }),
-                element('input', {
-                    type: 'checkbox', key: 'linkx', style: {
+        return <div className='filtercol'>
+            <control id='linkmarkers'>
+                <input id='link1' key='link0' type='checkbox' onChange={onLinkChange.bind(this, 0)} />
+                <input id='link2' key='link1' type='checkbox' onChange={onLinkChange.bind(this, 1)} />
+                <input id='link3' key='link2' type='checkbox' onChange={onLinkChange.bind(this, 2)} />
+                <br key='link' />
+                <input id='link4' key='link3' type='checkbox' onChange={onLinkChange.bind(this, 3)} />
+                <input
+                    type='checkbox' key='linkx' style={{
                         visibility: 'hidden'
                     }
-                }),
-                element('input', { id: 'link5', key: 'link4', type: 'checkbox', onChange: onLinkChange.bind(this, 4) }),
-                element('br', { key: 'linkbr2' }),
-                element('input', { id: 'link6', key: 'link5', type: 'checkbox', onChange: onLinkChange.bind(this, 5) }),
-                element('input', { id: 'link7', key: 'link6', type: 'checkbox', onChange: onLinkChange.bind(this, 6) }),
-                element('input', { id: 'link8', key: 'link7', type: 'checkbox', onChange: onLinkChange.bind(this, 7) })
-            ])
-        ]);
+                    }
+                />
+                <input id='link5' key='link4' type='checkbox' onChange={onLinkChange.bind(this, 4)} />
+                <br key='linkbr2' />
+                <input id='link6' key='link5' type='checkbox' onChange={onLinkChange.bind(this, 5)} />
+                <input id='link7' key='link6' type='checkbox' onChange={onLinkChange.bind(this, 6)} />
+                <input id='link8' key='link7' type='checkbox' onChange={onLinkChange.bind(this, 7)} />
+            </control>
+        </div>;
     }
+
     function renderStats() {
         const element = React.createElement;
         if (settings.cardtype !== 1) {
@@ -832,29 +848,7 @@ export default function DeckEditScreen() {
         ])];
     }
 
-    function onCardDoubleClick(source, index, event) {
-        event.preventDefault();
-        if (source === 'search') {
-            const card = search[index];
-            let legal = checkLegality(card, 'main', activeDeck, banlist);
-            if (!legal) {
-                return;
-            }
-            if (isExtra(card)) {
-                legal = checkLegality(card, 'extra', activeDeck, banlist);
-                activeDeck.extra.push(card);
-                hey({ action: 'RENDER' });
-                return;
-            }
-            activeDeck.main.push(card);
-            hey({ action: 'RENDER' });
-            return;
-        }
 
-        activeDeck[source].splice(index, 1);
-        hey({ action: 'RENDER' });
-
-    }
 
     function onDropExitZone(event) {
         const index = event.dataTransfer.getData('index'),
@@ -922,7 +916,7 @@ export default function DeckEditScreen() {
             list = releases.map((set, i) => {
                 return element('option', { key: `release-${i}`, value: set }, set);
             });
-        return [element('option', { value: 'undefined', key: 'releaseset' }, 'Release Set')].concat(list);
+        return [element('option', { value: undefined, key: 'releaseset' }, 'Release Set')].concat(list);
     }
 
     return (function render() {
@@ -948,10 +942,10 @@ export default function DeckEditScreen() {
                                 element('option', { key: 'deckedit-cardtype-3', value: 2 }, 'Spell'),
                                 element('option', { key: 'deckedit-cardtype-4', value: 4 }, 'Trap')
                             ]),
-                            element('div', { className: 'filtercol', key: 'deckedit-filtercol-2' }, cardTypes()),
+                            element('div', { className: 'filtercol', key: 'deckedit-filtercol-2' }, CardTypes()),
 
                             element('select', { key: 'deckedit-setcode', id: 'setcode', onChange: onSearchChange }, [
-                                element('option', { value: 'undefined', key: 'deckedit-setcode-undefined' }, 'Archetype')
+                                element('option', { value: undefined, key: 'deckedit-setcode-undefined' }, 'Archetype')
                             ].concat(setcodes.map((list, i) => {
                                 return React.createElement('option', { key: `setcode-${i}`, value: parseInt(list.num) }, list.name);
                             }))),
@@ -981,7 +975,7 @@ export default function DeckEditScreen() {
                                 onClick: clearSearch
                             }, 'Reset')
                         ]),
-                        renderLinks()
+                        LinkArrows()
                     ]),
                     element('controls', { key: 'deck-banlist-controls' }, [
                         element('div', { className: 'filtercol' }, [
@@ -1016,7 +1010,7 @@ export default function DeckEditScreen() {
 
                     ])
                 ]),
-                element('div', { id: 'decktextlist', key: 'deckedit-decktextlist-div' }, renderCardList())
+                element('div', { id: 'decktextlist', key: 'deckedit-decktextlist-div' }, <CardList {...activeDeck} />)
             ]),
 
             element('div', {

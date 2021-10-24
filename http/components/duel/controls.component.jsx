@@ -60,7 +60,7 @@ export default class GameplayControlButton extends React.Component {
 }
 
 
-export classControlButtons {
+export class ControlButtons {
 
     hide() {
         Object.keys(this.state.zones).forEach((uid) => {

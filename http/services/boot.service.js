@@ -1,7 +1,7 @@
 /*global store, $, app, Store, cardId, cardIs */
 import { userAlert } from './modal';
-import { hey, listen } from './store';
-import { cardStackSort } from './util/cardManipulation';
+import { hey, listen } from './listener.service';
+import { cardStackSort } from '../util/cardManipulation';
 
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

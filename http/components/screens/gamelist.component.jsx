@@ -1,5 +1,5 @@
 import React from 'react';
-import { hey, listen, watchOut } from '../../services/store';
+import { hey, listen, watchOut } from '../../services/listener.service';
 
 export default class GamelistScreen extends React.Component {
     constructor() {

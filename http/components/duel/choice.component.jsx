@@ -1,6 +1,6 @@
 /*global React */
 
-export classChoiceScreen extends React.Component {
+export class ChoiceScreen extends React.Component {
     constructor(store, chat) {
         super();
         this.sidechat = chat;

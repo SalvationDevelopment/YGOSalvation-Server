@@ -1,6 +1,7 @@
 
 export default class SearchFilter {
     constructor(database) {
+        console.log('create search',database);
         this.currentSearch = [];
         this.currentSearchIndex = 0;
         this.currentSearchPageSize = 60;

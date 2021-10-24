@@ -1,4 +1,4 @@
-import { hey, listen } from './store';
+import { hey, listen } from './listener.service';
 
 function Translator(initialLanguage = 'en') {
     function translate(language) {

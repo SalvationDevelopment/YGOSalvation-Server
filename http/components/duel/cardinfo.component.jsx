@@ -1,5 +1,5 @@
 import React from 'react';
-import { cardIs } from '../../services/util/cardManipulation';
+import { cardIs } from '../../util/cardManipulation';
 
 const attributeMap = {
     1: 'EARTH',

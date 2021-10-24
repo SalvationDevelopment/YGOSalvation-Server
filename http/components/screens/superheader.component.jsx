@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { listen, watchOut } from '../../services/store';
+import { listen, watchOut } from '../../services/listener.service';
 import { getTranslation } from './../../services/useTranslation';
 
 

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import SuperHeaderComponent from './superheader.component';
 import SuperFooterComponent from './superfooter.component';
-import { listen } from '../../services/store';
+import { listen } from '../../services/listener.service';
 
 export default function Screen({ children }) {
 

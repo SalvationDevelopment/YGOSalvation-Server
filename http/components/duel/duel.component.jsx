@@ -1,7 +1,7 @@
 /*global React */
 /*global Store, Field, CardInfo, SideChat, Flasher, Revealer, ControlButtons, LifepointDisplay */
 /*global SelectPosition, DeckDialog, YesNoDialog, SelectAttributes, Chainer, ExtraControls*/
-export classDuelScreen extends React.Component {
+export class DuelScreen extends React.Component {
     constructor(store, chat, databaseSystem) {
         super();
         this.state = {

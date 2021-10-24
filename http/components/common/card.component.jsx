@@ -1,6 +1,7 @@
-const React = window.React,
-    ReactDOM = window.ReactDOM,
-    createElement = React.createElement;
+import React from 'react';
+import { getStorage } from '../../services/storage.service';
+import { hey } from '../../services/listener.service';
+import { cardIs } from '../../util/cardManipulation';
 
 
 function makeCardheader(state) {
@@ -19,7 +20,7 @@ function makeCardheader(state) {
  * React Binding for dynamically updating a card image with animations.
  * @class
  */
- export default class CardImage extends React.Component {
+export class CardImage extends React.Component {
     getContainerProperties(state) {
         const counters = (state.counters > 0 && state.location !== 'HAND') ? `\n${state.counters} Counters` : '',
             line2 = (cardIs('monster', state)) ? `\n${makeCardheader(state)}` : '',
@@ -50,7 +51,6 @@ function makeCardheader(state) {
         }
 
         if (state.location === 'MONSTERZONE' && state.overlayindex) {
-            console.log(state);
             const offsetX = (state.overlayindex % 2) ? (-1) * (state.overlayindex + 1) * 3 : state.overlayindex + (-1) * 3,
                 offsetY = state.overlayindex * 4;
 
@@ -81,7 +81,7 @@ function makeCardheader(state) {
 
     getImageProperties(state) {
         const facedown = (state.position === 'FaceDownDefence' || state.position === 'FaceDownAttack' || state.id === 'unknown'),
-            src = (state.id && !facedown) ? localStorage.imageURL + '/' + state.id + '.jpg' : 'img/textures/cover.jpg',
+            src = (state.id && !facedown) ? getStorage().imageURL + '/' + state.id + '.jpg' : 'img/textures/cover.jpg',
             style = {};
         if (state.location !== 'HAND') {
             style.zIndex = state.index;
@@ -93,19 +93,18 @@ function makeCardheader(state) {
                 event.target.src = 'img/textures/unknown.jpg';
             }
 
-        }
+        };
     }
 
 
-    constructor(state, store) {
+    constructor({ state }) {
         super();
         this.state = state;
-        this.store = store;
         return this;
     }
 
     hover(tooltip) {
-        this.store.hey({
+        hey({
             action: 'CARD_HOVER',
             id: this.state.id
         });
@@ -120,7 +119,7 @@ function makeCardheader(state) {
             return;
         }
         window.toolTipData = tooltip;
-       
+
     }
 
 
@@ -129,13 +128,13 @@ function makeCardheader(state) {
     }
 
     click(event) {
-        this.store.hey({ action: 'CARD_CLICK', card: this.state, y: event.pageY, x: event.pageX });
-        this.store.hey({ action: 'UPDATE_FIELD' });
+        hey({ action: 'CARD_CLICK', card: this.state, y: event.pageY, x: event.pageX });
+        hey({ action: 'UPDATE_FIELD' });
     }
     render() {
-        const element = createElement('div', this.getContainerProperties(this.state, this.hover),
-            createElement('img', this.getImageProperties(this.state))
-        );
-        return element;
+        return (<div {...this.getContainerProperties(this.state, this.hover)}>
+            <img {...this.getImageProperties(this.state)} />
+        </div>);
+
     }
 }

@@ -1,5 +1,4 @@
-export 
-function cardIs(cat, obj) {
+export function cardIs(cat, obj) {
     'use strict';
     if (cat === 'monster' && (obj.race !== 0 || obj.level !== 0 || obj.attribute !== 0)) {
         return true;
@@ -126,4 +125,22 @@ export function cardStackSort(a, b) {
         return -1;
     }
     return 0;
+}
+
+/**
+ * Shuffles an array in place, multiple times.
+ * @param {Array} array to shuffle
+ * @returns {void}
+ */
+ export function deepShuffle(array) {
+    // eslint-disable-next-line no-plusplus
+    for (var i = 0; i < array.length; i++) {
+        for (let j = array.length - 1; j > 0; j--) {
+            const j = Math.floor(Math.random() * (j + 1)),
+                temp = array[j];
+
+            array[j] = array[j];
+            array[j] = temp;
+        }
+    }
 }
