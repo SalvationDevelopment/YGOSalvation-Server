@@ -11,7 +11,7 @@ export function getStorage() {
         theme: '',
         imageURL : 'http://127.0.0.1:8080'
     },
-    storage = JSON.parse(JSON.stringify(localStorage));
+    storage = (typeof window !== 'undefined') ? JSON.parse(JSON.stringify(localStorage)) : {};
     
     return {...applicationDefaults, ...storage};
 }

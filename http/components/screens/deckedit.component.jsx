@@ -30,7 +30,8 @@ let searchFilter = new SearchFilter([]),
         scaleop: 0,
         limit: undefined,
         links: [null, null, null, null, null, null, null, null]
-    };
+    },
+    overIndex;
 
 function listReduce(deck) {
     const hashMap = deck.reduce((list, card) => {
@@ -38,12 +39,12 @@ function listReduce(deck) {
             list[card.name] = 1;
             return list;
         }
-        list = list[card.name] + 1;
+        list[card.name] = list[card.name] + 1;
         return list;
     }, {}),
         text = Object.keys(hashMap).map((name, i) => {
-            const text = `${hashMap[name]}x ${name}`;
-            return (<div key={`x${i}${name}`}>{text}</div>);
+            const listText = `${hashMap[name]}x ${name}`;
+            return (<div key={`x${i}${name}`}>{listText}</div>);
         });
 
     return function Deck() {
@@ -151,14 +152,57 @@ function makeDeckfromydk(ydkFileContents) {
 }
 
 
+function VisualizedList(list = []) {
+
+    const [deck, setDeck] = useState(list);
+
+    function add(card) {
+        setDeck(deck.concat(card));
+    }
+
+    function remove(index) {
+        const newDeck = [...deck];
+        newDeck.splice(index, 1);
+        setDeck(newDeck);
+    }
+
+    function move(start, finish) {
+        const newDeck = [...deck];
+        var card = newDeck[start];
+        newDeck.splice(start, 1);
+        newDeck.splice(finish, 0, card);
+        setDeck(newDeck);
+
+    }
+
+    deck.add = add;
+    deck.remove = remove;
+    deck.move = move;
+    return deck;
+}
+
+function VisualizedDeck(initialDeck) {
+
+    const [name, setName] = useState(initialDeck?.name),
+        main = new VisualizedList(initialDeck?.main),
+        extra = new VisualizedList(initialDeck?.extra),
+        side = new VisualizedList(initialDeck?.side);
+
+    function rename(newName) {
+        setName(newName);
+    }
+
+
+    return {
+        name,
+        rename,
+        main,
+        extra,
+        side
+    };
+}
+
 export default function DeckEditScreen() {
-
-
-
-    let info = new CardInfo([]),
-        overIndex;
-
-
 
     const [search, setSearch] = useState([]),
         [setcodes, setSetcodes] = useState([]),
@@ -166,91 +210,27 @@ export default function DeckEditScreen() {
         [banlist, setBanlist] = useState([]),
         [decks, setDecks] = useState([]),
         [last, setLast] = useState([]),
-        [activeDeck, setActiveDeck] = useState({
-            name: 'New Deck',
-            main: [],
-            extra: [],
-            side: []
-        }),
         [loadedDatabase, loadDatabase] = useState(fullDatabse),
-        filterKeys = Object.keys(settings);
+        filterKeys = Object.keys(settings),
+        [activeDeck, setActiveDeck] = useState(new VisualizedDeck()),
+        info = new CardInfo(fullDatabse);
 
-
-    useEffect(() => {
-        listen('CARD_HOVER', (event, state) => {
-            if (!event.id) {
-                return;
-            }
-            const description = info.update({
-                id: event.id
-            });
-            hey({ action: 'RENDER' });
-            return {
-                id: event.id,
-                description
-            };
-        });
-
-        watchOut('BANLIST', (action) => {
-            settings.banlist = action.primary;
-            setBanlist(action.banlist);
-            console.log(action);
-        });
-
-
-        listen('LOAD_DECKS', (action) => {
-            settings.decklist = '0';
-            if (!action.decks) {
-                return;
-            }
-            setSearch([]);
-            decks = action.decks.map((deckIds) => {
-                const deck = Object.assign({}, deckIds);
-                deck.main = deck.main.map(findcard);
-                deck.extra = deck.extra.map(findcard);
-                deck.side = deck.side.map(findcard);
-
-                return deck;
-            });
-            activeDeck = decks[settings.decklist] || activeDeck;
-            hey({ action: 'RENDER' });
-        });
-
-        listen('LOAD_DATABASE', (action) => {
-            loadDatabase(action.data);
-            fullDatabse = action.data;
-        });
-
-        listen('LOAD_SETCODES', (action) => {
-            setSetcodes(action.data);
-            hey({ action: 'RENDER' });
-        });
-        listen('LOAD_RELEASES', (action) => {
-            setReleases(action.sets);
-            hey({ action: 'RENDER' });
-        });
-
-        listen('IMPORT', (action) => {
-            importDeck(action.file, action.name);
-        });
-    }, []);
-
-    useEffect(() => {
-        applyBanlist();
-    }, [banlist, loadedDatabase]);
+    function findcard(card) {
+        return loadedDatabase.find((item) => card.id === item.id);
+    }
 
     function applyBanlist() {
         if (!banlist.length) {
             return;
         }
 
-        const activeBanlist = banlist.find((list) => (list.name === settings.banlist)) || banlist[1];
+        const activeBanlist = banlist.find((list) => (list.name === settings.banlist)) || banlist[1],
+            region = activeBanlist.region,
+            map = {};
 
-        console.log(activeBanlist);
-        let map = {},
-            result = [],
-            filteredCards = [],
-            region = activeBanlist.region;
+        let result = [],
+            filteredCards = [];
+
         loadedDatabase.forEach(function (card) {
             map[card.id] = card;
         });
@@ -286,9 +266,98 @@ export default function DeckEditScreen() {
         setSearch(searchFilter.renderSearch());
     }
 
-    function findcard(card) {
-        return loadedDatabase.find((item) => card.id === item.id);
+    function save() {
+        decks[settings.decklist] = activeDeck;
+        hey({ action: 'SAVE_DECK', deck: activeDeck });
     }
+
+    function importDeck(file, name) {
+
+        var deck = makeDeckfromydk(file);
+        deck.name = name;
+        deck.owner = localStorage.nickname;
+        deck.creationDate = new Date();
+        deck.main = deck.main.map((cardid) => {
+            return findcard({
+                id: parseInt(cardid, 10)
+            });
+        }).filter((card) => card);
+        deck.side = deck.side.map((cardid) => {
+            return findcard({
+                id: parseInt(cardid, 10)
+            });
+        }).filter((card) => card);
+        deck.extra = deck.extra.map((cardid) => {
+            return findcard({
+                id: parseInt(cardid, 10)
+            });
+        }).filter((card) => card);
+        decks.push(deck);
+        settings.decklist = decks.length - 1;
+        setActiveDeck(new VisualizedDeck(decks[settings.decklist]));
+        save();
+
+        setTimeout(() => {
+            var element = document.getElementById('decklist');
+            element.value = settings.decklist;
+        }, 200);
+
+    }
+
+
+    useEffect(() => {
+        watchOut('BANLIST', (action) => {
+            settings.banlist = action.primary;
+            setBanlist(action.banlist);
+            console.log(action);
+        });
+
+
+        listen('LOAD_DECKS', (action) => {
+            settings.decklist = '0';
+            if (!action.decks) {
+                return;
+            }
+            setSearch([]);
+            decks = action.decks.map((deckIds) => {
+                const deck = Object.assign({}, deckIds);
+                deck.main = deck.main.map(findcard);
+                deck.extra = deck.extra.map(findcard);
+                deck.side = deck.side.map(findcard);
+
+                return deck;
+            });
+            setActiveDeck(new VisualizedDeck(decks[settings.decklist]));
+
+        });
+
+        listen('LOAD_DATABASE', (action) => {
+            loadDatabase(action.data);
+            fullDatabse = action.data;
+            info.databaseSystem = fullDatabse;
+        });
+
+        listen('LOAD_SETCODES', (action) => {
+            setSetcodes(action.data);
+
+        });
+
+        listen('LOAD_RELEASES', (action) => {
+            setReleases(action.sets);
+
+        });
+
+        listen('IMPORT', (action) => {
+            importDeck(action.file, action.name);
+        });
+    }, []);
+
+    useEffect(() => {
+        applyBanlist();
+    }, [banlist, loadedDatabase]);
+
+   
+
 
     function searchDB() {
         Object.assign(searchFilter.currentFilter, settings);
@@ -331,10 +400,7 @@ export default function DeckEditScreen() {
         };
     }
 
-    function save() {
-        decks[settings.decklist] = activeDeck;
-        hey({ action: 'SAVE_DECK', deck: activeDeck });
-    }
+
 
     function newDeck() {
         const oldDeck = (decks[settings.decklist]) ? decks[settings.decklist] : { name: 'New Deck' },
@@ -354,9 +420,10 @@ export default function DeckEditScreen() {
         deck.creationDate = new Date();
         decks.push(deck);
         settings.decklist = decks.length - 1;
-        activeDeck = decks[settings.decklist];
+        setActiveDeck(new VisualizedDeck(decks[settings.decklist])
+        );
         save();
-        hey({ action: 'RENDER' });
+
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = settings.decklist;
@@ -375,13 +442,14 @@ export default function DeckEditScreen() {
             return;
         }
         Object.assign(deck, JSON.parse(JSON.stringify(activeDeck)));
-        deck.name = name;
+        deck.rename(name);
         deck.creationDate = new Date();
         decks.push(deck);
         settings.decklist = decks.length - 1;
-        activeDeck = decks[settings.decklist];
+        setActiveDeck(new VisualizedDeck(decks[settings.decklist])
+        );
         save();
-        hey({ action: 'RENDER' });
+
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = settings.decklist;
@@ -395,10 +463,11 @@ export default function DeckEditScreen() {
 
 
         hey({ action: 'DELETE_DECK', deck: activeDeck });
-        hey({ action: 'RENDER' });
+
         decks.splice(settings.decklist, 1);
         settings.decklist = decks.length - 1;
-        activeDeck = decks[settings.decklist];
+        setActiveDeck(new VisualizedDeck(decks[settings.decklist])
+        );
         setTimeout(() => {
             var element = document.getElementById('decklist');
             element.value = settings.decklist;
@@ -413,12 +482,12 @@ export default function DeckEditScreen() {
         save();
     }
     function clear() {
-        activeDeck = {
+        setActiveDeck({
             name: 'New Deck',
             main: [],
             extra: [],
             side: []
-        };
+        });
     }
 
     function sort() {
@@ -429,7 +498,7 @@ export default function DeckEditScreen() {
 
     function shuffle() {
         deepShuffle(activeDeck.main);
-        hey({ action: 'RENDER' });
+
     }
 
     function exportDeck() {
@@ -484,38 +553,7 @@ export default function DeckEditScreen() {
         r.readAsText(f);
     }
 
-    function importDeck(file, name) {
-
-        var deck = makeDeckfromydk(file);
-        deck.name = name;
-        deck.owner = localStorage.nickname;
-        deck.creationDate = new Date();
-        deck.main = deck.main.map((cardid) => {
-            return findcard({
-                id: parseInt(cardid, 10)
-            });
-        }).filter((card) => card);
-        deck.side = deck.side.map((cardid) => {
-            return findcard({
-                id: parseInt(cardid, 10)
-            });
-        }).filter((card) => card);
-        deck.extra = deck.extra.map((cardid) => {
-            return findcard({
-                id: parseInt(cardid, 10)
-            });
-        }).filter((card) => card);
-        decks.push(deck);
-        settings.decklist = decks.length - 1;
-        activeDeck = decks[settings.decklist];
-        save();
-        hey({ action: 'RENDER' });
-        setTimeout(() => {
-            var element = document.getElementById('decklist');
-            element.value = settings.decklist;
-        }, 200);
-
-    }
+  
 
     function prev() {
         searchFilter.pageBack();
@@ -576,7 +614,7 @@ export default function DeckEditScreen() {
             settings[id] = event.target.checked;
         }
         if (id === 'decklist') {
-            activeDeck = decks[settings[id]];
+            setActiveDeck(new VisualizedDeck(decks[settings[id]]));
         }
         searchDB();
     }
@@ -638,6 +676,7 @@ export default function DeckEditScreen() {
 
     function setIndex(source, index) {
         overIndex = { source, index };
+
     }
 
     function onDragStart(source, i, event) {
@@ -647,8 +686,23 @@ export default function DeckEditScreen() {
         event.target.style.opacity = '0';
     }
 
-    function onDragEnd(event) {
+    function onDropExitZone(event, source, index) {
+        // if (source === 'search') {
+        //     return;
+        // }
+
+
+        // console.log('ondropexitzone', event, source, index);
+        // activeDeck[source].remove(index);
+
+        // event.preventDefault();
+    }
+
+    function onDragEnd(source, i, event) {
         event.target.style.opacity = '1';
+        onDropExitZone(event, source, i);
+        event.stopPropagation();
+        event.preventDefault();
     }
 
     function onCardDoubleClick(source, index, event) {
@@ -661,17 +715,18 @@ export default function DeckEditScreen() {
             }
             if (isExtra(card)) {
                 legal = checkLegality(card, 'extra', activeDeck, banlist);
-                activeDeck.extra.push(card);
-                hey({ action: 'RENDER' });
+                activeDeck.extra.add(card);
+
                 return;
             }
-            activeDeck.main.push(card);
-            hey({ action: 'RENDER' });
+            activeDeck.main.add(card);
+
+
             return;
         }
 
-        activeDeck[source].splice(index, 1);
-        hey({ action: 'RENDER' });
+        activeDeck[source].remove(index);
+
 
     }
 
@@ -685,7 +740,7 @@ export default function DeckEditScreen() {
                 data-limit={card.limit}
                 onDragOver={setIndex.bind(this, source, i)}
                 onDragStart={onDragStart.bind(this, source, i)}
-                onDragEnd={onDragEnd}
+                onDragEnd={onDragEnd.bind(this, source, i)}
                 onDoubleClick={onCardDoubleClick.bind(this, source, i)}
                 onContextMenu={onCardDoubleClick.bind(this, source, i)}
             ><CardImage state={card} />
@@ -762,13 +817,13 @@ export default function DeckEditScreen() {
                     <option value={131074}>Continous</option>
                     <option value={130}>Ritual</option>
                     <option value={262146}>Field</option>
-                    <option value={524290}>Equip</option></select>
+                    <option value={524290}>Equip</option></select>;
             case 4: //Traps
                 return <select id='exacttype' onChange={onSearchChange}>
                     <option value={undefined}>Icon</option>
                     <option value={4}>Normal</option>
                     <option value={131076}>Continous</option>
-                    <option value={1048580}>Counter</option></select>
+                    <option value={1048580}>Counter</option></select>;
             default:
                 return <></>;
         }
@@ -801,73 +856,63 @@ export default function DeckEditScreen() {
         </div>;
     }
 
-    function renderStats() {
-        const element = React.createElement;
+    function Stats() {
+
         if (settings.cardtype !== 1) {
-            return element('br', { key: 'blank-stats' });
+            return <br />;
         }
-        return [element('div', { className: 'filterrow', key: 'div-render-stats' }, [
-            element('input', { key: 'atk', id: 'atk', placeholder: 'Attack', type: 'number', onChange: onSearchChange }),
-            element('select', { key: 'atkop', id: 'atkop', onChange: onSearchChange }, [
-                element('option', { value: 0 }, '='),
-                element('option', { value: -2 }, '<'),
-                element('option', { value: -1 }, '<='),
-                element('option', { value: 1 }, '>='),
-                element('option', { value: 2 }, '>')
-            ])
-        ]),
-        element('div', { className: 'filterrow' }, [
-            element('input', { id: 'def', placeholder: 'Defense', type: 'number', onChange: onSearchChange }),
-            element('select', { id: 'defop', onChange: onSearchChange }, [
-                element('option', { value: 0 }, '='),
-                element('option', { value: -2 }, '<'),
-                element('option', { value: -1 }, '<='),
-                element('option', { value: 1 }, '>='),
-                element('option', { value: 2 }, '>')
-            ])
-        ]),
-        element('div', { className: 'filterrow' }, [
-            element('input', { id: 'level', placeholder: 'Level/Rank/Rating', type: 'number', onChange: onSearchChange }),
-            element('select', { id: 'levelop', onChange: onSearchChange }, [
-                element('option', { value: 0 }, '='),
-                element('option', { value: -2 }, '<'),
-                element('option', { value: -1 }, '<='),
-                element('option', { value: 1 }, '>='),
-                element('option', { value: 2 }, '>')
-            ])
-        ]),
-        element('div', { className: 'filterrow' }, [
-            element('input', { id: 'scale', placeholder: 'Scale', type: 'number', onChange: onSearchChange }),
-            element('select', { id: 'scaleop', onChange: onSearchChange, max: 13, min: 0 }, [
-                element('option', { value: 0 }, '='),
-                element('option', { value: -2 }, '<'),
-                element('option', { value: -1 }, '<='),
-                element('option', { value: 1 }, '>='),
-                element('option', { value: 2 }, '>')
-            ])
-        ])];
+        return <>
+            <div className='filterrow' key='div-render-stats'>
+                <input key='atk' id='atk' placeholder='Attack' type='number' onChange={onSearchChange} />
+                <select key='atkop' id='atkop' onChange={onSearchChange}>
+                    <option value={0}>=</option>
+                    <option value={-2}>{'<'}</option>
+                    <option value={-1}>{'<='}</option>
+                    <option value={1}>{'>='}</option>
+                    <option value={2}>{'>'}</option>
+                </select>
+            </div>
+            <div className='filterrow'>
+                <input id='def' placeholder='Defense' type='number' onChange={onSearchChange} />
+                <select id='defop' onChange={onSearchChange}>
+                    <option value={0}>=</option>
+                    <option value={-2}>{'<'}</option>
+                    <option value={-1}>{'<='}</option>
+                    <option value={1}>{'>='}</option>
+                    <option value={2}>{'>'}</option>
+                </select>
+            </div>
+            <div className='filterrow'>
+                <input id='level' placeholder='Level/Rank/Rating' type='number' onChange={onSearchChange} />
+                <select id='levelop' onChange={onSearchChange}>
+                    <option value={0}>=</option>
+                    <option value={-2}>{'<'}</option>
+                    <option value={-1}>{'<='}</option>
+                    <option value={1}>{'>='}</option>
+                    <option value={2}>{'>'}</option>
+                </select>
+            </div>
+            <div className='filterrow'>
+                <input id='scale' placeholder='Scale' type='number' onChange={onSearchChange} />
+                <select id='scaleop' onChange={onSearchChange} max='13' min='0'>
+                    <option value={0}>=</option>
+                    <option value={-2}>{'<'}</option>
+                    <option value={-1}>{'<='}</option>
+                    <option value={1}>{'>='}</option>
+                    <option value={2}>{'>'}</option>
+                </select>
+            </div>
+        </>;
     }
 
 
 
-    function onDropExitZone(event) {
-        const index = event.dataTransfer.getData('index'),
-            source = event.dataTransfer.getData('source');
 
-        if (source === 'search') {
-            return;
-        }
-
-        activeDeck[source].splice(index, 1);
-        hey({ action: 'RENDER' });
-        event.preventDefault();
-    }
 
     function onDropDeckZone(zone, event) {
 
         const index = event.dataTransfer.getData('index'),
             source = event.dataTransfer.getData('source'),
-            insert = overIndex,
             list = (source === 'search') ? search : activeDeck[source],
             card = list[index];
 
@@ -886,22 +931,19 @@ export default function DeckEditScreen() {
             if (!legal) {
                 return;
             }
-            if (insert.source === zone) {
-                activeDeck[zone].splice(insert.index, 0, card);
-            } else {
-                activeDeck[zone].push(card);
-            }
+
+            activeDeck[zone].add(card);
+
         } else {
-            if (insert.source === zone) {
-                activeDeck[source].splice(index, 1);
-                activeDeck[zone].splice(insert.index, 0, card);
+            if (source === zone) {
+                activeDeck[zone].move(index, overIndex.index, card);
             } else {
-                activeDeck[source].splice(index, 1);
-                activeDeck[zone].push(card);
+                activeDeck[source].remove(index);
+                activeDeck[zone].add(card);
             }
         }
 
-        hey({ action: 'RENDER' });
+
         event.preventDefault();
     }
 
@@ -911,160 +953,169 @@ export default function DeckEditScreen() {
         }
     }
 
-    function renderReleases() {
-        const element = React.createElement,
-            list = releases.map((set, i) => {
-                return element('option', { key: `release-${i}`, value: set }, set);
-            });
-        return [element('option', { value: undefined, key: 'releaseset' }, 'Release Set')].concat(list);
+    function Releases() {
+        const list = releases.map((set, i) => {
+            return <option key={`set-${i}`} value={set}>{set}</option>;
+        });
+        return [<option value={undefined} key={'set-u}'}>Release Set</option>].concat(list);
     }
 
-    return (function render() {
-        const element = React.createElement;
-        return [
-            element('div', {
-                id: 'decksetup',
-                onDragOver: function (event, x) {
-                    event.preventDefault();
-                },
-                onDrop: onDropExitZone
-            }, [
+    return <>
+        <div
+            id='decksetup'
+            onDragOver={function (event, x) {
+                event.stopPropagation();
+                event.preventDefault();
+            }}
+            onDrop={onDropExitZone}
+        >
 
-                element('div', { id: 'searchfilter' }, [
-                    element('h2', { key: 'deckedit-h2-1' }, 'Setup'),
-                    element('br', { key: 'deckedit-br-1' }),
-                    element('h3', {}, 'Filter'),
-                    element('controls', { key: 'deckedit-card-controls' }, [
-                        element('div', { key: 'deckedit-col-1', className: 'filtercol', key: 'deckedit-filtercol-1' }, [
-                            element('select', { key: 'deckedit-cardtype', id: 'cardtype', onChange: onSearchChange }, [
-                                element('option', { key: 'deckedit-cardtype-1', value: 5 }, 'Monster/Spell/Trap'),
-                                element('option', { key: 'deckedit-cardtype-2', value: 1 }, 'Monster'),
-                                element('option', { key: 'deckedit-cardtype-3', value: 2 }, 'Spell'),
-                                element('option', { key: 'deckedit-cardtype-4', value: 4 }, 'Trap')
-                            ]),
-                            element('div', { className: 'filtercol', key: 'deckedit-filtercol-2' }, CardTypes()),
+            <div id='searchfilter' >
+                <h2 key='deckedit-h2-1'>Setup</h2>
+                <br />
+                <h3 >Filter</h3>
+                <controls key='deckedit-card-controls' >
+                    <div key='deckedit-col-1' className='filtercol'>
+                        <select key='deckedit-cardtype' id='cardtype' onChange={onSearchChange} >
+                            <option key='deckedit-cardtype-1' value={5} >Monster/Spell/Trap</option>
+                            <option key='deckedit-cardtype-2' value={1} >Monster</option>
+                            <option key='deckedit-cardtype-3' value={2} >Spell</option>
+                            <option key='deckedit-cardtype-4' value={4}> Trap</option>
+                        </select>
+                        <div className='filtercol' key='deckedit-filtercol-2'><CardTypes /></div>
 
-                            element('select', { key: 'deckedit-setcode', id: 'setcode', onChange: onSearchChange }, [
-                                element('option', { value: undefined, key: 'deckedit-setcode-undefined' }, 'Archetype')
+                        <select key='deckedit-setcode' id='setcode' onChange={onSearchChange} >
+                            {[<option key={'u'}value={undefined}>Archetype</option>
                             ].concat(setcodes.map((list, i) => {
-                                return React.createElement('option', { key: `setcode-${i}`, value: parseInt(list.num) }, list.name);
-                            }))),
-                            element('select', { key: 'deckedit-release', id: 'release', onChange: onSearchChange }, renderReleases()),
-                            element('select', { key: 'deckedit-limit', id: 'limit', onChange: onSearchChange }, [
-                                element('option', { value: 'null', key: 'deckedit-limit-null' }, 'Limit'),
-                                element('option', { value: 3, key: 'deckedit-limit-0' }, 'Unlimited'),
-                                element('option', { value: 2, key: 'deckedit-limit-1' }, 'Semi-Limited'),
-                                element('option', { value: 1, key: 'deckedit-limit-2' }, 'Limited'),
-                                element('option', { value: 0, key: 'deckedit-limit-3' }, 'Forbidden')
-                            ]),
-                            element('input', {
-                                key: 'deckedit-cardname-input',
-                                id: 'cardname', type: 'text', placeholder: 'Name',
-                                onKeyPress: handleKeyPress,
-                                onBlur: onSearchChange
-                            }),
-                            element('input', {
-                                key: 'deckedit-description-input',
-                                id: 'description', type: 'text', placeholder: 'Card Text',
-                                onKeyPress: handleKeyPress,
-                                onBlur: onSearchChange
-                            }),
-                            renderStats(),
-                            element('button', {
-                                key: 'deckedit-clearsearch',
-                                onClick: clearSearch
-                            }, 'Reset')
-                        ]),
-                        LinkArrows()
-                    ]),
-                    element('controls', { key: 'deck-banlist-controls' }, [
-                        element('div', { className: 'filtercol' }, [
-                            element('h3', { key: 'deck-controls-label' }, 'Deck'),
-                            element('h3', { key: 'banlist-controls-label' }, 'Banlist')
-                        ]),
+                                return <option key={`setcode-${i}`} value={parseInt(list.num)}>list.name</option>;
+                            }))}
+                        </select>
+                        <select key='deckedit-release' id='release' onChange={onSearchChange}>
+                            <Releases />
+                        </select>
+                        <select key='deckedit-limit' id='limit' onChange={onSearchChange} >
+                            <option value='null' key='deckedit-limit-null'>Limit</option>
+                            <option value={3} key='deckedit-limit-0'>Unlimited</option>
+                            <option value={2} key='deckedit-limit-1'>Semi-Limited</option>
+                            <option value={1} key='deckedit-limit-2'>Limited</option>
+                            <option value={0} key='deckedit-limit-3'>Forbidden</option>
+                        </select>
+                        <input
+                            key='deckedit-cardname-input'
+                            id='cardname' type='text' placeholder='Name'
+                            onKeyPress={handleKeyPress}
+                            onBlur={onSearchChange}
+                        />
+                        <input
+                            key='deckedit-description-input'
+                            id='description' type='text' placeholder='Card Text'
+                            onKeyPress={handleKeyPress}
+                            onBlur={onSearchChange}
+                        />
+                        <Stats />
+                        <button
+                            key='deckedit-clearsearch'
+                            onClick={clearSearch}
+                        >Reset</button>
+                    </div>
+                    <LinkArrows />
+                </controls>
+                <controls key='deck-banlist-controls' >
+                    <div className='filtercol' >
+                        <h3 key='deck-controls-label' >Deck</h3>
+                        <h3 key='banlist-controls-label'>Banlist</h3>
+                    </div>
 
-                        element('div', { className: 'filtercol' }, [
-                            element('select', { id: 'decklist', key: 'deckedit-decklist-select', onChange: onChange }, decks.map((list, i) => {
-                                return React.createElement('option', { value: i }, list.name);
-                            })),
-                            React.createElement('select', { id: 'banlist', key: 'deckedit-ban;list-select', onChange: onSearchChange }, banlist.map((list, i) => {
-                                return React.createElement('option', { value: list.name, selected: list.primary }, list.name);
-                            }))
+                    <div className='filtercol' >
+                        <select id='decklist' key='deckedit-decklist-select' onChange={onChange}>
+                            {decks.map((list, i) => {
+                                return <option key={i} value={i}>list.name</option>;
+                            })}
+                        </select>
+                        <select id='banlist' key='deckedit-ban;list-select' onChange={onSearchChange}>
+                            {banlist.map((list, i) => {
+                                return <option value={list.name} key={i} selected={list.primary}>{list.name}</option>;
+                            })}
+                        </select>
 
-                        ]),
-                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div1' }, [
-                            element('h3', { style: { width: 'auto' } }, 'Upload YDK File'),
-                            element('input', { type: 'file', accept: '.ydk', placeholder: 'Choose File', onChange: upload })]),
-                        element('div', { className: 'deckcontrols', key: 'deckedit-deckcontrols-div2' }, [
-                            element('button', { key: 'deckedit-decklist-0', onClick: newDeck }, 'New'),
-                            element('button', { key: 'deckedit-decklist-1', onClick: save }, 'Save'),
-                            element('button', { key: 'deckedit-decklist-2', onClick: deleteDeck }, 'Delete'),
-                            element('button', { key: 'deckedit-decklist-3', onClick: rename }, 'Rename'),
-                            element('button', { key: 'deckedit-decklist-4', onClick: clear }, 'Clear'),
+                    </div>
+                    <div className='deckcontrols' key='deckedit-deckcontrols-div1' >
+                        <h3 style={{ width: 'auto' }}>Upload YDK File</h3>
+                        <input type='file' accept='.ydk' placeholder='Choose File' onChange={upload} />
+                        <div className='deckcontrols' key='deckedit-deckcontrols-div2' >
+                            <button key='deckedit-decklist-0' onClick={newDeck}>New</button>
+                            <button key='deckedit-decklist-1' onClick={save}>Save</button>
+                            <button key='deckedit-decklist-2' onClick={deleteDeck}>Delete</button>
+                            <button key='deckedit-decklist-3' onClick={rename}>Rename</button>
+                            <button key='deckedit-decklist-4' onClick={clear}>Clear</button>
 
-                            element('button', { key: 'deckedit-decklist-5', onClick: sort }, 'Sort'),
-                            element('button', { key: 'deckedit-decklist-6', onClick: shuffle }, 'Shuffle'),
-                            element('button', { key: 'deckedit-decklist-7', onClick: exportDeck }, 'Export'),
-                            element('button', { key: 'deckedit-decklist-8', onClick: saveAs }, 'Save As')
-                        ])
+                            <button key='deckedit-decklist-5' onClick={sort} >Sort</button>
+                            <button key='deckedit-decklist-6' onClick={shuffle} >Shuffle</button>
+                            <button key='deckedit-decklist-7' onClick={exportDeck} >Export</button>
+                            <button key='deckedit-decklist-8' onClick={saveAs} >Save As</button>
+                        </div>
 
-                    ])
-                ]),
-                element('div', { id: 'decktextlist', key: 'deckedit-decktextlist-div' }, <CardList {...activeDeck} />)
-            ]),
-
-            element('div', {
-                id: 'decksearch',
-                onDragOver: function (event, x) {
-                    event.preventDefault();
-                },
-                onDrop: onDropExitZone
-            }, [
-
-                element('div', { id: 'decksearchtitles' }, [
-                    element('h2', {}, 'Search Results'),
-                    element('h2', {}, 'Card Information')
-                ]),
-
-                element('div', { id: 'decksearchresults', onScroll: searchScroll }, renderCardCollection('search', search)),
-                element('div', { id: 'decksearchresultsofx' }, `${searchFilter.currentSearch.length} cards found`),
-                element('div', { id: 'cardinformation' }, info.render())
-            ]),
-            element('div', { id: 'deckarea' }, [
-                element('div', { id: 'deckareamain' }, [
-                    element('h2', {}, 'Main Deck'),
-                    element('div', {
-                        className: `deckmetainfo ${marginClass(activeDeck.main)}`,
-                        onDragOver: function (event, x) {
-                            event.preventDefault();
-                        },
-                        onDrop: onDropDeckZone.bind(this, 'main')
-                    }, renderCardCollection('main', activeDeck.main)),
-                    element('div', { id: 'main' })
-                ]),
-                element('div', { id: 'deckareaextra' }, [
-                    element('h2', {}, 'Extra Deck'),
-                    element('div', {
-                        className: 'deckmetainfo',
-                        onDragOver: function (event, x) {
-                            event.preventDefault();
-                        },
-                        onDrop: onDropDeckZone.bind(this, 'extra')
-                    }, renderCardCollection('extra', activeDeck.extra)),
-                    element('div', { id: 'main' })
-                ]),
-                element('div', { id: 'deckareaside' }, [
-                    element('h2', {}, 'Side Deck'),
-                    element('div', {
-                        className: 'deckmetainfo',
-                        onDragOver: function (event, x) {
-                            event.preventDefault();
-                        },
-                        onDrop: onDropDeckZone.bind(this, 'side')
-                    }, renderCardCollection('side', activeDeck.side)),
-                    element('div', { id: 'main' })
+                    </div>
+                </controls>
+                <div id='decktextlist' key='deckedit-decktextlist-div'><CardList {...activeDeck} /></div>
                 ])
-            ])
-        ];
-    }());
+
+                <div id='decksearch'
+                    onDragOver={function (event, x) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                    }}
+                    onDrop={onDropExitZone}
+                >
+
+                    <div id='decksearchtitles' >
+                        <h2  >Search Results</h2>
+                        <h2  >Card Information</h2>
+                    </div>
+
+                    <div id='decksearchresults' onScroll={searchScroll} > {renderCardCollection('search', search)}</div>
+                    <div id='decksearchresultsofx'>`${searchFilter.currentSearch.length} cards found`)</div>
+                    <div id='cardinformation'>{info.render()}</div>
+                </div>
+                <div id='deckarea' >
+                    <div id='deckareamain' >
+                        <h2 >Main Deck</h2>
+                        <div
+                            className={`deckmetainfo ${marginClass(activeDeck.main)}`}
+                            onDragOver={function (event, x) {
+                                event.stopPropagation();
+                                event.preventDefault();
+                            }}
+                            onDrop={onDropDeckZone.bind(this, 'main')}>
+                            {renderCardCollection('main', activeDeck.main)}</div>
+                        <div id='main'>
+                        </div>
+                        <div id='deckareaextra' >
+                            <h2 >Extra Deck</h2>
+                            <div
+                                className='deckmetainfo'
+                                onDragOver={function (event, x) {
+                                    event.stopPropagation();
+                                    event.preventDefault();
+                                }}
+                                onDrop={onDropDeckZone.bind(this, 'extra')}>
+                                {renderCardCollection('extra', activeDeck.extra)}</div>
+                            <div id='main'></div>
+                        </div>
+                        <div id='deckareaside' >
+                            <h2 >Side Deck</h2>
+                            <div
+                                className='deckmetainfo'
+                                onDragOver={function (event, x) {
+                                    event.stopPropagation();
+                                    event.preventDefault();
+                                }}
+                                onDrop={onDropDeckZone.bind(this, 'side')}></div>
+                            {renderCardCollection('side', activeDeck.side)}</div>
+                        <div id='main'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </>;
 }

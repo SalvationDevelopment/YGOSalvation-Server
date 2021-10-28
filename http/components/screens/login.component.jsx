@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { hey, listen } from '../../services/listener.service';
-import { deRef } from '../../services/util/deRef';
+import { deRef } from '../../util/deRef';
 
 export default function LoginScreen(props) {
 

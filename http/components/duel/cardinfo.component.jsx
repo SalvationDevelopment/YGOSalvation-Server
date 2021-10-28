@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cardIs } from '../../util/cardManipulation';
+import { getStorage } from '../../services/storage.service';
+import { watchOut } from '../../services/listener.service';
+
 
 const attributeMap = {
     1: 'EARTH',
@@ -126,17 +129,36 @@ function parseAtkDef(atk, def) {
     'use strict';
     return ((atk < 0) ? 'ATK ?' : 'ATK ' + atk) + ' / ' + ((def < 0 && def !== '-') ? 'DEF ?' : 'DEF ' + def);
 }
-export default class CardInfo extends React.Component {
 
-    constructor(databaseSystem) {
-        super();
-        this.state = {};
-        this.cardInfo = this.cardInfo || {};
-        this.databaseSystem = databaseSystem;
-    }
+let databaseSystem = [];
+
+export default function CardInfo() {
 
 
-    typings(targetCard) {
+    const [id, setId] = useState(undefined),
+        [info, setCardInfo] = useState({});
+
+    useEffect(() => {
+        watchOut('CARD_HOVER', (action) => {
+            if (!action.id) {
+                return;
+            }
+            
+            const card = databaseSystem.find(function (entry) {
+                return (action.id === entry.id);
+            });
+            
+            setCardInfo(card || {});
+            setId(action.id);
+        });
+
+        watchOut('LOAD_DATABASE', (action) => {
+            databaseSystem = action.data;
+        });
+    }, []);
+
+
+    function typings(targetCard) {
         const isMonster = cardIs('monster', targetCard),
             isSpell = cardIs('spell', targetCard),
             isTrap = cardIs('trap', targetCard);
@@ -169,7 +191,7 @@ export default class CardInfo extends React.Component {
         return React.createElement('span', { className }, text);
     }
 
-    makeDescription(targetCard) {
+    function makeDescription(targetCard) {
         if (!targetCard) {
             return '';
         }
@@ -181,38 +203,24 @@ export default class CardInfo extends React.Component {
                 React.createElement('div', { className: 'cardName', key: 'cardName' },
                     targetCard.name + ' [' + targetCard.id + ']')),
             React.createElement('br'),
-            React.createElement('span', { className: 'description', key: 'typing-description' }, this.typings(targetCard)),
+            React.createElement('span', { className: 'description', key: 'typing-description' }, typings(targetCard)),
             React.createElement('br'),
             React.createElement('div', { className: 'description', key: 'main-description' }, targetCard.desc)
         ];
     }
 
-    render() {
-        const src = (this.state.id) ? `${localStorage.imageURL}/${this.state.id}.jpg` : '',
+    function render() {
+        const src = (id) ? `${getStorage().imageURL}/${id}.jpg` : '',
             picture = [
                 React.createElement('div', { className: 'cardImage' },
                     React.createElement('img', { className: 'imgContainer', src })),
-                React.createElement('div', { className: 'cardDescription' }, this.makeDescription(this.state.cardInfo))
+                React.createElement('div', { className: 'cardDescription' }, makeDescription(info))
             ];
         return picture;
     }
 
-    update(state) {
 
-        Object.assign(this.state, state);
-        let card = (!state.id) ? {} : this.databaseSystem.find(function (entry) {
-            return (state.id === entry.id) ? entry : false;
-        });
-        card = card || {};
-        this.debounce = true;
 
-        if (card.id) {
-            this.state.id = card.id;
-            this.state.cardInfo = card;
-            return card;
-        }
-
-        return card;
-    }
+    return { render };
 }
 
