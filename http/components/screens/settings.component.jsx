@@ -1,111 +1,93 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { hey } from '../../services/listener.service';
+import { getStorage, persist } from '../../services/storage.service';
 
-const element = React.createElement;
+export default function SettingsScreen() {
 
-let localStorage = {};
+    const settings = getStorage(),
+        [backgrounds, setBackgrounds] = useState([]),
+        [covers, setCovers] = useState([]);
 
-export default class SettingsScreen extends React.Component {
-    constructor(store) {
-        super();
-        this.state = {};
-        this.settings = {
-            theme: localStorage.theme || '../img/magimagipinkshadow.jpg',
-            cover: localStorage.cover || '../img/textures/cover.jpg',
-            imageURL: localStorage.imageURL || 'http://127.0.0.1:8887',
-            hide_banlist: Boolean(localStorage.all_banlist),
-            language: localStorage.language || 'en'
-        };
-        this.store = store;
-        this.backgrounds = [];
-        this.covers = [];
+    useEffect(() => {
         fetch('/backgrounds')
             .then(response => response.json())
             .then(data => {
-                console.log('backgrounds', data)
-                this.backgrounds = Array.isArray(data) ? data : [];
-                this.store.hey({ action: 'RENDER' });
+                backgrounds = setBackgrounds(Array.isArray(data) ? data : []);
             });
 
         fetch('/covers')
             .then((response) => response.json())
             .then(data => {
-                console.log('covers', data)
-                this.covers = Array.isArray(data) ? data : [];
-                this.store.hey({ action: 'RENDER' });
+                setCovers(Array.isArray(data) ? data : []);
             });
+    }, []);
 
-    }
 
-
-    onChange(event) {
+    function onChange(event) {
         console.log('eep');
         const id = event.target.id;
-        this.settings[id] = event.target.value;
+        settings[id] = event.target.value;
+
         if (event.target.value === 'on') {
-            this.settings[id] = event.target.checked;
+            settings[id] = event.target.checked;
         }
-        localStorage.theme = this.settings.theme;
-        localStorage.all_banlist = this.settings.all_banlist;
-        localStorage.language = this.settings.language;
-        localStorage.imageURL = this.settings.imageURL;
-        document.body.style.backgroundImage = `url(${this.settings.theme})`;
-        this.store.hey({ action: 'RENDER' });
+
+        persist('theme', settings.theme);
+        persist('all_banlist', settings.all_banlist);
+        persist('language', settings.language);
+        persist('imageURL', settings.imageURL);
+
+        document.body.style.backgroundImage = `url(${settings.theme})`;
     }
 
-    renderBackground() {
-        return this.backgrounds.map((background, i) => {
-            return element('option', { value: background.image.url, key: `key-${i}` }, background.name);
+    function Background() {
+        return backgrounds.map((background, i) => {
+            return <option value={background.image.url} key={`key-${i}`}>{background.name}</option>;
         });
     }
 
-    renderCover() {
-        return this.covers.map((cover, i) => {
-            return element('option', { value: cover.image.url, key: `key-${i}` }, cover.name);
+    function Covers() {
+        return covers.map((cover, i) => {
+            return <option value={cover.image.url} key={`key-${i}`}> {cover.name}</option>;
         });
     }
 
-    render() {
 
-        return element('section', { id: 'hostSettings', key: 'hostSettings' }, [
-            element('h2', { key: 'h2-settings' }, 'Settings'),
-            element('label', { key: 'label-heme' }, 'Theme'),
-            element('select', {
-                key: 'select-theme',
-                id: 'theme',
-                onChange: this.onChange.bind(this)
-            }, this.renderBackground()),
-            element('label', { key: 'label-cover' }, 'Cover'),
-            element('select', {
-                key: 'select-cover',
-                id: 'theme',
-                onChange: this.onChange.bind(this)
-            }, this.renderCover()),
-            element('img', { key: 'imgtime', key: 'imgtheme', src: localStorage.cover, style: { width: '100%' } }),
-            element('label', { key: 'label-image' }, 'Image URL'),
-            element('input', {
-                key: 'input-url',
-                id: 'imageURL',
-                defaultValue: this.settings.imageURL,
-                placeholder: 'http://localhost:8887',
-                onBlur: this.onChange.bind(this)
-            }),
-            element('label', { key: 'label-old' }, 'Hide Old Banlist'),
-            element('input', { key: 'input-old', id: 'oldbanlist', type: 'checkbox' }),
-            element('label', { key: 'label-play' }, 'Play Assistance'),
-            element('input', { key: 'input-play', id: 'playassist', type: 'checkbox' }),
-            element('label', { key: 'label-auto' }, 'Automatically Bluff'),
-            element('input', { key: 'input-bluff', id: 'bluff', type: 'checkbox' })
-        ]);
-    }
+
+    return <section id='hostSettings' key='hostSettings'>
+        <h2>Settings</h2>
+        <label>Theme</label>
+        <select
+
+            id='theme'
+            onChange={onChange}>
+            <Background />
+        </select>
+        <label>Cover</label>
+        <select
+            id='theme'
+            onChange={onChange}>
+            <Covers />
+        </select>
+        <img src={getStorage().cover} style={{ width: '100%' }} />
+        <label>Image URL</label>
+        <input
+            id='imageURL'
+            defaultValue={settings.imageURL}
+            placeholder='http://localhost=8887'
+            onBlur={onChange}
+        />
+        <label>   Hide Old Banlist</label>
+        <input id='oldbanlist' type='checkbox' />
+        <label>   Play Assistance</label>
+        <input id='playassist' type='checkbox' />
+        <label>   Automatically Bluff</label>
+        <input id='bluff' type='checkbox' />
+    </section>;
+
 }
 
-//
-// , [
-//     element('option', {key:'../img/magimagipinkshadow.jpg', value:'../img/magimagipinkshadow.jpg'}, '../img/magimagipinkshadow.jpg'),
-//     element('option', {key:'../img/magimagipinkshadow2.jpg', value:'../img/magimagipinkshadow2.jpg'}, '../img/magimagipinkshadow2.jpg'),
-// ]
-
-// , [
-//     element('option', {key:'../img/magimagipink.jpg', value:'../img/magimagipink.jpg'}, '../img/magimagipink.jpg'),
-//     element('option', {key:'../img/magimagiblack.jpg', value:'../img/magimagiblack.jpg'}, '../img/magimagiblack.jpg')
-// ]
+// '../public/img/magimagipinkshadow.jpg'
+// '../public/img/magimagipinkshadow2.jpg'
+// '../public/img/magimagipink.jpg'
+// '../public/img/magimagiblack.jpg'

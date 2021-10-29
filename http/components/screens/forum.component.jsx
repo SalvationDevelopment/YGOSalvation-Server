@@ -1,34 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ForumService from './../../services/forum.service';
 
-export default class Forum extends React.Component {
+export default function Forum() {
 
 
-    constructor() {
-        super();
-        this.service = new ForumService('');
-        this.state = {
-            homepage: []
-        };
-        this.service.homepage()
-            .then((homepage) => {
-                this.state.homepage = homepage;
+    const [service, renewService] = useState(new ForumService('')),
+        [sections, updateSections] = useState([]);
+
+    useEffect(() => {
+        service.homepage()
+            .then((updatedHomepage) => {
+                updateSections(updatedHomepage);
             });
+    }, [service]);
 
+    function login(session) {
+        renewService(new ForumService(session));
     }
 
-    componentDidMount() {
-        console.log('mounted');
-
-    }
-
-    login(session) {
-        this.service = new ForumService(session);
-    }
-
-    render() {
-        console.log(this.state);
-        const element = React.createElement;
-        return element('div', { id: 'longsection' });
-    }
+    return <div id='longsection'>
+        {sections}
+    </div>;
 }
