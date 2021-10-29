@@ -19,7 +19,7 @@ export default function LoginScreen(props) {
             email,
             password,
             repeatedPassword,
-            rememberCode,
+            rememberCode
         };
 
         if (data[event.target.name]) {
@@ -34,7 +34,7 @@ export default function LoginScreen(props) {
 
     useEffect(() => {
 
-        memory.current = (localStorage.remember === 'true') ? { defaultChecked: true } : {}
+        memory.current = (localStorage.remember === 'true') ? { defaultChecked: true } : {};
 
         listen('LOGGEDIN', (action) => {
             setMode('loggedIn');
@@ -194,43 +194,29 @@ export default function LoginScreen(props) {
                     <a className="loginsystem" onClick={useRecoverCode} >Use Recovery Code</a>
                 </div>;
             case 'recover':
-                return element('div', { id: 'loginmodal', key: 'modal-5' }, [
-                    element('br', { key: 'br-1' }), ,
-                    element('input', {
-                        key: 'recovery',
-                        id: 'recover',
-                        type: 'text',
-                        className: 'loginsystem reg',
-                        tabIndex: '1',
-                        placeholder: 'Recovery Code'
-                    }),
-                    element('br', { key: 'br-2' }), ,
-
-                    element('button', {
-                        id: 'dolog',
-                        className: 'loginsystem',
-                        onClick: recoverAccount
-                    }, 'Recover'),
-                    '\r\n',
-                    element('button', {
-                        id: 'backuplogin',
-                        className: 'loginsystem',
-                        onClick: openLogin
-                    }, 'Back'),
-                    element('br', { key: 'br-3' })
-                ]);
+                return <div id= 'loginmodal'>
+                    <br />
+                    <input
+                        key= 'recovery'
+                        id= 'recover'
+                        type= 'text'
+                        className= 'loginsystem reg'
+                        tabIndex= '1'
+                        placeholder= 'Recovery Code'
+                    />
+                    <br />
+                    <button id="dolog" className="loginsystem" onClick={recoverAccount}>Recover</button>
+                    {'\r\n'},
+                    <button id="backuplogin" className="loginsystem" onClick={openLogin}>Back</button>
+                    <br />
+                </div>;
             case 'loggedin':
-                return element('div', { key: 'ipblogin', id: 'ipblogin', className: 'loginsystem', key: 'modal-6' }, [
-                    element('br', { key: 'br-1' }), ,
-                    element('button', {
-                        key: 'logout',
-                        id: 'logout',
-                        className: 'loginsystem',
-                        onClick: logout
-                    }, 'Logout')
-                ]);
+                return <div id="loginmodal">
+                    <br />
+                    <button id="backuplogin" className="loginsystem" onClick={logout}>Logout</button>
+                </div>;
             case 'loading':
-                return element('div', { id: 'ipblogin', className: 'loginsystem', key: 'modal-7' }, 'Loading...');
+                return <div id='ipblogin' className= 'loginsystem'>Loading...</div>;
             default:
                 return '';
         }
