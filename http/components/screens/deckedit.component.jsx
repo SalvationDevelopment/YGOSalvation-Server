@@ -1024,7 +1024,9 @@ export default function DeckEditScreen() {
                 <h2  >Card Information</h2>
             </div>
 
-            <div id='decksearchresults' onScroll={searchScroll} > {CardCollection('search', search)}</div>
+            <div id='decksearchresults' onScroll={searchScroll} >
+                <CardCollection source='search' deck={search} />
+            </div>
             <div id='decksearchresultsofx'>`${searchFilter.currentSearch.length} cards found`)</div>
             <div id='cardinformation'>{info.render()}</div>
         </div>;
@@ -1089,7 +1091,7 @@ export default function DeckEditScreen() {
                         onDragOver={onDragOver}
                         onDrop={onDropDeckZone.bind(this, 'extra')}>
                         <CardCollection source='extra' deck={activeDeck.extra} />
-                        </div>
+                    </div>
                     <div id='main'></div>
                 </div>
                 <div id='deckareaside' >
@@ -1098,8 +1100,8 @@ export default function DeckEditScreen() {
                         className='deckmetainfo'
                         onDragOver={onDragOver}
                         onDrop={onDropDeckZone.bind(this, 'side')}></div>
-                   <CardCollection source='side' deck={activeDeck.side} />
-                   </div>
+                    <CardCollection source='side' deck={activeDeck.side} />
+                </div>
                 <div id='main'></div>
             </div>
         </div>;
