@@ -57,14 +57,14 @@ function CardList(activeDeck) {
     const Main = listReduce(activeDeck.main),
         Side = listReduce(activeDeck.side),
         Extra = listReduce(activeDeck.extra);
-    return <>
+    return <div id='decktextlist' key='deckedit-decktextlist-div'>
         <h4>{`Main Deck - ${activeDeck.main.length}x`}</h4>
         <Main />
         <h4>{`Side Deck - ${activeDeck.side.length}x`}</h4>
         <Side />
         <h4>{`Extra Deck - ${activeDeck.extra.length}x`}</h4>
         <Extra />
-    </>;
+    </div>;
 }
 
 
@@ -356,14 +356,12 @@ export default function DeckEditScreen() {
         applyBanlist();
     }, [banlist, loadedDatabase]);
 
-   
-
-
     function searchDB() {
         Object.assign(searchFilter.currentFilter, settings);
         searchFilter.preformSearch();
         setSearch(searchFilter.renderSearch());
     }
+
     function clearSearch() {
         const searchBox = document.querySelector('#cardname'),
             description = document.querySelector('#description'),
@@ -553,7 +551,7 @@ export default function DeckEditScreen() {
         r.readAsText(f);
     }
 
-  
+
 
     function prev() {
         searchFilter.pageBack();
@@ -730,8 +728,8 @@ export default function DeckEditScreen() {
 
     }
 
-    function renderCardCollection(source, input) {
-        return input.map((card, i) => {
+    function CardCollection(source, deck) {
+        return deck.map((card, i) => {
             card.uid = i;
 
             return <div
@@ -836,22 +834,22 @@ export default function DeckEditScreen() {
         }
         return <div className='filtercol'>
             <control id='linkmarkers'>
-                <input id='link1' key='link0' type='checkbox' onChange={onLinkChange.bind(this, 0)} />
-                <input id='link2' key='link1' type='checkbox' onChange={onLinkChange.bind(this, 1)} />
-                <input id='link3' key='link2' type='checkbox' onChange={onLinkChange.bind(this, 2)} />
-                <br key='link' />
-                <input id='link4' key='link3' type='checkbox' onChange={onLinkChange.bind(this, 3)} />
+                <input id='link1' type='checkbox' onChange={onLinkChange.bind(this, 0)} />
+                <input id='link2' type='checkbox' onChange={onLinkChange.bind(this, 1)} />
+                <input id='link3' type='checkbox' onChange={onLinkChange.bind(this, 2)} />
+                <br />
+                <input id='link4' type='checkbox' onChange={onLinkChange.bind(this, 3)} />
                 <input
-                    type='checkbox' key='linkx' style={{
+                    type='checkbox' style={{
                         visibility: 'hidden'
                     }
                     }
                 />
-                <input id='link5' key='link4' type='checkbox' onChange={onLinkChange.bind(this, 4)} />
-                <br key='linkbr2' />
-                <input id='link6' key='link5' type='checkbox' onChange={onLinkChange.bind(this, 5)} />
-                <input id='link7' key='link6' type='checkbox' onChange={onLinkChange.bind(this, 6)} />
-                <input id='link8' key='link7' type='checkbox' onChange={onLinkChange.bind(this, 7)} />
+                <input id='link5' type='checkbox' onChange={onLinkChange.bind(this, 4)} />
+                <br />
+                <input id='link6' type='checkbox' onChange={onLinkChange.bind(this, 5)} />
+                <input id='link7' type='checkbox' onChange={onLinkChange.bind(this, 6)} />
+                <input id='link8' type='checkbox' onChange={onLinkChange.bind(this, 7)} />
             </control>
         </div>;
     }
@@ -862,9 +860,9 @@ export default function DeckEditScreen() {
             return <br />;
         }
         return <>
-            <div className='filterrow' key='div-render-stats'>
-                <input key='atk' id='atk' placeholder='Attack' type='number' onChange={onSearchChange} />
-                <select key='atkop' id='atkop' onChange={onSearchChange}>
+            <div className='filterrow'>
+                <input id='atk' placeholder='Attack' type='number' onChange={onSearchChange} />
+                <select id='atkop' onChange={onSearchChange}>
                     <option value={0}>=</option>
                     <option value={-2}>{'<'}</option>
                     <option value={-1}>{'<='}</option>
@@ -905,9 +903,10 @@ export default function DeckEditScreen() {
         </>;
     }
 
-
-
-
+    function onDragOver(event, x) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
 
     function onDropDeckZone(zone, event) {
 
@@ -960,9 +959,59 @@ export default function DeckEditScreen() {
         return [<option value={undefined} key={'set-u}'}>Release Set</option>].concat(list);
     }
 
-    return <>
-        <div
-            id='decksetup'
+
+
+    function SearchControls() {
+        return <controls key='deckedit-card-controls' >
+            <div key='deckedit-col-1' className='filtercol'>
+                <select key='deckedit-cardtype' id='cardtype' onChange={onSearchChange} >
+                    <option key='deckedit-cardtype-1' value={5} >Monster/Spell/Trap</option>
+                    <option key='deckedit-cardtype-2' value={1} >Monster</option>
+                    <option key='deckedit-cardtype-3' value={2} >Spell</option>
+                    <option key='deckedit-cardtype-4' value={4}> Trap</option>
+                </select>
+                <div className='filtercol' key='deckedit-filtercol-2'><CardTypes /></div>
+
+                <select key='deckedit-setcode' id='setcode' onChange={onSearchChange} >
+                    {[<option key={'u'} value={undefined}>Archetype</option>
+                    ].concat(setcodes.map((list, i) => {
+                        return <option key={`setcode-${i}`} value={parseInt(list.num)}>list.name</option>;
+                    }))}
+                </select>
+                <select key='deckedit-release' id='release' onChange={onSearchChange}>
+                    <Releases />
+                </select>
+                <select key='deckedit-limit' id='limit' onChange={onSearchChange} >
+                    <option value='null' key='deckedit-limit-null'>Limit</option>
+                    <option value={3} key='deckedit-limit-0'>Unlimited</option>
+                    <option value={2} key='deckedit-limit-1'>Semi-Limited</option>
+                    <option value={1} key='deckedit-limit-2'>Limited</option>
+                    <option value={0} key='deckedit-limit-3'>Forbidden</option>
+                </select>
+                <input
+                    key='deckedit-cardname-input'
+                    id='cardname' type='text' placeholder='Name'
+                    onKeyPress={handleKeyPress}
+                    onBlur={onSearchChange}
+                />
+                <input
+                    key='deckedit-description-input'
+                    id='description' type='text' placeholder='Card Text'
+                    onKeyPress={handleKeyPress}
+                    onBlur={onSearchChange}
+                />
+                <Stats />
+                <button
+                    key='deckedit-clearsearch'
+                    onClick={clearSearch}
+                >Reset</button>
+            </div>
+            <LinkArrows />
+        </controls>;
+    }
+
+    function DeckSearch() {
+        return <div id='decksearch'
             onDragOver={function (event, x) {
                 event.stopPropagation();
                 event.preventDefault();
@@ -970,151 +1019,104 @@ export default function DeckEditScreen() {
             onDrop={onDropExitZone}
         >
 
+            <div id='decksearchtitles' >
+                <h2  >Search Results</h2>
+                <h2  >Card Information</h2>
+            </div>
+
+            <div id='decksearchresults' onScroll={searchScroll} > {CardCollection('search', search)}</div>
+            <div id='decksearchresultsofx'>`${searchFilter.currentSearch.length} cards found`)</div>
+            <div id='cardinformation'>{info.render()}</div>
+        </div>;
+    }
+
+    function BanlistDeckListSelect() {
+        return <controls key='deck-banlist-controls' >
+            <div className='filtercol' >
+                <h3 key='deck-controls-label' >Deck</h3>
+                <h3 key='banlist-controls-label'>Banlist</h3>
+            </div>
+
+            <div className='filtercol' >
+                <select id='decklist' key='deckedit-decklist-select' onChange={onChange}>
+                    {decks.map((list, i) => {
+                        return <option key={i} value={i}>{list.name}</option>;
+                    })}
+                </select>
+                <select id='banlist' key='deckedit-ban;list-select' onChange={onSearchChange}>
+                    {banlist.map((list, i) => {
+                        return <option value={list.name} key={i} selected={list.primary}>{list.name}</option>;
+                    })}
+                </select>
+
+            </div>
+            <div className='deckcontrols' key='deckedit-deckcontrols-div1' >
+                <h3 style={{ width: 'auto' }}>Upload YDK File</h3>
+                <input type='file' accept='.ydk' placeholder='Choose File' onChange={upload} />
+                <div className='deckcontrols' key='deckedit-deckcontrols-div2' >
+                    <button key='deckedit-decklist-0' onClick={newDeck}>New</button>
+                    <button key='deckedit-decklist-1' onClick={save}>Save</button>
+                    <button key='deckedit-decklist-2' onClick={deleteDeck}>Delete</button>
+                    <button key='deckedit-decklist-3' onClick={rename}>Rename</button>
+                    <button key='deckedit-decklist-4' onClick={clear}>Clear</button>
+
+                    <button key='deckedit-decklist-5' onClick={sort} >Sort</button>
+                    <button key='deckedit-decklist-6' onClick={shuffle} >Shuffle</button>
+                    <button key='deckedit-decklist-7' onClick={exportDeck} >Export</button>
+                    <button key='deckedit-decklist-8' onClick={saveAs} >Save As</button>
+                </div>
+
+            </div>
+        </controls>;
+    }
+
+    function DeckArea() {
+        return <div id='deckarea' >
+            <div id='deckareamain' >
+                <h2 >Main Deck</h2>
+                <div
+                    className={`deckmetainfo ${marginClass(activeDeck.main)}`}
+                    onDragOver={onDragOver}
+                    onDrop={onDropDeckZone.bind(this, 'main')}>
+                    <CardCollection source='main' deck={activeDeck.main} />
+                </div>
+                <div id='main'>
+                </div>
+                <div id='deckareaextra' >
+                    <h2 >Extra Deck</h2>
+                    <div
+                        className='deckmetainfo'
+                        onDragOver={onDragOver}
+                        onDrop={onDropDeckZone.bind(this, 'extra')}>
+                        <CardCollection source='extra' deck={activeDeck.extra} />
+                        </div>
+                    <div id='main'></div>
+                </div>
+                <div id='deckareaside' >
+                    <h2 >Side Deck</h2>
+                    <div
+                        className='deckmetainfo'
+                        onDragOver={onDragOver}
+                        onDrop={onDropDeckZone.bind(this, 'side')}></div>
+                   <CardCollection source='side' deck={activeDeck.side} />
+                   </div>
+                <div id='main'></div>
+            </div>
+        </div>;
+    }
+
+    return <>
+        <div id='decksetup' onDragOver={onDragOver} onDrop={onDropExitZone} >
+
             <div id='searchfilter' >
-                <h2 key='deckedit-h2-1'>Setup</h2>
+                <h2>Setup</h2>
                 <br />
                 <h3 >Filter</h3>
-                <controls key='deckedit-card-controls' >
-                    <div key='deckedit-col-1' className='filtercol'>
-                        <select key='deckedit-cardtype' id='cardtype' onChange={onSearchChange} >
-                            <option key='deckedit-cardtype-1' value={5} >Monster/Spell/Trap</option>
-                            <option key='deckedit-cardtype-2' value={1} >Monster</option>
-                            <option key='deckedit-cardtype-3' value={2} >Spell</option>
-                            <option key='deckedit-cardtype-4' value={4}> Trap</option>
-                        </select>
-                        <div className='filtercol' key='deckedit-filtercol-2'><CardTypes /></div>
-
-                        <select key='deckedit-setcode' id='setcode' onChange={onSearchChange} >
-                            {[<option key={'u'}value={undefined}>Archetype</option>
-                            ].concat(setcodes.map((list, i) => {
-                                return <option key={`setcode-${i}`} value={parseInt(list.num)}>list.name</option>;
-                            }))}
-                        </select>
-                        <select key='deckedit-release' id='release' onChange={onSearchChange}>
-                            <Releases />
-                        </select>
-                        <select key='deckedit-limit' id='limit' onChange={onSearchChange} >
-                            <option value='null' key='deckedit-limit-null'>Limit</option>
-                            <option value={3} key='deckedit-limit-0'>Unlimited</option>
-                            <option value={2} key='deckedit-limit-1'>Semi-Limited</option>
-                            <option value={1} key='deckedit-limit-2'>Limited</option>
-                            <option value={0} key='deckedit-limit-3'>Forbidden</option>
-                        </select>
-                        <input
-                            key='deckedit-cardname-input'
-                            id='cardname' type='text' placeholder='Name'
-                            onKeyPress={handleKeyPress}
-                            onBlur={onSearchChange}
-                        />
-                        <input
-                            key='deckedit-description-input'
-                            id='description' type='text' placeholder='Card Text'
-                            onKeyPress={handleKeyPress}
-                            onBlur={onSearchChange}
-                        />
-                        <Stats />
-                        <button
-                            key='deckedit-clearsearch'
-                            onClick={clearSearch}
-                        >Reset</button>
-                    </div>
-                    <LinkArrows />
-                </controls>
-                <controls key='deck-banlist-controls' >
-                    <div className='filtercol' >
-                        <h3 key='deck-controls-label' >Deck</h3>
-                        <h3 key='banlist-controls-label'>Banlist</h3>
-                    </div>
-
-                    <div className='filtercol' >
-                        <select id='decklist' key='deckedit-decklist-select' onChange={onChange}>
-                            {decks.map((list, i) => {
-                                return <option key={i} value={i}>list.name</option>;
-                            })}
-                        </select>
-                        <select id='banlist' key='deckedit-ban;list-select' onChange={onSearchChange}>
-                            {banlist.map((list, i) => {
-                                return <option value={list.name} key={i} selected={list.primary}>{list.name}</option>;
-                            })}
-                        </select>
-
-                    </div>
-                    <div className='deckcontrols' key='deckedit-deckcontrols-div1' >
-                        <h3 style={{ width: 'auto' }}>Upload YDK File</h3>
-                        <input type='file' accept='.ydk' placeholder='Choose File' onChange={upload} />
-                        <div className='deckcontrols' key='deckedit-deckcontrols-div2' >
-                            <button key='deckedit-decklist-0' onClick={newDeck}>New</button>
-                            <button key='deckedit-decklist-1' onClick={save}>Save</button>
-                            <button key='deckedit-decklist-2' onClick={deleteDeck}>Delete</button>
-                            <button key='deckedit-decklist-3' onClick={rename}>Rename</button>
-                            <button key='deckedit-decklist-4' onClick={clear}>Clear</button>
-
-                            <button key='deckedit-decklist-5' onClick={sort} >Sort</button>
-                            <button key='deckedit-decklist-6' onClick={shuffle} >Shuffle</button>
-                            <button key='deckedit-decklist-7' onClick={exportDeck} >Export</button>
-                            <button key='deckedit-decklist-8' onClick={saveAs} >Save As</button>
-                        </div>
-
-                    </div>
-                </controls>
-                <div id='decktextlist' key='deckedit-decktextlist-div'><CardList {...activeDeck} /></div>
-                ])
-
-                <div id='decksearch'
-                    onDragOver={function (event, x) {
-                        event.stopPropagation();
-                        event.preventDefault();
-                    }}
-                    onDrop={onDropExitZone}
-                >
-
-                    <div id='decksearchtitles' >
-                        <h2  >Search Results</h2>
-                        <h2  >Card Information</h2>
-                    </div>
-
-                    <div id='decksearchresults' onScroll={searchScroll} > {renderCardCollection('search', search)}</div>
-                    <div id='decksearchresultsofx'>`${searchFilter.currentSearch.length} cards found`)</div>
-                    <div id='cardinformation'>{info.render()}</div>
-                </div>
-                <div id='deckarea' >
-                    <div id='deckareamain' >
-                        <h2 >Main Deck</h2>
-                        <div
-                            className={`deckmetainfo ${marginClass(activeDeck.main)}`}
-                            onDragOver={function (event, x) {
-                                event.stopPropagation();
-                                event.preventDefault();
-                            }}
-                            onDrop={onDropDeckZone.bind(this, 'main')}>
-                            {renderCardCollection('main', activeDeck.main)}</div>
-                        <div id='main'>
-                        </div>
-                        <div id='deckareaextra' >
-                            <h2 >Extra Deck</h2>
-                            <div
-                                className='deckmetainfo'
-                                onDragOver={function (event, x) {
-                                    event.stopPropagation();
-                                    event.preventDefault();
-                                }}
-                                onDrop={onDropDeckZone.bind(this, 'extra')}>
-                                {renderCardCollection('extra', activeDeck.extra)}</div>
-                            <div id='main'></div>
-                        </div>
-                        <div id='deckareaside' >
-                            <h2 >Side Deck</h2>
-                            <div
-                                className='deckmetainfo'
-                                onDragOver={function (event, x) {
-                                    event.stopPropagation();
-                                    event.preventDefault();
-                                }}
-                                onDrop={onDropDeckZone.bind(this, 'side')}></div>
-                            {renderCardCollection('side', activeDeck.side)}</div>
-                        <div id='main'></div>
-                    </div>
-                </div>
+                <SearchControls />
+                <BanlistDeckListSelect decks={decks} banlist={banlist} />
+                <CardList {...activeDeck} />
+                <DeckSearch />
+                <DeckArea />
             </div>
         </div>
     </>;
