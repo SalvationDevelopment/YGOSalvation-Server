@@ -52,6 +52,9 @@ export default function CreditsScreen() {
                 name: 'Jeff "Stormwolf" Falberg',
                 roles: ['Senior Software Engineer', 'Senior Database Administrator']
             }, {
+                name: '"Semicolon"',
+                roles: ['Software Development Engineer in Test']
+            },{
                 name: 'Rebeca "Dark Magician Girl"',
                 roles: ['Human Resources', 'Project Planning']
             }, {
@@ -148,7 +151,7 @@ export default function CreditsScreen() {
                 return <div key={`group-${l}-c`} className='credit'>
                     <span key={`group-${l}-cn`} className='creditsname'> {person.name}</span>
                     <span key={`roles-${l}-cr`} className='creditsroles'>{person.roles.map((role, j) => {
-                        return <span className='creditsrolename' key={`role-${role}-${j}`}>{role}</span>
+                        return <span className='creditsrolename' key={`role-${role}-${j}`}>{role}</span>;
                     })}</span>
                 </div>;
             });

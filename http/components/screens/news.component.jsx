@@ -1,38 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default class  NewsScreen extends React.Component {
-    constructor(store) {
-        super();
-        this.store = store;
-        this.articles = [];
+export default function NewsScreen() {
+    const [articles, updateArticles] = useState([]);
+
+    useState(() => {
         fetch('/news')
             .then((response) => response.json())
             .then(data => {
-                console.log('news', data)
-            this.articles = Array.isArray(data) ? data : [];
-            this.store.hey({action: 'RENDER'});
+
+                updateArticles(Array.isArray(data) ? data : []);
+
+            });
+    }, []);
+
+
+    function Article({ article }) {
+        return <article className='container'>
+            <h2 className='title'> article.title</h2>
+            <div className='newscontent'>{article.body}</div>
+            <div className='newsfooter'>
+                {`${article.creator.username} - ${new Date(article.createdAt).toDateString()}`}
+            </div>
+        </article>;
+
+    }
+
+    function Articles() {
+        const element = React.createElement;
+        return articles.map((article, i) => {
+            return <Article key={i} article={article} />;
         });
     }
 
-    generateFAQs() {
-        const element = React.createElement;
-        return this.articles.map((article, i) => {
-            return element('article', {key: `group-${i}`, className: 'container'},
-                [
-                    element('h2', {key: `title-${i}`, className: 'title'}, article.title),
-                    element('div', {key: `body-${i}`, className: 'newscontent'}, article.body),
-                    element('div', {
-                        key: `sig-${i}`,
-                        className: 'newsfooter'
-                    }, `${article.creator.username} - ${new Date(article.createdAt).toDateString()}`)
-                ]
-            );
-        });
-    }
 
-    render() {
-        const element = React.createElement;
-        return element('div', {className: 'faqs', id: 'faqs'}, this.generateFAQs());
+    return <div className='faqs' id='faqs'><Articles /></div>;
 
-    }
+
 }

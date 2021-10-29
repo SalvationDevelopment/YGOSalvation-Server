@@ -205,6 +205,7 @@ export default function LoginScreen(props) {
                         placeholder= 'Recovery Code'
                     />
                     <br />
+
                     <button id="dolog" className="loginsystem" onClick={recoverAccount}>Recover</button>
                     {'\r\n'},
                     <button id="backuplogin" className="loginsystem" onClick={openLogin}>Back</button>

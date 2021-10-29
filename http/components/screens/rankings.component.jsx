@@ -1,42 +1,35 @@
-import React from 'react';
-export default class RankingScreen extends React.Component {
-    constructor(store, initialState) {
-        super();
-        this.state = {
-            ranks: []
-        };
+import React, { useState, useEffect } from 'react';
+export default function RankingScreen() {
+    const [ranks, setRanks] = useState([]);
 
-        this.store = store;
-
-        fetch(`/ranking`).then((response) => {
+    useEffect(() => {
+        fetch('/ranking').then((response) => {
             response.json().then(data => {
-                this.state.ranks = Array.isArray(data) ? data : [];
-                this.store.hey({ action: 'RENDER' });
+                setRanks(Array.isArray(data) ? data : []);
             });
-
         });
+    });
 
+    function Row({ user, rank }) {
+        return <tr className='rankinguser'>
+            <td>{rank}</td>
+            <td>{user.points}</td>
+            <td>{user.elo}</td>
+            <td>{user.username}</td>
+        </tr>;
     }
 
-
-    render() {
-        console.log(this.state.ranks);
-        return React.createElement('div', { id: 'rankholder' },
-            React.createElement('table', {}, [
-                React.createElement('thead', { key: 'thead' }, [
-                    React.createElement('th', { key: 'rank' }, 'Rank'),
-                    React.createElement('th', { key: 'points' }, 'Points'),
-                    React.createElement('th', { key: 'elo' }, 'Skill Rating'),
-                    React.createElement('th', { key: 'name' }, 'Username')
-                ]),
-                React.createElement('tbody', { key: 'tbody' }, this.state.ranks.map((user, i) => {
-                    return React.createElement('tr', { className: 'rankinguser', key: `ranking-row-${i}` }, [
-                        React.createElement('td', { key: `ranking-rank-${i}` }, i + 1),
-                        React.createElement('td', { key: `ranking-points-${i}` }, `${user.points}`),
-                        React.createElement('td', { key: `ranking-elo-${i}` }, `${user.elo}`),
-                        React.createElement('td', { key: `ranking-name-${i}` }, `${user.username}`)
-                    ]);
-                }))
-            ]));
-    }
+    return <div>
+        <table>
+            <thead>
+                <th>Rank</th>
+                <th>Points</th>
+                <th>Skill Rating</th>
+                <th>Username</th>
+            </thead>
+            <tbody>
+                {ranks.map((user, i) => <Row user={user} key={i} rank={i + 1}/>)}
+            </tbody>
+        </table>
+    </div>;
 }

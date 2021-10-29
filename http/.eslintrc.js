@@ -89,6 +89,7 @@ module.exports = {
         'wrap-regex': 0,
         'yoda': 2,
         'prefer-const': 1,
-        'valid-jsdoc': 1
+        'valid-jsdoc': 1,
+        'react/prop-types': 0
     }
 };
