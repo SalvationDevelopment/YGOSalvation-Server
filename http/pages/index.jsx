@@ -6,6 +6,22 @@ import { userAlert, closeModal } from './../services/modal';
 import { connect, write, setSession } from '../services/primus.service';
 
 
+
+let toolTipData = '';
+
+
+function updateTooltip(event) {
+    const tooltip = document.querySelector('#tooltip');
+    tooltip.style.left = event.pageX + 'px';
+    tooltip.style.top = event.pageY + 'px';
+
+    tooltip.style.display = (toolTipData) ? 'block' : 'none';
+    tooltip.innerHTML = toolTipData;
+}
+
+
+document.addEventListener('mousemove', updateTooltip, false);
+
 export default function Application(props) {
     return (
         <main id="application">
@@ -137,7 +153,7 @@ function ApplicationComponent() {
             case 'gamelist':
                 setActiveUsers(data.ackresult);
                 setUserlist(data.userlist);
-                hey({action : 'GAMELIST', data});
+                hey({ action: 'GAMELIST', data });
                 break;
             case 'global':
                 superFooter.update({ global: data.message });
@@ -185,6 +201,10 @@ function ApplicationComponent() {
 
 
         listen('LOGIN_ACCOUNT', logInAccount);
+
+        listen('TOOL_TIP', (action) => {
+            toolTipData = action.data;
+        });
 
         listen('LOAD_SESSION', (action) => {
             const session = localStorage.session;
