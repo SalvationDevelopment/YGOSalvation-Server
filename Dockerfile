@@ -6,29 +6,28 @@ RUN git clone --recursive --depth=1 https://github.com/purerosefallen/ygopro.git
 
 WORKDIR ygopro
 
-RUN wget -O - https://cdn01.moecube.com/ygopro-build-materials/lua-5.3.6.tar.gz | tar zfx -
+RUN wget -O - https://www.lua.org/ftp/lua-5.3.6.tar.gz | tar zfx -
 RUN mv lua-5.3.6 lua
 
-RUN wget -O - https://cdn01.moecube.com/ygopro-build-materials/sqlite-autoconf-3360000.tar.gz | tar zfx -
-RUN mv sqlite-autoconf-3360000 sqlite3
+RUN wget -O - https://www.sqlite.org/2022/sqlite-autoconf-3390200.tar.gz | tar zfx -
+RUN mv sqlite-autoconf-3390200 sqlite3
 RUN cp -r sqlite3/sqlite3.h gframe/spmemvfs/
 
-RUN wget -O - https://cdn01.moecube.com/ygopro-build-materials/freetype-2.11.1.tar.gz | tar zfx -
+RUN wget -O - https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.gz | tar zfx -
 RUN mv freetype-2.11.1 freetype
 
-RUN env PROCESSOR_COUNT=$(nproc) ./.ci/libevent-prebuild.sh
-
+RUN ls
 RUN cp -r freetype/include/ft2build.h gframe/
 
-RUN cp -r libevent-stable/include/event2 gframe/
-
-RUN git clone --depth=1 https://code.mycard.moe/mycard/irrlicht-new irrlicht
+RUN curl --retry 5 --location --remote-header-name --remote-name http://downloads.sourceforge.net/irrlicht/irrlicht-1.8.5.zip
+RUN unzip -q irrlicht-1.8.5.zip
+RUN mv irrlicht-1.8.5 irrlicht
 
 RUN curl --retry 5 --connect-timeout 30 --location --remote-header-name --remote-name https://www.ambiera.at/downloads/irrKlang-64bit-1.6.0.zip
 RUN unzip -q irrKlang-64bit-1.6.0.zip
 RUN mv irrKlang-64bit-1.6.0 irrklang
 
-RUN wget -O - https://cdn01.moecube.com/ygopro-build-materials/premake-5.0.0-beta1-linux.tar.gz | tar zfx -
+RUN curl --retry 5 --connect-timeout 30 --location https://github.com/premake/premake-core/releases/download/v5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz | tar zfx -
 
 RUN sed -i 's/StaticLib/SharedLib/g' ./premake/lua/premake5.lua
 
@@ -53,7 +52,7 @@ WORKDIR build
 
 RUN make config=release
 
-FROM node:16-bullseye-slim
+FROM node:10-buster-slim
 RUN apt update && apt -y install python3 build-essential git && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /usr/src/app
 COPY ./package*.json /usr/src/app/
