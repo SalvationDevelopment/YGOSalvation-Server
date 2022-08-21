@@ -26,11 +26,11 @@
  * @property {Number} startLP
  * @property {Object} player
  */
-const ffi = require('ffi'),
-    ref = require('ref'),
+const ffi = require('ffi-napi'),
+    ref = require('ref-napi'),
     bytePointer = ref.refType(ref.types.byte),
     voidPointer = ref.refType(ref.types.void),
-    StructType = require('ref-struct'),
+    StructType = require('ref-struct-di'),
     fs = require('fs'),
     BufferStreamReader = require('./model_stream_reader'),
     POS_FACEDOWN_DEFENSE = 0x8,
