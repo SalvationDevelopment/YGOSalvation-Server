@@ -36,7 +36,7 @@
         "nodemailer": "^6.6.1",
         "nodemailer-direct-transport": "^3.3.2",
         "primus": "^7.3.3",
-        "primus-rooms": "^3.4.1",
+        "primus-rooms": "^3.4.3",
         "random-port": "^0.1.0",
         "request": "^2.88.0",
         "sanitizer": "^0.1.3",
