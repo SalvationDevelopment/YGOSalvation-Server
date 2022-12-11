@@ -127,7 +127,7 @@ class ChoiceScreen extends React.Component {
 
 
     render() {
-        console.log(this.state);
+        console.log('[CHOICE]', this.state);
         if (this.state.result) {
             switch (this.state.mode) {
                 case 'turn_player':

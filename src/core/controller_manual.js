@@ -16,7 +16,7 @@ function broadcast(players, message) {
 }
 
 function responseHandler(engine, players, client, message) {
-    console.log(message);
+    console.log('[MANUAL]', message);
     if (!message.action) {
         return;
     }

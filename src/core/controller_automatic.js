@@ -72,7 +72,7 @@ function askUser(gameBoard, slot, message, ygopro, command) {
         max: 1,
         min: 1
     }, function (answer) {
-        console.log('p' + slot, '  -->', answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
+        console.log('[CONTROLLER_AUTOMATIC] p' + slot, '  -->', answer.type, answer.i, command, buttonName[answer.type](answer.i, command));
         ygopro.write(buttonName[answer.type](answer.i, command));
     });
 }
@@ -132,7 +132,7 @@ function movement(message, gameBoard) {
         gameBoard.ygoproUpdate();
         return;
     }
-    console.log('take card');
+    console.log('[CONTROLLER_AUTOMATIC] take card');
     gameBoard.takeMaterial(previous, pp, current);
     gameBoard.ygoproUpdate();
 }
@@ -452,7 +452,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
                     id: message.card.id
                 });
             } catch (e) {
-                console.log(e, message);
+                console.log('[CONTROLLER_AUTOMATIC]', e, message);
             }
             break;
         case ('MSG_WAITING'): // Good
@@ -474,7 +474,7 @@ function boardController(gameBoard, slot, message, ygopro, player) {
             askUser(gameBoard, slot, message, ygopro, 'MSG_ANNOUNCE_NUMBER');
             break;
         default:
-            console.log('FAILURE!', message);
+            console.log('[CONTROLLER_AUTOMATIC] FAILURE!', message);
             break;
     }
     return message;

@@ -121,7 +121,7 @@ async function logDuel(info, callback) {
         await axios.put(`${ADMIN_SERVER_URL}/users/${loserID}`, {elo: loser.elo, points: loser.points}, settings);
 
     } catch (error) {
-        console.log(error);
+        console.log('[SERVER]', error);
         callback();
         return;
     }
