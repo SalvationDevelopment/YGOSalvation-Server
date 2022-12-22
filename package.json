@@ -30,7 +30,7 @@
         "hsts": "^2.2.0",
         "json": "^10.0.0",
         "jsonfile": "^2.4.0",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "mongoose": "^5.12.2",
         "nedb": "^1.7.2",
         "nodemailer": "^6.6.1",
