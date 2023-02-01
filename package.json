@@ -31,7 +31,7 @@
         "json": "^10.0.0",
         "jsonfile": "^2.4.0",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.12.2",
+        "mongoose": "^5.13.15",
         "nedb": "^1.7.2",
         "nodemailer": "^6.6.1",
         "nodemailer-direct-transport": "^3.3.2",
