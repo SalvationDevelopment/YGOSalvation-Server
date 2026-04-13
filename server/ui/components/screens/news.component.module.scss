@@ -1,0 +1,83 @@
+.root {
+  overflow-y: scroll;
+  height: 89vh;
+  display: grid;
+  gap: 0;
+}
+
+.card {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto 1rem;
+}
+
+.title {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  text-transform: capitalize;
+}
+
+.title a {
+  color: white;
+  display: block;
+  text-decoration: none;
+}
+
+.content {
+  text-align: justify;
+  border: 1px solid #444;
+  padding: 2%;
+  margin-bottom: 1%;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px black;
+  color: rgb(203, 203, 203);
+  font-family: tahoma, helvetica, arial, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 19.2px;
+  word-wrap: break-word;
+}
+
+.footer {
+  font-size: 0.8em;
+  color: #888;
+  text-shadow: 0 0 5px;
+  border: 1px solid #444;
+  border-top: 0;
+  padding: 1%;
+  background: rgba(0, 0, 0, 0.8);
+  line-height: 0.5em;
+  margin-top: -1%;
+}
+
+.footer a {
+  color: #d7d7d7;
+  float: right;
+  text-decoration: none;
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 30px auto 40px;
+  max-width: 920px;
+}
+
+.pageLink {
+  border: 1px solid #555;
+  background: rgba(0, 0, 0, 0.55);
+  color: #d9d9d9;
+  min-width: 38px;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.pageLinkActive,
+.pageLink:hover {
+  border-color: #aaa;
+  background: rgba(255, 255, 255, 0.12);
+}

@@ -1,0 +1,282 @@
+.owner {
+    width: min(92vw, 1400px);
+    height: calc(100vh - 8.75em);
+    margin: 1rem auto 0;
+    padding: 1.35rem;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 1rem;
+    overflow: hidden;
+    color: #f6f0f6;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(180deg, rgba(18, 18, 18, 0.9) 0%, rgba(6, 6, 6, 0.94) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1.2rem 3rem rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(10px);
+
+    :global(.tournamentdetailhero) {
+        display: grid;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        min-height: 0;
+    }
+
+    :global(.tournamentdetailboard) {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(22rem, 28rem);
+        gap: 1rem;
+        align-items: start;
+        height: 100%;
+        min-width: max-content;
+        padding-bottom: 0.35rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x proximity;
+    }
+
+    :global(.tournamentdetaillane) {
+        display: grid;
+        gap: 1rem;
+        align-content: start;
+        height: 100%;
+        min-width: 0;
+        overflow-y: auto;
+        scroll-snap-align: start;
+        padding-right: 0.2rem;
+    }
+
+    :global(.tournamentdetailback) {
+        width: fit-content;
+    }
+
+    :global(.tournamentpanel) {
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(180deg, rgba(18, 18, 18, 0.9) 0%, rgba(6, 6, 6, 0.94) 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1.2rem 3rem rgba(0, 0, 0, 0.26);
+        backdrop-filter: blur(10px);
+    }
+
+    :global(.tournamenteyebrow) {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+
+    :global(.tournamentlede) {
+        max-width: 56rem;
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.6;
+    }
+
+    :global(.tournamentcta) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.75rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: linear-gradient(135deg, rgba(150, 150, 150, 0.26) 0%, rgba(70, 70, 70, 0.42) 100%);
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    :global(.tournamentsecondarycta) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        padding: 0.75rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(22, 22, 22, 0.82);
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    :global(.tournamentbutton) {
+        cursor: pointer;
+    }
+
+    :global(.tournamentstack) {
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    :global(.tournamentmatchactions) {
+        display: grid;
+        justify-items: end;
+        gap: 0.65rem;
+
+        span {
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 0.85rem;
+            text-align: right;
+        }
+    }
+
+    :global(.tournamentfilters),
+    :global(.tournamentdaydetail) {
+        padding: 1.35rem;
+    }
+
+    :global(.tournamentlistgrid) {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1rem;
+    }
+
+    :global(.tournamentsectionheader) {
+        gap: 0.3rem;
+        margin-bottom: 1rem;
+
+        h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+    }
+
+    :global(.tournamenteventcard),
+    :global(.tournamentsidecard) {
+        display: grid;
+        gap: 0.8rem;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    :global(a.tournamenteventcard),
+    :global(a.tournamentsidecard) {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    :global(.tournamenteventmeta) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        color: rgba(255, 255, 255, 0.62);
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    :global(.tournamentstatus) {
+        padding: 0.25rem 0.45rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #fff;
+
+        &[data-status="registration-open"] {
+            background: rgba(148, 148, 148, 0.26);
+        }
+
+        &[data-status="registration-grace"] {
+            background: rgba(118, 118, 118, 0.26);
+        }
+
+        &[data-status="completed"] {
+            background: rgba(92, 92, 92, 0.32);
+        }
+    }
+
+    :global(.tournamenteventbody) {
+        display: grid;
+        gap: 1rem;
+
+        h4 {
+            margin: 0 0 0.45rem;
+            font-size: 1.1rem;
+        }
+
+        p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.74);
+            line-height: 1.55;
+        }
+    }
+
+    :global(.tournamentsidecard) {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+
+        strong {
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        p,
+        span {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+    }
+
+    :global(.tournamentempty) {
+        padding: 1rem;
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.68);
+        line-height: 1.55;
+
+        p {
+            margin: 0 0 0.4rem;
+        }
+    }
+
+    :global(.tournamentformactions) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        align-items: center;
+    }
+
+    :global(.tournamentvalidation) {
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+@media only screen and (max-width: 760px) {
+    .owner {
+        width: min(94vw, 42rem);
+        height: calc(100vh - 9.25em);
+        overflow: auto;
+
+        :global(.tournamentdetailboard) {
+            grid-auto-flow: row;
+            grid-auto-columns: unset;
+            height: auto;
+            min-width: 0;
+            overflow: visible;
+            scroll-snap-type: none;
+        }
+
+        :global(.tournamentdetaillane) {
+            height: auto;
+            overflow: visible;
+            padding-right: 0;
+        }
+
+        :global(.tournamentsidecard) {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+    }
+}

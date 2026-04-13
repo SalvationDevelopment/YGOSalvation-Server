@@ -1,0 +1,16 @@
+.footer {
+  background: var(--mono-panel-strong);
+  color: #aaa;
+  font-weight: 200;
+  height: 3em;
+  line-height: 3em;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  font-size: 0.7em;
+  max-height: 5%;
+  border-top: 1px solid var(--mono-border);
+}

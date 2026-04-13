@@ -1,0 +1,15 @@
+[submodule "clients/edopro"]
+	path = clients/edopro
+	url = https://github.com/edo9300/edopro
+[submodule "server/core/banlist"]
+	path = server/core/banlist
+	url = https://github.com/ProjectIgnis/LFLists
+[submodule "server/core/database"]
+	path = server/core/database
+	url = https://github.com/ProjectIgnis/BabelCDB
+[submodule "server/core/core/ocgcore-wasm"]
+	path = server/core/core/ocgcore-wasm
+	url = https://github.com/n1xx1/ocgcore-wasm
+[submodule "server/core/scripts"]
+	path = server/core/scripts
+	url = https://github.com/ProjectIgnis/CardScripts

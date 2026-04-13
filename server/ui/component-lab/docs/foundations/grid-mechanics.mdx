@@ -1,0 +1,42 @@
+# Grid Mechanics
+
+> This is a design-foundation audit page. It describes the layout mechanics that are already in the codebase today.
+
+## What this page is for
+
+Use the preview to understand how the application actually composes layouts before changing a screen. The app does not use one shared twelve-column grid. Instead, each screen owns a small number of explicit CSS Grid templates that repeat in recognizable ways.
+
+## Primary sources
+
+- `server/ui/components/screens/host.component.module.scss`
+- `server/ui/components/screens/profile.component.module.scss`
+- `server/ui/components/screens/tournaments.component.module.scss`
+- `server/ui/components/screens/tournament-calendar.component.module.scss`
+- `server/ui/components/screens/tournament-detail.component.module.scss`
+- `server/ui/components/screens/deckedit.component.module.scss`
+- `server/ui/styles/tournament.scss`
+
+## Current layout model
+
+- Screen shells use explicit track ratios, not a generic framework grid.
+- Flexible tracks usually use `minmax(0, 1fr)` so children can shrink without forcing overflow.
+- Side rails get minimum widths like `minmax(18rem, 0.78fr)` when they must stay readable.
+- Collection layouts use `repeat(auto-fit, minmax(18rem, 1fr))` so cards wrap naturally.
+- Forms commonly use two equal columns plus `grid-column: 1 / -1` for wide fields.
+- Calendar views use fixed equal-track matrices such as `repeat(7, minmax(0, 1fr))`.
+- Named grid areas are rare and mostly reserved for the deck editor shell.
+
+## Responsive behavior
+
+- `1100px` is a common breakpoint for collapsing split desktop shells.
+- `760px` is a common breakpoint for stacking forms, modal actions, and controls into one column.
+- The calendar route collapses at `72rem`.
+- The tournament hub steps down again at `64rem` and `44rem`.
+
+## Working rules
+
+- Start with the content structure and pick the smallest grid that expresses it.
+- Prefer explicit shell templates for major screen regions.
+- Prefer auto-fit grids for repeatable cards and lists.
+- Use `grid-column: 1 / -1` for exceptions rather than inventing a new wrapper.
+- Collapse to `1fr` once the desktop template stops being readable; do not keep shrinking the same multi-column grid forever.

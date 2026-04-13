@@ -1,0 +1,36 @@
+.root {
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 30%;
+}
+
+.creditsField {
+  margin-bottom: 4vh;
+  color: white;
+  font-size: 5vh;
+}
+
+.credit {
+  display: flex;
+  background: rgba(0, 0, 0, 0.8);
+  margin-bottom: 1vh;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+}
+
+.creditsName {
+  justify-content: flex-end;
+  padding-right: 8px;
+  color: white;
+  display: flex;
+  flex: 1;
+}
+
+.creditsRoles {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.creditsRoleName {
+  display: block;
+}

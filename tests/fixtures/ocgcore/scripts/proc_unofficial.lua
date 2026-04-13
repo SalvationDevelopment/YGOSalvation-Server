@@ -1,0 +1,4 @@
+-- Minimal repo-local fixture used to satisfy utility.lua's optional include.
+-- The core boot smoke only exercises vanilla monsters, so no extra helpers are
+-- required here.
+-- Run with: npm run test:boot

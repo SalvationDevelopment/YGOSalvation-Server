@@ -1,0 +1,5 @@
+{
+  "name": "ygo-core-server-cms",
+  "private": true,
+  "type": "module"
+}

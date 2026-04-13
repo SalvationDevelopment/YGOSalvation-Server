@@ -1,0 +1,195 @@
+.profilePage {
+  min-height: calc(100vh - 8em);
+  padding: 2vh 0 3vh;
+}
+
+.profileShell {
+  width: min(94vw, 1180px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.9fr) minmax(20rem, 1.1fr) minmax(20rem, 1.1fr);
+  gap: 1rem;
+  align-items: stretch;
+  max-height: 80vh;
+}
+
+.profilePanel {
+  gap: 0.9rem;
+  padding: 1.2rem;
+  background: rgba(0, 0, 0, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  height: 100%;
+  min-height: 0;
+}
+
+.profileSummary {
+  display: grid;
+  gap: 1rem;
+}
+
+.profileSummaryCopy {
+  display: grid;
+  gap: 0.45rem;
+
+  h2,
+  p {
+    margin: 0;
+  }
+}
+
+.profileAccountFields {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.profileEyebrow {
+  color: rgba(255, 255, 255, 0.62);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.76rem;
+}
+
+.profileAvatar {
+  width: 100%;
+  max-width: 14rem;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.settingsCoverPreview {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 300px;
+  object-fit: contain;
+  margin: 1vh 0 2vh;
+}
+
+.profileMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.profileMetric {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+
+  strong {
+    font-size: 1.3rem;
+  }
+
+  span {
+    color: rgba(255, 255, 255, 0.62);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+  }
+}
+
+.profilePanel input,
+.profilePanel select,
+.profilePanel textarea {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.profilePanel textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.profileAction,
+.profileSecondaryAction {
+  min-height: 2.6rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.74rem;
+}
+
+.profileAction {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.profileSecondaryAction {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.profileCheckrow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+
+  input {
+    width: auto;
+    min-height: 0;
+  }
+}
+
+.profileFriendForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+}
+
+.profileFriendGroups {
+  display: grid;
+  gap: 1rem;
+
+  section {
+    display: grid;
+    gap: 0.7rem;
+    padding-top: 0.2rem;
+  }
+
+  h4,
+  p {
+    margin: 0;
+  }
+}
+
+.profileFriendCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+
+  strong,
+  span {
+    display: block;
+  }
+
+  span {
+    color: rgba(255, 255, 255, 0.62);
+    margin-top: 0.2rem;
+  }
+}
+
+.profileInlineActions {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.profileMessage {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.profileError {
+  background: rgba(255, 255, 255, 0.08);
+}

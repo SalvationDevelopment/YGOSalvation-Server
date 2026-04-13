@@ -1,0 +1,17 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.fullscreen {
+  min-height: 100vh;
+  padding-top: 30vh;
+  font-size: 10vh;
+  background: none;
+}
+
+.panel {
+  text-align: center;
+}

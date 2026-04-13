@@ -1,0 +1,223 @@
+.root {
+  display: grid;
+  gap: 1.25rem;
+  color: #f4efe7;
+}
+
+.banner,
+.section,
+.patternCard,
+.breakpointItem {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(6, 8, 12, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.banner,
+.section {
+  padding: 1.25rem;
+}
+
+.banner,
+.section,
+.patternCard {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.banner h2,
+.sectionHeader h3,
+.patternHeader h4 {
+  margin: 0;
+}
+
+.banner p,
+.sectionHeader p,
+.patternHeader p,
+.note,
+.breakpointItem span {
+  margin: 0;
+  color: rgba(244, 239, 231, 0.78);
+  line-height: 1.6;
+}
+
+.kicker {
+  margin: 0;
+  color: rgba(244, 239, 231, 0.64);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.patternGrid,
+.sideBySide {
+  display: grid;
+  gap: 1rem;
+}
+
+.patternGrid {
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.patternCard {
+  padding: 1rem;
+}
+
+.patternHeader {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.diagram {
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0.5rem;
+  }
+}
+
+.splitDiagram,
+.dashboardDiagram,
+.formDiagram,
+.collectionDiagram,
+.calendarDiagram,
+.areaDiagram {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.splitDiagram {
+  grid-template-columns: minmax(0, 1.35fr) minmax(7rem, 0.78fr);
+}
+
+.dashboardDiagram {
+  grid-template-columns: minmax(6rem, 0.9fr) minmax(7rem, 1.1fr) minmax(7rem, 1.1fr);
+}
+
+.collectionDiagram {
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+}
+
+.formDiagram {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.spanTwo {
+  grid-column: 1 / -1;
+}
+
+.calendarDiagram {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+
+  > div {
+    min-height: 2.75rem;
+  }
+}
+
+.areaDiagram {
+  grid-template-columns: minmax(6rem, 0.9fr) minmax(9rem, 1.35fr) minmax(6rem, 0.9fr);
+  grid-template-areas: "search center info";
+}
+
+.searchArea {
+  grid-area: search;
+}
+
+.centerArea {
+  grid-area: center;
+}
+
+.infoArea {
+  grid-area: info;
+}
+
+.code {
+  display: block;
+  padding: 0.8rem;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(244, 239, 231, 0.92);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.sideBySide {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ruleList {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.65rem;
+  color: rgba(244, 239, 231, 0.88);
+  line-height: 1.6;
+}
+
+.breakpointList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.breakpointItem {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem;
+
+  strong {
+    color: #fff;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 900px) {
+  .sideBySide,
+  .patternGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendarDiagram {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .splitDiagram,
+  .dashboardDiagram,
+  .formDiagram,
+  .areaDiagram,
+  .calendarDiagram {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+
+  .searchArea,
+  .centerArea,
+  .infoArea,
+  .spanTwo {
+    grid-column: auto;
+    grid-area: auto;
+  }
+}

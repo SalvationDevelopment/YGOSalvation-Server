@@ -1,0 +1,125 @@
+.root {
+  display: grid;
+  gap: 1.25rem;
+  color: #f4efe7;
+}
+
+.banner,
+.section,
+.familyCard,
+.roleCard {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(6, 8, 12, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.banner,
+.section {
+  padding: 1.25rem;
+}
+
+.banner {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.banner h2,
+.sectionHeader h3,
+.roleMeta h4 {
+  margin: 0;
+}
+
+.banner p,
+.sectionHeader p,
+.roleMeta p,
+.familyUse {
+  margin: 0;
+  color: rgba(244, 239, 231, 0.78);
+  line-height: 1.6;
+}
+
+.kicker,
+.specimenLabel,
+.roleMeta span,
+.familyName {
+  margin: 0;
+  color: rgba(244, 239, 231, 0.64);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.familyGrid,
+.roleGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.familyGrid {
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.familyCard,
+.roleCard {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+}
+
+.familySample,
+.specimenSample {
+  margin: 0;
+  color: #fff;
+}
+
+.familySample {
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.roleGrid {
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.roleMeta {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.specimen {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.95rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.code {
+  display: block;
+  padding: 0.8rem;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(244, 239, 231, 0.92);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 720px) {
+  .roleGrid,
+  .familyGrid {
+    grid-template-columns: 1fr;
+  }
+}

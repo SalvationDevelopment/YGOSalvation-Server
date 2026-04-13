@@ -1,0 +1,255 @@
+#homecontainer {
+  width: 100%;
+  margin-top: 25px;
+  height: 78vh;
+}
+
+.superlogo {
+  padding-top: 10vh;
+  letter-spacing: 0.02em;
+}
+
+button#doregister,
+#backuplogin {
+  border-radius: 20px;
+  border: 1px solid white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 40px;
+  color: white;
+  width: 15%;
+  text-transform: uppercase;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  font-size: 70%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 20px;
+}
+
+#logout {
+  border-radius: 20px;
+  border: 1px solid white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 40px;
+  color: white;
+  width: 15%;
+  text-transform: uppercase;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 20px;
+  font-size: 70%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 20px;
+}
+
+#ipblogin {
+  text-align: center;
+  color: white !important;
+  margin: 0 auto;
+}
+
+button#dolog,
+#openlogin {
+  font-size: 70%;
+  border-radius: 20px;
+  border: 1px solid white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px 40px;
+  color: white;
+  width: 15%;
+  text-transform: uppercase;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 20px;
+}
+
+button#dolog,
+#openlogin {
+  border: 1px solid white;
+  background: rgba(255, 0, 100, 0.5);
+  color: white;
+}
+
+button#doregister,
+#backuplogin {
+  border: 1px solid white;
+  background: rgba(75, 0, 100, 0.5);
+  color: white;
+}
+
+ul#socialmediabuttons {
+  position: absolute;
+  right: 2vw;
+  top: 30%;
+  height: 30%;
+  padding: 0;
+  margin: 0;
+}
+
+#socialmediabuttons li {
+  list-style: none;
+  text-align: center;
+  margin-top: 5%;
+  width: 3vw;
+}
+
+#socialmediabuttons img {
+  display: block;
+  width: 100%;
+}
+
+#ips_username,
+#ips_password {
+  margin: 0 auto;
+  background: rgba(0, 0, 0, 1);
+  border: none;
+  width: 100%;
+  padding: 0.65em 0.9em;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  border: 1px solid #fff;
+  box-shadow: 0 0 10px black;
+  display: block;
+}
+
+.loginFieldStack {
+  width: min(40em, 90%);
+  margin: 20px auto 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.passwordFieldWrap {
+  position: relative;
+  width: 50%;
+  margin: 0;
+}
+
+.loginFieldStack > #ips_username {
+  width: 50%;
+}
+
+.passwordFieldWrap #ips_password {
+  width: 100%;
+  margin: 0;
+  padding-right: 2.8em;
+  border-left: none;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 0.55em;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 2em;
+  height: 2em;
+  opacity: 0.8;
+  border-radius: 999px;
+}
+
+.passwordToggle:hover {
+  opacity: 1;
+}
+
+.passwordToggle:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 1px;
+}
+
+#loginmodal {
+  input.loginsystem:not([type="checkbox"]) {
+    background: #000 !important;
+    color: #fff !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      -webkit-text-fill-color: #fff;
+      -webkit-box-shadow: 0 0 0 1000px #000 inset;
+      box-shadow: 0 0 0 1000px #000 inset;
+      caret-color: #fff;
+    }
+  }
+
+  input.reg {
+    margin: 1vh auto;
+    background: rgba(0, 0, 0, 1);
+    border: none;
+    width: 20em;
+    padding: 0.4em;
+    text-align: center;
+    color: white !important;
+    font-weight: bold;
+    border: 1px solid #fff;
+    box-shadow: 0 0 10px black;
+    border-radius: 14px;
+  }
+}
+
+div#loginmodal {
+  position: absolute;
+  top: 45vh;
+  width: 70%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #301;
+  left: 15%;
+  text-align: center;
+  box-shadow:
+    inset 0px 100px 100px rgba(255, 25, 120, 0.15),
+    0px 0px 20px black;
+  padding-bottom: 3vh;
+  animation-name: pulse;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+  button.loginsystem,
+  #logout,
+  #dolog,
+  #openlogin,
+  #doregister,
+  #backuplogin {
+    border-radius: 14px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+}
+
+#ips_username,
+#ips_password,
+#dolog,
+#openlogin,
+#doregister,
+#backuplogin {
+  animation-name: pulse;
+  animation-duration: 5s;
+  animation-iteration-count: 10;
+}
+
+#ips_username {
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#ips_password {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 14px;
+  border-bottom-right-radius: 14px;
+}

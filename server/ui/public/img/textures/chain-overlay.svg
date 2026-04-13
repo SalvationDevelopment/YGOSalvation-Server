@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="chainGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#7ff3ff" stop-opacity="0.85"/>
+      <stop offset="55%" stop-color="#2c8df6" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#00111f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="64" cy="64" r="55" fill="url(#chainGlow)"/>
+  <circle cx="64" cy="64" r="41" fill="none" stroke="#e8fbff" stroke-width="4" stroke-opacity="0.9"/>
+  <circle cx="64" cy="64" r="50" fill="none" stroke="#6fe3ff" stroke-width="2" stroke-opacity="0.7" stroke-dasharray="7 9"/>
+  <g fill="none" stroke="#f6feff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6">
+    <path d="M49 43c6-6 15-6 21 0l7 7c6 6 6 15 0 21"/>
+    <path d="M79 85c-6 6-15 6-21 0l-7-7c-6-6-6-15 0-21"/>
+    <path d="M56 72l16-16"/>
+  </g>
+</svg>
