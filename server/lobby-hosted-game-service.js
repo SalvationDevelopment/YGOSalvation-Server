@@ -24,24 +24,25 @@ const path = require('path');
  * @param {Function} options.setTimeoutFn The `setTimeoutFn` property supplies structured input used by the lobby hosted game service module.
  * @returns {{handleChildMessage: Function, hostGame: Function, spawnHostedChild: Function}} Returns the value produced by the lobby hosted game service module.
  */
-function createLobbyHostedGameService({
-  state,
-  broadcast,
-  consoleLog = console.log,
-  dateNow = Date.now,
-  logDuel,
-  parseHostConfig,
-  roomStatePacket,
-  sendPacket,
-  validateSession,
-  clearTimeoutFn = clearTimeout,
-  forkProcess = childProcess.fork.bind(childProcess),
-  gameChildCwd = path.resolve(__dirname, 'game'),
-  pathModule = path,
-  processArgv = process.argv,
-  processEnv = process.env,
-  setTimeoutFn = setTimeout
-}) {
+class LobbyHostedGameService {
+  constructor({
+    state,
+    broadcast,
+    consoleLog = console.log,
+    dateNow = Date.now,
+    logDuel,
+    parseHostConfig,
+    roomStatePacket,
+    sendPacket,
+    validateSession,
+    clearTimeoutFn = clearTimeout,
+    forkProcess = childProcess.fork.bind(childProcess),
+    gameChildCwd = path.resolve(__dirname, 'game'),
+    pathModule = path,
+    processArgv = process.argv,
+    processEnv = process.env,
+    setTimeoutFn = setTimeout
+  }) {
   /**
    * Resolves random port used by the lobby hosted game service module.
    * @returns {number} Returns the value produced by the lobby hosted game service module.
@@ -348,8 +349,9 @@ function createLobbyHostedGameService({
     hostGame,
     spawnHostedChild
   };
+  }
 }
 
 module.exports = {
-  createLobbyHostedGameService
+  LobbyHostedGameService
 };

@@ -1,14 +1,14 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyState } = require('../../../server/lobby-state');
-const { createLobbyDispatchService } = require('../../../server/lobby-dispatch-service');
+const { LobbyState } = require('../../../server/lobby-state');
+const { LobbyDispatchService } = require('../../../server/lobby-dispatch-service');
 
 function createService(overrides = {}) {
-  const state = overrides.state || createLobbyState();
+  const state = overrides.state || new LobbyState();
   const calls = [];
   const packets = [];
-  const service = createLobbyDispatchService({
+  const service = new LobbyDispatchService({
     state,
     closeProxyConnection(client) {
       calls.push(['closeProxyConnection', client.id]);
@@ -57,7 +57,7 @@ test('handleMessage returns false for non-action payloads', () => {
 });
 
 test('handleMessage forwards non-proxy actions to the active proxy connection', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.proxiedSockets.set('client-2', {});
   const { calls, packets, service } = createService({ state });
   const client = { id: 'client-2' };
@@ -74,7 +74,7 @@ test('handleMessage forwards non-proxy actions to the active proxy connection', 
 });
 
 test('handleMessage reports proxy failures when forwarding is unavailable', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.proxiedSockets.set('client-3', {});
   const { calls, packets, service } = createService({
     state,

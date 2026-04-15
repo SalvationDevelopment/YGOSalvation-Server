@@ -1,13 +1,13 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyDeckService } = require('../../../server/lobby-deck-service');
+const { LobbyDeckService } = require('../../../server/lobby-deck-service');
 
 function createService(overrides = {}) {
   const calls = [];
   const roomWrites = [];
   const logs = [];
-  const service = createLobbyDeckService({
+  const service = new LobbyDeckService({
     decksApi: overrides.decksApi || {
       saveDeck(session, deck, username, callback) {
         calls.push(['saveDeck', session, deck, username]);

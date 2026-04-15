@@ -32,95 +32,95 @@ function getMessageOwner(message) {
  * @param {Object} options.lobby The `lobby` property supplies structured input used by the runtime dispatcher module.
  * @returns {{handleConnection: Function, handleMessage: Function, removeClient: Function}} Returns the value produced by the runtime dispatcher module.
  */
-function createRuntimeDispatcher({
-  lobby,
-  log = () => {}
-}) {
-  const initializedRoomClients = new Set();
+class RuntimeDispatcher {
+  constructor({
+    lobby,
+    log: logFn = () => {}
+  }) {
+    const initializedRoomClients = new Set();
 
-  /**
-   * Executes the log helper used by the runtime dispatcher module.
-   * @param {string} message The message value provides an input used by the runtime dispatcher module.
-   * @returns {void} Does not return a value.
-   */
-  function log(message) {
-    log(`[runtime] ${message}`);
-  }
-
-  /**
-   * Ensures room connection used by the runtime dispatcher module.
-   * @param {Object} client The client value provides an input used by the runtime dispatcher module.
-   * @returns {void} Does not return a value.
-   */
-  function ensureRoomConnection(client, protocolMode = 'canonical') {
-    if (!client || initializedRoomClients.has(client.id)) {
-      if (client) {
-        attachRoomClientProtocol(client, protocolMode);
-      }
-      return;
+    /**
+     * Executes the log helper used by the runtime dispatcher module.
+     * @param {string} message The message value provides an input used by the runtime dispatcher module.
+     * @returns {void} Does not return a value.
+     */
+    function runtimeLog(message) {
+      logFn(`[runtime] ${message}`);
     }
 
-    attachRoomClientProtocol(client, protocolMode);
-    initializedRoomClients.add(client.id);
-  }
-
-  return {
     /**
-     * Handles connection used by the runtime dispatcher module.
+     * Ensures room connection used by the runtime dispatcher module.
      * @param {Object} client The client value provides an input used by the runtime dispatcher module.
      * @returns {void} Does not return a value.
      */
-    handleConnection(client) {
-      lobby.handleConnection(client);
-    },
-    /**
-     * Handles message used by the runtime dispatcher module.
-     * @param {Object} client The client value provides an input used by the runtime dispatcher module.
-     * @param {Object} message The message value provides an input used by the runtime dispatcher module.
-     * @returns {boolean} Returns the value produced by the runtime dispatcher module.
-     */
-    handleMessage(client, message) {
-      const translated = translateIncomingRuntimeMessage(message),
-        owner = translated.owner;
-
-      if (
-        message &&
-        typeof message === 'object' &&
-        typeof message.action === 'string' &&
-        message.action.length > 0 &&
-        typeof message.type === 'string' &&
-        message.type.length > 0
-      ) {
-        log(
-          `received ambiguous packet for ${client?.id || 'unknown'}; ` +
-            `routing to lobby action=${message.action} type=${message.type}`
-        );
+    function ensureRoomConnection(client, protocolMode = 'canonical') {
+      if (!client || initializedRoomClients.has(client.id)) {
+        if (client) {
+          attachRoomClientProtocol(client, protocolMode);
+        }
+        return;
       }
 
-      if (owner === 'lobby') {
-        return lobby.handleMessage(client, translated.message);
-      }
-
-     
-      return false;
-    },
-    /**
-     * Removes client used by the runtime dispatcher module.
-     * @param {Object} client The client value provides an input used by the runtime dispatcher module.
-     * @returns {void} Does not return a value.
-     */
-    removeClient(client) {
-      lobby.removeClient(client);
-
-      const hadRoomConnection = initializedRoomClients.delete(client?.id);
-     
+      attachRoomClientProtocol(client, protocolMode);
+      initializedRoomClients.add(client.id);
     }
-  };
+
+    return {
+      /**
+       * Handles connection used by the runtime dispatcher module.
+       * @param {Object} client The client value provides an input used by the runtime dispatcher module.
+       * @returns {void} Does not return a value.
+       */
+      handleConnection(client) {
+        lobby.handleConnection(client);
+      },
+      /**
+       * Handles message used by the runtime dispatcher module.
+       * @param {Object} client The client value provides an input used by the runtime dispatcher module.
+       * @param {Object} message The message value provides an input used by the runtime dispatcher module.
+       * @returns {boolean} Returns the value produced by the runtime dispatcher module.
+       */
+      handleMessage(client, message) {
+        const translated = translateIncomingRuntimeMessage(message),
+          owner = translated.owner;
+
+        if (
+          message &&
+          typeof message === 'object' &&
+          typeof message.action === 'string' &&
+          message.action.length > 0 &&
+          typeof message.type === 'string' &&
+          message.type.length > 0
+        ) {
+          runtimeLog(
+            `received ambiguous packet for ${client?.id || 'unknown'}; ` +
+              `routing to lobby action=${message.action} type=${message.type}`
+          );
+        }
+
+        if (owner === 'lobby') {
+          return lobby.handleMessage(client, translated.message);
+        }
+
+        return false;
+      },
+      /**
+       * Removes client used by the runtime dispatcher module.
+       * @param {Object} client The client value provides an input used by the runtime dispatcher module.
+       * @returns {void} Does not return a value.
+       */
+      removeClient(client) {
+        lobby.removeClient(client);
+
+        initializedRoomClients.delete(client?.id);
+      }
+    };
+  }
 }
 
 class ConnectionSuite {
   constructor({ lobby }) {
-    const runtimeDispatcher = createRuntimeDispatcher({
+    const runtimeDispatcher = new RuntimeDispatcher({
       lobby,
       log,
     });
@@ -160,6 +160,6 @@ class ConnectionSuite {
 
 module.exports = {
   ConnectionSuite,
-  createRuntimeDispatcher,
+  RuntimeDispatcher,
   getMessageOwner
 };

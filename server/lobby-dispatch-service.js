@@ -13,16 +13,17 @@
  * @param {Object} options.state The `state` property supplies structured input used by the lobby dispatch service module.
  * @returns {{handleMessage: Function, removeClient: Function}} Returns the value produced by the lobby dispatch service module.
  */
-function createLobbyDispatchService({
-  state,
-  closeProxyConnection,
-  detachClient,
-  forwardToProxy,
-  gamelistRequested,
-  handleAction,
-  removeClientFromRegistry,
-  sendPacket
-}) {
+class LobbyDispatchService {
+  constructor({
+    state,
+    closeProxyConnection,
+    detachClient,
+    forwardToProxy,
+    gamelistRequested,
+    handleAction,
+    removeClientFromRegistry,
+    sendPacket
+  }) {
   /**
    * Resolves whether the action is a direct proxy lifecycle action used by the
    * lobby dispatch service module.
@@ -90,8 +91,9 @@ function createLobbyDispatchService({
       removeClientFromRegistry(client);
     }
   };
+  }
 }
 
 module.exports = {
-  createLobbyDispatchService
+  LobbyDispatchService
 };

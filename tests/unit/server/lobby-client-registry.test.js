@@ -1,13 +1,13 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyClientRegistry } = require('../../../server/lobby-client-registry');
-const { createLobbyState } = require('../../../server/lobby-state');
+const { LobbyClientRegistry } = require('../../../server/lobby-client-registry');
+const { LobbyState } = require('../../../server/lobby-state');
 
 test('lobby client registry tracks connected clients and room membership explicitly', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   const delivered = [];
-  const registry = createLobbyClientRegistry({
+  const registry = new LobbyClientRegistry({
     state,
     sendPacket(client, packet) {
       delivered.push([client.id, packet]);

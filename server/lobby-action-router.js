@@ -46,36 +46,37 @@ function normalizeLobbyAction(action) {
  * @param {Function} options.validateSession The `validateSession` property supplies structured input used by the lobby action router module.
  * @returns {{handleAction: Function}} Returns the value produced by the lobby action router module.
  */
-function createLobbyActionRouter({
-  state,
-  broadcast,
-  chatLineCall,
-  closeProxyConnection,
-  censorCall,
-  createIrcRoom,
-  deleteDeckCall,
-  disconnectIrcClient,
-  forwardToProxy,
-  gamelistRequested,
-  genocideCall,
-  globalCall,
-  globalRequested,
-  joinRoom,
-  joinIrcRoom,
-  listIrcRooms,
-  mindCrushCall,
-  murderCall,
-  openProxyConnection,
-  privateMessageCall,
-  registrationCall,
-  reviveCall,
-  saveDeckCall,
-  sendIrcMessage,
-  sendPacket,
-  spawnHostedChild,
-  syncIrcClient,
-  validateSession
-}) {
+class LobbyActionRouter {
+  constructor({
+    state,
+    broadcast,
+    chatLineCall,
+    closeProxyConnection,
+    censorCall,
+    createIrcRoom,
+    deleteDeckCall,
+    disconnectIrcClient,
+    forwardToProxy,
+    gamelistRequested,
+    genocideCall,
+    globalCall,
+    globalRequested,
+    joinRoom,
+    joinIrcRoom,
+    listIrcRooms,
+    mindCrushCall,
+    murderCall,
+    openProxyConnection,
+    privateMessageCall,
+    registrationCall,
+    reviveCall,
+    saveDeckCall,
+    sendIrcMessage,
+    sendPacket,
+    spawnHostedChild,
+    syncIrcClient,
+    validateSession
+  }) {
   /**
    * Resolves room name used by the lobby action router module.
    * @param {Object} client The client object supplies the structured input used by the lobby action router module.
@@ -222,9 +223,10 @@ function createLobbyActionRouter({
       actionHandlers[action]?.(client, data, roomName);
     }
   };
+  }
 }
 
 module.exports = {
-  createLobbyActionRouter,
+  LobbyActionRouter,
   normalizeLobbyAction
 };

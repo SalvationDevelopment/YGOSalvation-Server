@@ -5,9 +5,24 @@
  * @param {string} prefix The prefix value provides an input used by the utils module.
  * @returns {string} Returns the value produced by the utils module.
  */
-function createId(prefix) {
-  const rand = Math.random().toString(36).slice(2, 10);
-  return `${prefix}_${Date.now().toString(36)}_${rand}`;
+class Id {
+  constructor(prefix) {
+    this.value = `${prefix}_${Date.now().toString(36)}_${Math.random()
+      .toString(36)
+      .slice(2, 10)}`;
+  }
+
+  toString() {
+    return this.value;
+  }
+
+  valueOf() {
+    return this.value;
+  }
+
+  [Symbol.toPrimitive]() {
+    return this.value;
+  }
 }
 
 /**
@@ -49,7 +64,7 @@ function fromBase64(base64Value) {
 }
 
 module.exports = {
-  createId,
+  Id,
   safeJsonParse,
   toBase64FromHeap,
   fromBase64

@@ -3,9 +3,9 @@ const test = require('node:test');
 const path = require('node:path');
 const { EventEmitter } = require('node:events');
 
-const { createLobbyState } = require('../../../server/lobby-state');
+const { LobbyState } = require('../../../server/lobby-state');
 const {
-  createLobbyHostedGameService
+  LobbyHostedGameService
 } = require('../../../server/lobby-hosted-game-service');
 
 class FakeChild extends EventEmitter {
@@ -21,12 +21,12 @@ class FakeChild extends EventEmitter {
 }
 
 function createService(overrides = {}) {
-  const state = overrides.state || createLobbyState();
+  const state = overrides.state || new LobbyState();
   const broadcasts = [];
   const packets = [];
   const forkCalls = [];
   const children = [];
-  const service = createLobbyHostedGameService({
+  const service = new LobbyHostedGameService({
     state,
     broadcast(packet) {
       broadcasts.push(packet);

@@ -1,16 +1,16 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyState } = require('../../../server/lobby-state');
-const { createLobbyStatusService } = require('../../../server/lobby-status-service');
+const { LobbyState } = require('../../../server/lobby-state');
+const { LobbyStatusService } = require('../../../server/lobby-status-service');
 
 function createService(overrides = {}) {
-  const state = overrides.state || createLobbyState();
+  const state = overrides.state || new LobbyState();
   const addClientCalls = [];
   const broadcasts = [];
   const packets = [];
   const intervals = [];
-  const service = createLobbyStatusService({
+  const service = new LobbyStatusService({
     state,
     addClient(client) {
       addClientCalls.push(client.id);
@@ -41,7 +41,7 @@ function createService(overrides = {}) {
 }
 
 test('handleConnection registers the client and sends the current room state packet', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.gamelist = {
     alpha: {
       roompass: 'alpha'
@@ -75,7 +75,7 @@ test('handleConnection registers the client and sends the current room state pac
 });
 
 test('roomStatePacket and getSnapshot expose lobby state without leaking top-level collections', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.gamelist = {
     beta: {
       roompass: 'beta'
@@ -112,7 +112,7 @@ test('roomStatePacket and getSnapshot expose lobby state without leaking top-lev
 });
 
 test('start schedules a single ack loop and resets ack state when the interval fires', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.gamelist = {
     gamma: {
       roompass: 'gamma'

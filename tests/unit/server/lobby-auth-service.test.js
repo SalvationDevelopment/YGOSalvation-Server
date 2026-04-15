@@ -1,18 +1,18 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyState } = require('../../../server/lobby-state');
-const { createLobbyAuthService } = require('../../../server/lobby-auth-service');
+const { LobbyState } = require('../../../server/lobby-state');
+const { LobbyAuthService } = require('../../../server/lobby-auth-service');
 
 function createService(overrides = {}) {
-  const state = overrides.state || createLobbyState();
+  const state = overrides.state || new LobbyState();
   const authenticatedClients = [];
   const broadcasts = [];
   const packets = [];
   const joins = [];
   const logs = [];
 
-  const service = createLobbyAuthService({
+  const service = new LobbyAuthService({
     state,
     broadcast(packet) {
       broadcasts.push(packet);

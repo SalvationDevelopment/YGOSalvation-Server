@@ -1,11 +1,11 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyState } = require('../../../server/lobby-state');
-const { createLobbyChatService } = require('../../../server/lobby-chat-service');
+const { LobbyState } = require('../../../server/lobby-state');
+const { LobbyChatService } = require('../../../server/lobby-chat-service');
 
 function createService(overrides = {}) {
-  const state = overrides.state || createLobbyState();
+  const state = overrides.state || new LobbyState();
   const broadcasts = [];
   const packets = [];
   const roomWrites = [];
@@ -36,7 +36,7 @@ function createService(overrides = {}) {
         bridgeCalls.push(['createChannel', clientId, channel]);
       }
     };
-  const service = createLobbyChatService({
+  const service = new LobbyChatService({
     state,
     broadcast(packet) {
       broadcasts.push(packet);
@@ -159,7 +159,7 @@ test('privateMessageCall writes a timestamped packet into the recipient room', (
 });
 
 test('censorCall removes the targeted chat history entry after validation', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.adminlist.alice = true;
   state.chatbox = [
     { uid: '100', msg: 'keep' },
@@ -184,7 +184,7 @@ test('censorCall removes the targeted chat history entry after validation', () =
 });
 
 test('globalCall updates the shared global message for validated admins', () => {
-  const state = createLobbyState();
+  const state = new LobbyState();
   state.adminlist.alice = true;
   const { broadcasts, service } = createService({ state });
 

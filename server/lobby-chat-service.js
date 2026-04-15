@@ -15,19 +15,20 @@
  * @param {Function} options.validateUser The `validateUser` property supplies structured input used by the lobby chat service module.
  * @returns {{attachClient: Function, chatLineCall: Function, censorCall: Function, createIrcRoom: Function, detachClient: Function, disconnectIrcClient: Function, genocideCall: Function, globalCall: Function, globalRequested: Function, joinIrcRoom: Function, listIrcRooms: Function, mindCrushCall: Function, murderCall: Function, privateMessageCall: Function, reviveCall: Function, sendIrcMessage: Function, syncIrcClient: Function}} Returns the value produced by the lobby chat service module.
  */
-function createLobbyChatService({
-  state,
-  broadcast,
-  chatBridge = null,
-  createChatId = () =>
-    String(global.crypto?.randomUUID?.() || `${Date.now()}_${Math.random()}`),
-  dateFactory = () => new Date(),
-  roomWrite,
-  sanitizeMessage,
-  sendPacket,
-  setTimeoutFn = setTimeout,
-  validateUser
-}) {
+class LobbyChatService {
+  constructor({
+    state,
+    broadcast,
+    chatBridge = null,
+    createChatId = () =>
+      String(global.crypto?.randomUUID?.() || `${Date.now()}_${Math.random()}`),
+    dateFactory = () => new Date(),
+    roomWrite,
+    sanitizeMessage,
+    sendPacket,
+    setTimeoutFn = setTimeout,
+    validateUser
+  }) {
   /**
    * Executes a validated user action used by the lobby chat service module.
    * @param {Object} data The data object supplies the structured input used by the lobby chat service module.
@@ -198,7 +199,7 @@ function createLobbyChatService({
    * @param {Object} data The data object supplies the structured input used by the lobby chat service module.
    * @returns {void} Does not return a value.
    */
-  function createIrcRoom(client, data) {
+  function handleIrcRoomCreate(client, data) {
     if (client.username && chatBridge) {
       chatBridge.createChannel(client.id, data.channel);
     }
@@ -319,7 +320,7 @@ function createLobbyChatService({
     attachClient,
     chatLineCall,
     censorCall,
-    createIrcRoom,
+    createIrcRoom: handleIrcRoomCreate,
     detachClient,
     disconnectIrcClient,
     genocideCall,
@@ -334,8 +335,9 @@ function createLobbyChatService({
     sendIrcMessage,
     syncIrcClient
   };
+  }
 }
 
 module.exports = {
-  createLobbyChatService
+  LobbyChatService
 };

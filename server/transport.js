@@ -1,8 +1,8 @@
 "use strict";
 
 const net = require("net");
-const { WebSocketServer } = require("ws");
-const { createId, safeJsonParse } = require("./utils");
+const { WebSocketServer: NativeWebSocketServer } = require("ws");
+const { Id, safeJsonParse } = require("./utils");
 
 class ClientConnection {
   /**
@@ -74,52 +74,54 @@ class ClientConnection {
  * @param {number} options.port The `port` property supplies structured input used by the transport module.
  * @returns {net.Server} Returns the value produced by the transport module.
  */
-function createTcpServer({ port, onConnection, onMessage, onClose, log }) {
-  const server = net.createServer((socket) => {
-    const client = new ClientConnection({
-      id: createId("tcp"),
-      transport: "tcp",
-      sendRaw: (text) => socket.write(`${text}\n`),
-      closeRaw: () => socket.destroy(),
-      onClose,
-      meta: {
-        address: {
-          ip: socket.remoteAddress || "",
-          port: socket.remotePort || 0,
+class TcpServer {
+  constructor({ port, onConnection, onMessage, onClose, log }) {
+    const server = net.createServer((socket) => {
+      const client = new ClientConnection({
+        id: String(new Id("tcp")),
+        transport: "tcp",
+        sendRaw: (text) => socket.write(`${text}\n`),
+        closeRaw: () => socket.destroy(),
+        onClose,
+        meta: {
+          address: {
+            ip: socket.remoteAddress || "",
+            port: socket.remotePort || 0,
+          },
         },
-      },
-    });
+      });
 
-    onConnection(client);
+      onConnection(client);
 
-    let buffer = "";
-    socket.on("data", (chunk) => {
-      buffer += chunk.toString("utf8");
-      let lineBreak = buffer.indexOf("\n");
-      while (lineBreak >= 0) {
-        const line = buffer.slice(0, lineBreak).trim();
-        buffer = buffer.slice(lineBreak + 1);
-        if (line.length > 0) {
-          const parsed = safeJsonParse(line);
-          if (!parsed.ok) {
-            client.send("error", { message: "Invalid JSON packet." });
+      let buffer = "";
+      socket.on("data", (chunk) => {
+        buffer += chunk.toString("utf8");
+        let lineBreak = buffer.indexOf("\n");
+        while (lineBreak >= 0) {
+          const line = buffer.slice(0, lineBreak).trim();
+          buffer = buffer.slice(lineBreak + 1);
+          if (line.length > 0) {
+            const parsed = safeJsonParse(line);
+            if (!parsed.ok) {
+              client.send("error", { message: "Invalid JSON packet." });
+            }
+            if (parsed.ok) {
+              onMessage(client, parsed.value);
+            }
           }
-          if (parsed.ok) {
-            onMessage(client, parsed.value);
-          }
+          lineBreak = buffer.indexOf("\n");
         }
-        lineBreak = buffer.indexOf("\n");
-      }
+      });
+
+      socket.on("close", () => client.handleClose());
+      socket.on("error", (error) => {
+        log(`[tcp:${client.id}] ${error.message}`);
+      });
     });
 
-    socket.on("close", () => client.handleClose());
-    socket.on("error", (error) => {
-      log(`[tcp:${client.id}] ${error.message}`);
-    });
-  });
-
-  server.listen(port, () => log(`TCP listening on ${port}`));
-  return server;
+    server.listen(port, () => log(`TCP listening on ${port}`));
+    return server;
+  }
 }
 
 /**
@@ -132,80 +134,55 @@ function createTcpServer({ port, onConnection, onMessage, onClose, log }) {
  * @param {number} options.port The `port` property supplies structured input used by the transport module.
  * @returns {WebSocketServer} Returns the value produced by the transport module.
  */
-function createWebSocketServer({
-  port,
-  onConnection,
-  onMessage,
-  onClose,
-  log,
-}) {
-  const wss = new WebSocketServer({ port });
-  wss.on("connection", (socket, req) => {
-    const client = new ClientConnection({
-      id: createId("ws"),
-      transport: "ws",
-      sendRaw: (text) => socket.send(text),
-      closeRaw: () => socket.close(),
-      onClose,
-      meta: {
-        address: {
-          ip: req?.socket?.remoteAddress || "",
-          port: req?.socket?.remotePort || 0,
-        },
-      },
-    });
-
-    onConnection(client);
-
-    socket.on("message", (data) => {
-      const message = data.toString("utf8");
-      const parsed = safeJsonParse(message);
-      if (!parsed.ok) {
-        client.send("error", { message: "Invalid JSON packet." });
-        return;
-      }
-      onMessage(client, parsed.value);
-    });
-
-    socket.on("close", () => client.handleClose());
-    socket.on("error", (error) => {
-      log(`[ws:${client.id}] ${error.message}`);
-    });
-  });
-
-  log(`WebSocket listening on ${port}`);
-
-  return wss;
-}
-
 class WebSocketServer {
-  constructor({ port, onConnection, onMessage, onClose, log }) {
-    return createWebSocketServer({
-      port,
-      onConnection,
-      onMessage,
-      onClose,
-      log,
-    });
-  }
-}
+  constructor({
+    port,
+    onConnection,
+    onMessage,
+    onClose,
+    log,
+  }) {
+    const wss = new NativeWebSocketServer({ port });
+    wss.on("connection", (socket, req) => {
+      const client = new ClientConnection({
+        id: String(new Id("ws")),
+        transport: "ws",
+        sendRaw: (text) => socket.send(text),
+        closeRaw: () => socket.close(),
+        onClose,
+        meta: {
+          address: {
+            ip: req?.socket?.remoteAddress || "",
+            port: req?.socket?.remotePort || 0,
+          },
+        },
+      });
 
-class TCPServer {
-  constructor({ port, onConnection, onMessage, onClose, log }) {
-    return createTcpServer({
-      port,
-      onConnection,
-      onMessage,
-      onClose,
-      log,
+      onConnection(client);
+
+      socket.on("message", (data) => {
+        const message = data.toString("utf8");
+        const parsed = safeJsonParse(message);
+        if (!parsed.ok) {
+          client.send("error", { message: "Invalid JSON packet." });
+          return;
+        }
+        onMessage(client, parsed.value);
+      });
+
+      socket.on("close", () => client.handleClose());
+      socket.on("error", (error) => {
+        log(`[ws:${client.id}] ${error.message}`);
+      });
     });
+
+    log(`WebSocket listening on ${port}`);
+    return wss;
   }
 }
 
 module.exports = {
-  createTcpServer,
-  createWebSocketServer,
   ClientConnection,
   WebSocketServer,
-  TCPServer,
+  TcpServer,
 };

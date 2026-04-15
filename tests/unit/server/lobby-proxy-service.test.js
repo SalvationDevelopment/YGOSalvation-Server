@@ -2,8 +2,8 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 const { EventEmitter } = require('node:events');
 
-const { createLobbyState } = require('../../../server/lobby-state');
-const { createLobbyProxyService } = require('../../../server/lobby-proxy-service');
+const { LobbyState } = require('../../../server/lobby-state');
+const { LobbyProxyService } = require('../../../server/lobby-proxy-service');
 
 class FakeWebSocket extends EventEmitter {
   static CONNECTING = 0;
@@ -36,9 +36,9 @@ class FakeWebSocket extends EventEmitter {
 
 function createService() {
   FakeWebSocket.instances = [];
-  const state = createLobbyState();
+  const state = new LobbyState();
   const packets = [];
-  const service = createLobbyProxyService({
+  const service = new LobbyProxyService({
     state,
     WebSocketClass: FakeWebSocket,
     sendPacket(client, packet) {

@@ -1,16 +1,16 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { createLobbyState } = require('../../../server/lobby-state');
+const { LobbyState } = require('../../../server/lobby-state');
 const {
-  createLobbyActionRouter,
+  LobbyActionRouter,
   normalizeLobbyAction
 } = require('../../../server/lobby-action-router');
 
 function createRouter(overrides = {}) {
   const calls = [];
-  const state = overrides.state || createLobbyState();
-  const router = createLobbyActionRouter({
+  const state = overrides.state || new LobbyState();
+  const router = new LobbyActionRouter({
     state,
     broadcast(packet) {
       calls.push(['broadcast', packet]);

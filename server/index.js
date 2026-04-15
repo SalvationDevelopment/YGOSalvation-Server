@@ -2,9 +2,7 @@
 
 require("./lib/load-shared-env");
 
-
-
-const { TCPServer, WebSocketServer } = require("./transport");
+const { TcpServer, WebSocketServer } = require("./transport");
 const { Lobby } = require("./lobby");
 const { ConnectionSuite } = require("./connection-suite");
 const { IRCServer } = require("./irc/irc");
@@ -26,25 +24,31 @@ class Server {
     this.ircServer = new IRCServer();
 
     this.lobby = new Lobby(this.ircServer);
+    const lobbyDependencies = {
+      lobby: this.lobby
+    };
 
     this.connectionSuite = new ConnectionSuite({
-      lobby: this.lobby,
+      ...lobbyDependencies,
     });
+    const connectionDependencies = {
+      ...this.connectionSuite,
+    };
 
     this.websocketServer = new WebSocketServer({
+      ...connectionDependencies,
       port: WS_PORT,
-      ...this.connectionSuite,
     });
 
-    this.tcpServer = new TCPServer({
+    this.tcpServer = new TcpServer({
+      ...connectionDependencies,
       port: TCP_PORT,
-      ...this.connectionSuite,
     });
 
      this.uiServer = new UIServer({
-      lobby: this.lobby,
+      ...connectionDependencies,
+      ...lobbyDependencies,
       port: HTTP_PORT,
-      ...this.connectionSuite,
     });
   }
 
