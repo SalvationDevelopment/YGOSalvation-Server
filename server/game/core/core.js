@@ -99,6 +99,11 @@ const path = require("path"),
   verificationSystem = new EventEmitter(),
   choice = require("./lib_choice"),
   {
+    cloneDeck,
+    getPuzzleConfig,
+    normalizeStartingPlayerSlot,
+  } = require("../../puzzle-catalog"),
+  {
     parseHostConfig,
     resolveAllowedCardsLabel,
     resolveMasterRule,
@@ -347,6 +352,64 @@ function attemptJoin(duel, game, state, client, callback) {
     }
   });
   client.join("chat");
+}
+
+function createPuzzleClient(deck, slot) {
+  const clonedDeck = cloneDeck(deck);
+
+  function safetyCall(room, callback){
+    if (typeof callback === "function") {
+        callback(null);
+      }
+  }
+  
+  return {
+    deck,
+    ready: true,
+    slot,
+    join:safetyCall,
+    leave:safetyCall,
+    write() {},
+    emit() {},
+  };
+}
+
+function ensurePuzzleParticipants(game, state) {
+  const puzzle = game.puzzle;
+  if (!puzzle || !game.player[0] || !state.clients[0]) {
+    return false;
+  }
+
+  const puzzleDeck = cloneDeck(puzzle.deck);
+  state.clients[0].deck = cloneDeck(puzzleDeck);
+  state.clients[0].ready = true;
+  state.decks[0] = cloneDeck(puzzleDeck);
+  game.decks = [cloneDeck(puzzleDeck)];
+  game.aiName = puzzle.opponentName || "";
+  game.opponentName = puzzle.opponentName || "";
+  game.player[0].ready = true;
+
+  if (game.player[1] && state.clients[1]) {
+    return true;
+  }
+
+  const opponentName = puzzle.opponentName || "Puzzle Opponent";
+  state.clients[1] = createPuzzleClient({}, 1);
+  game.player[1] = {
+    id: `puzzle:${game.puzzleId}:opponent`,
+    wins: 0,
+    ready: true,
+    points: 0,
+    elo: 1200,
+    slot: 1,
+    settings: {},
+    username: opponentName,
+    session: "",
+    avatar: "",
+  };
+  game.usernames[1] = opponentName;
+
+  return true;
 }
 
 /**
@@ -972,6 +1035,23 @@ function start(server, duel, game, state, message) {
   );
 }
 
+function autoStartPuzzle(server, duel, game, state) {
+  if (game.started || !ensurePuzzleParticipants(game, state)) {
+    return false;
+  }
+
+  game.started = true;
+  state.verification = randomUUID();
+  server.write({
+    action: "start",
+  });
+  start(server, duel, game, state, {
+    verification: state.verification,
+    turn_player: normalizeStartingPlayerSlot(game.puzzleStartingPlayerSlot),
+  });
+  return true;
+}
+
 /**
  * Executes the question helper used by the core module.
  * @param {Object} duel The duel object supplies the structured input used by the core module, including the `respond` property.
@@ -1047,11 +1127,17 @@ function processMessage(server, duel, game, state, client, message) {
       break;
     case "join":
       attemptJoin(duel, game, state, client, function () {
+        if (game.puzzle && !game.started) {
+          ensurePuzzleParticipants(game, state);
+        }
         broadcast(server, game);
         client.write({
           action: "slot",
           slot: client.slot,
         });
+        if (autoStartPuzzle(server, duel, game, state)) {
+          broadcast(server, game);
+        }
       });
       break;
     case "kick":
@@ -1351,14 +1437,15 @@ function boot(httpserver, server, game, state) {
 function Game(configuration) {
   const hostConfig = parseHostConfig(configuration || {});
   const mode = resolveModeLabel(hostConfig);
-
-  return {
+  const puzzle = hostConfig.puzzleId ? getPuzzleConfig(hostConfig.puzzleId) : null;
+  const game = {
     automatic: "Automatic",
-    banlist: hostConfig.banlist,
+    banlist: puzzle ? "Puzzle" : hostConfig.banlist,
     allowedCards: hostConfig.allowedCards,
     allowedCardsLabel: resolveAllowedCardsLabel(hostConfig.allowedCards),
     cardpool: resolveAllowedCardsLabel(hostConfig.allowedCards),
     deckcheck: !hostConfig.noCheckDeckContents,
+    decks: puzzle ? [cloneDeck(puzzle.deck)] : [],
     drawCountPerTurn: hostConfig.team1.drawCountPerTurn,
     locked: Boolean(hostConfig.password),
     masterRule: resolveMasterRule(hostConfig.rulePreset),
@@ -1372,9 +1459,9 @@ function Game(configuration) {
     priority: false,
     prerelease: hostConfig.allowedCards === "prerelease",
     roompass: hostConfig.roompass || randomUUID(),
-    roomName: hostConfig.roomName || "Hosted Duel",
+    roomName: hostConfig.roomName || puzzle?.roomName || "Hosted Duel",
     password: hostConfig.password,
-    ranked: "Exhibition",
+    ranked: puzzle ? "Puzzle" : "Exhibition",
     rule: 0,
     relay: hostConfig.relay,
     shuffle: !hostConfig.noShuffleDeck,
@@ -1399,9 +1486,28 @@ function Game(configuration) {
     tournamentId: hostConfig.tournamentId,
     tournamentSlug: hostConfig.tournamentSlug,
     tournamentMatchId: hostConfig.tournamentMatchId,
+    puzzleId: puzzle?.id || "",
+    puzzleName: puzzle?.name || "",
+    puzzleDescription: puzzle?.description || "",
+    puzzleStartingPlayerSlot: normalizeStartingPlayerSlot(
+      puzzle?.startingPlayerSlot
+    ),
+    aiName: puzzle?.opponentName || "",
+    opponentName: puzzle?.opponentName || "",
     usernames: [],
-    start_game: "rps"
+    start_game: puzzle ? "puzzle" : "rps"
   };
+
+  if (puzzle) {
+    Object.defineProperty(game, "puzzle", {
+      value: puzzle,
+      writable: true,
+      configurable: true,
+      enumerable: false,
+    });
+  }
+
+  return game;
 }
 
 /**

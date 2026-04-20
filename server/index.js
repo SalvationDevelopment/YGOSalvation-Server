@@ -5,7 +5,7 @@ require("./lib/load-shared-env");
 const { TcpServer, WebSocketServer } = require("./transport");
 const { Lobby } = require("./lobby");
 const { ConnectionSuite } = require("./connection-suite");
-const { IRCServer } = require("./irc/irc");
+const { createIrcBridge, startIrcServer } = require("./irc/irc");
 const { UIServer } = require("./ui-server");
 
 const HTTP_PORT = Number(process.env.HTTP_PORT || 80);
@@ -20,8 +20,18 @@ const WS_PORT = Number(process.env.WS_PORT || 5051);
  */
 class Server {
   constructor() {
-   
-    this.ircServer = new IRCServer();
+    this.ircServer = {
+      ircBridge: createIrcBridge(),
+      server: null,
+      start: async () => {
+        if (this.ircServer.server) {
+          return this.ircServer.server;
+        }
+
+        this.ircServer.server = await startIrcServer();
+        return this.ircServer.server;
+      },
+    };
 
     this.lobby = new Lobby(this.ircServer);
     const lobbyDependencies = {

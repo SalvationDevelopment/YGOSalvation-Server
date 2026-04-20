@@ -1,6 +1,7 @@
 require('../../lib/load-shared-env');
 
 const { request } = require('../../lib/http'),
+  { listProvidedPuzzles } = require('../../puzzle-catalog'),
   ADMIN_SERVER_URL = process.env.ADMIN_SERVER_URL || 'http://localhost:3000/api',
   users = require('./endpoint_users'),
   path = require('path'),
@@ -365,6 +366,13 @@ function setupEndpoints(app) {
     } catch (error) {
       response.send(error.data || error.message || String(error));
     }
+  });
+
+  app.get('/api/puzzles', (_request, response) => {
+    response.send({
+      success: true,
+      puzzles: listProvidedPuzzles()
+    });
   });
 
   app.post('/api/contact', postContactMessage);

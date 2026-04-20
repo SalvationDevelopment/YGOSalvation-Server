@@ -638,6 +638,11 @@ function readScriptSource(scriptCache, scriptname) {
   return scriptCache[resolvedPath];
 }
 
+function resolveOcgcoreModuleUrl() {
+  const modulePath = path.resolve(__dirname, "./ocgcore-wasm/dist/index.js");
+  return pathToFileURL(modulePath).href;
+}
+
 function normalizeReloadFieldPlayer(playerState, player) {
   const faceupExtraCount = Number(playerState?.extra_faceup_count || 0),
     extraSize = Number(playerState?.extra_size || 0);
@@ -1003,6 +1008,22 @@ function preloadStartupScripts(core, handle, scriptCache) {
     }
     core.loadScript(handle, `./expansions/script/${scriptName}`, scriptSource);
   });
+}
+
+function preloadPuzzleScript(core, handle, game) {
+  const scriptSource = game?.puzzle?.scriptSource;
+  if (typeof core.loadScript !== "function") {
+    return false;
+  }
+  if (typeof scriptSource !== "string" || !scriptSource.length) {
+    return false;
+  }
+
+  const scriptFilename = path.posix.basename(
+    game?.puzzle?.scriptPath || `${game?.puzzle?.id || "puzzle"}.lua`,
+  );
+  core.loadScript(handle, `./puzzles/${scriptFilename}`, scriptSource);
+  return true;
 }
 
 /**
@@ -1525,10 +1546,7 @@ function buildResponseFromEncodedSelection(messageType, data) {
 async function getCore() {
   if (!ocgapiPromise) {
     if (!ocgcoreModulePromise) {
-      ocgcoreModulePromise = import(
-        pathToFileURL(path.resolve(__dirname, "../ocgcore-wasm/dist/index.js"))
-          .href
-      ).then((ocgcore) => {
+      ocgcoreModulePromise = import(resolveOcgcoreModuleUrl()).then((ocgcore) => {
         createCore = ocgcore.default || ocgcore;
         OcgMessageType = ocgcore.OcgMessageType;
         OcgProcessResult = ocgcore.OcgProcessResult;
@@ -2505,6 +2523,7 @@ function duel(game, state, errorHandler, players, spectators) {
       console.log("booting duel with settings", game);
       const core = await getCore(),
         scriptCache = {},
+        puzzleMode = Boolean(game?.puzzle?.scriptSource),
         startLp = resolveStartingLp(game),
         startingDrawCount = resolveStartingDrawCount(game),
         drawCountPerTurn = resolveDrawCountPerTurn(game);
@@ -2537,6 +2556,7 @@ function duel(game, state, errorHandler, players, spectators) {
             },
           });
           preloadStartupScripts(core, handle, scriptCache);
+          preloadPuzzleScript(core, handle, game);
           return handle;
         },
         start_duel: (handle) => core.startDuel(handle),
@@ -2556,50 +2576,54 @@ function duel(game, state, errorHandler, players, spectators) {
         throw new Error("Failed to create duel with ocgcore");
       }
 
-      console.log("duel created, setting up cards");
-      for (const cardID of players[0].main) {
-        await core.duelNewCard(pduel, {
-          code: cardID,
-          team: 0,
-          duelist: 0,
-          controller: 0,
-          location: OcgLocation.DECK,
-          sequence: 0,
-          position: OcgPosition.FACEDOWN_DEFENSE,
-        });
-      }
-      for (const cardID of players[0].extra) {
-        await core.duelNewCard(pduel, {
-          code: cardID,
-          team: 0,
-          duelist: 0,
-          controller: 0,
-          location: OcgLocation.EXTRA,
-          sequence: 0,
-          position: OcgPosition.FACEDOWN_DEFENSE,
-        });
-      }
-      for (const cardID of players[1].main) {
-        await core.duelNewCard(pduel, {
-          code: cardID,
-          team: 1,
-          duelist: 0,
-          controller: 1,
-          location: OcgLocation.DECK,
-          sequence: 0,
-          position: OcgPosition.FACEDOWN_DEFENSE,
-        });
-      }
-      for (const cardID of players[1].extra) {
-        await core.duelNewCard(pduel, {
-          code: cardID,
-          team: 1,
-          duelist: 0,
-          controller: 1,
-          location: OcgLocation.EXTRA,
-          sequence: 0,
-          position: OcgPosition.FACEDOWN_DEFENSE,
-        });
+      if (!puzzleMode) {
+        console.log("duel created, setting up cards");
+        for (const cardID of players[0].main) {
+          await core.duelNewCard(pduel, {
+            code: cardID,
+            team: 0,
+            duelist: 0,
+            controller: 0,
+            location: OcgLocation.DECK,
+            sequence: 0,
+            position: OcgPosition.FACEDOWN_DEFENSE,
+          });
+        }
+        for (const cardID of players[0].extra) {
+          await core.duelNewCard(pduel, {
+            code: cardID,
+            team: 0,
+            duelist: 0,
+            controller: 0,
+            location: OcgLocation.EXTRA,
+            sequence: 0,
+            position: OcgPosition.FACEDOWN_DEFENSE,
+          });
+        }
+        for (const cardID of players[1].main) {
+          await core.duelNewCard(pduel, {
+            code: cardID,
+            team: 1,
+            duelist: 0,
+            controller: 1,
+            location: OcgLocation.DECK,
+            sequence: 0,
+            position: OcgPosition.FACEDOWN_DEFENSE,
+          });
+        }
+        for (const cardID of players[1].extra) {
+          await core.duelNewCard(pduel, {
+            code: cardID,
+            team: 1,
+            duelist: 0,
+            controller: 1,
+            location: OcgLocation.EXTRA,
+            sequence: 0,
+            position: OcgPosition.FACEDOWN_DEFENSE,
+          });
+        }
+      } else {
+        console.log("duel created, puzzle script preloaded");
       }
 
       const live = makeGame(pduel, game, ocgapi),
@@ -2718,6 +2742,9 @@ module.exports.__testHooks = {
       context.pduel,
       context.ocgapi,
     );
+  },
+  resolveOcgcoreModuleUrlForTest() {
+    return resolveOcgcoreModuleUrl();
   },
   stripPrivateIdleFieldForTest(message) {
     return stripPrivateIdleField(message);

@@ -99,6 +99,7 @@ function Screen({ children }) {
       "/gamelist": "Game List",
       "/host": "Host",
       "/news": "News",
+      "/puzzles": "Puzzles",
       "/rankings": "Rankings",
       "/replay": "Replay",
       "/profile": "Profile",

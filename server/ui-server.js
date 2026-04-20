@@ -5,7 +5,11 @@ const next = require("next");
 const { createApiRouter } = require("./api/routes");
 const WS_PORT = Number(process.env.WS_PORT || 5051);
 
-export class UIServer {
+function log(message) {
+  console.log(`[ui] ${message}`);
+}
+
+class UIServer {
   constructor({port, lobby}) {
     this.port = port;
     this.lobby = lobby;
@@ -36,8 +40,12 @@ export class UIServer {
       return nextHandler(req, res);
     });
 
-    app.listen(HTTP_PORT, () => {
-      log(`HTTP listening on ${HTTP_PORT} (Next UI mounted at /ui)`);
+    app.listen(this.port, () => {
+      log(`HTTP listening on ${this.port}`);
     });
   }
 }
+
+module.exports = {
+  UIServer,
+};

@@ -66,7 +66,6 @@ export function getZoneSelectorProperties(zone, active, store, hoveredRef) {
         'data-index': zone.index,
         'data-count': count ? count : '',
         reloaded: zone.reloaded,
-        key: zone.uid,
         onError: function (event) {
             event.target.src = 'img/textures/unknown.jpg';
         },
@@ -86,7 +85,7 @@ export function ZoneSelector({ zone, active, store }) {
 
     const properties = getZoneSelectorProperties(zone, active, store, hoveredRef);
 
-    return <div {...properties} className={`${properties.className} ${styles.root}`.trim()} />;
+    return <div key={zone.uid} {...properties} className={`${properties.className} ${styles.root}`.trim()} />;
 }
 
 export function MountedZoneSelector({ zone, active, store }) {

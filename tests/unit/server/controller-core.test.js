@@ -6,7 +6,7 @@ const runtimeRequire = eval("require");
 const controllerCoreModulePath = path.resolve(
   process.cwd(),
   "server",
-  "core",
+  "game",
   "core",
   "controller_core.js",
 );
@@ -39,6 +39,20 @@ test("controller_core resolves canonical automatic duel settings for starting LP
     assert.equal(
       controllerCore.__testHooks.resolveTimeLimitForTest({ timeLimitSeconds: 180 }),
       180,
+    );
+  } finally {
+    delete require.cache[controllerCoreModulePath];
+  }
+});
+
+test("controller_core resolves the ocgcore-wasm module from the in-core package directory", () => {
+  const controllerCore = loadControllerCore();
+
+  try {
+    const resolvedUrl = controllerCore.__testHooks.resolveOcgcoreModuleUrlForTest();
+    assert.equal(
+      resolvedUrl.endsWith("/server/game/core/ocgcore-wasm/dist/index.js"),
+      true,
     );
   } finally {
     delete require.cache[controllerCoreModulePath];

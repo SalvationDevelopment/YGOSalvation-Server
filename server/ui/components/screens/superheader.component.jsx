@@ -11,6 +11,7 @@ const LOGGED_IN_LINKS = [
     { href: '/chat', label: 'Chat' },
     { href: '/deckedit', label: 'Deck Edit', scroll: true },
     { href: '/host', label: 'Host' },
+    { href: '/puzzles', label: 'Puzzles' },
     { href: '/gamelist', label: 'Game List' },
     { href: '/calendar', label: 'Calendar', scroll: true },
     { href: '/tournaments', label: 'Tournaments' },

@@ -77,9 +77,8 @@ export async function GET(request) {
   await connectToDatabase();
 
   const query = {};
-  if (session.role !== "admin") {
-    query.owner = session.username;
-  } else if (owner) {
+  query.owner = (session.role !== "admin") ? session.username : undefined;
+  if (owner) {
     query.owner = owner;
   }
   const decks = await Deck.find(query).sort({ name: 1 }).lean();
