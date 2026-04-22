@@ -46,8 +46,8 @@
     "test:coverage:component": "npm run test:component:build && node --experimental-test-coverage --test \".tmp-tests/component/**/*.test.js\"",
     "test:coverage:parity": "npm run test:parity:build && node --experimental-test-coverage --test --test-concurrency=1 \".tmp-tests/parity/**/*.test.js\"",
     "test:coverage": "npm run test:coverage:boot && npm run test:coverage:unit && npm run test:coverage:integration && npm run test:coverage:component && npm run test:coverage:parity",
-    "build": "node .\\tools\\build-ocgapi-emscripten.js Release",
-    "build:debug": "node .\\tools\\build-ocgapi-emscripten.js Debug"
+    "build": "node .\\scripts\\build-emscripten.js Release",
+    "build:debug": "node .\\scripts\\build-emscripten.js Debug"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
