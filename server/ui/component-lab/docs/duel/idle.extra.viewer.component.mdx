@@ -1,0 +1,29 @@
+# Idle Extra Viewer
+
+> This belongs to the duel runtime. Many duel entries still depend on store or controller contracts, so check the preview status badge before assuming it is fully standalone.
+
+## What this page is for
+
+Use this page to inspect the component in isolation, compare the rendered result with the live props JSON, and record the implementation assumptions that juniors need before touching the source.
+
+## Source file
+
+`server/ui/components/duel/idle.extra.viewer.component.jsx`
+
+## Import
+
+```jsx
+import Component from '@/components/duel/idle.extra.viewer.component.jsx';
+```
+
+## How to work with it
+
+- Start with the preview status badge on the right. If the page is preview-ready, use the preset picker and props JSON editor to exercise the component contract.
+- If the page is docs-only, read the source path above and identify the missing runtime contract before changing behavior.
+- Keep prop names, event names, and any store actions aligned with the existing runtime wiring when you refactor this component.
+
+## Junior notes
+
+- Read the source file from top to bottom before changing the JSX. Many of these components still carry runtime assumptions from the older controller system.
+- Change one surface at a time, then come back to this page and update the notes or presets if the public shape changed.
+- If you add a new prop or interaction mode, document it here the same day so the lab stays useful.

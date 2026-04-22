@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <radialGradient id="battleGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#fff1a3" stop-opacity="0.95"/>
+      <stop offset="45%" stop-color="#ff9c1a" stop-opacity="0.68"/>
+      <stop offset="100%" stop-color="#280700" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="64" cy="64" r="56" fill="url(#battleGlow)"/>
+  <path fill="none" stroke="#fff4d5" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" d="M64 18l9 24 26 2-20 16 6 26-21-14-21 14 6-26-20-16 26-2z"/>
+  <circle cx="64" cy="64" r="18" fill="none" stroke="#fff6d5" stroke-width="4" stroke-opacity="0.9"/>
+</svg>

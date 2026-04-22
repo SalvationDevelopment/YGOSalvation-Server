@@ -1,0 +1,263 @@
+.root {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(240px, 21%) minmax(560px, 58%) minmax(260px, 25%);
+  grid-template-areas: "search center info";
+  gap: 1.25vw;
+  align-items: stretch;
+  height: calc(100vh - 7.5em);
+
+  :global(.deckedit-column-left) {
+    grid-area: search;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  :global(.deckedit-column-center) {
+    grid-area: center;
+    display: grid;
+    grid-template-rows: minmax(240px, 27%) minmax(420px, 66%);
+    gap: 1.25vh;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  :global(.deckedit-column-right) {
+    grid-area: info;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+  }
+
+  :global(#searchfilter),
+  :global(#decksearch),
+  :global(#deckarea),
+  :global(#cardinfopanel) {
+    width: 100%;
+    min-width: 0;
+  }
+
+  :global(#searchfilter) {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  :global(#decksearch) {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 0.75vh;
+    min-height: 0;
+  }
+
+  :global(#decksearchresults) {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+
+  :global(#decktextlist) {
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 50%;
+  }
+
+  :global(.deckedit-modal) {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3vh 2vw;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+  }
+
+  :global(.deckedit-modal-content) {
+    width: min(50vw, 48rem);
+    max-width: 100%;
+    max-height: 80vh;
+    overflow: auto;
+    padding: 2rem;
+    background: #050505;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25vh;
+    align-items: stretch;
+
+    h2 {
+      width: 100%;
+      margin: 0;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      margin: 0;
+      float: none;
+      clear: none;
+      padding: 0.65em 0.8em;
+    }
+  }
+
+  :global(.deckedit-modal-actions) {
+    display: flex;
+    gap: 1vw;
+    justify-content: center;
+
+    button {
+      float: none;
+      min-width: 8em;
+    }
+  }
+
+  :global(.deckedit-modal-error) {
+    margin: 0;
+    color: #ff8e8e;
+    text-align: center;
+  }
+
+  :global(.deckedit-searchbar) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75vh;
+    width: 100%;
+    padding: 0.9rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(10px);
+
+    input[type="text"] {
+      width: 100%;
+      margin: 0;
+      float: none;
+      clear: none;
+      font-size: 1.05rem;
+      padding: 0.8rem 1rem;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      float: none;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  :global(.deckedit-menu-anchor) {
+    width: 100%;
+    margin-top: 1vh;
+    flex: 0 0 auto;
+  }
+
+  :global(.deckedit-hamburger) {
+    width: 100%;
+    float: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 0 10px #000;
+  }
+
+  :global(.deckedit-hamburger span) {
+    width: 1.5rem;
+    height: 2px;
+    background: currentColor;
+    display: block;
+  }
+
+  :global(.deckedit-popout-menu) {
+    position: static;
+    width: 100%;
+    max-height: min(42vh, 26rem);
+    padding: 0.9rem;
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    background: rgba(10, 10, 10, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+  }
+
+  :global(.deckedit-popout-menu h3) {
+    float: none;
+    width: 100%;
+    margin: 0 0 0.35rem;
+    text-align: center;
+  }
+
+  :global(.deckedit-popout-menu button) {
+    width: 100%;
+    float: none;
+    margin: 0;
+    padding: 0.6rem 0.75rem;
+  }
+
+  :global(.deckedit-menu-upload) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  :global(.deckedit-menu-upload input[type="file"]) {
+    width: 100%;
+  }
+
+  :global(.deckedit-filter-modal-content) {
+    min-height: 64vh;
+    max-height: 70vh;
+    overflow: auto;
+
+    :global(.deckedit-controls) {
+      overflow: visible;
+    }
+
+    :global(.filtercol),
+    :global(.filterrow),
+    :global(.deckcontrols) {
+      width: 100%;
+    }
+  }
+}
+
+@media only screen and (max-width: 1280px) {
+  .root {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "search"
+      "center"
+      "info";
+    height: auto;
+
+    :global(.deckedit-column-center) {
+      grid-template-rows: auto auto;
+    }
+
+    :global(#decksearchresults),
+    :global(#cardinformation) {
+      min-height: 32vh;
+    }
+  }
+}

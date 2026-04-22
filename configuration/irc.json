@@ -1,0 +1,40 @@
+{
+  "server": {
+    "host": "127.0.0.1",
+    "port": 6667,
+    "name": "irc.ygosalvation.local",
+    "description": "YGOSalvation internal IRC server"
+  },
+  "bridge": {
+    "host": "127.0.0.1",
+    "port": 6667,
+    "maxMessages": 150
+  },
+  "channels": {
+    "default": "#general",
+    "topic": "",
+    "roomTopicTemplate": "Chat channel {channel}"
+  },
+  "limits": {
+    "historyLimit": 150,
+    "maxMessageLength": 420,
+    "duplicateWindowMs": 10000,
+    "burstWindowMs": 8000,
+    "burstLimit": 4
+  },
+  "services": {
+    "nickServNick": "NickServ",
+    "joinMotdTemplate": "Joined to {channel} for live lobby chat.",
+    "identifySessionSyntax": "Syntax: IDENTIFY SESSION <session-token>",
+    "identifyTokenSyntax": "Syntax: IDENTIFY TOKEN <token>",
+    "helpMessage": "Commands: IDENTIFY SESSION <session-token>, IDENTIFY TOKEN <service-token>",
+    "invalidSessionTokenMessage": "Invalid session token.",
+    "sessionNicknameMismatchMessage": "Session does not match the current nickname.",
+    "unknownServiceIdentityTokenMessage": "Unknown service identity token.",
+    "duplicateMessageBlockedNotice": "Duplicate message blocked. Slow down before repeating yourself.",
+    "burstBlockedNotice": "You are sending messages too quickly. Please slow down."
+  },
+  "auth": {
+    "staticIdentities": []
+  }
+}

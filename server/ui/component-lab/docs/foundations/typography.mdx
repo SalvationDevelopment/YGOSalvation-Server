@@ -1,0 +1,44 @@
+# Typography
+
+> This is a design-foundation audit page. It documents the typography that exists today rather than proposing a new token system.
+
+## What this page is for
+
+Use the preview to see the active font families and recurring text roles in one place. The application still mixes global legacy rules, newer screen-owned modules, and a few route-specific exceptions, so this page is meant to reduce guesswork before refactors.
+
+## Primary sources
+
+- `server/ui/styles/main.scss`
+- `server/ui/components/screens/superheader.component.module.scss`
+- `server/ui/components/screens/login.component.module.scss`
+- `server/ui/components/screens/host.component.module.scss`
+- `server/ui/components/screens/profile.component.module.scss`
+- `server/ui/components/screens/tournaments.component.module.scss`
+- `server/ui/components/screens/tournament-calendar.component.module.scss`
+- `server/ui/components/screens/news.component.module.scss`
+- `server/ui/components/screens/news-article.component.module.scss`
+
+## Current typography system
+
+- The default application reading layer is the `"Segoe UI"` stack declared on `body` in `main.scss`.
+- Display headings still lean on `"Lato"` through the global `h1` and `h2` rules plus the super-header wordmark.
+- Duel HUD numerals switch to `Georgia` for life points and other high-contrast score displays.
+- Code and implementation surfaces use monospace.
+- News and article pages still keep a smaller `Tahoma`-based editorial style as a deliberate legacy exception.
+
+## Repeating roles
+
+- Display headings: oversized Lato, lightweight, brand-facing.
+- Section headings: tighter Lato, medium weight, calmer than hero type.
+- Body copy: Segoe/Helvetica/Arial stack at the default reading size.
+- Eyebrows and metadata: uppercase, tracked out, usually `0.72rem` to `0.82rem`.
+- CTA labels: uppercase, bold, small-size labels that mirror metadata styling.
+- HUD numerals: serif, heavier, optimized for quick scanning.
+- Legacy article copy: Tahoma at roughly `12px`, isolated to news surfaces.
+
+## Working rules
+
+- Default to the body sans stack for product UI unless a route already owns a special treatment.
+- Reuse the uppercase metadata pattern instead of inventing new label styles.
+- Treat the Tahoma article typography as a compatibility exception, not a pattern to spread.
+- If a refactor changes font family, scale, or casing conventions, update this page the same day.

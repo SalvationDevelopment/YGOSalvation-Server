@@ -1,0 +1,108 @@
+.root {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.hero {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.hero h1 {
+  margin: 0;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 60rem;
+}
+
+.layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.list button,
+.panel button {
+  cursor: pointer;
+}
+
+.puzzleButton {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: left;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.puzzleButton[data-selected='true'] {
+  border-color: rgba(202, 173, 92, 0.7);
+  box-shadow: 0 0 0 1px rgba(202, 173, 92, 0.4);
+}
+
+.puzzleName {
+  font-weight: 700;
+}
+
+.puzzleMeta {
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+.panel {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.32);
+}
+
+.panel h2,
+.panel p {
+  margin: 0;
+}
+
+.facts {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.facts dt {
+  font-weight: 700;
+}
+
+.facts dd {
+  margin: 0.15rem 0 0;
+}
+
+.startButton {
+  border: 0;
+  border-radius: 999px;
+  background: #d1a342;
+  color: #111;
+  font-weight: 700;
+  justify-self: start;
+  padding: 0.8rem 1.35rem;
+}
+
+.emptyState,
+.error {
+  padding: 1rem 0;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,797 @@
+#cardDescription {
+    background-color: rgba(0, 0, 0, 0.70);
+}
+
+#cardDescription,
+#decktextlist,
+#cardinformation,
+.deckmetainfo,
+.searchfilter {
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+#deckedit {
+    padding: 1vh 1vw;
+
+    ::-webkit-input-placeholder {
+        text-align: center;
+    }
+
+    :-moz-placeholder {
+        text-align: center;
+    }
+
+    ::-moz-placeholder {
+        text-align: center;
+    }
+
+    :-ms-input-placeholder {
+        text-align: center;
+    }
+}
+
+#decksetup {
+    font-size: 70%;
+    display: grid;
+    grid-template-columns: minmax(250px, 21%) minmax(540px, 54%) minmax(260px, 25%);
+    gap: 1.25vw;
+    align-items: start;
+    height: calc(100vh - 7.5em);
+}
+
+.deckedit-column {
+    min-width: 0;
+}
+
+.deckedit-column-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.deckedit-column-center,
+.deckedit-column-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25vh;
+}
+
+#searchfilter {
+    width: 20%;
+}
+
+#decksearch, #deckarea {
+    width: 100%;
+    float: none;
+}
+
+#deckedit #prev, #deckedit #next {
+    float: left;
+    height: 100%;
+    margin-top: 16vh;
+    color: white;
+    background: transparent;
+    border: none;
+}
+
+#deckedit #prev {
+    margin-right: 1%;
+}
+
+#decksearchresults {
+    width: 100%;
+    height: 42vh;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+    float: none;
+    display: block;
+    flex-wrap: wrap;
+    padding: .5vh .5vw;
+    overflow-y: auto;
+}
+
+#decksearchresults>div {
+    flex: 1;
+    padding: 1%;
+    transition: opacity 500ms;
+    width: 10%;
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transitioning {
+    opacity: 0;
+}
+
+#decksearchresults div img {
+    height: 100%;
+    border: 1px solid black;
+}
+
+#decksearchresults div>img:hover {
+    border: 1px solid white;
+}
+
+#decksearchresults>div>div {
+    height: 100%;
+}
+
+#decksearch {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .75vh;
+    min-height: 0;
+}
+
+#deckedit * {
+    box-sizing: border-box;
+}
+
+#deckedit h2 {
+    display: none;
+}
+
+#decktextlist {
+    border: 1px solid gray;
+    float: none;
+    width: 100%;
+    margin-top: 1vh;
+    height: 24vh;
+    overflow: auto;
+    padding: .5vh .5vw;
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+}
+
+#deckedit h3 {
+    font-size: 2vh;
+    float: left;
+    font-weight: bold;
+    width: 50%;
+    margin: 1vh 0;
+    text-shadow: 1px 1px 1px #000;
+}
+
+.deckedit-controls {
+    clear: both;
+    display: block;
+    width: 100%;
+    overflow: auto;
+}
+
+#deckedit button {
+    background-color: rgba(0, 0, 0, 0.70);
+    border: 1px solid #fff;
+    color: white;
+    float: left;
+}
+
+#deckedit input[type=text] {
+    float: left;
+    margin-bottom: 1vh;
+    clear: left;
+    width: 45%;
+}
+
+img.imgContainer {
+    max-height: 100%;
+    max-width: 100%;
+    height: 100%;
+}
+
+.deckcontrols {
+    float: left;
+    width: 50%;
+}
+
+.deckcontrols button {
+    width: 45%;
+    margin: 1%;
+}
+
+#deckedit br {
+    clear: both;
+}
+
+#linkmarkers {
+    height: 50px;
+    display: block;
+    float: right;
+}
+
+.filtercol {
+    clear: left;
+}
+
+#deckedit input[type=number] {
+    float: left;
+    margin-right: 5%;
+    width: 45%;
+    padding-left: 1.5em;
+}
+
+#deckedit input[type=number]+select {
+    float: left;
+    width: 3em;
+}
+
+#deckedit select option {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.95);
+}
+
+#deckedit select {
+    float: left;
+    width: 45%;
+    margin-right: 5%;
+    margin-bottom: 1vh;
+    text-align-last: center;
+    text-align: center;
+    min-width: 3em;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.filterrow {
+    width: 100%;
+    height: auto;
+    display: block;
+    clear: both;
+    float: left;
+}
+
+#deckareamain, #deckareaextra, #deckareaside {
+    width: 100%;
+    float: none;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+#deckareamain {
+    min-height: 36vh;
+}
+
+.deckmetainfo {
+    border: 1px solid gray;
+    min-height: 12vh;
+    width: 100%;
+    float: none;
+}
+
+#cardinformation {
+    font-weight: bold;
+    font-size: 70%;
+    width: 100%;
+    float: none;
+    height: calc(100vh - 13em);
+    min-height: 32vh;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+    margin-left: 0;
+    overflow: hidden;
+    min-height:88vh;
+}
+
+#cardinformation .description {
+    margin-top: 2vh;
+}
+
+#cardinformation .cardImage {
+    float: none;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: .5vh .5vw 0;
+}
+
+#cardinformation .cardDescription {
+    float: none;
+    width: 100%;
+    height: auto;
+    padding: .75vh .5vw 1vh;
+    overflow: auto;
+}
+
+#cardinformation .description+br+.description {
+    overflow: auto;
+    height: 23vh;
+}
+
+.deckmetainfo {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(0, 0, 0, 0.70);
+    box-shadow: 0 0 10px #000;
+}
+
+.deckmetainfo>div {
+    height: 25%;
+    width: 10%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deckmetainfo>div>div {
+    height: 100%;
+    width: 100%;
+}
+
+.deckmetainfo.c48>div {
+    height: 25%;
+    width: 8%;
+}
+
+.deckmetainfo.c60>div {
+    height: 25%;
+    width: 6.6%;
+}
+
+.deckmetainfo img {
+    height: 100%;
+    border: 1px solid black;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.deckedit-card-image {
+    display: block;
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    border: 1px solid black;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.deckmetainfo img:hover {
+    border: 1px solid white;
+}
+
+#deckareaextra .deckmetainfo>div {
+    height: 25%;
+    width: 25%;
+}
+
+#deckareaside .deckmetainfo>div {
+    height: 25%;
+    width: 25%;
+}
+
+#decksearchresultsofx {
+    position: static;
+    width: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, .7);
+    box-shadow: 0 0 10px #000;
+}
+
+#deckarea {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25vh;
+}
+
+#deckareasub {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1vw;
+}
+
+#deckareaextra .deckmetainfo,
+#deckareaside .deckmetainfo {
+    /* min-height: 13vh; */
+        height: calc(30% - 2.25em) !important;
+        min-height: 0;
+}
+
+#cardinfopanel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+@media only screen and (max-width: 1280px) {
+    #decksetup {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    #decksearchresults {
+        height: 32vh;
+    }
+
+    #deckareamain {
+        min-height: 36vh;
+    }
+
+    #deckareasub {
+        grid-template-columns: 1fr;
+    }
+
+    #cardinformation {
+        height: 36vh;
+    }
+}
+
+#deckedit .deck-zone .deckmetainfo {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+#deckedit .deck-zone {
+    position: relative;
+    padding-top: 1.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#deckedit .deck-zone::before,
+#deckedit .deck-zone::after {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+#deckedit .deck-zone::before {
+    content: "";
+    
+    background: rgba(0, 0, 0, 0.82);
+    
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+  
+}
+
+#deckedit .deck-zone::after {
+    color: white;
+    font-size: 450% !important;
+    font-weight: 100;
+    line-height: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 1px #000;
+    position: absolute;
+    top: 50%;
+    width:100%;
+    text-align: center;
+    font-size: 500%;
+    opacity: 0.5;
+    z-index: -3;
+    padding-top:1%;
+    height:40%;
+}
+
+#deckedit #deckareamain::after {
+    content: "Main Deck";
+}
+
+#deckedit #deckareaextra::after {
+    content: "Extra Deck";
+}
+
+#deckedit #deckareaside::after {
+    content: "Side Deck";
+}
+
+#deckedit .deck-zone .deckmetainfo > div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#deckedit .deck-zone .deckmetainfo > div > div {
+    width: 100%;
+    height: 100%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo {
+    height: auto;
+    aspect-ratio: 4210 / 2456;
+    width: min(100%, 42rem);
+}
+
+#deckedit .deck-zone-main .deckmetainfo > div {
+    width: 10%;
+    height: 25%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c44 > div {
+    margin-right: -1%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c44 > div:nth-child(11n) {
+    margin-right: 0;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c48 > div {
+    margin-right: -1.8182%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c48 > div:nth-child(12n) {
+    margin-right: 0;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c52 > div {
+    margin-right: -2.5%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c52 > div:nth-child(13n) {
+    margin-right: 0;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c56 > div {
+    margin-right: -3.0769%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c56 > div:nth-child(14n) {
+    margin-right: 0;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c60 > div {
+    margin-right: -3.5714%;
+}
+
+#deckedit .deck-zone-main .deckmetainfo.c60 > div:nth-child(15n) {
+    margin-right: 0;
+}
+
+#deckedit .deck-zone-extra .deckmetainfo,
+#deckedit .deck-zone-side .deckmetainfo {
+    height: auto;
+    aspect-ratio: 6315 / 614;
+    width: min(100%, 42rem);
+}
+
+#deckedit .deck-zone-extra .deckmetainfo > div,
+#deckedit .deck-zone-side .deckmetainfo > div {
+    width: calc(100% / 15);
+    height: 100%;
+}
+
+#deckedit .deck-zone .deckedit-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    aspect-ratio: 421 / 614;
+}
+
+#deckedit #decksearchresultsofx {
+    position: static;
+    width: 100%;
+}
+
+#deckedit #deckarea {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: clamp(1.25rem, 2.5vh, 2.25rem);
+    min-height: 0;
+    align-content: start;
+    width: 60%;
+    margin: 0 auto;
+}
+
+#deckedit #deckareamain .deckmetainfo,
+#deckedit #deckareaextra .deckmetainfo,
+#deckedit #deckareaside .deckmetainfo {
+    width: 100%;
+    max-width: 42rem;
+    height: auto !important;
+    min-height: 0;
+}
+
+#deckedit #deckareamain .deckmetainfo,
+#deckedit #deckareaextra .deckmetainfo,
+#deckedit #deckareaside .deckmetainfo {
+    margin: 0 auto;
+}
+
+#deckedit #cardinfopanel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: .75vh;
+    min-height: 0;
+    height: 96.5%;
+    
+}
+
+#deckedit #cardinformation {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    border: 1px solid gray;
+}
+
+#deckedit #cardinformation .cardImage {
+    flex: 0 0 auto;
+}
+
+#deckedit #cardinformation .cardDescription {
+    flex: 1 1 auto;
+}
+
+#deckedit #cardinformation .imgContainer {
+    width: auto;
+    max-width: 100%;
+    max-height: 52vh;
+    height: auto;
+    object-fit: contain;
+}
+
+@media only screen and (max-width: 1280px) {
+}
+
+[data-limit] {
+    position: relative;
+}
+
+[data-limit]:before {
+    height: 1.5em;
+    width: 1.5em;
+    background: black;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -5px;
+    text-align: center;
+    font-weight: bold;
+    color: yellow;
+    border-radius: 7vw;
+    line-height: 1.2em;
+    border: 3px solid red;
+    z-index: 1;
+}
+
+[data-limit="0"]:before {
+    content: "X";
+    color: red;
+}
+
+[data-limit="1"]:before {
+    content: "1";
+}
+
+[data-limit="2"]:before {
+    content: "2";
+}
+
+#linkmarkers {
+    background: white;
+}
+
+#linkmarkers>input[type="checkbox"] {
+    visibility: hidden;
+}
+
+input[type="checkbox"]:after {
+    content: " ";
+    width: 0;
+    height: 0;
+    background: blue;
+    z-index: 50;
+    opacity: 1;
+    position: absolute;
+    visibility: visible;
+}
+
+input[type="checkbox"]:checked:after {
+    background: red;
+}
+
+#link1:after {
+    border-right: 13px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link3:after {
+    border-left: 13px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link6:after {
+    border-right: 13px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link8:after {
+    border-left: 13px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link2:after {
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    border-bottom: 13px solid transparent;
+}
+
+#link4:after {
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    border-right: 13px solid transparent;
+}
+
+#link5:after {
+    border-top: 7px solid white;
+    border-bottom: 7px solid white;
+    border-left: 13px solid transparent;
+}
+
+#link7:after {
+    border-left: 7px solid white;
+    border-right: 7px solid white;
+    border-top: 13px solid transparent;
+}
+
+#link1 {
+    position: relative;
+    left: -5px;
+    top: -5px;
+}
+
+#link2 {
+    position: relative;
+    top: -5px;
+}
+
+#link3 {
+    position: relative;
+    left: 5px;
+    top: -5px;
+}
+
+#link4 {
+    position: relative;
+    left: -5px;
+}
+
+#link5 {
+    position: relative;
+    left: 5px;
+}
+
+#link6 {
+    position: relative;
+    left: -5px;
+    top: 5px;
+}
+
+#link7 {
+    position: relative;
+    top: 5px;
+}
+
+#link8 {
+    position: relative;
+    left: 5px;
+    top: 5px;
+}
+
+.searchfilter {
+    background-color: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 10px #000;
+}

@@ -1,0 +1,308 @@
+.component-lab-page {
+  width: min(1380px, calc(100vw - 48px));
+  margin: 0 auto;
+  padding: 32px 0 64px;
+}
+
+.component-lab-eyebrow {
+  margin: 0 0 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #805f26;
+}
+
+.component-lab-hero,
+.component-lab-detail-header {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+.component-lab-hero h1,
+.component-lab-detail-header h1 {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.component-lab-hero p,
+.component-lab-detail-header p,
+.component-lab-docs-copy {
+  line-height: 1.6;
+}
+
+.component-lab-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.component-lab-hero-metrics > div,
+.component-lab-detail-meta,
+.component-lab-preview-shell,
+.component-lab-docs,
+.component-lab-card,
+.component-lab-search,
+.component-lab-preview-error,
+.component-lab-preview-empty {
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 251, 244, 0.96);
+  box-shadow: 0 18px 50px rgba(25, 18, 8, 0.08);
+}
+
+.component-lab-hero-metrics > div {
+  padding: 20px;
+}
+
+.component-lab-hero-metrics strong {
+  display: block;
+  font-size: 2rem;
+}
+
+.component-lab-search {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 18px 20px;
+}
+
+.component-lab-search input,
+.component-lab-controls select,
+.component-lab-controls input,
+.component-lab-control textarea {
+  border: 1px solid rgba(20, 20, 20, 0.18);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fffdf9;
+}
+
+.component-lab-group {
+  margin-top: 40px;
+}
+
+.component-lab-group > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.component-lab-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.component-lab-card {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.component-lab-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 60px rgba(25, 18, 8, 0.14);
+}
+
+.component-lab-card h3 {
+  margin: 0;
+}
+
+.component-lab-card p {
+  margin: 0;
+}
+
+.component-lab-card code,
+.component-lab-detail-meta code,
+.component-lab-inline-code,
+.component-lab-code-block {
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.component-lab-card-topline,
+.component-lab-breadcrumbs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.component-lab-breadcrumbs {
+  margin-bottom: 20px;
+}
+
+.component-lab-breadcrumbs a {
+  color: inherit;
+}
+
+.component-lab-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.component-lab-badge--ready {
+  background: #d8f2d9;
+  color: #12511b;
+}
+
+.component-lab-badge--muted {
+  background: #ece7dc;
+  color: #645843;
+}
+
+.component-lab-detail-meta {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+}
+
+.component-lab-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.1fr) minmax(360px, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.component-lab-docs,
+.component-lab-preview-shell {
+  padding: 24px;
+}
+
+.component-lab-docs-heading,
+.component-lab-docs-subheading {
+  margin-top: 1.6em;
+}
+
+.component-lab-docs-list {
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.component-lab-code-block {
+  overflow-x: auto;
+  padding: 14px;
+  border-radius: 14px;
+  background: #201710;
+  color: #f8f3ea;
+}
+
+.component-lab-callout {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border-left: 4px solid #805f26;
+  border-radius: 12px;
+  background: #f9f1de;
+}
+
+.component-lab-callout--warning {
+  border-left-color: #a14214;
+  background: #fff0e8;
+}
+
+.component-lab-preview-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.component-lab-preview-header,
+.component-lab-preview-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.component-lab-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.component-lab-control {
+  display: grid;
+  gap: 8px;
+}
+
+.component-lab-control--editor {
+  width: 100%;
+}
+
+.component-lab-control textarea {
+  width: 100%;
+  min-height: 280px;
+  resize: vertical;
+}
+
+.component-lab-reset {
+  align-self: end;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: #2e5fa7;
+  cursor: pointer;
+}
+
+.component-lab-preview-canvas {
+  min-height: 420px;
+  max-width: 100%;
+  overflow: auto;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px dashed rgba(20, 20, 20, 0.14);
+}
+
+.component-lab-preview-canvas--paper {
+  background: linear-gradient(180deg, #fffdf8 0%, #f7f1e4 100%);
+}
+
+.component-lab-preview-canvas--night {
+  color: #fff;
+  background: linear-gradient(180deg, #18232d 0%, #0f1217 100%);
+}
+
+.component-lab-preview-canvas--grid {
+  background-color: #faf4eb;
+  background-image:
+    linear-gradient(rgba(133, 111, 70, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(133, 111, 70, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.component-lab-preview-empty,
+.component-lab-preview-error {
+  padding: 20px;
+}
+
+.component-lab-screen-child {
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(46, 95, 167, 0.08);
+}
+
+@media (max-width: 1080px) {
+  .component-lab-hero,
+  .component-lab-detail-header,
+  .component-lab-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

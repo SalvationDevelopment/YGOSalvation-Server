@@ -1,0 +1,72 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Main Server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/server/index.js",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "outputCapture": "std",
+      "restart": true,
+      "autoAttachChildProcesses": true,
+      "serverReadyAction": {
+        "pattern": "HTTP listening on ([0-9]+)",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      },
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "HTTP_PORT": "3001",
+        "TCP_PORT": "5050",
+        "WS_PORT": "5051",
+        "PORT_RANGE_MIN": "30000",
+        "PORT_RANGE_MAX": "30999",
+        "CORE_DEBUG": "1",
+        "CORE_DEBUG_PORT_BASE": "9230"
+      }
+    },
+    {
+      "name": "CMS Server",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/server/cms/index.js",
+      "cwd": "${workspaceFolder}/server/cms",
+      "args": [
+        "--dev"
+      ],
+      "console": "integratedTerminal",
+      "restart": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "CMS_PORT": "3000"
+      }
+    },
+    {
+      "name": "Attach Child Core :9230",
+      "type": "node",
+      "request": "attach",
+      "port": 9230,
+      "restart": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Main + CMS",
+      "configurations": [
+        "Main Server",
+        "CMS Server"
+      ]
+    }
+  ]
+}
