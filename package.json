@@ -78,7 +78,7 @@
     "node-sqlite3-wasm": "^0.6.9",
     "promised-sqlite3": "^2.1.0",
     "sass": "^1.98.0",
-    "sqlite3": "^5.1.6",
+    "sqlite3": "^6.0.1",
     "typescript": "^5.3.3"
   }
 }
