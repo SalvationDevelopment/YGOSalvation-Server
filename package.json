@@ -70,7 +70,7 @@
     "@types/node": "^20.5.9",
     "better-sqlite3": "^12.4.1",
     "concurrently": "^9.2.1",
-    "esbuild": "^0.19.2",
+    "esbuild": "^0.28.1",
     "eslint": "^9.38.0",
     "eslint-config-next": "16.1.6",
     "esno": "^0.17.0",
